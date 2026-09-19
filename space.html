@@ -3073,6 +3073,14 @@
 })();
 
 /* ========== Page Entry Animation ========== */
+(function() {
+  window.addEventListener('load', function() {
+    setTimeout(function() {
+      document.body.classList.remove('page-loading');
+      document.body.classList.add('page-ready');
+    }, 300);
+  });
+})();
 
 /* ========== Bidirectional Scroll Reveal ========== */
 (function() {
