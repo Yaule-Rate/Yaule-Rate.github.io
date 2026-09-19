@@ -1,0 +1,1331 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>兴华中学广播站系统</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --glass-bg: rgba(255, 255, 255, 0.7);
+            --glass-border: rgba(255, 255, 255, 0.2);
+            --glass-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            --glass-blur: 12px;
+            --primary-color: #2196F3;
+            --primary-color-rgb: 33, 150, 243;
+            --secondary-color: #4FC3F7;
+            --accent-color: #00BCD4;
+            --warn-color: rgba(255, 204, 0, 0.85);
+            --success-color: rgba(76, 175, 80, 0.85);
+            --error-color: rgba(244, 67, 54, 0.85);
+            --text-color: #333333;
+            --text-secondary: #666666;
+            --bg-gradient: linear-gradient(135deg, #e8f4f8 0%, #f0f8fb 100%);
+        }
+
+        body {
+            font-family: 'Microsoft YaHei', 'PingFang SC', sans-serif;
+            background: var(--bg-gradient);
+            color: var(--text-color);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .top-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 28px;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: white;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+            z-index: 10;
+            flex-shrink: 0;
+        }
+
+        .top-bar .title {
+            font-size: 24px;
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
+
+        .top-bar .clock {
+            font-size: 30px;
+            font-weight: 600;
+            font-family: 'Courier New', monospace;
+            background: rgba(255, 255, 255, 0.15);
+            padding: 5px 20px;
+            border-radius: 12px;
+            backdrop-filter: blur(8px);
+        }
+
+        .main-content {
+            display: flex;
+            flex: 1;
+            gap: 0;
+            overflow: hidden;
+        }
+
+        .panel {
+            background: var(--glass-bg);
+            backdrop-filter: blur(var(--glass-blur));
+            -webkit-backdrop-filter: blur(var(--glass-blur));
+            border-radius: 16px;
+            box-shadow: var(--glass-shadow);
+            border: 1px solid var(--glass-border);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            margin: 10px;
+        }
+
+        .left-panel {
+            width: 22%;
+            min-width: 240px;
+        }
+        .center-panel {
+            width: 58%;
+            min-width: 460px;
+        }
+        .right-panel {
+            width: 20%;
+            min-width: 180px;
+        }
+
+        .panel-header {
+            padding: 14px 18px;
+            background: rgba(255, 255, 255, 0.4);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            border-bottom: 1px solid var(--glass-border);
+            font-size: 16px;
+            font-weight: 700;
+            color: #1e3c72;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .panel-body {
+            flex: 1;
+            padding: 14px 18px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        .btn {
+            padding: 10px 18px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 600;
+            transition: all 0.2s;
+            background: #ecf0f5;
+            color: #2c3e50;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+        .btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+        .btn-primary {
+            background: var(--primary-color);
+            color: white;
+        }
+        .btn-success {
+            background: #27ae60;
+            color: white;
+        }
+        .btn-warning {
+            background: #f39c12;
+            color: white;
+        }
+        .btn-danger {
+            background: #e74c3c;
+            color: white;
+        }
+        .btn-sm {
+            padding: 6px 12px;
+            font-size: 12px;
+        }
+        .btn-lg {
+            padding: 12px 22px;
+            font-size: 15px;
+        }
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .clock-btn-group {
+            display: flex;
+            gap: 8px;
+        }
+        .clock-btn-group .btn {
+            flex: 1;
+            padding: 12px;
+            font-size: 14px;
+        }
+
+        .duty-member-list {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+        .duty-tag {
+            background: #e0e7ff;
+            color: #2a5298;
+            padding: 4px 12px;
+            border-radius: 16px;
+            font-weight: 600;
+            font-size: 13px;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .duty-tag .del-btn {
+            cursor: pointer;
+            font-size: 15px;
+            margin-left: 2px;
+            color: #c0392b;
+        }
+
+        .search-box {
+            display: flex;
+            gap: 6px;
+        }
+        .search-box input {
+            flex: 1;
+            padding: 10px 12px;
+            border: 2px solid #dde1e7;
+            border-radius: 10px;
+            font-size: 14px;
+            outline: none;
+        }
+        .search-box input:focus {
+            border-color: #2a5298;
+        }
+
+        .player-controls {
+            background: rgba(255, 255, 255, 0.4);
+            border-radius: 12px;
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        .now-playing {
+            font-size: 15px;
+            font-weight: 600;
+            color: #1e3c72;
+            text-align: center;
+        }
+        .progress-row, .volume-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .progress-row input[type="range"] {
+            flex: 1;
+        }
+        .volume-row input[type="range"] {
+            width: 120px;          /* 缩短音量条 */
+            flex: none;
+        }
+        .control-btns {
+            display: flex;
+            gap: 8px;
+            justify-content: center;
+        }
+
+        .log-list {
+            flex: 1;
+            overflow-y: auto;
+            font-size: 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+        .log-item {
+            padding: 5px 8px;
+            background: rgba(255, 255, 255, 0.5);
+            border-radius: 6px;
+            border-left: 3px solid #2a5298;
+        }
+        .log-item .time {
+            color: #7f8c8d;
+            font-size: 10px;
+            margin-right: 6px;
+        }
+
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 999;
+            backdrop-filter: blur(4px);
+        }
+        .modal {
+            background: white;
+            border-radius: 16px;
+            padding: 24px;
+            width: 460px;
+            max-width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            animation: fadeIn 0.25s;
+        }
+        .modal h3 {
+            margin-bottom: 16px;
+            color: #1e3c72;
+            font-size: 18px;
+        }
+        .modal input, .modal textarea {
+            width: 100%;
+            padding: 8px;
+            margin: 6px 0 12px;
+            border: 2px solid #dde1e7;
+            border-radius: 8px;
+            font-size: 14px;
+        }
+        .song-list-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 10px;
+            margin: 4px 0;
+            background: #f5f7fb;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: 0.2s;
+            font-size: 14px;
+        }
+        .song-list-item:hover {
+            background: #e0e7ff;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.95); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 8px;
+        }
+        th, td {
+            padding: 6px;
+            text-align: center;
+            border-bottom: 1px solid #e0e0e0;
+            font-size: 13px;
+        }
+        th {
+            background: #f0f4fa;
+        }
+
+        .file-picker-area {
+            border: 2px dashed #2a5298;
+            border-radius: 12px;
+            padding: 24px;
+            text-align: center;
+            color: #2a5298;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .file-picker-area:hover {
+            background: #f0f4ff;
+        }
+
+        audio {
+            display: none;
+        }
+
+        @media (max-width:900px) {
+            .main-content {
+                flex-direction: column;
+            }
+            .panel {
+                width: 100%;
+                min-width: 0;
+                margin: 6px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="top-bar">
+        <div class="title">🎙️ 兴华中学广播站系统</div>
+        <div class="clock" id="liveClock">--:--:--</div>
+    </div>
+
+    <div class="main-content">
+        <!-- 左：打卡系统 -->
+        <div class="panel left-panel">
+            <div class="panel-header">📋 成员打卡</div>
+            <div class="panel-body">
+                <div id="checkinStatusBar" style="font-size:13px; font-weight:bold; padding:6px; border-radius:6px; background:rgba(255,255,255,0.5);">⏰ 未到打卡时间</div>
+                <div class="clock-btn-group">
+                    <button class="btn btn-warning" id="noonClockBtn">🌞 中午打卡<br><small id="noonTimeLabel">12:20-12:30</small></button>
+                    <button class="btn btn-danger" id="afternoonClockBtn">🌆 下午打卡<br><small id="afterTimeLabel">17:05-17:25</small></button>
+                </div>
+                <!-- 纵向单列功能按钮（移除清除冗余成员） -->
+                <div style="display: flex; flex-direction: column; gap: 8px;">
+                    <button class="btn" id="viewAttendanceBtn">📊 打卡统计</button>
+                    <button class="btn" id="exportAttendanceBtn">📤 导出记录(CSV)</button>
+                    <button class="btn" id="showLateBtn">⏰ 查看迟到</button>
+                    <button class="btn" id="setCheckinTimeBtn">⏱️ 设置打卡时间</button>
+                    <button class="btn" id="clearAllRecordsBtn">🗑️ 清除打卡记录</button>
+                </div>
+                <div style="margin-top:auto; border-top:1px solid #e0e0e0; padding-top:8px;">
+                    <strong style="font-size:13px;">今日值班：</strong>
+                    <div class="duty-member-list" id="dutyMembersDisplay"></div>
+                    <div style="display:flex; gap:6px; margin-top:6px;">
+                        <button class="btn btn-sm" id="editDutyBtn">🖊️ 编辑</button>
+                        <button class="btn btn-sm" id="genDutyBtn">🎲 随机</button>
+                    </div>
+                </div>
+                <button class="btn" id="manageMembersBtn" style="margin-top:8px;">👥 成员管理</button>
+            </div>
+        </div>
+
+        <!-- 中：歌曲搜索播放 -->
+        <div class="panel center-panel">
+            <div class="panel-header">🎵 歌曲搜索播放</div>
+            <div class="panel-body">
+                <div class="search-box">
+                    <input type="text" id="searchInput" placeholder="输入歌名关键词搜索...">
+                    <button class="btn btn-primary" id="searchBtn">🔍 搜索</button>
+                </div>
+                <div style="display:flex; gap:6px;">
+                    <button class="btn" id="refreshMusicBtn">🔄 刷新歌曲</button>
+                    <button class="btn btn-warning" id="randomPlayBtn">🎲 随机播放</button>
+                </div>
+                <div class="player-controls">
+                    <div class="now-playing" id="nowPlaying">未选择歌曲</div>
+                    <div class="progress-row">
+                        <span id="currentTime">00:00</span>
+                        <input type="range" id="progressBar" value="0" step="0.01" max="1">
+                        <span id="duration">00:00</span>
+                    </div>
+                    <div class="volume-row">
+                        <span>🔊</span>
+                        <input type="range" id="volumeBar" min="0" max="1" step="0.05" value="0.8">
+                        <span id="volumePercent">80%</span>
+                    </div>
+                    <div class="control-btns">
+                        <button class="btn btn-sm" id="prevBtn">⏮️ 上一首</button>
+                        <button class="btn btn-sm btn-primary" id="playPauseBtn">▶️ 播放</button>
+                        <button class="btn btn-sm" id="nextBtn">⏭️ 下一首</button>
+                    </div>
+                    <div class="control-btns">
+                        <button class="btn btn-sm" id="stopBtn">⏹️ 停止</button>
+                        <button class="btn btn-sm" id="loopToggleBtn" data-loop="false">🔁 顺序播放</button>
+                    </div>
+                </div>
+                <details>
+                    <summary style="cursor:pointer; font-weight:600; font-size:14px;">📜 播放历史</summary>
+                    <div class="log-list" id="playHistoryList" style="max-height:100px;"></div>
+                </details>
+                <details open>
+                    <summary style="cursor:pointer; font-weight:600; font-size:14px;">📝 操作记录</summary>
+                    <div class="log-list" id="operationLogList" style="max-height:140px;"></div>
+                </details>
+            </div>
+        </div>
+
+        <!-- 右：播放控制 -->
+        <div class="panel right-panel">
+            <div class="panel-header">🎛️ 播放控制</div>
+            <div class="panel-body" style="align-items: stretch;">
+                <button class="btn btn-lg btn-primary" id="playOpeningBtn" style="width:100%;">🔊 开场白</button>
+                <button class="btn btn-lg btn-danger" id="playEndingBtn" style="width:100%;">🎵 结束音乐</button>
+                <button class="btn" id="managePlaylistBtn" style="width:100%;">📋 排班歌单</button>
+                <hr style="border-color: var(--glass-border); margin: 6px 0;">
+                <div style="display: flex; align-items: center; gap: 6px;">
+                    <span style="font-size:13px;">自动播放</span>
+                    <button class="btn btn-sm" id="autoPlayToggleBtn" style="flex:1;">✅ 已启用</button>
+                </div>
+                <button class="btn" id="setAutoPlayTimeBtn" style="width:100%; margin-top:6px;">⏰ 设置自动播放时间</button>
+                <button class="btn" id="holidayManageBtn" style="width:100%; margin-top:6px;">🗓️ 节假日</button>
+                <!-- 歌曲列表（排除特殊歌曲） -->
+                <div style="margin-top:8px; max-height:150px; overflow-y:auto; border:1px solid var(--glass-border); border-radius:8px; padding:6px; font-size:12px;" id="songListRight">
+                    <p style="color:#888;">暂无歌曲</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <audio id="audioPlayer"></audio>
+    <input type="file" id="folderPicker" webkitdirectory style="display:none;">
+    <div id="modalContainer"></div>
+
+    <script>
+        (function() {
+            // ========== 全局变量 ==========
+            let gbzFiles = [];
+            let musicFiles = [];
+            let dutyMembers = [];
+            let attendanceRecords = [];
+            let playHistory = [];
+            let operationLogs = [];
+            let currentAudioIndex = -1;
+            let isPlaying = false;
+            let recentRandomIndices = [];
+            const SPECIAL_SONGS = ['开场白配乐.mp3', '结束音乐.mp3'];
+            let loopMode = false;
+            let autoPlayEnabled = true;
+            let memberList = [];
+            let holidays = [];
+            let playlist = [];
+
+            let noonStart = { h: 12, m: 20 };
+            let noonEnd = { h: 12, m: 30 };
+            let afterStart = { h: 17, m: 5 };
+            let afterEnd = { h: 17, m: 25 };
+            let autoPlayTimes = { noonOpen: '12:20', noonClose: '12:30', afterOpen: '17:05', afterClose: '17:25' };
+
+            const liveClock = document.getElementById('liveClock');
+            const dutyMembersDisplay = document.getElementById('dutyMembersDisplay');
+            const nowPlaying = document.getElementById('nowPlaying');
+            const audioPlayer = document.getElementById('audioPlayer');
+            const progressBar = document.getElementById('progressBar');
+            const currentTimeSpan = document.getElementById('currentTime');
+            const durationSpan = document.getElementById('duration');
+            const volumeBar = document.getElementById('volumeBar');
+            const folderPicker = document.getElementById('folderPicker');
+            const modalContainer = document.getElementById('modalContainer');
+            const noonBtn = document.getElementById('noonClockBtn');
+            const afternoonBtn = document.getElementById('afternoonClockBtn');
+            const autoPlayToggleBtn = document.getElementById('autoPlayToggleBtn');
+            const loopToggleBtn = document.getElementById('loopToggleBtn');
+            const playOpeningBtn = document.getElementById('playOpeningBtn');
+            const playEndingBtn = document.getElementById('playEndingBtn');
+            const statusBar = document.getElementById('checkinStatusBar');
+            const noonLabel = document.getElementById('noonTimeLabel');
+            const afterLabel = document.getElementById('afterTimeLabel');
+            const songListRight = document.getElementById('songListRight');
+
+            // ========== 自定义弹窗 ==========
+            function showAlert(msg, title = '提示') {
+                return new Promise(resolve => {
+                    const content = `
+                        <h3>${title}</h3>
+                        <p style="margin-bottom:16px;">${msg}</p>
+                        <button class="btn btn-primary" id="alertOkBtn" style="width:100%;">确定</button>
+                    `;
+                    showModal(content, false);
+                    document.getElementById('alertOkBtn').addEventListener('click', () => {
+                        closeModal();
+                        resolve();
+                    });
+                });
+            }
+
+            function showConfirm(msg, title = '确认') {
+                return new Promise(resolve => {
+                    const content = `
+                        <h3>${title}</h3>
+                        <p style="margin-bottom:16px;">${msg}</p>
+                        <div style="display:flex; gap:10px; justify-content:flex-end;">
+                            <button class="btn btn-sm" id="confirmCancelBtn">取消</button>
+                            <button class="btn btn-primary btn-sm" id="confirmOkBtn">确定</button>
+                        </div>
+                    `;
+                    showModal(content, false);
+                    document.getElementById('confirmCancelBtn').addEventListener('click', () => { closeModal(); resolve(false); });
+                    document.getElementById('confirmOkBtn').addEventListener('click', () => { closeModal(); resolve(true); });
+                });
+            }
+
+            function showPasswordModal(actionTitle, callback) {
+                const content = `
+                    <h3>🔐 输入安全密码</h3>
+                    <p>${actionTitle}</p>
+                    <input type="password" id="passwordInput" placeholder="请输入密码" style="margin:12px 0;">
+                    <div style="display:flex; gap:10px; justify-content:flex-end;">
+                        <button class="btn btn-sm" id="pwCancelBtn">取消</button>
+                        <button class="btn btn-primary btn-sm" id="pwConfirmBtn">确认</button>
+                    </div>
+                `;
+                showModal(content, false);
+                document.getElementById('pwCancelBtn').addEventListener('click', () => { closeModal(); callback(false); });
+                document.getElementById('pwConfirmBtn').addEventListener('click', () => {
+                    const input = document.getElementById('passwordInput').value;
+                    closeModal();
+                    callback(input);
+                });
+            }
+
+            function init() {
+                loadSettings();
+                updateClock();
+                setInterval(updateClock, 1000);
+                loadDataFromStorage();
+                checkDayChange();
+                showFolderPickerModal();
+                bindEvents();
+                updateAutoPlayButton();
+                updateButtonStates(new Date());
+            }
+
+            function loadSettings() {
+                const saved = JSON.parse(localStorage.getItem('checkinSettings') || '{}');
+                if (saved.noonStart) noonStart = saved.noonStart;
+                if (saved.noonEnd) noonEnd = saved.noonEnd;
+                if (saved.afterStart) afterStart = saved.afterStart;
+                if (saved.afterEnd) afterEnd = saved.afterEnd;
+                const autoPlay = JSON.parse(localStorage.getItem('autoPlaySettings') || '{}');
+                if (autoPlay.noonOpen) autoPlayTimes.noonOpen = autoPlay.noonOpen;
+                if (autoPlay.noonClose) autoPlayTimes.noonClose = autoPlay.noonClose;
+                if (autoPlay.afterOpen) autoPlayTimes.afterOpen = autoPlay.afterOpen;
+                if (autoPlay.afterClose) autoPlayTimes.afterClose = autoPlay.afterClose;
+                updateTimeLabels();
+            }
+
+            function updateTimeLabels() {
+                noonLabel.textContent = `${pad(noonStart.h)}:${pad(noonStart.m)}-${pad(noonEnd.h)}:${pad(noonEnd.m)}`;
+                afterLabel.textContent = `${pad(afterStart.h)}:${pad(afterStart.m)}-${pad(afterEnd.h)}:${pad(afterEnd.m)}`;
+            }
+
+            function bindEvents() {
+                noonBtn.addEventListener('click', () => attemptClock('noon'));
+                afternoonBtn.addEventListener('click', () => attemptClock('afternoon'));
+                document.getElementById('viewAttendanceBtn').addEventListener('click', showStatsModal);
+                document.getElementById('exportAttendanceBtn').addEventListener('click', exportAttendanceCSV);
+                document.getElementById('showLateBtn').addEventListener('click', showLateModal);
+                document.getElementById('editDutyBtn').addEventListener('click', showEditDutyModal);
+                document.getElementById('genDutyBtn').addEventListener('click', generateRandomDuty);
+                document.getElementById('manageMembersBtn').addEventListener('click', showMemberManageModal);
+                document.getElementById('setCheckinTimeBtn').addEventListener('click', showSetCheckinTimeModal);
+                document.getElementById('clearAllRecordsBtn').addEventListener('click', clearAllAttendance);
+                document.getElementById('searchBtn').addEventListener('click', performSearch);
+                document.getElementById('searchInput').addEventListener('keypress', (e) => { if (e.key === 'Enter') performSearch(); });
+                document.getElementById('refreshMusicBtn').addEventListener('click', () => { folderPicker.click(); });
+                document.getElementById('randomPlayBtn').addEventListener('click', randomPlay);
+                document.getElementById('playPauseBtn').addEventListener('click', togglePlay);
+                document.getElementById('prevBtn').addEventListener('click', playPrevious);
+                document.getElementById('nextBtn').addEventListener('click', playNext);
+                document.getElementById('stopBtn').addEventListener('click', stopMusic);
+                loopToggleBtn.addEventListener('click', toggleLoopMode);
+                playOpeningBtn.addEventListener('click', () => playSpecial('开场白配乐.mp3'));
+                playEndingBtn.addEventListener('click', () => playSpecial('结束音乐.mp3'));
+                document.getElementById('managePlaylistBtn').addEventListener('click', showPlaylistModal);
+                document.getElementById('holidayManageBtn').addEventListener('click', showHolidayModal);
+                autoPlayToggleBtn.addEventListener('click', toggleAutoPlay);
+                document.getElementById('setAutoPlayTimeBtn').addEventListener('click', showSetAutoPlayTimeModal);
+                folderPicker.addEventListener('change', handleFolderSelect);
+                progressBar.addEventListener('input', seekAudio);
+                volumeBar.addEventListener('input', changeVolume);
+                audioPlayer.addEventListener('timeupdate', updateProgress);
+                audioPlayer.addEventListener('loadedmetadata', updateDuration);
+                audioPlayer.addEventListener('ended', handleSongEnd);
+                setInterval(checkAutoPlaySchedule, 30000);
+            }
+
+            function updateClock() {
+                const now = new Date();
+                liveClock.textContent = now.toLocaleTimeString('zh-CN', { hour12: false });
+                updateButtonStates(now);
+            }
+
+            function checkDayChange() {
+                const today = new Date().toLocaleDateString('zh-CN');
+                if (localStorage.getItem('lastDate') !== today) {
+                    localStorage.setItem('lastDate', today);
+                    dutyMembers = [];
+                    saveDutyToStorage();
+                    renderDutyDisplay();
+                    addLog('已自动清除昨日值班人员名单');
+                }
+            }
+
+            function updateButtonStates(now) {
+                const h = now.getHours(), m = now.getMinutes();
+                const noonActive = isTimeInRange(h, m, noonStart.h, noonStart.m, noonEnd.h, noonEnd.m);
+                const afterActive = isTimeInRange(h, m, afterStart.h, afterStart.m, afterEnd.h, afterEnd.m);
+                noonBtn.disabled = !noonActive;
+                afternoonBtn.disabled = !afterActive;
+
+                if (noonActive) {
+                    statusBar.innerHTML = `🟢 中午打卡时间：${pad(noonStart.h)}:${pad(noonStart.m)}-${pad(noonEnd.h)}:${pad(noonEnd.m)}`;
+                    statusBar.style.background = '#d4edda';
+                } else if (afterActive) {
+                    statusBar.innerHTML = `🟢 下午打卡时间：${pad(afterStart.h)}:${pad(afterStart.m)}-${pad(afterEnd.h)}:${pad(afterEnd.m)}`;
+                    statusBar.style.background = '#d4edda';
+                } else {
+                    statusBar.innerHTML = '⏰ 未到打卡时间';
+                    statusBar.style.background = 'rgba(255,255,255,0.5)';
+                }
+            }
+
+            function isTimeInRange(h, m, sh, sm, eh, em) {
+                const cur = h * 60 + m;
+                const start = sh * 60 + sm;
+                const end = eh * 60 + em;
+                return cur >= start && cur <= end;
+            }
+
+            function pad(n) { return n.toString().padStart(2, '0'); }
+
+            // ========== 文件夹加载 ==========
+            function showFolderPickerModal() {
+                showModal(`
+                    <h3>📁 请选择“GBZ”文件夹</h3>
+                    <p>系统需读取 GBZ/music 目录下的音乐文件。</p>
+                    <div class="file-picker-area" onclick="document.getElementById('folderPicker').click()">
+                        📂 点击此处选择文件夹
+                    </div>
+                `, false);
+            }
+
+            function handleFolderSelect(event) {
+                const files = Array.from(event.target.files);
+                if (!files.length) return;
+                gbzFiles = files;
+                musicFiles = files.filter(f => /\/music\/.+(\.mp3|\.wav|\.ogg|\.flac|\.m4a|\.aac)$/i.test(f.webkitRelativePath || ''));
+                if (musicFiles.length === 0) {
+                    showAlert('未在 GBZ/music 目录下检测到音乐文件！');
+                    return;
+                }
+                closeModal();
+                addLog('已加载音乐库，共 ' + musicFiles.length + ' 首歌曲');
+                renderSongListRight();
+            }
+
+            function renderSongListRight() {
+                if (!musicFiles.length) {
+                    songListRight.innerHTML = '<p style="color:#888;">暂无歌曲</p>';
+                    return;
+                }
+                const regularSongs = musicFiles.filter(f => !SPECIAL_SONGS.includes(f.name.toLowerCase()));
+                if (regularSongs.length === 0) {
+                    songListRight.innerHTML = '<p style="color:#888;">无常规歌曲</p>';
+                    return;
+                }
+                songListRight.innerHTML = regularSongs.map(s => `<div style="padding:2px 0;">🎵 ${s.name}</div>`).join('');
+            }
+
+            // ========== 值班管理 ==========
+            function showEditDutyModal() {
+                const options = memberList.map(m => `<option value="${m}" ${dutyMembers.includes(m) ? 'selected' : ''}>${m}</option>`).join('');
+                showModal(`
+                    <h3>🖊️ 编辑今日值班人员</h3>
+                    <label>值班人员1</label>
+                    <select id="duty1Select">
+                        <option value="">-- 请选择 --</option>
+                        ${options}
+                    </select>
+                    <label>值班人员2</label>
+                    <select id="duty2Select">
+                        <option value="">-- 请选择 --</option>
+                        ${options}
+                    </select>
+                    <div style="display:flex; gap:10px; justify-content:flex-end; margin-top:16px;">
+                        <button class="btn btn-sm" id="modalCancelBtn">取消</button>
+                        <button class="btn btn-primary btn-sm" id="confirmEditDuty">确定</button>
+                    </div>
+                `, true);
+                document.getElementById('confirmEditDuty').addEventListener('click', () => {
+                    const n1 = document.getElementById('duty1Select').value;
+                    const n2 = document.getElementById('duty2Select').value;
+                    dutyMembers = [n1, n2].filter(Boolean).slice(0, 2);
+                    saveDutyToStorage();
+                    renderDutyDisplay();
+                    closeModal();
+                    addLog('更新值班人员：' + dutyMembers.join(', '));
+                });
+                document.getElementById('modalCancelBtn').addEventListener('click', closeModal);
+            }
+
+            async function generateRandomDuty() {
+                if (memberList.length < 2) {
+                    await showAlert('成员不足，请先添加至少2名成员。');
+                    return;
+                }
+                const shuffled = [...memberList].sort(() => Math.random() - 0.5);
+                dutyMembers = [shuffled[0], shuffled[1]];
+                saveDutyToStorage();
+                renderDutyDisplay();
+                addLog('随机生成值班人员：' + dutyMembers.join(', '));
+            }
+
+            function renderDutyDisplay() {
+                if (dutyMembers.length === 0) {
+                    dutyMembersDisplay.innerHTML = '<span style="color:#888;">未设置</span>';
+                } else {
+                    dutyMembersDisplay.innerHTML = dutyMembers.map((name, idx) =>
+                        `<span class="duty-tag">${name} <span class="del-btn" data-idx="${idx}">✕</span></span>`
+                    ).join('');
+                    document.querySelectorAll('.del-btn').forEach(btn => {
+                        btn.addEventListener('click', function(e) {
+                            e.stopPropagation();
+                            const idx = parseInt(this.dataset.idx);
+                            dutyMembers.splice(idx, 1);
+                            saveDutyToStorage();
+                            renderDutyDisplay();
+                            addLog('删除值班人员，当前：' + dutyMembers.join(', '));
+                        });
+                    });
+                }
+            }
+
+            // ========== 打卡相关 ==========
+            async function attemptClock(type) {
+                if (dutyMembers.length === 0) {
+                    await showAlert('请先设置今日值班人员！');
+                    return;
+                }
+                const now = new Date();
+                const dateStr = now.toLocaleDateString('zh-CN');
+                const timeStr = now.toLocaleTimeString('zh-CN', { hour12: false });
+                const typeName = type === 'noon' ? '中午' : '下午';
+                const already = attendanceRecords.filter(r => r.date === dateStr && r.type === typeName);
+                if (already.length > 0) {
+                    await showAlert(`今日${typeName}已打卡`);
+                    return;
+                }
+                const h = now.getHours(), m = now.getMinutes();
+                let valid = false;
+                if (type === 'noon') valid = isTimeInRange(h, m, noonStart.h, noonStart.m, noonEnd.h, noonEnd.m);
+                else valid = isTimeInRange(h, m, afterStart.h, afterStart.m, afterEnd.h, afterEnd.m);
+                dutyMembers.forEach(name => {
+                    attendanceRecords.push({ name, date: dateStr, type: typeName, time: timeStr, status: valid ? '正常' : '迟到' });
+                });
+                saveAttendanceToStorage();
+                await showAlert(`${dutyMembers.join('、')} ${typeName}打卡：${valid?'正常':'迟到'} (${timeStr})`);
+                addLog(`${typeName}打卡：${dutyMembers.join(', ')} ${valid?'正常':'迟到'}`);
+            }
+
+            function showStatsModal() {
+                if (attendanceRecords.length === 0) { showAlert('暂无打卡记录'); return; }
+                const stats = {};
+                attendanceRecords.forEach(r => {
+                    if (!stats[r.name]) stats[r.name] = { noon: 0, afternoon: 0, late: 0 };
+                    if (r.type === '中午') stats[r.name].noon++;
+                    else stats[r.name].afternoon++;
+                    if (r.status === '迟到') stats[r.name].late++;
+                });
+                let html = '<h3>📊 打卡统计</h3><table><tr><th>姓名</th><th>中午</th><th>下午</th><th>迟到</th></tr>';
+                for (const [name, s] of Object.entries(stats)) {
+                    html += `<tr><td>${name}</td><td>${s.noon}</td><td>${s.afternoon}</td><td>${s.late}</td></tr>`;
+                }
+                html += '</table>';
+                showModal(html, true);
+            }
+
+            function showLateModal() {
+                const lateRecords = attendanceRecords.filter(r => r.status === '迟到');
+                if (lateRecords.length === 0) { showAlert('没有迟到记录'); return; }
+                let html = '<h3>⏰ 迟到名单</h3><ul style="list-style:none; padding:0;">';
+                lateRecords.forEach(r => {
+                    html += `<li style="padding:8px; background:#fff3cd; margin:4px 0; border-radius:8px;">${r.name} - ${r.date} ${r.type} (${r.time})</li>`;
+                });
+                html += '</ul>';
+                showModal(html, true);
+            }
+
+            function exportAttendanceCSV() {
+                if (attendanceRecords.length === 0) { showAlert('无记录'); return; }
+                let csv = '姓名,日期,时段,时间,状态\n';
+                attendanceRecords.forEach(r => { csv += `${r.name},${r.date},${r.type},${r.time},${r.status}\n`; });
+                const blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8;' });
+                const a = document.createElement('a');
+                a.href = URL.createObjectURL(blob);
+                a.download = `打卡记录_${new Date().toISOString().slice(0,10)}.csv`;
+                a.click(); URL.revokeObjectURL(a.href);
+                addLog('导出打卡记录');
+            }
+
+            async function clearAllAttendance() {
+                const confirmed = await showConfirm('确定清空所有打卡记录吗？');
+                if (confirmed) {
+                    attendanceRecords = [];
+                    saveAttendanceToStorage();
+                    addLog('已清空所有打卡记录');
+                    await showAlert('打卡记录已清除');
+                }
+            }
+
+            function showSetCheckinTimeModal() {
+                showModal(`
+                    <h3>⏱️ 自定义打卡时间</h3>
+                    <label>中午开始 (HH:MM)</label>
+                    <input type="time" id="noonStartTime" value="${pad(noonStart.h)}:${pad(noonStart.m)}">
+                    <label>中午结束 (HH:MM)</label>
+                    <input type="time" id="noonEndTime" value="${pad(noonEnd.h)}:${pad(noonEnd.m)}">
+                    <label>下午开始 (HH:MM)</label>
+                    <input type="time" id="afterStartTime" value="${pad(afterStart.h)}:${pad(afterStart.m)}">
+                    <label>下午结束 (HH:MM)</label>
+                    <input type="time" id="afterEndTime" value="${pad(afterEnd.h)}:${pad(afterEnd.m)}">
+                    <div style="display:flex; gap:10px; justify-content:flex-end; margin-top:16px;">
+                        <button class="btn btn-sm" id="cancelTimeBtn">取消</button>
+                        <button class="btn btn-primary btn-sm" id="saveTimeBtn">保存</button>
+                    </div>
+                `, true);
+                document.getElementById('saveTimeBtn').addEventListener('click', () => {
+                    const nst = document.getElementById('noonStartTime').value.split(':');
+                    const net = document.getElementById('noonEndTime').value.split(':');
+                    const ast = document.getElementById('afterStartTime').value.split(':');
+                    const aet = document.getElementById('afterEndTime').value.split(':');
+                    if (nst.length === 2 && net.length === 2 && ast.length === 2 && aet.length === 2) {
+                        noonStart = { h: parseInt(nst[0]), m: parseInt(nst[1]) };
+                        noonEnd = { h: parseInt(net[0]), m: parseInt(net[1]) };
+                        afterStart = { h: parseInt(ast[0]), m: parseInt(ast[1]) };
+                        afterEnd = { h: parseInt(aet[0]), m: parseInt(aet[1]) };
+                        localStorage.setItem('checkinSettings', JSON.stringify({ noonStart, noonEnd, afterStart, afterEnd }));
+                        updateTimeLabels();
+                        updateButtonStates(new Date());
+                        closeModal();
+                        addLog('打卡时间已更新');
+                    } else {
+                        showAlert('请输入完整时间');
+                    }
+                });
+                document.getElementById('cancelTimeBtn').addEventListener('click', closeModal);
+            }
+
+            function showSetAutoPlayTimeModal() {
+                showModal(`
+                    <h3>⏰ 自定义自动播放时间</h3>
+                    <label>中午开场 (HH:MM)</label>
+                    <input type="time" id="autoNoonOpen" value="${autoPlayTimes.noonOpen}">
+                    <label>中午结束 (HH:MM)</label>
+                    <input type="time" id="autoNoonClose" value="${autoPlayTimes.noonClose}">
+                    <label>下午开场 (HH:MM)</label>
+                    <input type="time" id="autoAfterOpen" value="${autoPlayTimes.afterOpen}">
+                    <label>下午结束 (HH:MM)</label>
+                    <input type="time" id="autoAfterClose" value="${autoPlayTimes.afterClose}">
+                    <div style="display:flex; gap:10px; justify-content:flex-end; margin-top:16px;">
+                        <button class="btn btn-sm" id="cancelAutoBtn">取消</button>
+                        <button class="btn btn-primary btn-sm" id="saveAutoBtn">保存</button>
+                    </div>
+                `, true);
+                document.getElementById('saveAutoBtn').addEventListener('click', () => {
+                    autoPlayTimes.noonOpen = document.getElementById('autoNoonOpen').value || '12:20';
+                    autoPlayTimes.noonClose = document.getElementById('autoNoonClose').value || '12:30';
+                    autoPlayTimes.afterOpen = document.getElementById('autoAfterOpen').value || '17:05';
+                    autoPlayTimes.afterClose = document.getElementById('autoAfterClose').value || '17:25';
+                    localStorage.setItem('autoPlaySettings', JSON.stringify(autoPlayTimes));
+                    closeModal();
+                    addLog('自动播放时间已更新');
+                });
+                document.getElementById('cancelAutoBtn').addEventListener('click', closeModal);
+            }
+
+            // ========== 搜索与播放 ==========
+            function performSearch() {
+                const kw = document.getElementById('searchInput').value.trim().toLowerCase();
+                if (!kw) { showAlert('请输入歌名'); return; }
+                const matches = musicFiles.filter(f => f.name.toLowerCase().includes(kw));
+                if (!matches.length) { showAlert('未找到相关歌曲'); return; }
+                showSongListModal(matches);
+                addLog(`搜索歌曲：${kw}，找到 ${matches.length} 首`);
+            }
+
+            function showSongListModal(songs) {
+                let html = '<h3>🎵 搜索结果</h3>';
+                songs.forEach(song => {
+                    const idx = musicFiles.indexOf(song);
+                    html += `<div class="song-list-item" data-idx="${idx}">${song.name}</div>`;
+                });
+                showModal(html, true);
+                document.querySelectorAll('.song-list-item').forEach(el => {
+                    el.addEventListener('click', () => {
+                        playMusicByIndex(parseInt(el.dataset.idx));
+                        closeModal();
+                    });
+                });
+            }
+
+            function playMusicByIndex(index) {
+                if (index < 0 || index >= musicFiles.length) return;
+                if (currentAudioIndex === index) {
+                    isPlaying ? audioPlayer.pause() : audioPlayer.play();
+                    isPlaying = !isPlaying;
+                    updatePlayPauseBtn();
+                    return;
+                }
+                if (audioPlayer.src) URL.revokeObjectURL(audioPlayer.src);
+                const file = musicFiles[index];
+                audioPlayer.src = URL.createObjectURL(file);
+                audioPlayer.play();
+                currentAudioIndex = index;
+                isPlaying = true;
+                nowPlaying.textContent = file.name;
+                updatePlayPauseBtn();
+                playHistory.unshift({ time: new Date().toLocaleString(), name: file.name });
+                if (playHistory.length > 20) playHistory.pop();
+                savePlayHistoryToStorage();
+                renderPlayHistory();
+                addLog(`播放歌曲：${file.name}`);
+            }
+
+            function togglePlay() {
+                if (currentAudioIndex === -1) { showAlert('请先选择歌曲'); return; }
+                isPlaying ? audioPlayer.pause() : audioPlayer.play();
+                isPlaying = !isPlaying;
+                updatePlayPauseBtn();
+            }
+
+            function playPrevious() {
+                if (!musicFiles.length) return;
+                const idx = (currentAudioIndex - 1 + musicFiles.length) % musicFiles.length;
+                playMusicByIndex(idx);
+            }
+            function playNext() {
+                if (!musicFiles.length) return;
+                const idx = (currentAudioIndex + 1) % musicFiles.length;
+                playMusicByIndex(idx);
+            }
+
+            function randomPlay() {
+                const filtered = musicFiles.filter(f => !SPECIAL_SONGS.includes(f.name.toLowerCase()));
+                if (filtered.length === 0) {
+                    showAlert('没有可随机播放的歌曲（已排除开场白/结束音乐）');
+                    return;
+                }
+                let available = filtered;
+                if (recentRandomIndices.length > 0 && filtered.length > recentRandomIndices.length) {
+                    available = filtered.filter(f => !recentRandomIndices.includes(musicFiles.indexOf(f)));
+                    if (available.length === 0) available = filtered;
+                }
+                const randFile = available[Math.floor(Math.random() * available.length)];
+                const idx = musicFiles.indexOf(randFile);
+                recentRandomIndices.push(idx);
+                if (recentRandomIndices.length > 5) recentRandomIndices.shift();
+                playMusicByIndex(idx);
+                addLog('随机播放：' + randFile.name);
+            }
+
+            function playSpecial(filename) {
+                const file = musicFiles.find(f => f.name.toLowerCase() === filename.toLowerCase());
+                if (!file) {
+                    showAlert(`未找到文件：${filename}`);
+                    return;
+                }
+                const idx = musicFiles.indexOf(file);
+                playMusicByIndex(idx);
+            }
+
+            function stopMusic() {
+                audioPlayer.pause();
+                if (audioPlayer.src) URL.revokeObjectURL(audioPlayer.src);
+                audioPlayer.src = '';
+                currentAudioIndex = -1;
+                isPlaying = false;
+                nowPlaying.textContent = '未选择歌曲';
+                updatePlayPauseBtn();
+                addLog('停止播放音乐');
+            }
+
+            function toggleLoopMode() {
+                loopMode = !loopMode;
+                loopToggleBtn.textContent = loopMode ? '🔂 单曲循环' : '🔁 顺序播放';
+                loopToggleBtn.dataset.loop = loopMode ? 'true' : 'false';
+                addLog(`切换循环模式：${loopMode ? '单曲循环' : '顺序播放'}`);
+            }
+
+            function handleSongEnd() {
+                if (loopMode) {
+                    audioPlayer.currentTime = 0;
+                    audioPlayer.play();
+                } else {
+                    playNext();
+                }
+            }
+
+            function updatePlayPauseBtn() {
+                document.getElementById('playPauseBtn').textContent = isPlaying ? '⏸️ 暂停' : '▶️ 播放';
+            }
+
+            function seekAudio() {
+                if (audioPlayer.duration && !isNaN(audioPlayer.duration)) {
+                    audioPlayer.currentTime = progressBar.value * audioPlayer.duration;
+                }
+            }
+            function changeVolume() {
+                audioPlayer.volume = volumeBar.value;
+                document.getElementById('volumePercent').textContent = Math.round(volumeBar.value*100)+'%';
+            }
+            function updateProgress() {
+                if (audioPlayer.duration && !isNaN(audioPlayer.duration)) {
+                    const pct = audioPlayer.currentTime / audioPlayer.duration;
+                    progressBar.value = isNaN(pct) ? 0 : pct;
+                    currentTimeSpan.textContent = formatTime(audioPlayer.currentTime);
+                }
+            }
+            function updateDuration() {
+                if (audioPlayer.duration && !isNaN(audioPlayer.duration)) {
+                    durationSpan.textContent = formatTime(audioPlayer.duration);
+                }
+            }
+            function formatTime(s) {
+                const m = Math.floor(s/60), sec = Math.floor(s%60);
+                return `${String(m).padStart(2,'0')}:${String(sec).padStart(2,'0')}`;
+            }
+            function renderPlayHistory() {
+                document.getElementById('playHistoryList').innerHTML = playHistory.map(p =>
+                    `<div class="log-item"><span class="time">${p.time}</span>${p.name}</div>`).join('');
+            }
+            function addLog(action) {
+                operationLogs.unshift({ time: new Date().toLocaleString(), action });
+                if (operationLogs.length > 100) operationLogs.pop();
+                saveLogsToStorage();
+                renderOperationLogs();
+            }
+            function renderOperationLogs() {
+                document.getElementById('operationLogList').innerHTML = operationLogs.map(l =>
+                    `<div class="log-item"><span class="time">${l.time}</span>${l.action}</div>`).join('');
+            }
+
+            function toggleAutoPlay() {
+                autoPlayEnabled = !autoPlayEnabled;
+                updateAutoPlayButton();
+                addLog(autoPlayEnabled ? '启用自动播放' : '禁用自动播放');
+            }
+            function updateAutoPlayButton() {
+                autoPlayToggleBtn.textContent = autoPlayEnabled ? '✅ 已启用' : '❌ 已禁用';
+                localStorage.setItem('autoPlayEnabled', autoPlayEnabled);
+            }
+
+            function checkAutoPlaySchedule() {
+                if (!autoPlayEnabled || musicFiles.length === 0) return;
+                const now = new Date();
+                const h = now.getHours(), m = now.getMinutes();
+                const day = now.getDay();
+                const todayStr = now.toISOString().slice(0,10);
+                if (day === 5 && h === 17) return;
+                if (holidays.includes(todayStr)) return;
+                const timeStr = `${pad(h)}:${pad(m)}`;
+                if (timeStr === autoPlayTimes.noonOpen) { playSpecial('开场白配乐.mp3'); addLog('自动播放中午开场'); }
+                else if (timeStr === autoPlayTimes.noonClose) { playSpecial('结束音乐.mp3'); addLog('自动播放中午结束'); }
+                else if (timeStr === autoPlayTimes.afterOpen) { playSpecial('开场白配乐.mp3'); addLog('自动播放下午开场'); }
+                else if (timeStr === autoPlayTimes.afterClose) { playSpecial('结束音乐.mp3'); addLog('自动播放下午结束'); }
+            }
+
+            // ========== 歌单/节假日/成员弹窗 ==========
+            function showPlaylistModal() {
+                let plHtml = playlist.map((s, i) =>
+                    `<div style="display:flex; justify-content:space-between; padding:6px; background:#f0f0f0; margin:4px 0; border-radius:8px;">
+                        <span>${s}</span>
+                        <button class="btn btn-sm btn-danger del-pl-btn" data-index="${i}">删除</button>
+                    </div>`
+                ).join('') || '<p style="color:#888;">歌单为空</p>';
+                showModal(`
+                    <h3>📋 排班歌单</h3>
+                    <div style="margin-bottom:10px;">
+                        <input type="text" id="newPlSong" placeholder="歌名（需精确匹配）" style="width:70%; display:inline;">
+                        <button class="btn btn-sm btn-primary" id="addPlBtn" style="width:25%;">添加</button>
+                    </div>
+                    <div style="max-height:200px; overflow-y:auto;">${plHtml}</div>
+                    <div style="margin-top:10px; display:flex; gap:8px; justify-content:flex-end;">
+                        <button class="btn btn-sm btn-success" id="playPlBtn">▶️ 播放</button>
+                        <button class="btn btn-sm" id="closePlModal">关闭</button>
+                    </div>
+                `, true);
+
+                document.getElementById('addPlBtn').addEventListener('click', async () => {
+                    const song = document.getElementById('newPlSong').value.trim();
+                    if (!song) return showAlert('请输入歌名');
+                    if (!musicFiles.find(f => f.name === song)) {
+                        const ok = await showConfirm('未在音乐库中找到该歌曲，是否仍添加？');
+                        if (!ok) return;
+                    }
+                    playlist.push(song);
+                    savePlaylist();
+                    addLog('添加歌单歌曲：' + song);
+                    showPlaylistModal();
+                });
+
+                document.querySelectorAll('.del-pl-btn').forEach(btn => {
+                    btn.addEventListener('click', () => {
+                        const idx = parseInt(btn.dataset.index);
+                        playlist.splice(idx, 1);
+                        savePlaylist();
+                        showPlaylistModal();
+                    });
+                });
+                document.getElementById('playPlBtn').addEventListener('click', () => {
+                    if (playlist.length === 0) return showAlert('歌单为空');
+                    playPlaylist();
+                    closeModal();
+                });
+                document.getElementById('closePlModal').addEventListener('click', closeModal);
+            }
+
+            function playPlaylist() {
+                const songs = playlist.filter(s => musicFiles.find(f => f.name === s));
+                if (songs.length === 0) return showAlert('歌单中没有可播放的歌曲');
+                let index = 0;
+                const playNext = () => {
+                    if (index >= songs.length) {
+                        stopMusic();
+                        addLog('歌单播放完毕，已停止所有音频');
+                        return;
+                    }
+                    const file = musicFiles.find(f => f.name === songs[index]);
+                    if (file) {
+                        const audioIndex = musicFiles.indexOf(file);
+                        playMusicByIndex(audioIndex);
+                        audioPlayer.addEventListener('ended', function handler() {
+                            audioPlayer.removeEventListener('ended', handler);
+                            index++;
+                            playNext();
+                        }, { once: true });
+                    } else {
+                        index++;
+                        playNext();
+                    }
+                };
+                playNext();
+                addLog('开始播放排班歌单');
+            }
+
+            function showHolidayModal() {
+                let hHtml = holidays.map((d, i) =>
+                    `<div style="display:flex; justify-content:space-between; padding:6px; background:#f0f0f0; margin:4px 0; border-radius:8px;">
+                        <span>${d}</span>
+                        <button class="btn btn-sm btn-danger del-h-btn" data-index="${i}">删除</button>
+                    </div>`
+                ).join('') || '<p style="color:#888;">暂无节假日</p>';
+                showModal(`
+                    <h3>🗓️ 节假日设置</h3>
+                    <input type="date" id="newHoliday" style="width:70%;">
+                    <button class="btn btn-sm btn-primary" id="addHolidayBtn" style="width:25%;">添加</button>
+                    <div style="max-height:200px; overflow-y:auto; margin-top:10px;">${hHtml}</div>
+                    <div style="margin-top:10px; text-align:right;">
+                        <button class="btn btn-sm" id="closeHolidayModal">关闭</button>
+                    </div>
+                `, true);
+                document.getElementById('addHolidayBtn').addEventListener('click', () => {
+                    const date = document.getElementById('newHoliday').value;
+                    if (!date) return showAlert('请选择日期');
+                    if (holidays.includes(date)) return showAlert('该日期已存在');
+                    holidays.push(date);
+                    saveHolidays();
+                    addLog('添加节假日：' + date);
+                    showHolidayModal();
+                });
+                document.querySelectorAll('.del-h-btn').forEach(btn => {
+                    btn.addEventListener('click', () => {
+                        const idx = parseInt(btn.dataset.index);
+                        holidays.splice(idx, 1);
+                        saveHolidays();
+                        showHolidayModal();
+                    });
+                });
+                document.getElementById('closeHolidayModal').addEventListener('click', closeModal);
+            }
+
+            function showMemberManageModal() {
+                let mHtml = memberList.map((m, i) =>
+                    `<div style="display:flex; justify-content:space-between; padding:6px; background:#f0f0f0; margin:4px 0; border-radius:8px;">
+                        <span>${m}</span>
+                        <button class="btn btn-sm btn-danger del-m-btn" data-index="${i}">删除</button>
+                    </div>`
+                ).join('') || '<p style="color:#888;">暂无成员</p>';
+                showModal(`
+                    <h3>👥 成员管理</h3>
+                    <input type="text" id="newMember" placeholder="姓名" style="width:70%;">
+                    <button class="btn btn-sm btn-primary" id="addMemberBtn" style="width:25%;">添加</button>
+                    <div style="max-height:200px; overflow-y:auto; margin-top:10px;">${mHtml}</div>
+                    <div style="margin-top:10px; display:flex; gap:8px; justify-content:space-between;">
+                        <button class="btn btn-sm btn-danger" id="clearAllMembersBtn">🗑️ 一键清除所有成员</button>
+                        <button class="btn btn-sm" id="closeMemberModal">关闭</button>
+                    </div>
+                `, true);
+                document.getElementById('addMemberBtn').addEventListener('click', async () => {
+                    const name = document.getElementById('newMember').value.trim();
+                    if (!name) return showAlert('请输入姓名');
+                    if (memberList.includes(name)) return showAlert('已存在');
+                    memberList.push(name);
+                    saveMemberList();
+                    addLog('添加成员：' + name);
+                    showMemberManageModal();
+                });
+                document.querySelectorAll('.del-m-btn').forEach(btn => {
+                    btn.addEventListener('click', () => {
+                        const idx = parseInt(btn.dataset.index);
+                        memberList.splice(idx, 1);
+                        saveMemberList();
+                        showMemberManageModal();
+                    });
+                });
+                document.getElementById('clearAllMembersBtn').addEventListener('click', () => {
+                    showPasswordModal('确认一键清除所有成员？', (pwd) => {
+                        if (pwd === '816103') {
+                            memberList = [];
+                            saveMemberList();
+                            addLog('已一键清除所有成员');
+                            showAlert('已清除所有成员！');
+                            closeModal();
+                        } else if (pwd) {
+                            showAlert('密码错误！', '错误');
+                        }
+                    });
+                });
+                document.getElementById('closeMemberModal').addEventListener('click', closeModal);
+            }
+
+            // ========== 本地存储 ==========
+            function saveDutyToStorage() { localStorage.setItem('dutyMembers', JSON.stringify(dutyMembers)); }
+            function saveAttendanceToStorage() { localStorage.setItem('attendanceRecords', JSON.stringify(attendanceRecords)); }
+            function savePlayHistoryToStorage() { localStorage.setItem('playHistory', JSON.stringify(playHistory)); }
+            function saveLogsToStorage() { localStorage.setItem('operationLogs', JSON.stringify(operationLogs)); }
+            function saveMemberList() { localStorage.setItem('memberList', JSON.stringify(memberList)); }
+            function saveHolidays() { localStorage.setItem('holidays', JSON.stringify(holidays)); }
+            function savePlaylist() { localStorage.setItem('playlist', JSON.stringify(playlist)); }
+
+            function loadDataFromStorage() {
+                try {
+                    dutyMembers = JSON.parse(localStorage.getItem('dutyMembers') || '[]');
+                    attendanceRecords = JSON.parse(localStorage.getItem('attendanceRecords') || '[]');
+                    playHistory = JSON.parse(localStorage.getItem('playHistory') || '[]');
+                    operationLogs = JSON.parse(localStorage.getItem('operationLogs') || '[]');
+                    memberList = JSON.parse(localStorage.getItem('memberList') || '[]');
+                    holidays = JSON.parse(localStorage.getItem('holidays') || '[]');
+                    playlist = JSON.parse(localStorage.getItem('playlist') || '[]');
+                    autoPlayEnabled = JSON.parse(localStorage.getItem('autoPlayEnabled') ?? 'true');
+                } catch(e){}
+                renderDutyDisplay();
+                renderPlayHistory();
+                renderOperationLogs();
+            }
+
+            function showModal(content, closable = true) {
+                const overlay = document.createElement('div');
+                overlay.className = 'modal-overlay';
+                overlay.innerHTML = `<div class="modal">${content}</div>`;
+                if (closable) overlay.addEventListener('click', e => { if (e.target === overlay) closeModal(); });
+                modalContainer.innerHTML = '';
+                modalContainer.appendChild(overlay);
+            }
+            function closeModal() { modalContainer.innerHTML = ''; }
+
+            window.addEventListener('load', init);
+        })();
+    </script>
+</body>
+</html>

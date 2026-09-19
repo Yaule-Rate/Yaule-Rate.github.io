@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>花式图案表情转图片转换器</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+    padding: 20px;
+    color: #333;
+  }
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  h1 {
+    text-align: center;
+    color: #fff;
+    font-size: 28px;
+    margin-bottom: 8px;
+    text-shadow: 0 2px 10px rgba(0,0,0,0.2);
+  }
+  .subtitle {
+    text-align: center;
+    color: rgba(255,255,255,0.85);
+    font-size: 14px;
+    margin-bottom: 24px;
+  }
+  .main {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+  }
+  @media (max-width: 768px) {
+    .main { grid-template-columns: 1fr; }
+  }
+  .panel {
+    background: #fff;
+    border-radius: 16px;
+    padding: 24px;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.15);
+  }
+  .panel-title {
+    font-size: 16px;
+    font-weight: 600;
+    color: #555;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .panel-title::before {
+    content: '';
+    width: 4px;
+    height: 18px;
+    background: linear-gradient(180deg, #667eea, #764ba2);
+    border-radius: 2px;
+  }
+  .form-group {
+    margin-bottom: 18px;
+  }
+  label {
+    display: block;
+    font-size: 13px;
+    color: #666;
+    margin-bottom: 6px;
+    font-weight: 500;
+  }
+  textarea, input[type="text"], input[type="number"], select {
+    width: 100%;
+    padding: 10px 12px;
+    border: 2px solid #e0e0e0;
+    border-radius: 8px;
+    font-size: 14px;
+    transition: border-color 0.2s;
+    font-family: inherit;
+  }
+  textarea:focus, input:focus, select:focus {
+    outline: none;
+    border-color: #667eea;
+  }
+  textarea {
+    resize: vertical;
+    min-height: 70px;
+  }
+  .preset-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 8px;
+  }
+  .preset-btn {
+    padding: 6px 14px;
+    border: 2px solid #e0e0e0;
+    border-radius: 20px;
+    background: #fff;
+    cursor: pointer;
+    font-size: 12px;
+    transition: all 0.2s;
+    color: #555;
+  }
+  .preset-btn:hover {
+    border-color: #667eea;
+    color: #667eea;
+  }
+  .preset-btn.active {
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color: #fff;
+    border-color: transparent;
+  }
+  .color-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  input[type="color"] {
+    width: 44px;
+    height: 36px;
+    border: 2px solid #e0e0e0;
+    border-radius: 8px;
+    cursor: pointer;
+    padding: 2px;
+  }
+  .color-hex {
+    flex: 1;
+    padding: 8px 10px;
+    border: 2px solid #e0e0e0;
+    border-radius: 8px;
+    font-size: 13px;
+    font-family: monospace;
+  }
+  .slider-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  input[type="range"] {
+    flex: 1;
+    -webkit-appearance: none;
+    height: 6px;
+    border-radius: 3px;
+    background: #e0e0e0;
+    outline: none;
+  }
+  input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    cursor: pointer;
+    box-shadow: 0 2px 6px rgba(102,126,234,0.4);
+  }
+  .slider-value {
+    min-width: 50px;
+    text-align: center;
+    font-size: 13px;
+    color: #667eea;
+    font-weight: 600;
+  }
+  .canvas-wrap {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: repeating-conic-gradient(#f0f0f0 0% 25%, #fff 0% 50%) 50% / 20px 20px;
+    border-radius: 12px;
+    padding: 20px;
+    min-height: 300px;
+    margin-bottom: 16px;
+  }
+  canvas {
+    max-width: 100%;
+    border-radius: 8px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+  }
+  .download-btn {
+    width: 100%;
+    padding: 14px;
+    border: none;
+    border-radius: 10px;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color: #fff;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+  }
+  .download-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(102,126,234,0.4);
+  }
+  .download-btn:active {
+    transform: translateY(0);
+  }
+  .info-text {
+    font-size: 12px;
+    color: #999;
+    text-align: center;
+    margin-top: 10px;
+  }
+  .two-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+  .font-select {
+    padding: 8px 10px;
+    border: 2px solid #e0e0e0;
+    border-radius: 8px;
+    font-size: 13px;
+    width: 100%;
+  }
+</style>
+</head>
+<body>
+<div class="container">
+  <h1>🎨 花式图案表情转图片转换器</h1>
+  <p class="subtitle">输入文字、表情或任意内容，自定义颜色、对齐、旋转和比例，一键导出图片</p>
+  
+  <div class="main">
+    <!-- 左侧：控制面板 -->
+    <div class="panel">
+      <div class="panel-title">输入内容</div>
+      <div class="form-group">
+        <textarea id="textInput" placeholder="在这里输入文字、表情符号 😀🎉 或任意内容...">Hello World 🌍</textarea>
+      </div>
+
+      <div class="panel-title">画布比例</div>
+      <div class="form-group">
+        <div class="preset-row" id="ratioPresets">
+          <button class="preset-btn active" data-ratio="1:1">1:1 方形</button>
+          <button class="preset-btn" data-ratio="4:3">4:3</button>
+          <button class="preset-btn" data-ratio="16:9">16:9</button>
+          <button class="preset-btn" data-ratio="3:4">3:4</button>
+          <button class="preset-btn" data-ratio="9:16">9:16</button>
+          <button class="preset-btn" data-ratio="2:1">2:1</button>
+        </div>
+      </div>
+
+      <div class="two-col">
+        <div>
+          <div class="panel-title">背景颜色</div>
+          <div class="form-group">
+            <div class="preset-row">
+              <button class="preset-btn active" data-bg="#ffffff">白底</button>
+              <button class="preset-btn" data-bg="#000000">黑底</button>
+              <button class="preset-btn" data-bg="transparent">透明</button>
+            </div>
+            <div class="color-row">
+              <input type="color" id="bgColor" value="#ffffff">
+              <input type="text" class="color-hex" id="bgHex" value="#ffffff">
+            </div>
+          </div>
+        </div>
+        <div>
+          <div class="panel-title">文字颜色</div>
+          <div class="form-group">
+            <div class="preset-row">
+              <button class="preset-btn" data-fg="#000000">黑色</button>
+              <button class="preset-btn active" data-fg="#ffffff">白色</button>
+              <button class="preset-btn" data-fg="#667eea">紫色</button>
+              <button class="preset-btn" data-fg="#ff6b6b">红色</button>
+            </div>
+            <div class="color-row">
+              <input type="color" id="fgColor" value="#ffffff">
+              <input type="text" class="color-hex" id="fgHex" value="#ffffff">
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="panel-title">对齐方式</div>
+      <div class="form-group">
+        <div class="preset-row" id="alignPresets">
+          <button class="preset-btn" data-align="left">⬅ 左对齐</button>
+          <button class="preset-btn active" data-align="center">⬛ 居中</button>
+          <button class="preset-btn" data-align="right">➡ 右对齐</button>
+        </div>
+      </div>
+
+      <div class="two-col">
+        <div>
+          <div class="panel-title">字体大小</div>
+          <div class="form-group">
+            <div class="slider-row">
+              <input type="range" id="fontSize" min="12" max="200" value="64">
+              <span class="slider-value" id="fontSizeVal">64px</span>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div class="panel-title">旋转角度</div>
+          <div class="form-group">
+            <div class="slider-row">
+              <input type="range" id="rotation" min="-180" max="180" value="0">
+              <span class="slider-value" id="rotationVal">0°</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="panel-title">字体样式</div>
+      <div class="form-group">
+        <select class="font-select" id="fontFamily">
+          <option value="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif">系统默认</option>
+          <option value="'PingFang SC', 'Microsoft YaHei', sans-serif">苹方/雅黑</option>
+          <option value="Georgia, serif">Georgia 衬线</option>
+          <option value="'Times New Roman', serif">Times New Roman</option>
+          <option value="'Courier New', monospace">Courier 等宽</option>
+          <option value="Arial, sans-serif">Arial</option>
+          <option value="Verdana, sans-serif">Verdana</option>
+          <option value="Impact, sans-serif">Impact 粗体</option>
+        </select>
+      </div>
+
+      <div class="two-col">
+        <div>
+          <div class="panel-title">字体粗细</div>
+          <div class="form-group">
+            <select class="font-select" id="fontWeight">
+              <option value="300">细体 Light</option>
+              <option value="400" selected>常规 Normal</option>
+              <option value="600">半粗 Semibold</option>
+              <option value="700">粗体 Bold</option>
+              <option value="900">特粗 Black</option>
+            </select>
+          </div>
+        </div>
+        <div>
+          <div class="panel-title">垂直偏移</div>
+          <div class="form-group">
+            <div class="slider-row">
+              <input type="range" id="offsetY" min="-200" max="200" value="0">
+              <span class="slider-value" id="offsetYVal">0px</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 右侧：预览和下载 -->
+    <div class="panel">
+      <div class="panel-title">实时预览</div>
+      <div class="canvas-wrap">
+        <canvas id="canvas" width="512" height="512"></canvas>
+      </div>
+      <button class="download-btn" id="downloadBtn">
+        <span>⬇</span> 下载 PNG 图片
+      </button>
+      <p class="info-text">图片尺寸：<span id="canvasSize">512 × 512</span> px</p>
+    </div>
+  </div>
+</div>
+
+<script>
+const canvas = document.getElementById('canvas');
+const ctx = canvas.getContext('2d');
+
+const state = {
+  text: 'Hello World 🌍',
+  ratio: '1:1',
+  bgColor: '#ffffff',
+  fgColor: '#ffffff',
+  align: 'center',
+  fontSize: 64,
+  rotation: 0,
+  fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
+  fontWeight: '400',
+  offsetY: 0
+};
+
+const ratioMap = {
+  '1:1': [512, 512],
+  '4:3': [640, 480],
+  '16:9': [640, 360],
+  '3:4': [480, 640],
+  '9:16': [360, 640],
+  '2:1': [640, 320]
+};
+
+function draw() {
+  const [w, h] = ratioMap[state.ratio];
+  canvas.width = w;
+  canvas.height = h;
+  document.getElementById('canvasSize').textContent = w + ' × ' + h;
+
+  // 背景
+  ctx.clearRect(0, 0, w, h);
+  if (state.bgColor !== 'transparent') {
+    ctx.fillStyle = state.bgColor;
+    ctx.fillRect(0, 0, w, h);
+  }
+
+  // 文字
+  ctx.save();
+  ctx.translate(w / 2, h / 2 + state.offsetY);
+  ctx.rotate(state.rotation * Math.PI / 180);
+
+  ctx.font = state.fontWeight + ' ' + state.fontSize + 'px ' + state.fontFamily;
+  ctx.fillStyle = state.fgColor;
+  ctx.textBaseline = 'middle';
+
+  const lines = state.text.split('\n');
+  const lineHeight = state.fontSize * 1.3;
+  const totalHeight = lines.length * lineHeight;
+  const startY = -totalHeight / 2 + lineHeight / 2;
+
+  lines.forEach((line, i) => {
+    let x = 0;
+    if (state.align === 'left') {
+      ctx.textAlign = 'left';
+      x = -w / 2 + state.fontSize * 0.5;
+    } else if (state.align === 'right') {
+      ctx.textAlign = 'right';
+      x = w / 2 - state.fontSize * 0.5;
+    } else {
+      ctx.textAlign = 'center';
+    }
+    ctx.fillText(line, x, startY + i * lineHeight);
+  });
+
+  ctx.restore();
+}
+
+// 事件绑定
+document.getElementById('textInput').addEventListener('input', e => {
+  state.text = e.target.value;
+  draw();
+});
+
+document.querySelectorAll('#ratioPresets .preset-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('#ratioPresets .preset-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    state.ratio = btn.dataset.ratio;
+    draw();
+  });
+});
+
+document.querySelectorAll('[data-bg]').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('[data-bg]').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    state.bgColor = btn.dataset.bg;
+    if (state.bgColor !== 'transparent') {
+      document.getElementById('bgColor').value = state.bgColor;
+      document.getElementById('bgHex').value = state.bgColor;
+    }
+    draw();
+  });
+});
+
+document.querySelectorAll('[data-fg]').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('[data-fg]').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    state.fgColor = btn.dataset.fg;
+    document.getElementById('fgColor').value = state.fgColor;
+    document.getElementById('fgHex').value = state.fgColor;
+    draw();
+  });
+});
+
+document.getElementById('bgColor').addEventListener('input', e => {
+  state.bgColor = e.target.value;
+  document.getElementById('bgHex').value = e.target.value;
+  document.querySelectorAll('[data-bg]').forEach(b => b.classList.remove('active'));
+  draw();
+});
+
+document.getElementById('bgHex').addEventListener('change', e => {
+  if (/^#[0-9A-Fa-f]{6}$/.test(e.target.value)) {
+    state.bgColor = e.target.value;
+    document.getElementById('bgColor').value = e.target.value;
+    draw();
+  }
+});
+
+document.getElementById('fgColor').addEventListener('input', e => {
+  state.fgColor = e.target.value;
+  document.getElementById('fgHex').value = e.target.value;
+  document.querySelectorAll('[data-fg]').forEach(b => b.classList.remove('active'));
+  draw();
+});
+
+document.getElementById('fgHex').addEventListener('change', e => {
+  if (/^#[0-9A-Fa-f]{6}$/.test(e.target.value)) {
+    state.fgColor = e.target.value;
+    document.getElementById('fgColor').value = e.target.value;
+    draw();
+  }
+});
+
+document.querySelectorAll('#alignPresets .preset-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('#alignPresets .preset-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    state.align = btn.dataset.align;
+    draw();
+  });
+});
+
+document.getElementById('fontSize').addEventListener('input', e => {
+  state.fontSize = parseInt(e.target.value);
+  document.getElementById('fontSizeVal').textContent = state.fontSize + 'px';
+  draw();
+});
+
+document.getElementById('rotation').addEventListener('input', e => {
+  state.rotation = parseInt(e.target.value);
+  document.getElementById('rotationVal').textContent = state.rotation + '°';
+  draw();
+});
+
+document.getElementById('offsetY').addEventListener('input', e => {
+  state.offsetY = parseInt(e.target.value);
+  document.getElementById('offsetYVal').textContent = state.offsetY + 'px';
+  draw();
+});
+
+document.getElementById('fontFamily').addEventListener('change', e => {
+  state.fontFamily = e.target.value;
+  draw();
+});
+
+document.getElementById('fontWeight').addEventListener('change', e => {
+  state.fontWeight = e.target.value;
+  draw();
+});
+
+// 下载
+document.getElementById('downloadBtn').addEventListener('click', () => {
+  const link = document.createElement('a');
+  link.download = 'converted-image-' + Date.now() + '.png';
+  link.href = canvas.toDataURL('image/png');
+  link.click();
+});
+
+// 初始绘制
+draw();
+</script>
+</body>
+</html>

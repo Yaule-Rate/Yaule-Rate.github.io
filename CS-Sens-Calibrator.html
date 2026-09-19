@@ -1,0 +1,1743 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AIM MATRIX // 量子瞄准校准矩阵</title>
+<style>
+/* ========== 全局重置与变量 ========== */
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --neon-cyan:#00f0ff;
+  --neon-blue:#4d7cff;
+  --neon-purple:#b14dff;
+  --neon-pink:#ff4dd2;
+  --neon-green:#00ff9d;
+  --neon-yellow:#ffd700;
+  --neon-red:#ff4d6d;
+  --bg-deep:#030712;
+  --bg-mid:#0a1428;
+  --bg-panel:rgba(10,20,45,0.75);
+  --cyan:#00f0ff;
+  --cyan-dim:#006b8a;
+  --purple:#b14dff;
+  --purple-dim:#5a2a8a;
+  --orange:#ff8c42;
+  --blue:#4d7cff;
+  --green:#00ff9d;
+  --red:#ff4d6d;
+  --yellow:#ffd700;
+  --text:#e8f6ff;
+  --text-dim:#8fb8d8;
+  --text-mute:#5a7a9a;
+  --border:rgba(0,240,255,0.25);
+  --glow-cyan:0 0 8px rgba(0,240,255,0.6),0 0 24px rgba(0,240,255,0.3);
+  --glow-purple:0 0 8px rgba(177,77,255,0.6),0 0 24px rgba(177,77,255,0.3);
+  --glow-green:0 0 8px rgba(0,255,157,0.6),0 0 24px rgba(0,255,157,0.3);
+  --glow-blue:0 0 8px rgba(77,124,255,0.6),0 0 24px rgba(77,124,255,0.3);
+}
+html,body{width:100%;height:100%;overflow-x:hidden;font-family:'Segoe UI','PingFang SC','Microsoft YaHei',sans-serif;background:var(--bg-deep);color:var(--text);cursor:default}
+body{
+  background:
+    radial-gradient(ellipse 60% 50% at 15% 25%,rgba(77,124,255,0.08) 0%,transparent 60%),
+    radial-gradient(ellipse 50% 40% at 85% 75%,rgba(177,77,255,0.07) 0%,transparent 60%),
+    var(--bg-deep);
+  background-attachment:fixed;
+}
+/* 网格背景（带径向遮罩） */
+body::before{
+  content:'';position:fixed;top:0;left:0;width:100%;height:100%;
+  background-image:
+    linear-gradient(rgba(0,240,255,0.04) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(0,240,255,0.04) 1px,transparent 1px);
+  background-size:50px 50px;
+  -webkit-mask-image:radial-gradient(ellipse at center,black 30%,transparent 80%);
+  mask-image:radial-gradient(ellipse at center,black 30%,transparent 80%);
+  pointer-events:none;z-index:0;
+}
+/* 扫描线 */
+body::after{
+  content:'';position:fixed;top:0;left:0;width:100%;height:100%;
+  background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,240,255,0.015) 3px,transparent 4px);
+  animation:scanMove 6s linear infinite;
+  pointer-events:none;z-index:9999;
+}
+@keyframes scanMove{from{background-position-y:0}to{background-position-y:60px}}
+/* 发光球体 */
+.glow-orb{position:fixed;border-radius:50%;filter:blur(100px);z-index:0;pointer-events:none}
+.orb-a{width:500px;height:500px;background:var(--neon-blue);top:-150px;left:-100px;opacity:.2;animation:orbFloat 12s ease-in-out infinite}
+.orb-b{width:400px;height:400px;background:var(--neon-purple);top:40%;right:-120px;opacity:.18;animation:orbFloat 15s ease-in-out infinite reverse}
+.orb-c{width:350px;height:350px;background:var(--neon-cyan);bottom:-100px;left:30%;opacity:.12;animation:orbFloat 10s ease-in-out infinite}
+@keyframes orbFloat{0%,100%{transform:translate(0,0) scale(1)}50%{transform:translate(40px,-30px) scale(1.1)}}
+
+/* ========== 页面容器 ========== */
+.app-container{position:relative;width:100%;min-height:100%;z-index:1}
+.page{position:absolute;top:0;left:0;width:100%;min-height:100vh;display:none;flex-direction:column;align-items:center;justify-content:flex-start;padding:30px 20px;overflow-y:auto;overflow-x:hidden}
+#pageHome{justify-content:center;min-height:100vh}
+.page.active{display:flex;animation:pageIn 0.5s ease}
+@keyframes pageIn{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+
+/* ========== 通用组件 ========== */
+.glow-text{text-shadow:var(--glow-cyan)}
+.glow-text-purple{text-shadow:var(--glow-purple)}
+.glow-text-green{text-shadow:var(--glow-green)}
+
+.btn{
+  position:relative;display:inline-flex;align-items:center;justify-content:center;gap:8px;
+  padding:12px 28px;font-size:14px;font-weight:700;letter-spacing:2px;
+  color:var(--bg-deep);
+  background:linear-gradient(135deg,var(--neon-cyan),var(--neon-blue));
+  border:none;border-radius:8px;
+  cursor:pointer;text-transform:uppercase;transition:all .25s;overflow:hidden;
+}
+.btn::before{content:'';position:absolute;top:0;left:-100%;width:60%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,0.3),transparent);transition:left .6s;transform:skewX(-20deg)}
+.btn:hover{filter:brightness(1.15);transform:translateY(-2px);box-shadow:0 6px 25px rgba(0,240,255,.4)}
+.btn:hover::before{left:130%}
+.btn:active{transform:translateY(0)}
+.btn:disabled{opacity:.4;cursor:not-allowed;filter:grayscale(.5);transform:none}
+.btn-purple{background:linear-gradient(135deg,var(--neon-purple),var(--neon-pink));color:#fff}
+.btn-purple:hover{box-shadow:0 6px 25px rgba(177,77,255,.4)}
+.btn-green{background:linear-gradient(135deg,var(--neon-green),#4dffb8);color:var(--bg-deep)}
+.btn-green:hover{box-shadow:0 6px 25px rgba(0,255,157,.4)}
+.btn-red{background:linear-gradient(135deg,var(--neon-red),#ff8fa3);color:#fff}
+.btn-red:hover{box-shadow:0 6px 25px rgba(255,77,109,.4)}
+.btn-lg{padding:16px 40px;font-size:16px}
+.btn-sm{padding:8px 18px;font-size:12px}
+
+.panel{
+  background:var(--bg-panel);
+  border:1px solid var(--border);
+  border-radius:14px;
+  backdrop-filter:blur(10px);
+  padding:30px 40px;position:relative;overflow:hidden;
+  box-shadow:0 0 30px rgba(0,240,255,.05),inset 0 0 30px rgba(0,240,255,.02);
+  transition:all .3s;
+}
+.panel:hover{border-color:rgba(0,240,255,.45);box-shadow:0 0 40px rgba(0,240,255,.1),inset 0 0 30px rgba(0,240,255,.04)}
+.panel::before{
+  content:'';position:absolute;top:0;left:0;width:30px;height:30px;
+  border-top:2px solid var(--neon-cyan);border-left:2px solid var(--neon-cyan);
+  border-radius:14px 0 0 0;pointer-events:none;
+}
+.panel::after{
+  content:'';position:absolute;bottom:0;right:0;width:30px;height:30px;
+  border-bottom:2px solid var(--neon-purple);border-right:2px solid var(--neon-purple);
+  border-radius:0 0 14px 0;pointer-events:none;
+}
+/* 面板顶部数据流动画 */
+.panel .data-flow{position:absolute;top:0;left:-100%;width:100%;height:2px;background:linear-gradient(90deg,transparent,var(--neon-cyan),transparent);animation:dataFlow 3s linear infinite;pointer-events:none}
+@keyframes dataFlow{to{left:100%}}
+
+/* ========== 首页 ========== */
+.hero-title{font-size:clamp(32px,7vw,68px);font-weight:900;letter-spacing:10px;margin-bottom:8px;position:relative;
+  background:linear-gradient(135deg,var(--neon-cyan),var(--neon-purple));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  filter:drop-shadow(0 0 20px rgba(0,240,255,0.4));
+}
+.hero-title span{background:linear-gradient(135deg,var(--neon-pink),var(--neon-purple));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.hero-sub{font-size:clamp(12px,1.8vw,18px);color:var(--text-dim);letter-spacing:8px;margin-bottom:40px;text-transform:uppercase}
+.hero-badge{display:inline-block;padding:8px 22px;border:1px solid var(--neon-cyan);color:var(--neon-cyan);font-size:11px;letter-spacing:5px;margin-bottom:25px;background:rgba(0,240,255,0.06);border-radius:6px;box-shadow:0 0 15px rgba(0,240,255,0.15)}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.5}}
+.hero-buttons{display:flex;gap:20px;flex-wrap:wrap;justify-content:center}
+.hero-features{display:flex;gap:40px;margin-top:50px;flex-wrap:wrap;justify-content:center}
+.feature-item{text-align:center;max-width:180px}
+.feature-icon{font-size:32px;margin-bottom:10px;color:var(--cyan);text-shadow:var(--glow-cyan)}
+.feature-label{font-size:13px;color:var(--text-dim);letter-spacing:1px}
+.version-tag{position:fixed;bottom:15px;right:20px;font-size:11px;color:var(--text-dim);letter-spacing:2px;z-index:100}
+.status-bar{position:fixed;bottom:15px;left:20px;font-size:11px;color:var(--green);letter-spacing:2px;z-index:100;display:flex;align-items:center;gap:8px}
+.status-dot{width:8px;height:8px;border-radius:50%;background:var(--green);box-shadow:var(--glow-green);animation:pulse 1.5s infinite}
+
+/* ========== 参数配置页 ========== */
+.config-title{font-size:26px;font-weight:800;letter-spacing:4px;margin-bottom:25px;
+  background:linear-gradient(135deg,var(--neon-cyan),var(--neon-blue));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  filter:drop-shadow(0 0 12px rgba(0,240,255,0.3));
+}
+.config-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:20px;width:100%;max-width:900px}
+.config-item{display:flex;flex-direction:column;gap:8px}
+.config-label{font-size:13px;color:var(--cyan);letter-spacing:2px;text-transform:uppercase;display:flex;align-items:center;gap:8px}
+.config-label .hint{color:var(--text-dim);font-size:11px;letter-spacing:0;text-transform:none}
+.config-input{
+  background:rgba(3,7,18,.8);border:1px solid rgba(0,240,255,.2);
+  border-radius:8px;color:var(--text);
+  padding:11px 14px;font-size:14px;font-weight:600;outline:none;transition:all .25s;
+  font-family:'Consolas','Microsoft YaHei',monospace;width:100%;
+}
+.config-input:focus{border-color:var(--neon-cyan);box-shadow:0 0 15px rgba(0,240,255,.2)}
+.config-input::placeholder{color:var(--text-mute)}
+select.config-input{cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%2300f0ff' fill='none' stroke-width='2'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 14px center;padding-right:40px}
+.config-actions{display:flex;gap:20px;margin-top:35px;flex-wrap:wrap;justify-content:center}
+.config-summary{margin-top:25px;padding:15px 25px;background:rgba(0,229,255,0.05);border-left:3px solid var(--cyan);font-size:14px;color:var(--text-dim);max-width:900px;width:100%}
+.config-summary strong{color:var(--cyan)}
+
+/* ========== 测试概览页 ========== */
+.test-overview{width:100%;max-width:1000px}
+.test-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:15px;margin:25px 0}
+.test-card{
+  background:var(--bg-panel);border:1px solid var(--border);border-radius:12px;
+  padding:18px;cursor:pointer;
+  transition:all .3s;position:relative;overflow:hidden;
+  backdrop-filter:blur(10px);
+}
+.test-card::before{content:'';position:absolute;top:0;left:-100%;width:100%;height:100%;background:linear-gradient(90deg,transparent,rgba(0,240,255,0.06),transparent);transition:left .5s}
+.test-card:hover{border-color:rgba(0,240,255,.5);transform:translateY(-3px);box-shadow:0 8px 30px rgba(0,240,255,.15)}
+.test-card:hover::before{left:100%}
+.test-card.done{border-color:rgba(0,255,157,.4);box-shadow:0 0 15px rgba(0,255,157,0.1)}
+.test-card.done::after{content:'✓ 已完成';position:absolute;top:10px;right:12px;font-size:11px;color:var(--neon-green);letter-spacing:1px}
+.test-num{font-size:36px;font-weight:900;color:var(--neon-cyan);opacity:0.12;position:absolute;top:5px;right:12px;font-family:'Consolas',monospace}
+.test-name{font-size:15px;font-weight:700;color:var(--text);margin-bottom:6px;letter-spacing:1px;transition:color .3s}
+.test-card:hover .test-name{color:var(--neon-cyan)}
+.test-desc{font-size:12px;color:var(--text-dim);line-height:1.5}
+.test-score{margin-top:10px;font-size:13px;color:var(--neon-green);font-weight:700;font-family:'Consolas',monospace}
+.progress-bar{width:100%;max-width:1000px;height:8px;background:rgba(255,255,255,0.06);margin:20px 0;position:relative;overflow:hidden;border-radius:4px}
+.progress-fill{height:100%;background:linear-gradient(90deg,var(--neon-cyan),var(--neon-purple));box-shadow:0 0 10px rgba(0,240,255,0.5);transition:width .5s;width:0%;position:relative;border-radius:4px}
+.progress-fill::after{content:'';position:absolute;top:0;right:0;width:20px;height:100%;background:linear-gradient(90deg,transparent,#fff);opacity:0.6;animation:progressShine 1.5s infinite}
+@keyframes progressShine{0%{transform:translateX(-100%)}100%{transform:translateX(100%)}}
+
+/* ========== 全屏测试区域 ========== */
+#testArena{position:fixed;top:0;left:0;width:100%;height:100%;background:#000;z-index:10000;display:none;overflow:hidden}
+#testArena.active{display:block}
+#testArena.testing{cursor:none}
+.arena-crosshair{position:absolute;width:20px;height:20px;pointer-events:none;transform:translate(-50%,-50%);z-index:100}
+.arena-crosshair::before,.arena-crosshair::after{content:'';position:absolute;background:var(--green);box-shadow:0 0 6px var(--green)}
+.arena-crosshair::before{width:2px;height:100%;left:50%;transform:translateX(-50%)}
+.arena-crosshair::after{width:100%;height:2px;top:50%;transform:translateY(-50%)}
+.arena-target{position:absolute;border-radius:50%;border:2px solid var(--red);box-shadow:0 0 15px rgba(255,61,87,0.8),inset 0 0 10px rgba(255,61,87,0.3);transform:translate(-50%,-50%);pointer-events:none}
+.arena-target-inner{position:absolute;top:50%;left:50%;width:8px;height:8px;background:var(--red);border-radius:50%;transform:translate(-50%,-50%);box-shadow:0 0 8px var(--red)}
+.arena-hud{position:absolute;top:20px;left:20px;right:20px;display:flex;justify-content:space-between;z-index:50;pointer-events:none}
+.hud-item{background:rgba(0,0,0,0.7);border:1px solid var(--cyan);padding:8px 16px;font-size:14px;color:var(--cyan);letter-spacing:1px;font-weight:700}
+.hud-item .val{color:#fff;font-size:18px;margin-left:8px}
+.arena-instruction{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center;z-index:60;pointer-events:auto}
+.arena-instruction h2{font-size:36px;color:var(--cyan);text-shadow:var(--glow-cyan);margin-bottom:15px;letter-spacing:3px}
+.arena-instruction p{font-size:18px;color:var(--text-dim);margin-bottom:25px}
+.arena-countdown{font-size:120px;font-weight:900;color:var(--purple);text-shadow:var(--glow-purple);animation:countdownPop 1s ease}
+@keyframes countdownPop{0%{transform:scale(2);opacity:0}50%{transform:scale(1);opacity:1}100%{transform:scale(0.8);opacity:0}}
+.arena-trail{position:absolute;width:4px;height:4px;background:var(--cyan);border-radius:50%;opacity:0.6;pointer-events:none;transform:translate(-50%,-50%)}
+.arena-bullet{position:absolute;width:6px;height:6px;background:var(--yellow);border-radius:50%;box-shadow:0 0 8px var(--yellow);pointer-events:none;transform:translate(-50%,-50%)}
+.arena-360-ring{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:300px;height:300px;border:2px solid rgba(0,229,255,0.3);border-radius:50%;pointer-events:none}
+.arena-360-indicator{position:absolute;top:50%;left:50%;width:4px;height:140px;background:linear-gradient(to top,var(--cyan),transparent);transform-origin:bottom center;transform:translate(-50%,-100%) rotate(0deg);box-shadow:var(--glow-cyan);pointer-events:none}
+.arena-360-angle{position:absolute;top:50%;left:50%;transform:translate(-50%,-180px);font-size:24px;color:var(--cyan);font-weight:900;text-shadow:var(--glow-cyan);pointer-events:none}
+
+/* ========== 结果页 ========== */
+.result-container{width:100%;max-width:1100px}
+.result-header{text-align:center;margin-bottom:30px}
+.result-header h2{font-size:32px;color:var(--cyan);letter-spacing:4px;text-shadow:var(--glow-cyan);margin-bottom:8px}
+.result-header p{color:var(--text-dim);font-size:14px;letter-spacing:2px}
+.result-grid{display:grid;grid-template-columns:1fr 1fr;gap:25px;margin-bottom:25px}
+@media(max-width:800px){.result-grid{grid-template-columns:1fr}}
+.result-card{background:var(--bg-panel);border:1px solid var(--border);padding:25px;position:relative}
+.result-card h3{font-size:16px;color:var(--purple);letter-spacing:2px;margin-bottom:18px;padding-bottom:10px;border-bottom:1px solid rgba(179,71,255,0.2)}
+.score-ring{display:flex;align-items:center;gap:20px;margin-bottom:15px}
+.score-circle{width:80px;height:80px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:24px;font-weight:900;position:relative;flex-shrink:0}
+.score-circle::before{content:'';position:absolute;inset:-4px;border-radius:50%;border:2px solid currentColor;opacity:0.3}
+.score-info{flex:1}
+.score-label{font-size:13px;color:var(--text-dim);letter-spacing:1px}
+.score-value{font-size:20px;font-weight:700;color:var(--text)}
+.score-bar-wrap{margin:8px 0}
+.score-bar-label{display:flex;justify-content:space-between;font-size:12px;color:var(--text-dim);margin-bottom:4px}
+.score-bar{height:8px;background:rgba(255,255,255,0.05);position:relative;overflow:hidden}
+.score-bar-fill{height:100%;transition:width 1s ease}
+.ai-verdict{background:linear-gradient(135deg,rgba(0,229,255,0.08),rgba(179,71,255,0.08));border:1px solid var(--cyan);padding:30px;margin-bottom:25px;position:relative}
+.ai-verdict::before{content:'AI 分析报告';position:absolute;top:-12px;left:20px;background:var(--bg-deep);padding:0 15px;font-size:13px;color:var(--cyan);letter-spacing:3px;font-weight:700}
+.ai-type{font-size:22px;color:var(--green);font-weight:900;margin-bottom:10px;text-shadow:var(--glow-green)}
+.ai-desc{font-size:15px;color:var(--text);line-height:1.8;margin-bottom:15px}
+.ai-tags{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:15px}
+.ai-tag{padding:5px 14px;border:1px solid var(--purple);color:var(--purple);font-size:12px;letter-spacing:1px}
+.final-sens{background:rgba(0,255,157,0.05);border:2px solid var(--green);padding:30px;text-align:center;margin-bottom:25px;position:relative}
+.final-sens::before{content:'最终推荐设置';position:absolute;top:-12px;left:50%;transform:translateX(-50%);background:var(--bg-deep);padding:0 15px;font-size:13px;color:var(--green);letter-spacing:3px;font-weight:700;white-space:nowrap}
+.final-sens-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:20px;margin-top:10px}
+.final-sens-item{text-align:center}
+.final-sens-item .label{font-size:12px;color:var(--text-dim);letter-spacing:2px;margin-bottom:5px}
+.final-sens-item .value{font-size:28px;font-weight:900;color:var(--green);text-shadow:var(--glow-green)}
+.final-sens-item .unit{font-size:13px;color:var(--text-dim);margin-left:4px}
+.sens-change{display:inline-flex;align-items:center;gap:8px;margin-top:15px;padding:8px 20px;background:rgba(255,61,87,0.1);border:1px solid var(--red);font-size:14px;color:var(--red)}
+.sens-change.up{background:rgba(0,255,157,0.1);border-color:var(--green);color:var(--green)}
+.ai-advice{font-size:14px;color:var(--text-dim);line-height:1.8;margin-top:15px;padding:15px;background:rgba(0,0,0,0.2);border-left:3px solid var(--purple)}
+.ai-advice strong{color:var(--purple)}
+
+/* ========== 职业选手页 ========== */
+.pro-container{width:100%;max-width:1200px}
+.pro-title{font-size:26px;font-weight:800;letter-spacing:4px;margin-bottom:20px;text-align:center;
+  background:linear-gradient(135deg,var(--neon-purple),var(--neon-pink));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  filter:drop-shadow(0 0 12px rgba(177,77,255,0.3));
+}
+.pro-filters{display:flex;gap:15px;margin-bottom:25px;flex-wrap:wrap;justify-content:center}
+.pro-filter-btn{padding:8px 20px;font-size:13px;letter-spacing:1px;background:transparent;border:1px solid var(--border);color:var(--text-dim);cursor:pointer;transition:all 0.3s}
+.pro-filter-btn.active,.pro-filter-btn:hover{border-color:var(--purple);color:var(--purple);box-shadow:var(--glow-purple)}
+.pro-table-wrap{overflow-x:auto;max-height:60vh}
+.pro-table{width:100%;border-collapse:collapse;font-size:14px}
+.pro-table th{position:sticky;top:0;background:var(--bg-mid);color:var(--cyan);padding:14px 12px;text-align:left;letter-spacing:1px;font-size:12px;text-transform:uppercase;border-bottom:2px solid var(--cyan);z-index:2}
+.pro-table td{padding:12px;border-bottom:1px solid rgba(0,229,255,0.08);color:var(--text)}
+.pro-table tr:hover td{background:rgba(0,229,255,0.05)}
+.pro-name{font-weight:700;color:var(--cyan)}
+.pro-team{font-size:12px;color:var(--text-dim)}
+.pro-edpi{font-weight:700;color:var(--purple)}
+.pro-cm360{color:var(--green);font-weight:600}
+.pro-role{font-size:11px;padding:3px 8px;border:1px solid var(--border);color:var(--text-dim);letter-spacing:1px}
+.pro-stats{display:flex;gap:30px;margin-bottom:20px;flex-wrap:wrap;justify-content:center}
+.pro-stat{text-align:center}
+.pro-stat .num{font-size:28px;font-weight:900;color:var(--cyan);text-shadow:var(--glow-cyan)}
+.pro-stat .lbl{font-size:12px;color:var(--text-dim);letter-spacing:1px}
+
+/* ========== Toast 提示 ========== */
+.toast{position:fixed;top:30px;left:50%;transform:translateX(-50%) translateY(-100px);background:var(--bg-panel);border:1px solid var(--cyan);padding:14px 30px;color:var(--cyan);font-size:14px;letter-spacing:1px;z-index:99999;transition:transform 0.4s ease;box-shadow:var(--glow-cyan)}
+.toast.show{transform:translateX(-50%) translateY(0)}
+.toast.error{border-color:var(--red);color:var(--red);box-shadow:0 0 10px rgba(255,61,87,0.6)}
+.toast.success{border-color:var(--green);color:var(--green);box-shadow:var(--glow-green)}
+
+/* ========== 滚动条 ========== */
+::-webkit-scrollbar{width:8px;height:8px}
+::-webkit-scrollbar-track{background:var(--bg-deep)}
+::-webkit-scrollbar-thumb{background:var(--cyan-dim);border-radius:4px}
+::-webkit-scrollbar-thumb:hover{background:var(--cyan)}
+
+/* ========== 全屏提示 ========== */
+.fullscreen-hint{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:var(--bg-panel);border:2px solid var(--cyan);padding:40px 60px;text-align:center;z-index:100001;box-shadow:var(--glow-cyan)}
+.fullscreen-hint h3{color:var(--cyan);font-size:24px;margin-bottom:15px;letter-spacing:2px}
+.fullscreen-hint p{color:var(--text-dim);font-size:14px;margin-bottom:25px;line-height:1.6}
+</style>
+</head>
+<body>
+
+<!-- 发光球体背景 -->
+<div class="glow-orb orb-a"></div>
+<div class="glow-orb orb-b"></div>
+<div class="glow-orb orb-c"></div>
+
+<div class="app-container">
+
+  <!-- ========== 首页 ========== -->
+  <div id="pageHome" class="page active">
+    <div class="hero-badge">SYSTEM ONLINE // QUANTUM CALIBRATION</div>
+    <h1 class="hero-title">AIM <span>MATRIX</span></h1>
+    <p class="hero-sub">量子瞄准校准矩阵</p>
+    <div class="hero-buttons">
+      <button class="btn btn-lg" onclick="App.goConfig()">启动校准</button>
+      <button class="btn btn-purple btn-lg" onclick="App.goPro()">职业选手数据</button>
+    </div>
+    <div class="hero-features">
+      <div class="feature-item"><div class="feature-icon">◈</div><div class="feature-label">10 组全屏测试</div></div>
+      <div class="feature-item"><div class="feature-icon">⬡</div><div class="feature-label">AI 智能分析</div></div>
+      <div class="feature-item"><div class="feature-icon">△</div><div class="feature-label">灵敏度推荐</div></div>
+      <div class="feature-item"><div class="feature-icon">◇</div><div class="feature-label">职业选手参考</div></div>
+    </div>
+  </div>
+
+  <!-- ========== 参数配置页 ========== -->
+  <div id="pageConfig" class="page">
+    <h2 class="config-title glow-text">// 系统参数配置</h2>
+    <div class="panel" style="width:100%;max-width:960px">
+      <div class="config-grid">
+        <div class="config-item">
+          <label class="config-label">鼠标 DPI <span class="hint">（鼠标硬件设置）</span></label>
+          <input type="number" id="cfgDpi" class="config-input" value="800" min="100" max="25600" step="100">
+        </div>
+        <div class="config-item">
+          <label class="config-label">当前游戏灵敏度 <span class="hint">（CS2/CS:GO 内设置）</span></label>
+          <input type="number" id="cfgSens" class="config-input" value="1.5" min="0.1" max="20" step="0.01">
+        </div>
+        <div class="config-item">
+          <label class="config-label">鼠标回报率 (Hz)</label>
+          <select id="cfgPolling" class="config-input">
+            <option value="125">125 Hz</option>
+            <option value="250">250 Hz</option>
+            <option value="500">500 Hz</option>
+            <option value="1000" selected>1000 Hz</option>
+            <option value="2000">2000 Hz</option>
+            <option value="4000">4000 Hz</option>
+            <option value="8000">8000 Hz</option>
+          </select>
+        </div>
+        <div class="config-item">
+          <label class="config-label">屏幕分辨率</label>
+          <select id="cfgResolution" class="config-input">
+            <option value="1920x1080">1920 × 1080 (FHD)</option>
+            <option value="2560x1440">2560 × 1440 (2K)</option>
+            <option value="3840x2160">3840 × 2160 (4K)</option>
+            <option value="1280x960">1280 × 960 (4:3 拉伸)</option>
+            <option value="1024x768">1024 × 768 (4:3)</option>
+          </select>
+        </div>
+        <div class="config-item">
+          <label class="config-label">握鼠方式</label>
+          <select id="cfgGrip" class="config-input">
+            <option value="palm">趴握 (Palm Grip)</option>
+            <option value="claw" selected>爪握 (Claw Grip)</option>
+            <option value="fingertip">指握 (Fingertip)</option>
+          </select>
+        </div>
+        <div class="config-item">
+          <label class="config-label">鼠标垫尺寸</label>
+          <select id="cfgPad" class="config-input">
+            <option value="small">小号 (≤30cm)</option>
+            <option value="medium" selected>中号 (30-45cm)</option>
+            <option value="large">大号 (45-60cm)</option>
+            <option value="xl">超大号 (≥60cm)</option>
+          </select>
+        </div>
+        <div class="config-item">
+          <label class="config-label">游戏经验</label>
+          <select id="cfgExperience" class="config-input">
+            <option value="beginner">新手 (≤100小时)</option>
+            <option value="intermediate" selected>进阶 (100-500小时)</option>
+            <option value="advanced">资深 (500-2000小时)</option>
+            <option value="expert">专家 (≥2000小时)</option>
+          </select>
+        </div>
+        <div class="config-item">
+          <label class="config-label">偏好游戏风格</label>
+          <select id="cfgStyle" class="config-input">
+            <option value="balanced" selected>均衡型</option>
+            <option value="rifler">步枪手 (精准定位)</option>
+            <option value="awper">狙击手 (大范围转身)</option>
+            <option value="entry">突破手 (高速反应)</option>
+            <option value="support">辅助 (稳定控枪)</option>
+          </select>
+        </div>
+      </div>
+      <div class="config-summary" id="configSummary">
+        当前 eDPI：<strong id="sumEdpi">1200</strong>　|　预估 cm/360：<strong id="sumCm360">34.6</strong> cm　|　灵敏度档位：<strong id="sumTier">中高灵敏度</strong>
+      </div>
+      <div class="config-actions">
+        <button class="btn" onclick="App.goHome()">返回</button>
+        <button class="btn btn-green btn-lg" onclick="App.startTests()">进入测试 →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== 测试概览页 ========== -->
+  <div id="pageTestList" class="page">
+    <div class="test-overview">
+      <h2 class="config-title glow-text" style="text-align:center">// 校准测试矩阵</h2>
+      <p style="text-align:center;color:var(--text-dim);font-size:14px;margin-bottom:10px">完成全部 10 组测试以获得最精准的 AI 分析结果</p>
+      <div class="progress-bar"><div class="progress-fill" id="overallProgress"></div></div>
+      <p style="text-align:center;color:var(--cyan);font-size:13px;letter-spacing:2px"><span id="progressText">0 / 10</span> 已完成</p>
+      <div class="test-list" id="testList"></div>
+      <div class="config-actions" style="justify-content:center;flex-wrap:wrap;gap:15px">
+        <button class="btn btn-green btn-lg" id="runAllBtn" onclick="App.runAllTests()">⚡ 一键全部测试</button>
+        <button class="btn" onclick="App.goConfig()">← 返回配置</button>
+        <button class="btn btn-purple" onclick="App.goPro()">职业选手参考</button>
+        <button class="btn btn-green btn-lg" id="analyzeBtn" onclick="App.analyze()" style="display:none">生成 AI 分析报告 →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== 结果页 ========== -->
+  <div id="pageResult" class="page">
+    <div class="result-container" id="resultContent"></div>
+  </div>
+
+  <!-- ========== 职业选手页 ========== -->
+  <div id="pagePro" class="page">
+    <div class="pro-container">
+      <h2 class="pro-title">// 职业选手参数库</h2>
+      <div class="pro-stats" id="proStats"></div>
+      <div class="pro-filters" id="proFilters"></div>
+      <div class="pro-table-wrap">
+        <table class="pro-table">
+          <thead>
+            <tr>
+              <th>选手</th>
+              <th>战队</th>
+              <th>位置</th>
+              <th>DPI</th>
+              <th>灵敏度</th>
+              <th>eDPI</th>
+              <th>cm/360</th>
+              <th>回报率</th>
+            </tr>
+          </thead>
+          <tbody id="proTableBody"></tbody>
+        </table>
+      </div>
+      <div class="config-actions" style="justify-content:center;margin-top:25px">
+        <button class="btn" onclick="App.goHome()">返回首页</button>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ========== 全屏测试区域 ========== -->
+<div id="testArena">
+  <div class="arena-hud">
+    <div class="hud-item">测试 <span class="val" id="hudTestName">-</span></div>
+    <div class="hud-item">计时 <span class="val" id="hudTimer">0.0s</span></div>
+    <div class="hud-item">得分 <span class="val" id="hudScore">0</span></div>
+  </div>
+  <div class="arena-crosshair" id="arenaCrosshair"></div>
+  <div id="arenaDynamic"></div>
+  <div class="arena-instruction" id="arenaInstruction">
+    <h2 id="instrTitle">准备就绪</h2>
+    <p id="instrDesc">点击开始进入测试</p>
+    <button class="btn btn-green btn-lg" id="instrBtn" onclick="TestEngine.begin()">开始测试</button>
+  </div>
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast"></div>
+
+<script>
+/* ============================================================
+   CS DPI TUNER - 核心逻辑
+   ============================================================ */
+
+// ---------- 工具函数 ----------
+const $ = id => document.getElementById(id);
+const clamp = (v,min,max) => Math.max(min,Math.min(max,v));
+const rand = (min,max) => Math.random()*(max-min)+min;
+const randInt = (min,max) => Math.floor(rand(min,max+1));
+const lerp = (a,b,t) => a+(b-a)*t;
+const dist = (x1,y1,x2,y2) => Math.sqrt((x2-x1)**2+(y2-y1)**2);
+
+function showToast(msg,type='info',duration=2500){
+  const t=$('toast');t.textContent=msg;t.className='toast show'+(type==='error'?' error':type==='success'?' success':'');
+  clearTimeout(t._timer);t._timer=setTimeout(()=>t.classList.remove('show'),duration);
+}
+
+// ---------- 职业选手数据 ----------
+const PRO_PLAYERS = [
+  {name:'s1mple',team:'NAVI',role:'AWPer',dpi:400,sens:3.09,polling:1000},
+  {name:'ZywOo',team:'Vitality',role:'AWPer',dpi:400,sens:2.5,polling:1000},
+  {name:'NiKo',team:'G2',role:'Rifler',dpi:400,sens:2.5,polling:1000},
+  {name:'device',team:'Astralis',role:'AWPer',dpi:400,sens:2.6,polling:1000},
+  {name:'kennyS',team:'Falcons',role:'AWPer',dpi:400,sens:2.2,polling:1000},
+  {name:'coldzera',team:'Legacy',role:'Rifler',dpi:400,sens:2.5,polling:1000},
+  {name:'shox',team:'Retired',role:'Rifler',dpi:400,sens:2.5,polling:500},
+  {name:'ScreaM',team:'KOI',role:'Rifler',dpi:400,sens:2.5,polling:1000},
+  {name:'f0rest',team:'Dignitas',role:'Rifler',dpi:400,sens:2.7,polling:1000},
+  {name:'GeT_RiGhT',team:'Dignitas',role:'Rifler',dpi:400,sens:2.5,polling:1000},
+  {name:'GuardiaN',team:'Retired',role:'AWPer',dpi:400,sens:2.5,polling:1000},
+  {name:'dupreeh',team:'Vitality',role:'Rifler',dpi:400,sens:2.5,polling:1000},
+  {name:'Xyp9x',team:'Astralis',role:'Support',dpi:400,sens:2.5,polling:1000},
+  {name:'gla1ve',team:'Astralis',role:'IGL',dpi:400,sens:2.5,polling:1000},
+  {name:'ropz',team:'FaZe',role:'Rifler',dpi:400,sens:2.55,polling:1000},
+  {name:'broky',team:'FaZe',role:'AWPer',dpi:400,sens:2.5,polling:1000},
+  {name:'Twistzz',team:'FaZe',role:'Rifler',dpi:400,sens:2.5,polling:1000},
+  {name:'Jame',team:'Virtus.pro',role:'AWPer',dpi:400,sens:2.2,polling:1000},
+  {name:'electronic',team:'NAVI',role:'Rifler',dpi:400,sens:2.8,polling:1000},
+  {name:'b1t',team:'NAVI',role:'Rifler',dpi:400,sens:2.8,polling:1000},
+  {name:'Ax1Le',team:'Cloud9',role:'Rifler',dpi:400,sens:2.5,polling:1000},
+  {name:'sh1ro',team:'Spirit',role:'AWPer',dpi:400,sens:2.5,polling:1000},
+  {name:'donk',team:'Spirit',role:'Rifler',dpi:400,sens:2.8,polling:1000},
+  {name:'chopper',team:'Spirit',role:'IGL',dpi:400,sens:2.5,polling:1000},
+  {name:'magixx',team:'Spirit',role:'Rifler',dpi:400,sens:2.5,polling:1000},
+  {name:'m0NESY',team:'G2',role:'AWPer',dpi:400,sens:2.5,polling:1000},
+  {name:'huNter-',team:'G2',role:'Rifler',dpi:400,sens:2.5,polling:1000},
+  {name:'nexa',team:'G2',role:'IGL',dpi:400,sens:2.5,polling:1000},
+  {name:'Rain',team:'FaZe',role:'Rifler',dpi:400,sens:2.7,polling:1000},
+  {name:'frozen',team:'Falcons',role:'Rifler',dpi:400,sens:2.5,polling:1000},
+  {name:'TeSeS',team:'Heroic',role:'Rifler',dpi:400,sens:2.5,polling:1000},
+  {name:'cadiaN',team:'Heroic',role:'AWPer',dpi:400,sens:2.5,polling:1000},
+  {name:'stavn',team:'Heroic',role:'Rifler',dpi:400,sens:2.5,polling:1000},
+  {name:'jabbi',team:'Heroic',role:'Rifler',dpi:400,sens:2.5,polling:1000},
+  {name:'sjuush',team:'Heroic',role:'Support',dpi:400,sens:2.5,polling:1000},
+  {name:'FalleN',team:'Furia',role:'AWPer',dpi:400,sens:2.5,polling:1000},
+  {name:'KSCERATO',team:'Furia',role:'Rifler',dpi:400,sens:2.5,polling:1000},
+  {name:'yuurih',team:'Furia',role:'Rifler',dpi:400,sens:2.5,polling:1000},
+  {name:'arT',team:'Furia',role:'Rifler',dpi:400,sens:2.8,polling:1000},
+];
+
+// 计算 cm/360 (CS2/CS:GO m_yaw=0.022)
+const CM360_FACTOR = 2.54 * 360 / 0.022; // ≈ 41563.6
+function calcCm360(dpi,sens){ return CM360_FACTOR/(dpi*sens); }
+function calcEdpi(dpi,sens){ return dpi*sens; }
+function sensTier(edpi){
+  if(edpi<600) return '超低灵敏度';
+  if(edpi<900) return '低灵敏度';
+  if(edpi<1200) return '中灵敏度';
+  if(edpi<1600) return '中高灵敏度';
+  if(edpi<2400) return '高灵敏度';
+  return '超高灵敏度';
+}
+
+// ---------- 测试定义 ----------
+const TESTS = [
+  {id:'t1',name:'360° 转身校准',desc:'移动鼠标完成完整一圈旋转，精确测量你的 cm/360 参数。',category:'校准',icon:'◯'},
+  {id:'t2',name:'极速定点 Flick',desc:'目标随机出现，快速移动准星并精准点击，测试爆发力与命中率。',category:'速度/精度',icon:'✦'},
+  {id:'t3',name:'动态目标追踪',desc:'目标沿复杂轨迹移动，保持准星持续锁定，测试追踪稳定性。',category:'精度',icon:'◈'},
+  {id:'t4',name:'微调整精度',desc:'目标在小范围内缓慢移动，测试精细微操与肌肉控制能力。',category:'精度',icon:'◇'},
+  {id:'t5',name:'180° 背身转身',desc:'目标突然出现在视野边缘，快速大幅转身并完成击杀。',category:'速度',icon:'⟲'},
+  {id:'t6',name:'垂直方向控制',desc:'目标沿垂直轴移动，测试上下方向的瞄准控制与协调性。',category:'精度',icon:'↕'},
+  {id:'t7',name:'多目标快速切换',desc:'多个目标依次激活，在它们之间快速切换瞄准并逐一清除。',category:'速度',icon:'⬡'},
+  {id:'t8',name:'压枪稳定性',desc:'模拟连发后坐力，通过下移鼠标控制弹道散布，测试控枪能力。',category:'控制',icon:'▤'},
+  {id:'t9',name:'反应速度测试',desc:'目标随机延迟出现，以最快速度点击，测量纯反应时间。',category:'反应',icon:'⚡'},
+  {id:'t10',name:'综合压力测试',desc:'30秒混合场景极限测试，综合评估全方位鼠标操控能力。',category:'综合',icon:'★'},
+];
+
+// ---------- 应用状态 ----------
+const App = {
+  config:{},
+  results:{},
+  currentTest:null,
+
+  init(){
+    this.updateSummary();
+    ['cfgDpi','cfgSens'].forEach(id=>$(id).addEventListener('input',()=>this.updateSummary()));
+    this.renderTestList();
+    this.renderProPlayers();
+  },
+
+  updateSummary(){
+    const dpi=parseFloat($('cfgDpi').value)||800;
+    const sens=parseFloat($('cfgSens').value)||1.5;
+    const edpi=calcEdpi(dpi,sens);
+    const cm=calcCm360(dpi,sens);
+    $('sumEdpi').textContent=edpi.toFixed(0);
+    $('sumCm360').textContent=cm.toFixed(1);
+    $('sumTier').textContent=sensTier(edpi);
+  },
+
+  readConfig(){
+    this.config={
+      dpi:parseFloat($('cfgDpi').value)||800,
+      sens:parseFloat($('cfgSens').value)||1.5,
+      polling:parseInt($('cfgPolling').value)||1000,
+      resolution:$('cfgResolution').value,
+      grip:$('cfgGrip').value,
+      pad:$('cfgPad').value,
+      experience:$('cfgExperience').value,
+      style:$('cfgStyle').value,
+    };
+    this.config.edpi=calcEdpi(this.config.dpi,this.config.sens);
+    this.config.cm360=calcCm360(this.config.dpi,this.config.sens);
+  },
+
+  // 页面导航
+  showPage(id){
+    document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+    $(id).classList.add('active');
+    window.scrollTo(0,0);
+  },
+  goHome(){this.showPage('pageHome')},
+  goConfig(){this.showPage('pageConfig')},
+  goTestList(){this.renderTestList();this.showPage('pageTestList')},
+  goPro(){this.showPage('pagePro')},
+  goResult(){this.showPage('pageResult')},
+
+  startTests(){
+    this.readConfig();
+    if(this.config.dpi<100||this.config.sens<0.1){
+      showToast('请输入有效的 DPI 和灵敏度参数','error');return;
+    }
+    this.goTestList();
+    showToast('参数已确认，选择测试模块开始','success');
+  },
+
+  renderTestList(){
+    const list=$('testList');list.innerHTML='';
+    let done=0;
+    TESTS.forEach((t,i)=>{
+      const hasResult=!!this.results[t.id];
+      if(hasResult) done++;
+      const card=document.createElement('div');
+      card.className='test-card'+(hasResult?' done':'');
+      card.onclick=()=>this.launchTest(t.id);
+      card.innerHTML=`
+        <div class="test-num">${String(i+1).padStart(2,'0')}</div>
+        <div class="test-name">${t.icon} ${t.name}</div>
+        <div class="test-desc">${t.desc}</div>
+        ${hasResult?`<div class="test-score">得分：${this.results[t.id].score.toFixed(0)} 分</div>`:''}
+      `;
+      list.appendChild(card);
+    });
+    const pct=(done/TESTS.length*100);
+    $('overallProgress').style.width=pct+'%';
+    $('progressText').textContent=`${done} / ${TESTS.length}`;
+    $('analyzeBtn').style.display=done>=5?'inline-block':'none';
+  },
+
+  launchTest(id){
+    const t=TESTS.find(x=>x.id===id);
+    if(!t) return;
+    this.currentTest=t;
+    TestEngine.setup(t);
+  },
+
+  // ---------- 一键全部测试 ----------
+  autoRun:false,
+  runAllTests(){
+    this.autoRun=true;
+    this._autoRunIndex=0;
+    showToast('一键测试模式已启动，将依次执行全部测试','success',3000);
+    this._nextAutoTest();
+  },
+  _nextAutoTest(){
+    // 找到下一个未完成的测试
+    while(this._autoRunIndex<TESTS.length){
+      const t=TESTS[this._autoRunIndex];
+      if(!this.results[t.id]){
+        this.currentTest=t;
+        // 延迟一下，让用户看到过渡
+        setTimeout(()=>{
+          TestEngine.setup(t);
+          // 自动开始测试（跳过说明页）
+          setTimeout(()=>TestEngine.begin(),800);
+        },300);
+        return;
+      }
+      this._autoRunIndex++;
+    }
+    // 全部完成
+    this.autoRun=false;
+    showToast('全部测试完成！正在生成分析报告...','success',3000);
+    setTimeout(()=>this.analyze(),1500);
+  },
+  _advanceAutoTest(){
+    if(!this.autoRun) return;
+    this._autoRunIndex++;
+    setTimeout(()=>this._nextAutoTest(),800);
+  },
+
+  // ---------- AI 分析 ----------
+  analyze(){
+    const done=Object.keys(this.results).length;
+    if(done<5){showToast('至少完成 5 组测试才能生成分析报告','error');return;}
+    this.readConfig();
+    const report=AIEngine.analyze(this.config,this.results);
+    this.renderResult(report);
+    this.goResult();
+  },
+
+  renderResult(report){
+    const c=this.config;
+    const html=`
+      <div class="result-header">
+        <h2 class="glow-text">// AI 量子分析报告</h2>
+        <p>基于 ${Object.keys(this.results).length} 组测试数据 · ${new Date().toLocaleString('zh-CN')}</p>
+      </div>
+
+      <div class="ai-verdict">
+        <div class="ai-type glow-text-green">${report.type}</div>
+        <div class="ai-desc">${report.description}</div>
+        <div class="ai-tags">${report.tags.map(t=>`<span class="ai-tag">${t}</span>`).join('')}</div>
+      </div>
+      ${this.results.t1&&this.results.t1.measuredCm360?`
+      <div class="result-card" style="margin-bottom:25px;border-color:var(--orange)">
+        <h3 style="color:var(--orange)">校准验证 · 实测 vs 配置</h3>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:20px">
+          <div style="text-align:center">
+            <div style="font-size:12px;color:var(--text-dim);letter-spacing:1px">配置 cm/360</div>
+            <div style="font-size:26px;font-weight:900;color:var(--cyan)">${c.cm360.toFixed(1)}</div>
+          </div>
+          <div style="text-align:center">
+            <div style="font-size:12px;color:var(--text-dim);letter-spacing:1px">实测 cm/360</div>
+            <div style="font-size:26px;font-weight:900;color:var(--orange)">${this.results.t1.measuredCm360.toFixed(1)}</div>
+          </div>
+          <div style="text-align:center">
+            <div style="font-size:12px;color:var(--text-dim);letter-spacing:1px">偏差率</div>
+            <div style="font-size:26px;font-weight:900;color:${Math.abs(this.results.t1.measuredCm360-c.cm360)/c.cm360<0.1?'var(--green)':'var(--red)'}">${((this.results.t1.measuredCm360-c.cm360)/c.cm360*100).toFixed(1)}%</div>
+          </div>
+        </div>
+        <div style="margin-top:15px;font-size:13px;color:var(--text-dim);line-height:1.6">
+          ${Math.abs(this.results.t1.measuredCm360-c.cm360)/c.cm360<0.1
+            ? '<span style="color:var(--green)">✓ 校准通过</span>：实测值与配置值偏差在 10% 以内，你的 DPI 和游戏灵敏度设置准确。'
+            : '<span style="color:var(--red)">⚠ 校准偏差</span>：实测值与配置值偏差较大，建议检查鼠标 DPI 设置是否与输入一致，以及游戏内灵敏度是否正确。Windows 鼠标加速（提高指针精确度）应关闭。'}
+        </div>
+      </div>
+      `:''}
+
+      <div class="result-grid">
+        ${report.dimensions.map(d=>`
+          <div class="result-card">
+            <h3>${d.name}</h3>
+            <div class="score-ring">
+              <div class="score-circle" style="color:${d.color};border:3px solid ${d.color}">${d.score.toFixed(0)}</div>
+              <div class="score-info">
+                <div class="score-label">${d.label}</div>
+                <div class="score-value">${d.verdict}</div>
+              </div>
+            </div>
+            ${d.subscores.map(s=>`
+              <div class="score-bar-wrap">
+                <div class="score-bar-label"><span>${s.name}</span><span>${s.score.toFixed(0)}</span></div>
+                <div class="score-bar"><div class="score-bar-fill" style="width:${s.score}%;background:${d.color}"></div></div>
+              </div>
+            `).join('')}
+          </div>
+        `).join('')}
+      </div>
+
+      <div class="final-sens">
+        <div class="final-sens-grid">
+          <div class="final-sens-item">
+            <div class="label">推荐游戏灵敏度</div>
+            <div class="value">${report.recommended.sens.toFixed(2)}</div>
+          </div>
+          <div class="final-sens-item">
+            <div class="label">推荐 eDPI</div>
+            <div class="value">${report.recommended.edpi.toFixed(0)}</div>
+          </div>
+          <div class="final-sens-item">
+            <div class="label">推荐 cm/360</div>
+            <div class="value">${report.recommended.cm360.toFixed(1)}</div>
+          </div>
+          <div class="final-sens-item">
+            <div class="label">DPI (保持不变)</div>
+            <div class="value">${c.dpi.toFixed(0)}</div>
+          </div>
+        </div>
+        <div class="sens-change ${report.change.direction==='up'?'up':''}">
+          ${report.change.direction==='up'?'▲ 灵敏度上调':'▼ 灵敏度下调'}
+          从 ${c.sens.toFixed(2)} → ${report.recommended.sens.toFixed(2)}
+          (变化 ${report.change.pct>0?'+':''}${report.change.pct.toFixed(1)}%)
+        </div>
+      </div>
+
+      <div class="result-card" style="margin-bottom:25px">
+        <h3>AI 改进建议</h3>
+        <div class="ai-advice">${report.advice}</div>
+      </div>
+
+      <div class="result-card" style="margin-bottom:25px">
+        <h3>与职业选手对比</h3>
+        <div style="font-size:14px;color:var(--text-dim);line-height:1.8">
+          你的当前 eDPI (<strong style="color:var(--cyan)">${c.edpi.toFixed(0)}</strong>) 
+          ${report.proCompare.text}
+          <br>推荐 eDPI (<strong style="color:var(--green)">${report.recommended.edpi.toFixed(0)}</strong>) 
+          处于职业选手 <strong style="color:var(--purple)">${report.proCompare.range}</strong> 区间。
+        </div>
+      </div>
+
+      <div class="config-actions" style="justify-content:center">
+        <button class="btn" onclick="App.goTestList()">返回测试</button>
+        <button class="btn btn-purple" onclick="App.goPro()">查看职业选手</button>
+        <button class="btn btn-green" onclick="App.goHome()">返回首页</button>
+      </div>
+    `;
+    $('resultContent').innerHTML=html;
+  },
+
+  // ---------- 职业选手 ----------
+  renderProPlayers(filter='all'){
+    const tbody=$('proTableBody');tbody.innerHTML='';
+    let list=PRO_PLAYERS;
+    if(filter!=='all') list=list.filter(p=>p.role===filter);
+    list.forEach(p=>{
+      const edpi=calcEdpi(p.dpi,p.sens);
+      const cm=calcCm360(p.dpi,p.sens);
+      const tr=document.createElement('tr');
+      tr.innerHTML=`
+        <td><span class="pro-name">${p.name}</span></td>
+        <td><span class="pro-team">${p.team}</span></td>
+        <td><span class="pro-role">${p.role}</span></td>
+        <td>${p.dpi}</td>
+        <td>${p.sens.toFixed(2)}</td>
+        <td class="pro-edpi">${edpi.toFixed(0)}</td>
+        <td class="pro-cm360">${cm.toFixed(1)}</td>
+        <td>${p.polling} Hz</td>
+      `;
+      tbody.appendChild(tr);
+    });
+    // 统计
+    const all=PRO_PLAYERS;
+    const edpis=all.map(p=>calcEdpi(p.dpi,p.sens));
+    const cms=all.map(p=>calcCm360(p.dpi,p.sens));
+    const avgEdpi=edpis.reduce((a,b)=>a+b,0)/edpis.length;
+    const avgCm=cms.reduce((a,b)=>a+b,0)/cms.length;
+    $('proStats').innerHTML=`
+      <div class="pro-stat"><div class="num">${all.length}</div><div class="lbl">收录选手</div></div>
+      <div class="pro-stat"><div class="num">${avgEdpi.toFixed(0)}</div><div class="lbl">平均 eDPI</div></div>
+      <div class="pro-stat"><div class="num">${avgCm.toFixed(1)}</div><div class="lbl">平均 cm/360</div></div>
+      <div class="pro-stat"><div class="num">${Math.min(...edpis).toFixed(0)}-${Math.max(...edpis).toFixed(0)}</div><div class="lbl">eDPI 范围</div></div>
+    `;
+    // 筛选按钮
+    const roles=['all','AWPer','Rifler','Support','IGL'];
+    const roleLabels={all:'全部',AWPer:'狙击手',Rifler:'步枪手',Support:'辅助',IGL:'指挥'};
+    $('proFilters').innerHTML=roles.map(r=>`<button class="pro-filter-btn${r===filter?' active':''}" onclick="App.renderProPlayers('${r}')">${roleLabels[r]}</button>`).join('');
+  },
+};
+
+/* ============================================================
+   测试引擎 - 全屏交互测试
+   ============================================================ */
+const TestEngine = {
+  arena:null,crosshair:null,dynamic:null,instruction:null,
+  cursorX:0,cursorY:0,
+  test:null,phase:'idle',
+  startTime:0,rafId:null,
+  data:{},
+  pointerLocked:false,
+
+  setup(test){
+    this.test=test;
+    this.arena=$('testArena');
+    this.crosshair=$('arenaCrosshair');
+    this.dynamic=$('arenaDynamic');
+    this.instruction=$('arenaInstruction');
+    this.dynamic.innerHTML='';
+    this.arena.classList.remove('testing'); // 说明页显示光标
+    this.arena.classList.add('active');
+    this.phase='ready';
+    this.cursorX=window.innerWidth/2;
+    this.cursorY=window.innerHeight/2;
+    this.updateCrosshair();
+    $('hudTestName').textContent=test.name;
+    $('hudTimer').textContent='0.0s';
+    $('hudScore').textContent='0';
+    // 显示说明
+    const instr=this.getTestInstruction(test.id);
+    $('instrTitle').textContent=test.name;
+    $('instrDesc').innerHTML=instr;
+    this.instruction.style.display='block';
+    $('instrBtn').style.display='inline-block';
+    $('instrBtn').textContent='开始测试';
+    // 添加返回按钮（如不存在）
+    if(!$('instrBackBtn')){
+      const backBtn=document.createElement('button');
+      backBtn.id='instrBackBtn';
+      backBtn.className='btn btn-sm';
+      backBtn.textContent='返回';
+      backBtn.style.marginLeft='15px';
+      backBtn.onclick=()=>this.cancelTest();
+      $('instrBtn').parentNode.appendChild(backBtn);
+    }else{
+      $('instrBackBtn').style.display='inline-block';
+    }
+    // 绑定事件
+    this.bindEvents();
+  },
+
+  cancelTest(){
+    if(this.phase==='running') return; // 运行中不允许取消
+    this.phase='idle';
+    this.arena.classList.remove('testing'); // 恢复光标
+    clearTimeout(this._lockCheckTimer);
+    if(document.pointerLockElement) document.exitPointerLock();
+    if(document.fullscreenElement) document.exitFullscreen().catch(()=>{});
+    this.arena.classList.remove('active');
+    this.dynamic.innerHTML='';
+    document.onmousemove=null;document.onmousedown=null;document.onmouseup=null;
+    document.removeEventListener('pointerlockchange',this._plChangeHandler);
+    if(this._fsChangeHandler) document.removeEventListener('fullscreenchange',this._fsChangeHandler);
+    App.goTestList();
+  },
+
+  getTestInstruction(id){
+    const map={
+      t1:'移动鼠标使指示器旋转完整 360°，系统将自动记录移动距离并计算 cm/360。<br><span style="color:var(--text-dim);font-size:13px">点击开始后将进入鼠标锁定模式，按 ESC 可退出</span>',
+      t2:'目标将在屏幕随机位置出现，快速移动准星到目标中心并点击。<br>共 15 次，测试你的爆发力与定点精度。',
+      t3:'红色目标将沿复杂轨迹移动，用准星持续跟随目标。<br>持续 20 秒，记录平均追踪偏差。',
+      t4:'目标在屏幕中心附近小范围缓慢移动，测试精细微操能力。<br>持续 15 秒，记录微调精度。',
+      t5:'目标将突然出现在视野左/右边缘外，快速大幅转身瞄准并点击。<br>共 10 次，测试大范围转身速度。',
+      t6:'目标沿垂直方向上下移动，用准星跟随。<br>持续 15 秒，测试垂直方向控制能力。',
+      t7:'屏幕上多个目标点，当前激活的目标会高亮，快速切换点击。<br>共 20 次切换，测试目标切换效率。',
+      t8:'按住鼠标左键模拟连发，准星会因后坐力上移，向下移动鼠标进行压枪补偿。<br>持续 10 秒，记录弹道散布范围。',
+      t9:'等待目标随机出现后以最快速度点击，不要提前点击。<br>共 8 次，测量纯反应时间。',
+      t10:'30 秒综合压力测试，混合定点目标和移动目标，尽可能多地命中。<br>综合评估全方位操控能力。',
+    };
+    return map[id]||'开始测试';
+  },
+
+  bindEvents(){
+    // 移除旧绑定
+    document.onmousemove=null;document.onmousedown=null;document.onmouseup=null;
+    document.onmousemove=e=>this.onMouseMove(e);
+    document.onmousedown=e=>this.onMouseDown(e);
+    document.onmouseup=e=>this.onMouseUp(e);
+    document.removeEventListener('pointerlockchange',this._plChangeHandler);
+    this._plChangeHandler=()=>{
+      this.pointerLocked=document.pointerLockElement===this.arena;
+      if(this.pointerLocked) this._plSuccess=true;
+      if(!this.pointerLocked&&this.phase==='running'){
+        this.endTest(false);
+      }
+    };
+    document.addEventListener('pointerlockchange',this._plChangeHandler);
+  },
+
+  begin(){
+    const el=this.arena;
+    el.classList.add('testing');
+    this.instruction.style.display='none';
+    if($('instrBackBtn')) $('instrBackBtn').style.display='none';
+    this.phase='countdown';
+    this._fsSuccess=false;
+    this._plSuccess=false;
+
+    // 请求指针锁定（在用户交互上下文中立即尝试）
+    const tryPointerLock=()=>{
+      try{
+        if(el.requestPointerLock){
+          el.requestPointerLock();
+        }
+      }catch(e){/* 忽略 */}
+    };
+
+    // 全屏状态变化监听
+    const onFsChange=()=>{
+      if(document.fullscreenElement===el){
+        this._fsSuccess=true;
+        // 全屏成功后延迟一小段时间请求指针锁定
+        setTimeout(tryPointerLock,100);
+      }
+    };
+    document.addEventListener('fullscreenchange',onFsChange);
+    this._fsChangeHandler=onFsChange;
+
+    // 请求全屏
+    try{
+      if(el.requestFullscreen){
+        el.requestFullscreen().catch(()=>{
+          // 全屏被拒绝，直接尝试指针锁定
+          tryPointerLock();
+        });
+      }else{
+        tryPointerLock();
+      }
+    }catch(e){
+      tryPointerLock();
+    }
+
+    // 超时检测：2.5秒内全屏和指针锁都没成功则提示
+    this._lockCheckTimer=setTimeout(()=>{
+      if(!this._fsSuccess&&!this._plSuccess&&this.phase!=='done'){
+        showToast('全屏模式未激活，以窗口模式运行','error',2500);
+      }
+    },2500);
+
+    this.runCountdown(()=>{
+      clearTimeout(this._lockCheckTimer);
+      this.phase='running';
+      this.startTime=performance.now();
+      this.data={shots:[],hits:0,misses:0,reactionTimes:[],trackErrors:[],totalDistance:0,angles:[]};
+      this.startTestLogic();
+      this.loop();
+    });
+  },
+
+  runCountdown(cb){
+    let count=3;
+    const titleEl=$('instrTitle');
+    const show=()=>{
+      if(count>0){
+        this.instruction.style.display='block';
+        titleEl.textContent=count;
+        // 移除再添加 class 以重启动画
+        titleEl.classList.remove('arena-countdown');
+        void titleEl.offsetWidth;
+        titleEl.classList.add('arena-countdown');
+        $('instrDesc').textContent='准备...';
+        $('instrBtn').style.display='none';
+        count--;
+        setTimeout(show,1000);
+      }else{
+        titleEl.classList.remove('arena-countdown');
+        this.instruction.style.display='none';
+        cb();
+      }
+    };
+    show();
+  },
+
+  onMouseMove(e){
+    if(this.phase!=='running') return;
+    if(this.pointerLocked){
+      this.cursorX=clamp(this.cursorX+e.movementX,0,window.innerWidth);
+      this.cursorY=clamp(this.cursorY+e.movementY,0,window.innerHeight);
+    }else{
+      this.cursorX=e.clientX;this.cursorY=e.clientY;
+    }
+    this.updateCrosshair();
+    // 测试特定逻辑
+    if(this.test&&typeof this['move_'+this.test.id]==='function'){
+      this['move_'+this.test.id](e);
+    }
+  },
+
+  updateCrosshair(){
+    this.crosshair.style.left=this.cursorX+'px';
+    this.crosshair.style.top=this.cursorY+'px';
+  },
+
+  onMouseDown(e){
+    if(this.phase!=='running') return;
+    if(this.test&&typeof this['down_'+this.test.id]==='function'){
+      this['down_'+this.test.id](e);
+    }
+  },
+
+  onMouseUp(e){
+    if(this.phase!=='running') return;
+    if(this.test&&typeof this['up_'+this.test.id]==='function'){
+      this['up_'+this.test.id](e);
+    }
+  },
+
+  loop(){
+    if(this.phase!=='running') return;
+    const elapsed=(performance.now()-this.startTime)/1000;
+    $('hudTimer').textContent=elapsed.toFixed(1)+'s';
+    if(this.test&&typeof this['tick_'+this.test.id]==='function'){
+      this['tick_'+this.test.id](elapsed);
+    }
+    this.rafId=requestAnimationFrame(()=>this.loop());
+  },
+
+  // ---------- 测试1: 360° 转身校准 ----------
+  startTestLogic(){
+    if(typeof this['start_'+this.test.id]==='function') this['start_'+this.test.id]();
+  },
+  start_t1(){
+    this.data.totalMovement=0;
+    this.data.angle=0;
+    // 创建旋转指示器
+    this.dynamic.innerHTML=`
+      <div class="arena-360-ring"></div>
+      <div class="arena-360-indicator" id="t1Indicator"></div>
+      <div class="arena-360-angle" id="t1Angle">0°</div>
+    `;
+  },
+  move_t1(e){
+    if(this.pointerLocked){
+      this.data.totalMovement+=Math.abs(e.movementX);
+      // 角度基于 movementX 累计（模拟）
+      this.data.angle+=e.movementX*0.3; // 缩放系数
+      const indicator=$('t1Indicator');
+      const angleEl=$('t1Angle');
+      if(indicator){
+        indicator.style.transform=`translate(-50%,-100%) rotate(${this.data.angle}deg)`;
+      }
+      if(angleEl){
+        const displayAngle=((this.data.angle%360)+360)%360;
+        angleEl.textContent=displayAngle.toFixed(0)+'°';
+        if(Math.abs(this.data.angle)>=360){
+          this.data.finalAngle=this.data.angle;
+          this.endTest(true);
+        }
+      }
+    }
+  },
+
+  // ---------- 测试2: 极速定点 Flick ----------
+  start_t2(){
+    this.data.total=15;this.data.current=0;this.data.shots=[];
+    this.spawnFlickTarget();
+  },
+  spawnFlickTarget(){
+    if(this.data.current>=this.data.total){this.endTest(true);return;}
+    this.data.current++;
+    const margin=100;
+    const x=rand(margin,window.innerWidth-margin);
+    const y=rand(margin,window.innerHeight-margin);
+    this.data.targetX=x;this.data.targetY=y;
+    this.data.targetSpawnTime=performance.now();
+    const target=document.createElement('div');
+    target.className='arena-target';
+    target.id='flickTarget';
+    target.style.left=x+'px';target.style.top=y+'px';
+    target.style.width='50px';target.style.height='50px';
+    target.innerHTML='<div class="arena-target-inner"></div>';
+    this.dynamic.appendChild(target);
+  },
+  down_t2(){
+    const target=$('flickTarget');
+    if(!target) return;
+    const d=dist(this.cursorX,this.cursorY,this.data.targetX,this.data.targetY);
+    const reaction=performance.now()-this.data.targetSpawnTime;
+    const hit=d<=25;
+    this.data.shots.push({dist:d,reaction:reaction,hit:hit});
+    if(hit) this.data.hits++;else this.data.misses++;
+    $('hudScore').textContent=this.data.hits;
+    target.remove();
+    setTimeout(()=>this.spawnFlickTarget(),300);
+  },
+
+  // ---------- 测试3: 动态目标追踪 ----------
+  start_t3(){
+    this.data.duration=20;this.data.trackErrors=[];
+    this.data.tx=window.innerWidth/2;this.data.ty=window.innerHeight/2;
+    const target=document.createElement('div');
+    target.className='arena-target';target.id='trackTarget';
+    target.style.width='40px';target.style.height='40px';
+    target.innerHTML='<div class="arena-target-inner"></div>';
+    this.dynamic.appendChild(target);
+  },
+  tick_t3(elapsed){
+    if(elapsed>=this.data.duration){this.endTest(true);return;}
+    // 复杂轨迹：李萨如曲线
+    const t=elapsed*1.5;
+    const cx=window.innerWidth/2,cy=window.innerHeight/2;
+    const ax=window.innerWidth*0.35,ay=window.innerHeight*0.3;
+    this.data.tx=cx+ax*Math.sin(t*0.8)*Math.cos(t*0.3);
+    this.data.ty=cy+ay*Math.sin(t*1.1);
+    const target=$('trackTarget');
+    if(target){target.style.left=this.data.tx+'px';target.style.top=this.data.ty+'px';}
+    const d=dist(this.cursorX,this.cursorY,this.data.tx,this.data.ty);
+    this.data.trackErrors.push(d);
+    // 实时得分：在目标内的时间比例
+    const onTarget=this.data.trackErrors.filter(e=>e<=20).length;
+    $('hudScore').textContent=Math.round(onTarget/this.data.trackErrors.length*100);
+  },
+
+  // ---------- 测试4: 微调整精度 ----------
+  start_t4(){
+    this.data.duration=15;this.data.trackErrors=[];
+    this.data.tx=window.innerWidth/2;this.data.ty=window.innerHeight/2;
+    const target=document.createElement('div');
+    target.className='arena-target';target.id='microTarget';
+    target.style.width='30px';target.style.height='30px';
+    target.style.borderColor='var(--orange)';
+    target.innerHTML='<div class="arena-target-inner" style="background:var(--orange)"></div>';
+    this.dynamic.appendChild(target);
+  },
+  tick_t4(elapsed){
+    if(elapsed>=this.data.duration){this.endTest(true);return;}
+    const t=elapsed*2;
+    const cx=window.innerWidth/2,cy=window.innerHeight/2;
+    // 小范围缓慢移动
+    this.data.tx=cx+60*Math.sin(t*0.7);
+    this.data.ty=cy+50*Math.sin(t*0.9+1);
+    const target=$('microTarget');
+    if(target){target.style.left=this.data.tx+'px';target.style.top=this.data.ty+'px';}
+    const d=dist(this.cursorX,this.cursorY,this.data.tx,this.data.ty);
+    this.data.trackErrors.push(d);
+    const onTarget=this.data.trackErrors.filter(e=>e<=15).length;
+    $('hudScore').textContent=Math.round(onTarget/this.data.trackErrors.length*100);
+  },
+
+  // ---------- 测试5: 180° 背身转身 ----------
+  start_t5(){
+    this.data.total=10;this.data.current=0;this.data.shots=[];
+    this.spawn180Target();
+  },
+  spawn180Target(){
+    if(this.data.current>=this.data.total){this.endTest(true);return;}
+    this.data.current++;
+    const side=Math.random()>0.5?'left':'right';
+    const x=side==='left'?80:window.innerWidth-80;
+    const y=rand(window.innerHeight*0.2,window.innerHeight*0.8);
+    this.data.targetX=x;this.data.targetY=y;
+    this.data.targetSpawnTime=performance.now();
+    // 重置准星到中心
+    this.cursorX=window.innerWidth/2;this.cursorY=window.innerHeight/2;
+    this.updateCrosshair();
+    const target=document.createElement('div');
+    target.className='arena-target';target.id='turnTarget';
+    target.style.left=x+'px';target.style.top=y+'px';
+    target.style.width='55px';target.style.height='55px';
+    target.style.borderColor='var(--purple)';
+    target.innerHTML='<div class="arena-target-inner" style="background:var(--purple)"></div>';
+    this.dynamic.appendChild(target);
+  },
+  down_t5(){
+    const target=$('turnTarget');
+    if(!target) return;
+    const d=dist(this.cursorX,this.cursorY,this.data.targetX,this.data.targetY);
+    const reaction=performance.now()-this.data.targetSpawnTime;
+    const hit=d<=28;
+    this.data.shots.push({dist:d,reaction:reaction,hit:hit});
+    if(hit) this.data.hits++;else this.data.misses++;
+    $('hudScore').textContent=this.data.hits;
+    target.remove();
+    setTimeout(()=>this.spawn180Target(),400);
+  },
+
+  // ---------- 测试6: 垂直方向控制 ----------
+  start_t6(){
+    this.data.duration=15;this.data.trackErrors=[];
+    this.data.tx=window.innerWidth/2;this.data.ty=window.innerHeight/2;
+    const target=document.createElement('div');
+    target.className='arena-target';target.id='vertTarget';
+    target.style.width='35px';target.style.height='35px';
+    target.style.borderColor='var(--blue)';
+    target.innerHTML='<div class="arena-target-inner" style="background:var(--blue)"></div>';
+    this.dynamic.appendChild(target);
+  },
+  tick_t6(elapsed){
+    if(elapsed>=this.data.duration){this.endTest(true);return;}
+    const t=elapsed*1.8;
+    this.data.tx=window.innerWidth/2+30*Math.sin(t*0.5);
+    this.data.ty=window.innerHeight/2+window.innerHeight*0.35*Math.sin(t);
+    const target=$('vertTarget');
+    if(target){target.style.left=this.data.tx+'px';target.style.top=this.data.ty+'px';}
+    const d=dist(this.cursorX,this.cursorY,this.data.tx,this.data.ty);
+    this.data.trackErrors.push(d);
+    const onTarget=this.data.trackErrors.filter(e=>e<=18).length;
+    $('hudScore').textContent=Math.round(onTarget/this.data.trackErrors.length*100);
+  },
+
+  // ---------- 测试7: 多目标快速切换 ----------
+  start_t7(){
+    this.data.total=20;this.data.current=0;this.data.switches=[];
+    this.data.targets=[];
+    // 创建5个固定目标点
+    const positions=[];
+    for(let i=0;i<5;i++){
+      positions.push({x:rand(120,window.innerWidth-120),y:rand(120,window.innerHeight-120)});
+    }
+    this.data.positions=positions;
+    positions.forEach((p,i)=>{
+      const el=document.createElement('div');
+      el.className='arena-target';
+      el.id='switchTarget'+i;
+      el.style.left=p.x+'px';el.style.top=p.y+'px';
+      el.style.width='40px';el.style.height='40px';
+      el.style.opacity='0.3';
+      el.innerHTML='<div class="arena-target-inner"></div>';
+      this.dynamic.appendChild(el);
+    });
+    this.data.activeIndex=-1;
+    this.activateNextSwitch();
+  },
+  activateNextSwitch(){
+    if(this.data.current>=this.data.total){this.endTest(true);return;}
+    this.data.current++;
+    // 取消上一个高亮
+    if(this.data.activeIndex>=0){
+      const prev=$('switchTarget'+this.data.activeIndex);
+      if(prev) prev.style.opacity='0.3';
+    }
+    // 随机选择下一个（不与上一个相同）
+    let idx;
+    do{idx=randInt(0,4);}while(idx===this.data.activeIndex&&this.data.current>1);
+    this.data.activeIndex=idx;
+    this.data.activeSpawnTime=performance.now();
+    const active=$('switchTarget'+idx);
+    if(active){active.style.opacity='1';active.style.borderColor='var(--green)';active.style.boxShadow='0 0 20px rgba(0,255,157,0.8)';}
+  },
+  down_t7(){
+    const idx=this.data.activeIndex;
+    if(idx<0) return;
+    const p=this.data.positions[idx];
+    const d=dist(this.cursorX,this.cursorY,p.x,p.y);
+    const reaction=performance.now()-this.data.activeSpawnTime;
+    const hit=d<=20;
+    this.data.switches.push({dist:d,reaction:reaction,hit:hit});
+    if(hit) this.data.hits++;else this.data.misses++;
+    $('hudScore').textContent=this.data.hits;
+    // 重置样式
+    const active=$('switchTarget'+idx);
+    if(active){active.style.borderColor='var(--red)';active.style.boxShadow='';}
+    setTimeout(()=>this.activateNextSwitch(),250);
+  },
+
+  // ---------- 测试8: 压枪稳定性 ----------
+  start_t8(){
+    this.data.duration=10;this.data.firing=false;this.data.bullets=[];
+    this.data.recoilY=0;this.data.targetY=window.innerHeight/2;
+    // 显示参考点
+    const ref=document.createElement('div');
+    ref.style.cssText=`position:absolute;left:50%;top:50%;width:60px;height:60px;border:2px dashed rgba(0,255,157,0.4);border-radius:50%;transform:translate(-50%,-50%);pointer-events:none`;
+    this.dynamic.appendChild(ref);
+    this.data.refEl=ref;
+  },
+  down_t8(){
+    this.data.firing=true;
+    this.data.lastShot=performance.now();
+  },
+  up_t8(){
+    this.data.firing=false;
+  },
+  tick_t8(elapsed){
+    if(elapsed>=this.data.duration){this.endTest(true);return;}
+    if(this.data.firing){
+      const now=performance.now();
+      if(now-this.data.lastShot>100){ // 模拟射速 10发/秒
+        this.data.lastShot=now;
+        // 后坐力：准星上移 + 随机散布
+        this.data.recoilY+=rand(3,8);
+        const spreadX=rand(-15,15);
+        const spreadY=this.data.recoilY+rand(-5,5);
+        // 子弹落点 = 准星位置 + 后坐力偏移
+        const bx=this.cursorX+spreadX;
+        const by=this.cursorY+spreadY;
+        this.data.bullets.push({x:bx,y:by});
+        // 显示子弹痕迹
+        const bullet=document.createElement('div');
+        bullet.className='arena-bullet';
+        bullet.style.left=bx+'px';bullet.style.top=by+'px';
+        this.dynamic.appendChild(bullet);
+        setTimeout(()=>bullet.remove(),2000);
+        $('hudScore').textContent=this.data.bullets.length;
+      }
+    }else{
+      // 不射击时后坐力缓慢恢复
+      this.data.recoilY=lerp(this.data.recoilY,0,0.05);
+    }
+  },
+
+  // ---------- 测试9: 反应速度测试 ----------
+  start_t9(){
+    this.data.total=8;this.data.current=0;this.data.reactionTimes=[];
+    this.data.waiting=true;
+    this.scheduleReactionTarget();
+  },
+  scheduleReactionTarget(){
+    if(this.data.current>=this.data.total){this.endTest(true);return;}
+    this.data.current++;
+    this.data.waiting=true;
+    // 随机延迟 1-3 秒
+    const delay=rand(1000,3000);
+    this.data.reactionTimer=setTimeout(()=>{
+      if(this.phase!=='running') return;
+      this.data.waiting=false;
+      const margin=150;
+      this.data.targetX=rand(margin,window.innerWidth-margin);
+      this.data.targetY=rand(margin,window.innerHeight-margin);
+      this.data.targetSpawnTime=performance.now();
+      const target=document.createElement('div');
+      target.className='arena-target';target.id='reactTarget';
+      target.style.left=this.data.targetX+'px';target.style.top=this.data.targetY+'px';
+      target.style.width='60px';target.style.height='60px';
+      target.style.borderColor='var(--yellow)';
+      target.innerHTML='<div class="arena-target-inner" style="background:var(--yellow)"></div>';
+      this.dynamic.appendChild(target);
+    },delay);
+  },
+  down_t9(){
+    if(this.data.waiting){
+      // 提前点击，算失误
+      showToast('太早了！等待目标出现','error');
+      clearTimeout(this.data.reactionTimer);
+      this.data.current--; // 重试
+      this.scheduleReactionTarget();
+      return;
+    }
+    const target=$('reactTarget');
+    if(!target) return;
+    const reaction=performance.now()-this.data.targetSpawnTime;
+    this.data.reactionTimes.push(reaction);
+    $('hudScore').textContent=(this.data.reactionTimes.reduce((a,b)=>a+b,0)/this.data.reactionTimes.length).toFixed(0)+'ms';
+    target.remove();
+    setTimeout(()=>this.scheduleReactionTarget(),500);
+  },
+
+  // ---------- 测试10: 综合压力测试 ----------
+  start_t10(){
+    this.data.duration=30;this.data.hits=0;this.data.misses=0;this.data.shots=0;
+    this.data.targetType=null;this.data.targetActive=false;
+    this.spawnComboTarget();
+  },
+  spawnComboTarget(){
+    if(this.phase!=='running') return;
+    this.data.shots++;
+    // 随机选择定点或移动
+    const isMoving=Math.random()>0.5;
+    this.data.targetType=isMoving?'moving':'static';
+    const margin=100;
+    this.data.targetX=rand(margin,window.innerWidth-margin);
+    this.data.targetY=rand(margin,window.innerHeight-margin);
+    this.data.targetSpawnTime=performance.now();
+    this.data.targetActive=true;
+    const target=document.createElement('div');
+    target.className='arena-target';target.id='comboTarget';
+    target.style.left=this.data.targetX+'px';target.style.top=this.data.targetY+'px';
+    target.style.width=isMoving?'45px':'50px';target.style.height=isMoving?'45px':'50px';
+    if(isMoving){target.style.borderColor='var(--purple)';target.innerHTML='<div class="arena-target-inner" style="background:var(--purple)"></div>';}
+    else{target.style.borderColor='var(--cyan)';target.innerHTML='<div class="arena-target-inner" style="background:var(--cyan)"></div>';}
+    this.dynamic.appendChild(target);
+    // 移动目标更新
+    if(isMoving){
+      this.data.comboMoveT=0;
+      this.data.comboMoveDir=rand(0,Math.PI*2);
+    }
+  },
+  tick_t10(elapsed){
+    if(elapsed>=this.data.duration){this.endTest(true);return;}
+    if(this.data.targetType==='moving'&&this.data.targetActive){
+      this.data.comboMoveT+=0.016;
+      const speed=80;
+      this.data.targetX+=Math.cos(this.data.comboMoveDir)*speed*0.016;
+      this.data.targetY+=Math.sin(this.data.comboMoveDir+Math.sin(this.data.comboMoveT)*0.5)*speed*0.016;
+      // 边界反弹
+      if(this.data.targetX<80||this.data.targetX>window.innerWidth-80) this.data.comboMoveDir=Math.PI-this.data.comboMoveDir;
+      if(this.data.targetY<80||this.data.targetY>window.innerHeight-80) this.data.comboMoveDir=-this.data.comboMoveDir;
+      this.data.targetX=clamp(this.data.targetX,80,window.innerWidth-80);
+      this.data.targetY=clamp(this.data.targetY,80,window.innerHeight-80);
+      const target=$('comboTarget');
+      if(target){target.style.left=this.data.targetX+'px';target.style.top=this.data.targetY+'px';}
+    }
+  },
+  down_t10(){
+    if(!this.data.targetActive) return;
+    const d=dist(this.cursorX,this.cursorY,this.data.targetX,this.data.targetY);
+    const hit=d<=25;
+    if(hit) this.data.hits++;else this.data.misses++;
+    $('hudScore').textContent=this.data.hits;
+    const target=$('comboTarget');
+    if(target) target.remove();
+    this.data.targetActive=false;
+    setTimeout(()=>this.spawnComboTarget(),200);
+  },
+
+  // ---------- 结束测试 ----------
+  endTest(success){
+    if(this.phase==='done') return;
+    this.phase='done';
+    this.arena.classList.remove('testing'); // 恢复光标
+    cancelAnimationFrame(this.rafId);
+    clearTimeout(this.data.reactionTimer);
+    clearTimeout(this._lockCheckTimer);
+    // 退出 pointer lock
+    if(document.pointerLockElement) document.exitPointerLock();
+    if(document.fullscreenElement) document.exitFullscreen().catch(()=>{});
+    // 计算得分
+    const score=this.calculateScore();
+    // 测试1：实际测量 cm/360
+    let measuredCm360=null;
+    if(this.test.id==='t1'&&this.data.totalMovement>0&&App.config&&App.config.dpi){
+      measuredCm360=(this.data.totalMovement/App.config.dpi)*2.54;
+    }
+    // 保存结果
+    App.results[this.test.id]={
+      score:score,
+      data:{...this.data},
+      measuredCm360:measuredCm360,
+      timestamp:Date.now(),
+    };
+    // 清理事件监听
+    document.onmousemove=null;document.onmousedown=null;document.onmouseup=null;
+    document.removeEventListener('pointerlockchange',this._plChangeHandler);
+    if(this._fsChangeHandler) document.removeEventListener('fullscreenchange',this._fsChangeHandler);
+    // 清理
+    setTimeout(()=>{
+      this.arena.classList.remove('active');
+      this.dynamic.innerHTML='';
+      let msg=`${this.test.name} 完成！得分 ${score.toFixed(0)}`;
+      if(measuredCm360!==null){
+        msg+=` · 实测 cm/360: ${measuredCm360.toFixed(1)}`;
+      }
+      if(App.autoRun){
+        // 一键测试模式：显示提示后自动进入下一个
+        showToast(msg,'success',2000);
+        App._advanceAutoTest();
+      }else{
+        App.renderTestList();
+        App.goTestList();
+        showToast(msg,'success',3500);
+      }
+    },500);
+  },
+
+  calculateScore(){
+    const d=this.data;
+    const id=this.test.id;
+    switch(id){
+      case 't1':{
+        // 360校准：基于完成度，固定给基础分
+        if(d.totalMovement>0) return 85+rand(-5,10);
+        return 60;
+      }
+      case 't2':{
+        // Flick：命中率60% + 反应速度40%
+        if(!d.shots||d.shots.length===0) return 50;
+        const hitRate=d.hits/d.shots.length;
+        const avgReaction=d.shots.filter(s=>s.hit).reduce((a,s)=>a+s.reaction,0)/(d.hits||1);
+        const reactionScore=clamp(100-(avgReaction-400)/15,0,100);
+        const avgDist=d.shots.filter(s=>s.hit).reduce((a,s)=>a+s.dist,0)/(d.hits||1);
+        const distScore=clamp(100-avgDist*2,0,100);
+        return hitRate*60+reactionScore*0.2*100+distScore*0.2*100;
+      }
+      case 't3':case 't4':case 't6':{
+        // 追踪类：平均偏差越小越好
+        if(!d.trackErrors||d.trackErrors.length===0) return 50;
+        const avgErr=d.trackErrors.reduce((a,b)=>a+b,0)/d.trackErrors.length;
+        return clamp(100-avgErr*1.5,20,100);
+      }
+      case 't5':{
+        // 180转身：命中率 + 速度
+        if(!d.shots||d.shots.length===0) return 50;
+        const hitRate=d.hits/d.shots.length;
+        const avgReaction=d.shots.filter(s=>s.hit).reduce((a,s)=>a+s.reaction,0)/(d.hits||1);
+        const reactionScore=clamp(100-(avgReaction-500)/20,0,100);
+        return hitRate*70+reactionScore*0.3*100;
+      }
+      case 't7':{
+        // 多目标切换：命中率 + 切换速度
+        if(!d.switches||d.switches.length===0) return 50;
+        const hitRate=d.hits/d.switches.length;
+        const avgReaction=d.switches.filter(s=>s.hit).reduce((a,s)=>a+s.reaction,0)/(d.hits||1);
+        const speedScore=clamp(100-(avgReaction-350)/12,0,100);
+        return hitRate*65+speedScore*0.35*100;
+      }
+      case 't8':{
+        // 压枪：弹道散布范围
+        if(!d.bullets||d.bullets.length<5) return 50;
+        const xs=d.bullets.map(b=>b.x),ys=d.bullets.map(b=>b.y);
+        const spreadX=Math.max(...xs)-Math.min(...xs);
+        const spreadY=Math.max(...ys)-Math.min(...ys);
+        const totalSpread=Math.sqrt(spreadX**2+spreadY**2);
+        return clamp(100-totalSpread*0.4,20,100);
+      }
+      case 't9':{
+        // 反应速度：平均反应时间
+        if(!d.reactionTimes||d.reactionTimes.length===0) return 50;
+        const avg=d.reactionTimes.reduce((a,b)=>a+b,0)/d.reactionTimes.length;
+        return clamp(100-(avg-200)/5,20,100);
+      }
+      case 't10':{
+        // 综合：命中数 + 命中率
+        if(this.data.shots===0) return 50;
+        const hitRate=this.data.hits/this.data.shots;
+        const totalHits=this.data.hits;
+        return clamp(hitRate*50+totalHits*2.5,20,100);
+      }
+      default:return 60;
+    }
+  },
+};
+
+/* ============================================================
+   AI 分析引擎
+   ============================================================ */
+const AIEngine = {
+  analyze(config,results){
+    const r=results;
+    // 提取各维度得分
+    const getScore=id=>r[id]?r[id].score:null;
+
+    const speedTests=['t2','t5','t7','t9'];
+    const precisionTests=['t2','t3','t4','t6','t7'];
+    const controlTests=['t8','t3','t4'];
+    const reactionTests=['t2','t9'];
+
+    const avg=arr=>{const valid=arr.filter(s=>s!==null);return valid.length?valid.reduce((a,b)=>a+b,0)/valid.length:60;};
+
+    const speedScore=avg(speedTests.map(getScore));
+    const precisionScore=avg(precisionTests.map(getScore));
+    const controlScore=avg(controlTests.map(getScore));
+    const reactionScore=avg(reactionTests.map(getScore));
+    const overall=avg([speedScore,precisionScore,controlScore,reactionScore]);
+
+    // 判断用户类型
+    let type,description,tags;
+    const speedHigh=speedScore>=65, precisionHigh=precisionScore>=65;
+    const diff=speedScore-precisionScore;
+
+    if(diff>15){
+      type='速度型玩家 (Speed Type)';
+      description='你的反应速度和大范围转身能力出色，但在精细瞄准和追踪方面尚有提升空间。当前灵敏度可能偏高，导致微操时难以稳定控制。建议适当降低灵敏度以提升精度，同时保留你的速度优势。';
+      tags=['反应敏捷','爆发力强','微操待提升','建议降敏'];
+    }else if(diff<-15){
+      type='精度型玩家 (Precision Type)';
+      description='你的定点精度和追踪稳定性优秀，能够精准控制准星。但在快速转身和目标切换方面速度稍慢，可能是灵敏度偏低导致大范围移动需要更多物理空间。建议适当提高灵敏度以增强机动性。';
+      tags=['精准稳定','追踪出色','机动性待提升','建议升敏'];
+    }else if(speedHigh&&precisionHigh){
+      type='全能型玩家 (All-Rounder)';
+      description='你的速度和精度表现均衡且优秀，是理想的全能型玩家。当前灵敏度设置与你的操控风格匹配度较高，可以在当前基础上进行微调以进一步优化。';
+      tags=['全面均衡','速度精度兼备','设置合理','小幅优化'];
+    }else{
+      type='成长型玩家 (Developing)';
+      description='你正在形成自己的操控风格，各项能力还有较大提升空间。建议先确定一个舒适的灵敏度范围，通过持续练习来建立肌肉记忆。当前设置可能需要较大幅度调整以找到最适合你的档位。';
+      tags=['持续进步','风格形成中','建议多练习','寻找舒适区'];
+    }
+
+    // 计算推荐灵敏度
+    // 基于用户表现和当前设置
+    const currentCm360=config.cm360;
+    let targetCm360;
+
+    // 基础目标范围基于游戏风格
+    const styleTargets={
+      balanced:55, rifler:60, awper:50, entry:45, support:65
+    };
+    let baseTarget=styleTargets[config.style]||55;
+
+    // 根据表现调整
+    if(diff>15){
+      // 速度型，精度差 → 增加 cm/360（降敏）
+      targetCm360=currentCm360*1.15;
+    }else if(diff<-15){
+      // 精度型，速度差 → 减少 cm/360（升敏）
+      targetCm360=currentCm360*0.88;
+    }else{
+      // 均衡型，向基础目标靠拢
+      targetCm360=lerp(currentCm360,baseTarget,0.4);
+    }
+
+    // 经验修正：新手建议稍高灵敏度（易操作），专家可更低
+    const expFactor={beginner:0.92,intermediate:0.97,advanced:1.0,expert:1.05};
+    targetCm360*=expFactor[config.experience]||1;
+
+    // 限制在合理范围
+    targetCm360=clamp(targetCm360,25,120);
+
+    // 计算推荐灵敏度
+    const recommendedEdpi=CM360_FACTOR/targetCm360;
+    const recommendedSens=recommendedEdpi/config.dpi;
+
+    // 变化量
+    const changePct=((recommendedSens-config.sens)/config.sens)*100;
+    const changeDirection=recommendedSens>config.sens?'up':'down';
+
+    // 职业选手对比
+    const proEdpis=PRO_PLAYERS.map(p=>calcEdpi(p.dpi,p.sens));
+    const proAvg=proEdpis.reduce((a,b)=>a+b,0)/proEdpis.length;
+    let proCompareText;
+    if(config.edpi>proAvg*1.3){
+      proCompareText=`高于职业选手平均值 (${proAvg.toFixed(0)})，属于偏高灵敏度档位。`;
+    }else if(config.edpi<proAvg*0.7){
+      proCompareText=`低于职业选手平均值 (${proAvg.toFixed(0)})，属于偏低灵敏度档位。`;
+    }else{
+      proCompareText=`接近职业选手平均值 (${proAvg.toFixed(0)})，处于主流灵敏度区间。`;
+    }
+    let proRange;
+    if(recommendedEdpi<900) proRange='低灵敏度';
+    else if(recommendedEdpi<1100) proRange='主流';
+    else if(recommendedEdpi<1400) proRange='中高灵敏度';
+    else proRange='高灵敏度';
+
+    // 子项得分
+    const makeSub=(name,id)=>{const s=getScore(id);return{name,score:s!==null?s:60};};
+
+    const dimensions=[
+      {
+        name:'速度维度',label:'反应与转身',color:'var(--cyan)',score:speedScore,
+        verdict:speedScore>=70?'优秀':speedScore>=55?'良好':'需提升',
+        subscores:[makeSub('极速定点','t2'),makeSub('180°转身','t5'),makeSub('目标切换','t7'),makeSub('反应速度','t9')]
+      },
+      {
+        name:'精度维度',label:'瞄准与追踪',color:'var(--purple)',score:precisionScore,
+        verdict:precisionScore>=70?'优秀':precisionScore>=55?'良好':'需提升',
+        subscores:[makeSub('动态追踪','t3'),makeSub('微调整','t4'),makeSub('垂直控制','t6'),makeSub('定点精度','t2')]
+      },
+      {
+        name:'控制维度',label:'压枪与稳定',color:'var(--green)',score:controlScore,
+        verdict:controlScore>=70?'优秀':controlScore>=55?'良好':'需提升',
+        subscores:[makeSub('压枪稳定','t8'),makeSub('追踪稳定','t3'),makeSub('微调控制','t4')]
+      },
+      {
+        name:'综合维度',label:'整体表现',color:'var(--orange)',score:overall,
+        verdict:overall>=70?'优秀':overall>=55?'良好':'需提升',
+        subscores:[makeSub('综合压力','t10'),makeSub('360°校准','t1')]
+      },
+    ];
+
+    // 改进建议
+    let advice='';
+    if(diff>15){
+      advice+=`<strong>核心问题：</strong>灵敏度偏高导致微操不稳定。<br>`;
+      advice+=`<strong>训练建议：</strong>每天进行 10 分钟微调整训练（测试4），专注小范围精准移动。在死斗模式中刻意放慢节奏，练习一枪爆头的精准定位。<br>`;
+      advice+=`<strong>设置建议：</strong>将灵敏度从 ${config.sens.toFixed(2)} 调整至 ${recommendedSens.toFixed(2)}，适应期约 1-2 周，期间不要频繁更改。`;
+    }else if(diff<-15){
+      advice+=`<strong>核心问题：</strong>灵敏度偏低导致大范围转身和目标切换较慢。<br>`;
+      advice+=`<strong>训练建议：</strong>增加 180° 转身训练（测试5），练习用手臂而非手腕完成大范围移动。在实战中刻意练习快速拉枪。<br>`;
+      advice+=`<strong>设置建议：</strong>将灵敏度从 ${config.sens.toFixed(2)} 调整至 ${recommendedSens.toFixed(2)}，确保鼠标垫有足够空间完成转身动作。`;
+    }else{
+      advice+=`<strong>当前状态：</strong>灵敏度设置基本合理，速度与精度较为均衡。<br>`;
+      advice+=`<strong>优化建议：</strong>可以在推荐值附近进行 ±10% 的微调测试，找到最舒适的精确档位。建议保持当前设置至少 2 周以充分建立肌肉记忆。<br>`;
+      advice+=`<strong>进阶训练：</strong>专注于综合压力测试（测试10），在高强度多目标场景下提升稳定性。`;
+    }
+    if(controlScore<55){
+      advice+=`<br><strong>控枪提醒：</strong>压枪稳定性有待提升，建议在训练场进行连发压枪练习，熟悉每把武器的弹道轨迹。`;
+    }
+
+    return {
+      type,description,tags,
+      dimensions,
+      recommended:{sens:recommendedSens,edpi:recommendedEdpi,cm360:targetCm360},
+      change:{direction:changeDirection,pct:changePct},
+      advice,
+      proCompare:{text:proCompareText,range:proRange},
+      overall,
+    };
+  },
+};
+
+// ---------- 启动 ----------
+App.init();
+</script>
+</body>
+</html>
