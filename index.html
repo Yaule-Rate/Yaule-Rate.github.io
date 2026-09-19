@@ -3,36 +3,14 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Yaule · 个人主页 | 欢迎你的到来</title>
-<meta name="description" content="欢迎来到 Yaule 的个人主页。这里是我的个人空间入口，收录我的作品与项目，欢迎进入我的失眠夜个人空间。">
-<meta name="keywords" content="Yaule,个人主页,个人空间,GitHub,开发者,失眠夜">
+<title>Yaule · 欢迎你的到来</title>
+<meta name="description" content="欢迎来到 Yaule 的个人主页。">
 <meta name="author" content="Yaule">
 <link rel="canonical" href="https://Yaule-Rate.github.io/">
-
 <meta property="og:type" content="website">
-<meta property="og:site_name" content="Yaule 个人主页">
-<meta property="og:title" content="Yaule · 个人主页">
-<meta property="og:description" content="欢迎来到 Yaule 的个人主页。这里是我的个人空间入口，收录我的作品与项目。">
+<meta property="og:title" content="Yaule · 欢迎">
 <meta property="og:url" content="https://Yaule-Rate.github.io/">
-<meta property="og:locale" content="zh_CN">
-
-<meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Yaule · 个人主页">
-<meta name="twitter:description" content="欢迎来到 Yaule 的个人主页。">
-
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230284c7'/%3E%3Ctext x='32' y='44' font-family='Georgia, serif' font-size='36' font-weight='bold' fill='%23FAFAF9' text-anchor='middle'%3EY%3C/text%3E%3C/svg%3E">
-
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "Person",
-  "name": "Yaule",
-  "url": "https://Yaule-Rate.github.io/",
-  "jobTitle": "开发者",
-  "sameAs": ["https://github.com/Yaule-Rate"]
-}
-</script>
-
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230284c7'/%3E%3Ctext x='32' y='44' font-family='Georgia, serif' font-size='36' font-weight='bold' fill='%23fff' text-anchor='middle'%3EY%3C/text%3E%3C/svg%3E">
 <link rel="stylesheet" href="https://miaoda.feishu.cn/fonts/css2?family=Noto+Serif+SC:wght@600;700&family=Noto+Sans+SC:wght@400;500&display=swap">
 <style>
   :root {
@@ -47,6 +25,10 @@
   }
   * { margin: 0; padding: 0; box-sizing: border-box; }
   html { scroll-behavior: smooth; }
+  html, body {
+    min-height: 100%;
+    background: var(--bg);
+  }
   body {
     background: var(--bg);
     color: var(--ink);
@@ -54,61 +36,84 @@
     font-size: 16px;
     line-height: 1.75;
     -webkit-font-smoothing: antialiased;
+    display: flex;
+    flex-direction: column;
   }
-  .wrap { max-width: 1040px; margin: 0 auto; padding: 0 24px; }
+  .wrap { max-width: 1040px; margin: 0 auto; padding: 0 24px; width: 100%; }
   a { color: var(--accent); text-decoration: none; }
   a:hover { text-decoration: underline; }
 
+  /* ===== 首屏：只有欢迎语 ===== */
   .hero {
-    min-height: calc(100vh - 64px);
+    min-height: 100vh;
     display: flex;
     flex-direction: column;
     justify-content: center;
-    padding: 72px 0 48px;
-  }
-  .hero .kicker {
-    font-size: 15px;
-    color: var(--accent);
-    font-weight: 500;
-    margin-bottom: 20px;
-    letter-spacing: 0.06em;
+    align-items: center;
+    text-align: center;
+    padding: 40px 24px;
   }
   .hero h1 {
     font-family: "Noto Serif SC", Georgia, "Songti SC", serif;
     font-size: clamp(44px, 7.5vw, 84px);
     font-weight: 700;
     line-height: 1.12;
-    margin-bottom: 24px;
   }
-  .hero .subtitle {
-    font-size: clamp(17px, 2.4vw, 21px);
+  .scroll-hint {
+    margin-top: 32px;
+    font-size: 14px;
     color: var(--ink-2);
-    max-width: 34em;
-    margin-bottom: 40px;
+    opacity: 0.6;
+    animation: bounce 2s infinite;
+  }
+  @keyframes bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(6px); }
   }
 
+  /* ===== 进入按钮板块 ===== */
+  .enter-section {
+    padding: 80px 24px;
+    text-align: center;
+    border-top: 1px solid var(--line);
+  }
+  .enter-section h2 {
+    font-family: "Noto Serif SC", Georgia, serif;
+    font-size: 28px;
+    font-weight: 600;
+    margin-bottom: 12px;
+  }
+  .enter-section p {
+    color: var(--ink-2);
+    max-width: 480px;
+    margin: 0 auto 32px;
+    font-size: 15px;
+  }
   .btn-enter {
-    display: flex;
+    display: inline-flex;
     align-items: center;
-    justify-content: space-between;
-    width: 100%;
-    max-width: 640px;
-    padding: 22px 28px;
+    gap: 10px;
+    padding: 18px 44px;
     background: var(--ink);
     color: var(--bg);
-    border-radius: 16px;
-    font-size: 18px;
+    border-radius: 999px;
+    font-size: 17px;
     font-weight: 600;
     transition: background .2s, transform .15s;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.12);
   }
   .btn-enter:hover {
     background: var(--accent);
     text-decoration: none;
     transform: translateY(-2px);
+    box-shadow: 0 6px 24px rgba(2, 132, 199, 0.25);
   }
-  .btn-enter .arrow { font-size: 24px; }
 
-  section { padding: 56px 0; border-top: 1px solid var(--line); }
+  /* ===== 作品区 ===== */
+  .works {
+    padding: 72px 0;
+    border-top: 1px solid var(--line);
+  }
   .section-head {
     display: flex;
     align-items: baseline;
@@ -121,7 +126,6 @@
     font-size: 28px;
     font-weight: 600;
   }
-
   .grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
@@ -160,14 +164,46 @@
   .btn-more:hover {
     border-color: var(--accent);
     color: var(--accent);
-    text-decoration: none;
   }
   .hidden { display: none; }
 
+  /* ===== 关于我板块 ===== */
+  .about {
+    padding: 72px 0;
+    border-top: 1px solid var(--line);
+    background: #fff;
+  }
+  .about-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 48px;
+    align-items: start;
+  }
+  .about-text p {
+    color: var(--ink-2);
+    font-size: 15px;
+    margin-bottom: 16px;
+  }
+  .tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  .tag {
+    padding: 6px 14px;
+    background: var(--bg);
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    font-size: 13px;
+    color: var(--ink-2);
+  }
+
+  /* ===== Footer - 纯黑，贴底 ===== */
   footer {
     background: var(--footer-bg);
     color: var(--footer-ink);
-    margin-top: 48px;
+    margin-top: auto;
+    width: 100%;
   }
   .footer-grid {
     display: grid;
@@ -206,82 +242,116 @@
     font-size: clamp(96px, 22vw, 340px);
     font-weight: 700; line-height: 0.8;
     color: rgba(255, 255, 255, 0.05);
-    padding: 0 0 24px; user-select: none; letter-spacing: 0.04em;
+    padding: 0; user-select: none; letter-spacing: 0.04em;
   }
 
   @media (max-width: 820px) {
-    .hero { padding: 48px 0; }
     .grid { grid-template-columns: 1fr; }
+    .about-grid { grid-template-columns: 1fr; gap: 32px; }
     .footer-grid { grid-template-columns: 1fr 1fr; gap: 32px; }
   }
   @media (max-width: 520px) {
     .footer-grid { grid-template-columns: 1fr; }
+    .hero h1 { font-size: 40px; }
+    .enter-section { padding: 60px 20px; }
   }
   @media (prefers-reduced-motion: reduce) {
     html { scroll-behavior: auto; }
     .card, .btn-enter, .btn-more { transition: none; }
+    .scroll-hint { animation: none; }
   }
 </style>
 </head>
 <body>
 
-<main id="top">
-  <section class="hero">
-    <div class="wrap">
-      <p class="kicker">YAULE · PERSONAL SPACE</p>
-      <h1>欢迎你的到来</h1>
-      <p class="subtitle">这里是 Yaule 的个人空间入口。点下面的按钮，进入我的「失眠夜」个人空间——那里有关于我的一切：爱好、技能、生活、荣誉与联系。</p>
-      <a class="btn-enter" href="space.html">
-        <span>进入失眠夜个人空间</span>
-        <span class="arrow">→</span>
+<!-- 首屏：只有欢迎语 -->
+<section class="hero">
+  <h1>欢迎你的到来</h1>
+  <p class="scroll-hint">向下滑动 ↓</p>
+</section>
+
+<!-- 进入按钮板块 -->
+<section class="enter-section">
+  <div class="wrap">
+    <h2>失眠夜 · 个人空间</h2>
+    <p>爱好、技能、生活、荣誉与联系——关于我的一切，都在里面。</p>
+    <a class="btn-enter" href="space.html">
+      进入个人空间
+      <span>→</span>
+    </a>
+  </div>
+</section>
+
+<!-- 作品区 -->
+<section class="works">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="no">01</span>
+      <h2>开源项目</h2>
+    </div>
+    <div class="grid">
+      <a class="card" href="Xinghua%20Middle%20School%20Broadcasting%20Station%20System.html" target="_blank" rel="noopener">
+        <h3>兴华中学广播站系统</h3>
+        <p>广播排班管理、播放日程控制、站点信息维护，独立设计开发并投入校园实际使用。</p>
+        <span class="meta">查看 →</span>
+      </a>
+      <a class="card" href="Self-service%20accounting%20system%20Pro%20Enhanced%20V6.html" target="_blank" rel="noopener">
+        <h3>自助记账系统</h3>
+        <p>收支记录、分类统计、数据可视化，轻量化单文件本地工具，开箱即用。</p>
+        <span class="meta">查看 →</span>
+      </a>
+      <a class="card" href="Nayingte%20M4e%20Code%20Writing%20System%20V2.9Pro.html" target="_blank" rel="noopener">
+        <h3>纳英特M4e代码编写系统</h3>
+        <p>可视化拖拽生成C++代码，降低编程入门门槛，助力机器人编程学习。</p>
+        <span class="meta">查看 →</span>
+      </a>
+      <a class="card" href="Fancy-Pattern-Emoji-to-Image-Converter.html" target="_blank" rel="noopener">
+        <h3>花式图案表情转图片转换器</h3>
+        <p>文字、表情符号一键转图片，支持自定义背景与文字颜色、对齐方式，导出高清PNG。</p>
+        <span class="meta">查看 →</span>
+      </a>
+      <a class="card hidden" href="CS-Sens-Calibrator.html" target="_blank" rel="noopener">
+        <h3>CS2 & CS:GO 灵敏度校准</h3>
+        <p>输入当前 DPI 与灵敏度参数，完成多样性测试，智能评估并输出游戏内最佳鼠标灵敏度。</p>
+        <span class="meta">查看 →</span>
+      </a>
+      <a class="card hidden" href="Chess-Gomoku-Collection.html" target="_blank" rel="noopener">
+        <h3>棋类合集</h3>
+        <p>多棋类游戏合集，本地运行。</p>
+        <span class="meta">查看 →</span>
       </a>
     </div>
-  </section>
+    <div class="btn-more-wrap">
+      <button class="btn-more" id="btnMore">查看更多 ↓</button>
+    </div>
+  </div>
+</section>
 
-  <section id="works">
-    <div class="wrap">
-      <div class="section-head">
-        <span class="no">01</span>
-        <h2>我的作品</h2>
+<!-- 关于我板块 -->
+<section class="about">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="no">02</span>
+      <h2>关于我</h2>
+    </div>
+    <div class="about-grid">
+      <div class="about-text">
+        <p>喜欢折腾各种小工具，从校园广播站到机器人代码编写系统，都是一点点写出来的。</p>
+        <p>平时下棋、打游戏，也喜欢研究各种效率工具。这个站点就是我的个人小角落，记录一些东西。</p>
       </div>
-      <div class="grid">
-        <a class="card" href="Xinghua%20Middle%20School%20Broadcasting%20Station%20System.html" target="_blank" rel="noopener">
-          <h3>兴华中学广播站系统</h3>
-          <p>广播排班管理、播放日程控制、站点信息维护，独立设计开发并投入校园实际使用。</p>
-          <span class="meta">查看 →</span>
-        </a>
-        <a class="card" href="Self-service%20accounting%20system%20Pro%20Enhanced%20V6.html" target="_blank" rel="noopener">
-          <h3>自助记账系统</h3>
-          <p>收支记录、分类统计、数据可视化，轻量化单文件本地工具，开箱即用。</p>
-          <span class="meta">查看 →</span>
-        </a>
-        <a class="card" href="Nayingte%20M4e%20Code%20Writing%20System%20V2.9Pro.html" target="_blank" rel="noopener">
-          <h3>纳英特M4e代码编写系统</h3>
-          <p>可视化拖拽生成C++代码，降低编程入门门槛，助力机器人编程学习。</p>
-          <span class="meta">查看 →</span>
-        </a>
-        <a class="card" href="Fancy-Pattern-Emoji-to-Image-Converter.html" target="_blank" rel="noopener">
-          <h3>花式图案表情转图片转换器</h3>
-          <p>文字、表情符号一键转图片，支持自定义背景与文字颜色、对齐方式，导出高清PNG。</p>
-          <span class="meta">查看 →</span>
-        </a>
-        <a class="card hidden" href="CS-Sens-Calibrator.html" target="_blank" rel="noopener">
-          <h3>CS2 & CS:GO 灵敏度校准</h3>
-          <p>输入当前 DPI 与灵敏度参数，完成多样性测试，智能评估并输出游戏内最佳鼠标灵敏度。</p>
-          <span class="meta">查看 →</span>
-        </a>
-        <a class="card hidden" href="Chess-Gomoku-Collection.html" target="_blank" rel="noopener">
-          <h3>棋类合集</h3>
-          <p>多棋类游戏合集，本地运行。</p>
-          <span class="meta">查看 →</span>
-        </a>
-      </div>
-      <div class="btn-more-wrap">
-        <button class="btn-more" id="btnMore">查看更多作品 ↓</button>
+      <div>
+        <div class="tags">
+          <span class="tag">Web 开发</span>
+          <span class="tag">Python</span>
+          <span class="tag">C++</span>
+          <span class="tag">机器人</span>
+          <span class="tag">下棋</span>
+          <span class="tag">效率工具</span>
+        </div>
       </div>
     </div>
-  </section>
-</main>
+  </div>
+</section>
 
 <footer>
   <div class="wrap">
@@ -295,7 +365,7 @@
         <ul>
           <li><a href="#top">首页</a></li>
           <li><a href="space.html">个人空间</a></li>
-          <li><a href="#works">作品</a></li>
+          <li><a href="#works">项目</a></li>
         </ul>
       </div>
       <div class="footer-col">
@@ -332,7 +402,7 @@
     hiddenCards.forEach(function (c) {
       c.classList.toggle('hidden', !expanded);
     });
-    btn.textContent = expanded ? '收起 ↑' : '查看更多作品 ↓';
+    btn.textContent = expanded ? '收起 ↑' : '查看更多 ↓';
   });
 </script>
 
