@@ -24,6 +24,28 @@
     --footer-ink: #C9CDD4;
     --footer-ink-2: #8B9099;
     --ink-color: #0f766e;
+    --card-bg: #fff;
+    --soft: #F1F2F4;
+    --soft-2: #FAFAF9;
+    --overlay: rgba(250, 250, 249, 0.96);
+    --card-image: linear-gradient(135deg, #e0f2fe, #bae6fd);
+  }
+  :root[data-theme="dark"] {
+    --bg: #131519;
+    --ink: #E8EAED;
+    --ink-2: #9BA1A9;
+    --accent: #38bdf8;
+    --accent-2: #7dd3fc;
+    --line: #2A2E35;
+    --footer-bg: #0D0F12;
+    --footer-ink: #C9CDD4;
+    --footer-ink-2: #8B9099;
+    --ink-color: #5eead4;
+    --card-bg: #1B1E24;
+    --soft: #23272E;
+    --soft-2: #1E2228;
+    --overlay: rgba(19, 21, 25, 0.96);
+    --card-image: linear-gradient(135deg, #173042, #1E4A5E);
   }
   * { margin: 0; padding: 0; box-sizing: border-box; }
   html { scroll-behavior: smooth; }
@@ -58,7 +80,7 @@
   .loading-overlay {
     position: fixed;
     inset: 0;
-    background: rgba(250, 250, 249, 0.96);
+    background: var(--overlay);
     backdrop-filter: blur(12px);
     z-index: 9999;
     display: flex;
@@ -177,6 +199,73 @@
     50% { transform: translateY(6px); }
   }
   .scroll-hint .arrow { display: inline-block; animation: bounceDown 2s infinite; }
+  .hero-meta {
+    margin-top: 30px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    max-width: 580px;
+  }
+  .clock-row, .quote-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 14px;
+    color: var(--ink-2);
+    opacity: 0;
+    transform: translateY(10px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+  }
+  .clock-row.show, .quote-row.show { opacity: 1; transform: translateY(0); }
+  .clock-row svg, .quote-row svg { width: 16px; height: 16px; flex: none; color: var(--accent); }
+  #clockTime {
+    font-family: "Noto Serif SC", Georgia, serif;
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--ink);
+    font-variant-numeric: tabular-nums;
+    letter-spacing: 0.04em;
+  }
+  #clockDate { font-size: 13px; }
+  .quote-btn {
+    border: 0;
+    background: transparent;
+    color: var(--accent);
+    cursor: pointer;
+    padding: 3px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    transition: transform .2s ease, background .2s ease;
+  }
+  .quote-btn:hover { transform: rotate(180deg); background: var(--soft); }
+  .quote-btn svg { width: 15px; height: 15px; }
+  #quoteText { font-size: 14px; }
+  .theme-toggle {
+    position: fixed;
+    top: 18px;
+    right: 18px;
+    z-index: 10001;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    border: 1px solid var(--line);
+    background: var(--card-bg);
+    color: var(--ink);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background .25s, color .25s, transform .2s, box-shadow .25s;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+  }
+  .theme-toggle:hover { transform: scale(1.06); }
+  .theme-toggle svg { width: 20px; height: 20px; }
+  .theme-toggle .icon-sun { display: none; }
+  .theme-toggle .icon-moon { display: block; }
+  :root[data-theme="dark"] .theme-toggle .icon-sun { display: block; }
+  :root[data-theme="dark"] .theme-toggle .icon-moon { display: none; }
 
   /* ===== 进入按钮板块 ===== */
   .enter-section {
@@ -230,7 +319,7 @@
     padding: 80px 0;
     border-top: 1px solid var(--line);
   }
-  .section.alt { background: #fff; }
+  .section.alt { background: var(--card-bg); }
   .section-head { margin-bottom: 48px; }
   .section-head .kicker {
     font-size: 13px;
@@ -264,7 +353,7 @@
     flex-direction: column;
     border: 1px solid var(--line);
     border-radius: 16px;
-    background: #fff;
+    background: var(--card-bg);
     overflow: hidden;
     transition: border-color .15s, transform .15s, box-shadow .15s;
   }
@@ -277,7 +366,7 @@
   .card .card-image {
     position: relative;
     height: 160px;
-    background: linear-gradient(135deg, #e0f2fe, #bae6fd);
+    background: var(--card-image);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -323,7 +412,7 @@
     padding: 14px 32px;
     border: 1px solid var(--line);
     border-radius: 999px;
-    background: #fff;
+    background: var(--card-bg);
     color: var(--ink);
     font-size: 15px;
     font-weight: 500;
@@ -337,7 +426,7 @@
   /* ===== 生活瞬间（Apple 风格三界面切换） ===== */
   .life-tabs {
     display: inline-flex;
-    background: #F1F2F4;
+    background: var(--soft);
     border-radius: 999px;
     padding: 4px;
     gap: 4px;
@@ -356,7 +445,7 @@
     transition: all .25s;
     font-family: inherit;
   }
-  .life-tab.active { background: #fff; color: var(--ink); box-shadow: 0 1px 6px rgba(0,0,0,0.12); }
+  .life-tab.active { background: var(--card-bg); color: var(--ink); box-shadow: 0 1px 6px rgba(0,0,0,0.12); }
   .life-panels { position: relative; }
   .life-panel {
     position: absolute;
@@ -365,7 +454,7 @@
     align-items: center;
     gap: 44px;
     padding: 40px 44px;
-    background: #fff;
+    background: var(--card-bg);
     border: 1px solid var(--line);
     border-radius: 20px;
     opacity: 0;
@@ -421,7 +510,7 @@
   .data-desc { color: var(--ink-2); font-size: 14px; }
   .mc-subtabs {
     display: inline-flex;
-    background: #F1F2F4;
+    background: var(--soft);
     border-radius: 999px;
     padding: 4px;
     gap: 4px;
@@ -440,7 +529,7 @@
     transition: all .25s;
     font-family: inherit;
   }
-  .mc-subtab.active { background: #fff; color: var(--ink); box-shadow: 0 1px 6px rgba(0,0,0,0.1); }
+  .mc-subtab.active { background: var(--card-bg); color: var(--ink); box-shadow: 0 1px 6px rgba(0,0,0,0.1); }
   .mc-metrics {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
@@ -448,10 +537,15 @@
   }
   .mc-metric {
     padding: 14px 16px;
-    border: 1px solid var(--line);
+    border: 1.5px solid #17181C;
     border-radius: 12px;
-    background: #FAFAF9;
+    background: transparent;
   }
+  .mc-metric .m-val { color: #17181C; }
+  .mc-metric .m-label { color: #17181C; opacity: 0.62; }
+  :root[data-theme="dark"] .mc-metric { border-color: #E8EAED; }
+  :root[data-theme="dark"] .mc-metric .m-val { color: #E8EAED; }
+  :root[data-theme="dark"] .mc-metric .m-label { color: #E8EAED; }
   .mc-metric .m-val {
     font-family: "Noto Serif SC", Georgia, serif;
     font-size: 32px;
@@ -462,6 +556,140 @@
   .mc-metric .m-val small { font-size: 14px; color: var(--ink-2); font-weight: 600; margin-left: 3px; }
   .mc-metric .m-label { font-size: 13px; color: var(--ink-2); margin-top: 4px; }
   .mc-note { margin-top: 16px; font-size: 13px; color: var(--ink-2); opacity: 0.8; }
+
+  /* ===== 城市足迹 & 访客地图 ===== */
+  .daily-song a { color: var(--accent); }
+
+  /* ===== 天气 & 纪念日 ===== */
+  .weather-row {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    font-size: 14px;
+    color: var(--ink-2);
+    margin-top: 10px;
+  }
+  .weather-row svg { width: 18px; height: 18px; color: var(--accent); flex: none; }
+  .weather-temp { font-weight: 600; color: var(--ink); margin-left: 2px; }
+  .anniv-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 20px;
+  }
+  .anniv-card {
+    background: var(--card-bg);
+    border: 1px solid var(--line);
+    border-radius: 20px;
+    padding: 34px 32px;
+  }
+  .anniv-num {
+    font-family: "Noto Serif SC", Georgia, serif;
+    font-size: clamp(42px, 6vw, 64px);
+    font-weight: 700;
+    color: var(--accent);
+    line-height: 1.1;
+  }
+  .anniv-label { font-size: 14px; color: var(--ink-2); margin-top: 8px; }
+  .anniv-date { font-size: 13px; color: var(--ink-2); opacity: 0.8; margin-top: 14px; }
+
+  /* ===== 节日飘浮元素 ===== */
+  .fest-layer {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    overflow: hidden;
+    z-index: 9990;
+  }
+  .fest-item {
+    position: absolute;
+    bottom: -90px;
+    color: var(--accent);
+    opacity: 0;
+    line-height: 1;
+  }
+  .fest-item svg {
+    width: 1em;
+    height: 1em;
+    display: block;
+    animation-name: festFloat;
+    animation-timing-function: ease-out;
+    animation-fill-mode: forwards;
+    filter: drop-shadow(0 6px 14px rgba(2, 132, 199, 0.28));
+  }
+  @keyframes festFloat {
+    0%   { transform: translateY(0) translateX(0) rotate(-10deg) scale(0.6); opacity: 0; }
+    10%  { opacity: 0.95; }
+    60%  { opacity: 0.9; }
+    100% { transform: translateY(-115vh) translateX(36px) rotate(12deg) scale(1.08); opacity: 0; }
+  }
+
+  /* ===== 节日专属欢迎语 ===== */
+  .fest-greeting {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--accent);
+    letter-spacing: 0.06em;
+    margin-bottom: 10px;
+    opacity: 0;
+    transform: translateY(-6px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+  }
+  .fest-greeting.show { opacity: 1; transform: translateY(0); }
+
+  /* ===== 翻牌时钟 ===== */
+  #clockTime { position: relative; perspective: 200px; }
+  .flip-digit { display: inline-block; position: relative; }
+  .fl-old { position: absolute; inset: 0; animation: flipOut .4s ease; }
+  .fl-new { display: inline-block; animation: flipIn .4s ease; }
+  .fl-colon { display: inline-block; animation: blink 1s steps(1) infinite; }
+  @keyframes flipOut { from { transform: rotateX(0); opacity: 1; } to { transform: rotateX(-90deg); opacity: 0; } }
+  @keyframes flipIn { from { transform: rotateX(90deg); opacity: 0; } to { transform: rotateX(0); opacity: 1; } }
+  @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.25; } }
+
+  /* ===== 页面停留计时 ===== */
+  .stay-time { font-size: 13px; color: var(--accent); }
+  .stay-time b { font-weight: 600; }
+
+  /* ===== 作品下载次数 ===== */
+  .card-dl-count {
+    display: block;
+    margin-top: 10px;
+    font-size: 12px;
+    color: var(--accent);
+    opacity: 0.85;
+  }
+
+  /* ===== 此刻（时钟与天气）板块 ===== */
+  .now-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+  }
+  .now-card {
+    background: var(--card-bg);
+    border: 1px solid var(--line);
+    border-radius: 20px;
+    padding: 34px 32px;
+    min-height: 150px;
+  }
+  .now-card .clock-row {
+    font-size: 18px;
+    margin-top: 6px;
+  }
+  .now-card #clockTime {
+    font-size: clamp(34px, 6vw, 52px);
+    line-height: 1.15;
+  }
+  .now-card #clockDate { font-size: 15px; }
+  .now-card .weather-row {
+    font-size: 17px;
+    margin-top: 8px;
+  }
+  .now-card .weather-row svg { width: 30px; height: 30px; }
+  .now-card .weather-temp { font-size: 34px; font-weight: 700; }
+  @media (max-width: 640px) {
+    .now-grid { grid-template-columns: 1fr; }
+  }
 
   /* ===== Footer ===== */
   footer {
@@ -575,14 +803,28 @@
   <p class="loading-hint">稍等片刻，马上就好…</p>
 </div>
 <div class="toast" id="toast"></div>
+<button class="theme-toggle" id="themeToggle" aria-label="切换深色 / 浅色主题" title="切换主题">
+  <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+  <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+</button>
 
-<!-- 首屏：苹果激活 · 全世界语言的问候 · 手写欢迎 -->
+<!-- 首屏：苹果激活 · 全世界语言的问候 -->
 <section class="hero" id="hero">
   <h1 class="sr-only">欢迎你的到来</h1>
   <div class="hero-inner">
+    <p class="fest-greeting" id="festGreeting"></p>
     <p class="lang-roamer" id="langRoamer"></p>
     <p class="en-title" id="enTitle">Welcome to Yaule's Space</p>
     <p class="intro" id="intro">这里是我的个人小角落，记录着咖啡、音乐、游戏与作品。不紧不慢，慢慢翻就好。</p>
+    <div class="hero-meta">
+      <p class="quote-row" id="quoteRow">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21c3 0 7-1 7-8V5c0-1.25-.756-2.017-2-2H4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2 1 0 1 0 1 1v1c0 1-1 2-2 2s-1 .008-1 1.031V20c0 1 0 1 1 1z"/><path d="M15 21c3 0 7-1 7-8V5c0-1.25-.757-2.017-2-2h-4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2h.75c0 2.25.25 4-2.75 4v3c0 1 0 1 1 1z"/></svg>
+        <span id="quoteText"></span>
+        <button class="quote-btn" id="quoteNext" aria-label="换一句" title="换一句">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
+        </button>
+      </p>
+    </div>
     <p class="scroll-hint" id="scrollHint">向下滑动 <span class="arrow">↓</span></p>
   </div>
 </section>
@@ -718,22 +960,24 @@
       <div class="life-panel active" id="lifeCoffee">
         <div class="life-visual">
           <svg viewBox="0 0 200 200" fill="none" stroke="#17181C" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M70 118 c-4 -26 6 -48 26 -58 c6 -3 12 -4 18 -3 c8 -12 22 -18 34 -16 c-2 8 -8 14 -16 16 c8 1 16 4 22 10 c-6 4 -14 5 -20 2 c8 6 13 14 14 24 c-8 -1 -15 -6 -19 -12 c0 14 -7 27 -18 35 c-14 10 -32 12 -41 2 z"/>
-            <path d="M92 62 c4 -2 8 -4 10 -8"/>
-            <path d="M122 68 c5 -1 9 -2 12 -5"/>
-            <circle cx="70" cy="118" r="3"/>
-            <circle cx="88" cy="122" r="3"/>
-            <circle cx="106" cy="118" r="3"/>
-            <path d="M58 136 h72 a10 10 0 0 1 10 10 v8 a34 34 0 0 1 -34 34 h-24 a34 34 0 0 1 -34 -34 v-8 a10 10 0 0 1 10 -10 z"/>
-            <path d="M140 150 h10 a12 12 0 0 1 0 24 h-12"/>
-            <path d="M70 100 c0 -10 14 -10 14 -20 c0 10 14 10 14 20"/>
-            <path d="M112 130 c10 -2 18 -8 22 -16"/>
+            <!-- 瑞幸标志：圆形徽标 + 鹿头 -->
+            <circle cx="60" cy="92" r="48"/>
+            <circle cx="60" cy="92" r="40"/>
+            <path d="M48 66 c2 -12 12 -19 21 -15 c-4 -2 -5 -7 -2 -9 c3 -3 9 -1 9 3 c4 -7 13 -9 17 -4 c-5 -1 -10 2 -11 8 c7 1 11 4 13 9 c-5 0 -11 -3 -13 -8 c0 7 -6 14 -15 18 c-8 5 -17 3 -19 -2 z"/>
+            <circle cx="50" cy="86" r="3.5" fill="#17181C"/>
+            <circle cx="70" cy="86" r="3.5" fill="#17181C"/>
+            <path d="M56 98 q5 5 9 0"/>
+            <!-- 咖啡杯 -->
+            <path d="M98 116 h74 a12 12 0 0 1 12 12 v8 a32 32 0 0 1 -32 32 h-34 a32 32 0 0 1 -32 -32 v-8 a12 12 0 0 1 12 -12 z"/>
+            <path d="M172 124 h9 a13 13 0 0 1 0 26 h-11"/>
+            <circle cx="130" cy="152" r="8"/>
+            <path d="M130 144 v16"/>
           </svg>
         </div>
         <div class="life-info">
           <h3>瑞幸咖啡 <span class="tag">续命中</span></h3>
           <div class="data-number" id="cups">176<small>杯</small></div>
-          <p class="data-desc">已喝掉的咖啡 · 每 3 天多喝一杯 · 从第一杯开始记录</p>
+          <p class="data-desc">从第一杯咖啡开始，悄悄记录每一次续命时刻</p>
           <p class="data-desc" style="margin-top:8px">美式、拿铁、生椰……每一杯都是生活的续命剂。</p>
         </div>
       </div>
@@ -741,28 +985,43 @@
       <div class="life-panel" id="lifeMusic">
         <div class="life-visual">
           <svg viewBox="0 0 200 200" fill="none" stroke="#17181C" stroke-width="5" stroke-linecap="round" stroke-linejoin="round">
-            <circle cx="100" cy="100" r="68"/>
-            <circle cx="100" cy="100" r="44"/>
-            <circle cx="100" cy="100" r="10" fill="#17181C"/>
-            <path d="M132 62 c14 14 22 32 22 52 c0 26 -18 46 -42 50"/>
-            <path d="M144 48 l8 12"/>
-            <path d="M156 58 l6 9"/>
+            <!-- 唱片外圈 -->
+            <circle cx="100" cy="100" r="78"/>
+            <circle cx="100" cy="100" r="60"/>
+            <!-- 音符：椭圆头 + 符杆 + 旗 -->
+            <ellipse cx="108" cy="80" rx="10" ry="7.5" fill="#17181C"/>
+            <path d="M118 80 l0 -36 c0 -4 4 -7 9 -5 l10 4"/>
+            <path d="M137 43 l-10 -4"/>
+            <path d="M118 44 l-12 -5"/>
+            <!-- 唱片中心 -->
+            <circle cx="100" cy="100" r="9" fill="#17181C"/>
           </svg>
         </div>
         <div class="life-info">
           <h3>网易云音乐 <span class="tag">循环播放中</span></h3>
           <div class="data-number"><span id="songs">305</span><small>首</small></div>
-          <p class="data-desc">累计收听 <span id="hours">2000</span>+ 小时 · 每 2 天多听 25.7 小时</p>
+          <p class="data-desc">累计收听 <span id="hours">2000</span>+ 小时，旋律里藏着无数个夜晚</p>
           <p class="data-desc" style="margin-top:8px">深夜的旋律，陪我度过每一个失眠夜。</p>
+          <p class="data-desc daily-song" style="margin-top:8px">今日推荐：<a id="dailySong" href="#" target="_blank" rel="noopener">正在挑选…</a></p>
         </div>
       </div>
       <!-- 界面 3：我的世界 -->
       <div class="life-panel" id="lifeGame">
         <div class="life-visual">
-          <svg viewBox="0 0 200 200" fill="none" stroke="#17181C" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M60 30 h80 l30 30 v100 l-30 30 h-80 l-30 -30 v-100 z"/>
-            <path d="M60 30 l40 40 v80 l-40 40 M140 30 l-40 40 v80 l40 40 M30 60 l40 40 h80 l40 -40 M30 140 l40 -40 h80 l40 40"/>
-            <path d="M70 70 h20 v20 h-20 z M110 100 h20 v20 h-20 z"/>
+          <svg viewBox="0 0 200 200" fill="none" stroke="#17181C" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+            <!-- 等轴测方块：顶面（草） + 两个侧面（土） -->
+            <path d="M100 26 L168 66 L100 106 L32 66 Z"/>
+            <path d="M32 66 L100 106 L100 168 L32 128 Z"/>
+            <path d="M168 66 L100 106 L100 168 L168 128 Z"/>
+            <!-- 顶面草纹理 -->
+            <path d="M58 60 l8 6 M76 68 l8 6 M94 76 l8 6 M112 84 l8 6 M56 74 l8 6 M90 88 l8 6"/>
+            <!-- 侧面土粒 -->
+            <circle cx="60" cy="118" r="2.5" fill="#17181C"/>
+            <circle cx="80" cy="132" r="2.5" fill="#17181C"/>
+            <circle cx="100" cy="146" r="2.5" fill="#17181C"/>
+            <circle cx="128" cy="116" r="2.5" fill="#17181C"/>
+            <circle cx="144" cy="130" r="2.5" fill="#17181C"/>
+            <circle cx="74" cy="152" r="2.5" fill="#17181C"/>
           </svg>
         </div>
         <div class="life-info">
@@ -804,6 +1063,55 @@
   </div>
 </section>
 
+<!-- 板块 3：纪念日 -->
+<section class="section alt" id="anniv">
+  <div class="wrap">
+    <div class="section-head">
+      <p class="kicker">ANNIVERSARY</p>
+      <h2>纪念日</h2>
+      <p class="desc">有些日子值得被记住，有些时间悄悄在走。</p>
+    </div>
+    <div class="anniv-grid">
+      <div class="anniv-card">
+        <div class="anniv-num" id="annivDays">--</div>
+        <div class="anniv-label">活着的第 <span id="annivDaysN">--</span> 天</div>
+        <div class="anniv-date">自 2012 年 1 月 17 日起</div>
+      </div>
+      <div class="anniv-card">
+        <div class="anniv-num" id="siteDays">--</div>
+        <div class="anniv-label">本站上线第 <span id="siteDaysN">--</span> 天</div>
+        <div class="anniv-date">自 2026 年 9 月 18 日起</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 板块 5：此刻（时钟与天气） -->
+<section class="section alt" id="now">
+  <div class="wrap">
+    <div class="section-head">
+      <p class="kicker">RIGHT NOW</p>
+      <h2>此刻</h2>
+      <p class="desc">时间与天气，都在悄悄走。</p>
+    </div>
+    <div class="now-grid">
+      <div class="now-card">
+        <p class="clock-row show" id="clockRow">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          <span id="clockTime">--:--:--</span>
+          <span id="clockDate"></span>
+        </p>
+      </div>
+      <div class="now-card">
+        <p class="weather-row" id="weatherRow">
+          <svg id="weatherIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z"/></svg>
+          <span id="weatherText">衢州 · 正在读取天气…</span>
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
 
 <footer>
   <div class="wrap">
@@ -839,11 +1147,13 @@
     </div>
     <div class="footer-bottom">
       <span>© <span id="year">2026</span> Yaule. All rights reserved.</span>
+      <span class="stay-time" id="stayTime">已停留 0 分 0 秒</span>
       <span>Powered by GitHub Pages</span>
     </div>
   </div>
   <span class="footer-word" aria-hidden="true">Yaule</span>
 </footer>
+<div class="fest-layer" id="festLayer"></div>
 <script>
   document.getElementById('year').textContent = new Date().getFullYear();
 
@@ -941,18 +1251,52 @@
     });
   });
 
+  // 作品卡片：整卡可点击（单击卡片任意处打开作品，下载按钮除外）
+  document.querySelectorAll('.card').forEach(function (card) {
+    card.addEventListener('click', function (e) {
+      if (e.target.closest('.card-dl')) return;
+      var link = this.querySelector('a.card-image');
+      if (link && !e.target.closest('a.card-image')) {
+        link.click();
+      }
+    });
+    card.addEventListener('keydown', function (e) {
+      if ((e.key === 'Enter' || e.key === ' ') && e.target === card) {
+        e.preventDefault();
+        var link = this.querySelector('a.card-image');
+        if (link) link.click();
+      }
+    });
+  });
+
   /* ========== 首屏：全世界语言的欢迎轮播（循环）+ 小字逐字打字机 ========== */
   (function () {
     var langs = [
       ['Welcome to You', '英语'],
       ['Bienvenue à toi', '法语'],
       ['Bienvenido a ti', '西班牙语'],
+      ['Willkommen bei dir', '德语'],
       ['Benvenuto da te', '意大利语'],
+      ['Vítejte u vás', '捷克语'],
+      ['Witamy u Ciebie', '波兰语'],
+      ['Tervetuloa luoksesi', '芬兰语'],
+      ['Välkommen till dig', '瑞典语'],
+      ['Üdvözöljük nálad', '匈牙利语'],
+      ['Добре дошли при теб', '保加利亚语'],
+      ['Bine ai venit la tine', '罗马尼亚语'],
+      ['Καλώς ήρθες', '希腊语'],
+      ['ברוך הבא אליך', '希伯来语'],
+      ['أهلاً بك', '阿拉伯语'],
+      ['Merhaba, hoş geldin', '土耳其语'],
+      ['स्वागत है आपका', '印地语'],
+      ['ยินดีต้อนรับ', '泰语'],
+      ['Xin chào bạn', '越南语'],
+      ['Selamat datang kepada anda', '印尼语'],
       ['ようこそ', '日语'],
       ['어서 오세요', '韩语'],
-      ['أهلاً بك', '阿拉伯语'],
       ['Bem-vindo a você', '葡萄牙语'],
       ['Welkom bij jou', '荷兰语'],
+      ['歡迎你的到來', '繁体中文'],
       ['欢迎你的到来', '中文']
     ];
     var roamer = document.getElementById('langRoamer');
@@ -961,48 +1305,47 @@
     var scrollHint = document.getElementById('scrollHint');
 
     // 小字与向下滚动：一进来就一直存在
+    var quoteRow = document.getElementById('quoteRow');
     enTitle.classList.add('show');
     scrollHint.classList.add('show');
     intro.classList.add('show');
+    quoteRow.classList.add('show');
 
-    // 大标题：全世界语言轮播，循环播放（已排除俄语、德语等过长翻译）
+    // 大标题：全世界语言轮播 · 打字机（缓慢打出 → 停留 → 逐字消失 → 切换）
     var li = 0;
     function roamNext() {
-      roamer.textContent = langs[li][0];
-      roamer.classList.add('show');
       li = (li + 1) % langs.length;
-      setTimeout(function () {
-        roamer.classList.remove('show');
-        setTimeout(roamNext, 320);
-      }, 1500);
+      roamType();
     }
-    setTimeout(roamNext, 300);
-
-    // 简介：一个字一个字出来，再一个字一个字回去，循环
-    var introText = '这里是我的个人小角落，记录着咖啡、音乐、游戏与作品。不紧不慢，慢慢翻就好。';
-    var pos = introText.length;
-    var deleting = false;
-    function typeLoop() {
-      intro.textContent = introText.slice(0, pos);
-      if (!deleting) {
-        if (pos < introText.length) {
-          pos++;
-          setTimeout(typeLoop, 150);
+    function roamType() {
+      var text = langs[li][0];
+      var len = text.length;
+      var c = 0;
+      roamer.textContent = '';
+      roamer.classList.add('show');
+      // 缓慢打出
+      (function type() {
+        c++;
+        roamer.textContent = text.slice(0, c);
+        if (c < len) {
+          setTimeout(type, 55);
         } else {
-          deleting = true;
-          setTimeout(typeLoop, 1800);
+          setTimeout(erase, 1300);
         }
-      } else {
-        if (pos > 0) {
-          pos--;
-          setTimeout(typeLoop, 70);
+      })();
+      // 逐字消失（打印机倒放）
+      function erase() {
+        c--;
+        if (c > 0) {
+          roamer.textContent = text.slice(0, c);
+          setTimeout(erase, 55);
         } else {
-          deleting = false;
-          setTimeout(typeLoop, 400);
+          roamer.textContent = '';
+          setTimeout(roamNext, 320);
         }
       }
     }
-    setTimeout(typeLoop, 2000);
+    setTimeout(roamType, 300);
   })();
 
 
@@ -1076,6 +1419,324 @@
         if (key === 'bjd') { bjd.classList.remove('hidden'); hyt.classList.add('hidden'); }
         else { hyt.classList.remove('hidden'); bjd.classList.add('hidden'); }
       });
+    });
+  })();
+
+  /* ========== 实时时钟 ========== */
+  (function () {
+    var timeEl = document.getElementById('clockTime');
+    var dateEl = document.getElementById('clockDate');
+    var week = ['日', '一', '二', '三', '四', '五', '六'];
+    var prev = '';
+    function tick() {
+      var d = new Date();
+      var hh = String(d.getHours()).padStart(2, '0');
+      var mm = String(d.getMinutes()).padStart(2, '0');
+      var ss = String(d.getSeconds()).padStart(2, '0');
+      var s = hh + ':' + mm + ':' + ss;
+      var html = '';
+      for (var i = 0; i < s.length; i++) {
+        var ch = s[i];
+        if (ch === ':') {
+          html += '<span class="fl-colon">:</span>';
+          continue;
+        }
+        var pch = i < prev.length ? prev[i] : '';
+        if (pch && pch !== ch) {
+          html += '<span class="flip-digit"><span class="fl-old">' + pch + '</span><span class="fl-new">' + ch + '</span></span>';
+        } else {
+          html += '<span class="flip-digit">' + ch + '</span>';
+        }
+      }
+      timeEl.innerHTML = html;
+      prev = s;
+      dateEl.textContent = d.getFullYear() + ' 年 ' + (d.getMonth() + 1) + ' 月 ' + d.getDate() + ' 日 · 星期' + week[d.getDay()];
+    }
+    tick();
+    setInterval(tick, 1000);
+  })();
+
+  /* ========== 今日一言（每日一句，点击换一句） ========== */
+  (function () {
+    var quotes = [
+      ['保持好奇，缓慢生长。', 'Yaule'],
+      ['每一行代码，都是对世界的一次回应。', 'Yaule'],
+      ['夜里睡不着，就写点东西吧。', 'Yaule'],
+      ['生活不止眼前的 Bug，还有诗和远方。', '佚名'],
+      ['把每一天，当作一次新的版本迭代。', 'Yaule'],
+      ['咖啡续命，代码养魂。', 'Yaule'],
+      ['慢慢来，比较快。', '佚名'],
+      ['热爱可抵岁月漫长。', '佚名'],
+      ['写下的，终会有人看见。', 'Yaule'],
+      ['不赶路，去感受路。', '佚名'],
+      ['做自己喜欢的事，顺便养活自己。', '佚名'],
+      ['种一棵树最好的时间是十年前，其次是现在。', '谚语'],
+      ['黑夜给了我黑色的眼睛，我却用它寻找光明。', '顾城'],
+      ['路漫漫其修远兮，吾将上下而求索。', '屈原'],
+      ['千磨万击还坚劲，任尔东西南北风。', '郑燮'],
+      ['长风破浪会有时，直挂云帆济沧海。', '李白'],
+      ['会当凌绝顶，一览众山小。', '杜甫'],
+      ['山重水复疑无路，柳暗花明又一村。', '陆游'],
+      ['沉舟侧畔千帆过，病树前头万木春。', '刘禹锡'],
+      ['欲穷千里目，更上一层楼。', '王之涣'],
+      ['千里之行，始于足下。', '老子'],
+      ['知人者智，自知者明。', '老子'],
+      ['天行健，君子以自强不息。', '《周易》'],
+      ['业精于勤，荒于嬉；行成于思，毁于随。', '韩愈'],
+      ['纸上得来终觉浅，绝知此事要躬行。', '陆游'],
+      ['问渠那得清如许？为有源头活水来。', '朱熹'],
+      ['世上无难事，只怕有心人。', '谚语'],
+      ['宝剑锋从磨砺出，梅花香自苦寒来。', '《警世贤文》'],
+      ['Stay hungry, stay foolish.', 'Steve Jobs'],
+      ['The only way to do great work is to love what you do.', 'Steve Jobs']
+    ];
+    var text = document.getElementById('quoteText');
+    var next = document.getElementById('quoteNext');
+    var cur = 0;
+    function render(q) {
+      text.textContent = '“' + q[0] + '”' + (q[1] ? ' —— ' + q[1] : '');
+    }
+    function fetchNet(ok) {
+      var ctrl = ('AbortController' in window) ? new AbortController() : null;
+      var timer = setTimeout(function () { if (ctrl) ctrl.abort(); }, 4500);
+      fetch('https://v1.hitokoto.cn/?encode=json&charset=utf-8', ctrl ? { signal: ctrl.signal } : {})
+        .then(function (r) { return r.json(); })
+        .then(function (d) {
+          clearTimeout(timer);
+          ok(d && d.hitokoto ? [d.hitokoto, d.from || ''] : null);
+        })
+        .catch(function () { clearTimeout(timer); ok(null); });
+    }
+    function pickLocal(random) {
+      if (random) {
+        var i;
+        do { i = Math.floor(Math.random() * quotes.length); } while (i === cur);
+        cur = i;
+      } else {
+        var d = new Date();
+        var key = d.getFullYear() * 10000 + (d.getMonth() + 1) * 100 + d.getDate();
+        cur = key % quotes.length;
+      }
+      render(quotes[cur]);
+    }
+    // 初始化：先显示本地每日一句，联网成功则替换为实时句子
+    pickLocal(false);
+    fetchNet(function (q) { if (q) render(q); });
+    next.addEventListener('click', function () {
+      fetchNet(function (q) { if (q) { render(q); } else { pickLocal(true); } });
+    });
+  })();
+
+  /* ========== 主题切换（深色 / 浅色） ========== */
+  (function () {
+    var toggle = document.getElementById('themeToggle');
+    var root = document.documentElement;
+    try {
+      if (localStorage.getItem('yaule-theme') === 'dark') root.setAttribute('data-theme', 'dark');
+    } catch (e) {}
+    toggle.addEventListener('click', function () {
+      if (root.getAttribute('data-theme') === 'dark') {
+        root.removeAttribute('data-theme');
+        try { localStorage.setItem('yaule-theme', 'light'); } catch (e) {}
+      } else {
+        root.setAttribute('data-theme', 'dark');
+        try { localStorage.setItem('yaule-theme', 'dark'); } catch (e) {}
+      }
+    });
+  })();
+
+  /* ========== 每日推荐：按日期从歌单取一首，跳网易云搜索 ========== */
+  (function () {
+    var DAILY_SONGS = [
+      ['起风了', '买辣椒也用券'],
+      ['平凡之路', '朴树'],
+      ['夜空中最亮的星', '逃跑计划'],
+      ['晴天', '周杰伦'],
+      ['光年之外', 'G.E.M. 邓紫棋'],
+      ['海阔天空', 'Beyond'],
+      ['稻香', '周杰伦'],
+      ['Shape of You', 'Ed Sheeran'],
+      ['人间', '王菲'],
+      ['成都', '赵雷'],
+      ['Viva La Vida', 'Coldplay'],
+      ['千千阙歌', '陈慧娴']
+    ];
+    var link = document.getElementById('dailySong');
+    if (link) {
+      var d = new Date();
+      var key = d.getFullYear() * 10000 + (d.getMonth() + 1) * 100 + d.getDate();
+      var song = DAILY_SONGS[key % DAILY_SONGS.length];
+      link.textContent = song[0] + ' — ' + song[1];
+      link.href = 'https://music.163.com/#/search/m/?s=' + encodeURIComponent(song[0] + ' ' + song[1]);
+    }
+  })();
+
+  /* ========== 天气：Open-Meteo 免费接口（衢州 28.94, 118.87） ========== */
+  (function () {
+    var icon = document.getElementById('weatherIcon');
+    var txt = document.getElementById('weatherText');
+    if (!icon || !txt) return;
+    function svgFor(code) {
+      var cloud = '<path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z"/>';
+      if (code === 0) {
+        return '<circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/>';
+      }
+      if (code <= 3) return cloud;
+      if (code <= 48) return cloud + '<line x1="7" y1="15" x2="7" y2="18"/><line x1="12" y1="15" x2="12" y2="18"/><line x1="17" y1="15" x2="17" y2="18"/>';
+      if (code <= 67) return cloud + '<line x1="7" y1="17" x2="7" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/><line x1="17" y1="17" x2="17" y2="21"/>';
+      if (code <= 77) return cloud + '<line x1="8" y1="17" x2="8" y2="21"/><line x1="16" y1="17" x2="16" y2="21"/>';
+      if (code <= 82) return cloud + '<line x1="7" y1="17" x2="7" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/><line x1="17" y1="17" x2="17" y2="21"/>';
+      if (code <= 86) return cloud + '<line x1="8" y1="17" x2="8" y2="21"/><line x1="16" y1="17" x2="16" y2="21"/>';
+      return cloud + '<polyline points="13 12 11 16 14 16 12 20"/>';
+    }
+    function textFor(code) {
+      if (code === 0) return '晴';
+      if (code === 1) return '大部晴朗';
+      if (code === 2) return '多云';
+      if (code === 3) return '阴';
+      if (code <= 48) return '雾';
+      if (code <= 56) return '毛毛雨';
+      if (code <= 67) return '雨';
+      if (code <= 77) return '雪';
+      if (code <= 82) return '阵雨';
+      if (code <= 86) return '阵雪';
+      return '雷阵雨';
+    }
+    fetch('https://api.open-meteo.com/v1/forecast?latitude=28.94&longitude=118.87&current=temperature_2m,weather_code&timezone=Asia%2FShanghai&forecast_days=1')
+      .then(function (r) { if (!r.ok) throw new Error('weather'); return r.json(); })
+      .then(function (d) {
+        var c = d.current;
+        icon.innerHTML = svgFor(c.weather_code);
+        txt.innerHTML = '<span>衢州</span><span class="weather-temp">' + Math.round(c.temperature_2m) + '°C</span><span>' + textFor(c.weather_code) + '</span>';
+      })
+      .catch(function () { txt.textContent = '衢州 · 天气暂时不可用'; });
+  })();
+
+  /* ========== 纪念日：活着第几天 / 网站上线天数 ========== */
+  (function () {
+    function daysSince(y, m, d) {
+      var start = new Date(y, m - 1, d);
+      var now = new Date();
+      now.setHours(0, 0, 0, 0);
+      return Math.floor((now - start) / 86400000) + 1;
+    }
+    var a = daysSince(2012, 1, 17);
+    var s = daysSince(2026, 9, 18);
+    var e1 = document.getElementById('annivDays');
+    var e2 = document.getElementById('annivDaysN');
+    var e3 = document.getElementById('siteDays');
+    var e4 = document.getElementById('siteDaysN');
+    if (e1) e1.textContent = a;
+    if (e2) e2.textContent = a;
+    if (e3) e3.textContent = s;
+    if (e4) e4.textContent = s;
+  })();
+
+  /* ========== 节日飘浮：自动拉取中国法定节假日，节日当天飘 3 秒 ========== */
+  (function () {
+    var layer = document.getElementById('festLayer');
+    if (!layer) return;
+    var GREETING = {
+      '春节': '新年快乐，万事顺遂。',
+      '除夕': '辞旧迎新，灯火可亲。',
+      '元宵节': '元宵喜乐，阖家团圆。',
+      '清明节': '气清景明，万物皆显。',
+      '劳动节': '辛苦了，今天属于你。',
+      '端午节': '端午安康，粽叶飘香。',
+      '中秋节': '今晚的月亮，借你一半。',
+      '国庆节': '山河远阔，人间烟火。'
+    };
+    var FEST = {
+      '春节': ['lantern', 'firework', 'lantern', 'couplet'],
+      '除夕': ['lantern', 'firework'],
+      '元宵节': ['lantern', 'tangyuan'],
+      '清明节': ['willow', 'rain'],
+      '劳动节': ['star', 'firework'],
+      '端午节': ['zongzi', 'zongzi', 'dragonboat'],
+      '中秋节': ['mooncake', 'lantern', 'rabbit', 'mooncake'],
+      '国庆节': ['flag', 'firework', 'flag', 'star']
+    };
+    var ICONS = {
+      mooncake: '🥮', lantern: '🏮', rabbit: '🐇', zongzi: '🫔',
+      dragonboat: '🛶', firework: '🎆', willow: '🌿', rain: '🌧️',
+      flag: '🎇', star: '⭐', tangyuan: '🍡', couplet: '🧧'
+    };
+    var year = new Date().getFullYear();
+    var url = 'https://raw.githubusercontent.com/NateScarlet/holiday-cn/master/' + year + '.json';
+    fetch(url)
+      .then(function (r) { if (!r.ok) throw new Error('holiday'); return r.json(); })
+      .then(function (data) {
+        var now = new Date();
+        var ymd = now.getFullYear() + '-' + String(now.getMonth() + 1).padStart(2, '0') + '-' + String(now.getDate()).padStart(2, '0');
+        var matched = null;
+        (data.days || []).forEach(function (day) {
+          if (day.date === ymd && day.isOffDay) matched = day;
+        });
+        if (!matched) return;
+        var gEl = document.getElementById('festGreeting');
+        if (gEl && GREETING[matched.name]) {
+          gEl.textContent = GREETING[matched.name];
+          gEl.classList.add('show');
+        }
+        var icons = FEST[matched.name] || ['star', 'firework'];
+        for (var i = 0; i < 7; i++) {
+          (function (i) {
+            var el = document.createElement('span');
+            el.className = 'fest-item';
+            el.style.left = (6 + Math.random() * 86) + '%';
+            el.style.fontSize = (34 + Math.random() * 34) + 'px';
+            el.style.animationDelay = (Math.random() * 0.9) + 's';
+            el.style.animationDuration = (2.6 + Math.random() * 1.1) + 's';
+            el.textContent = ICONS[icons[i % icons.length]];
+            layer.appendChild(el);
+            setTimeout(function () { el.remove(); }, 4200);
+          })(i);
+        }
+      })
+      .catch(function () {});
+  })();
+
+  /* ========== 页面停留计时 ========== */
+  (function () {
+    var el = document.getElementById('stayTime');
+    if (!el) return;
+    var start = Date.now();
+    function update() {
+      var sec = Math.floor((Date.now() - start) / 1000);
+      var m = Math.floor(sec / 60);
+      var s = sec % 60;
+      el.innerHTML = '已停留 <b>' + m + '</b> 分 <b>' + s + '</b> 秒';
+    }
+    update();
+    setInterval(update, 1000);
+  })();
+
+  /* ========== 作品下载计数（localStorage） ========== */
+  (function () {
+    var KEY = 'yaule_dl_count';
+    var store = {};
+    try { store = JSON.parse(localStorage.getItem(KEY) || '{}') || {}; } catch (e) {}
+    function nameOf(card) {
+      var dl = card.querySelector('.card-dl');
+      return dl ? (dl.getAttribute('download') || 'unknown') : 'unknown';
+    }
+    document.querySelectorAll('.card').forEach(function (card) {
+      var body = card.querySelector('.card-body');
+      if (!body) return;
+      var badge = document.createElement('span');
+      badge.className = 'card-dl-count';
+      badge.textContent = '下载 ' + (store[nameOf(card)] || 0) + ' 次';
+      body.appendChild(badge);
+    });
+    document.querySelectorAll('.card-dl').forEach(function (dl) {
+      dl.addEventListener('click', function () {
+        var card = this.closest('.card');
+        var name = nameOf(card);
+        store[name] = (store[name] || 0) + 1;
+        try { localStorage.setItem(KEY, JSON.stringify(store)); } catch (e) {}
+        var badge = card ? card.querySelector('.card-dl-count') : null;
+        if (badge) badge.textContent = '下载 ' + store[name] + ' 次';
+      }, true);
     });
   })();
 </script>
