@@ -1,1149 +1,1341 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>棋艺合集 · Chess &amp; Gomoku Collection</title>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<meta name="color-scheme" content="light"/>
+<title>对弈 · 五子棋与中国象棋</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%23C98E4B'/%3E%3Ccircle cx='32' cy='32' r='17' fill='%232B2620'/%3E%3Ccircle cx='32' cy='32' r='8' fill='%23F6F1E6'/%3E%3C/svg%3E"/>
+<link rel="stylesheet" href="https://miaoda.feishu.cn/fonts/css2?family=Noto+Serif+SC:wght@400;600;700;900&display=swap"/>
 <style>
-* { margin: 0; padding: 0; box-sizing: border-box; }
-body {
-  font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif;
-  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
-  min-height: 100vh;
-  color: #eee;
-  overflow-x: hidden;
+:root{
+  --paper:#F3EBD9;
+  --paper-2:#E9DEC6;
+  --ink:#2A241C;
+  --ink-soft:#6B5F4E;
+  --wood:#C98E4B;
+  --wood-deep:#A86F31;
+  --wood-light:#E0B174;
+  --line:#5B4325;
+  --cinnabar:#B03A2E;
+  --cinnabar-dark:#8F2E24;
+  --gold:#C9A227;
+  --stone-black:#26221C;
+  --stone-white:#F7F2E7;
+  --disc:#F5EDDC;
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{height:100%}
+body{
+  font-family:'Noto Serif SC','Songti SC','SimSun','STSong',serif;
+  color:var(--ink);
+  background:
+    radial-gradient(1100px 700px at 15% -10%, rgba(255,251,238,.9) 0%, transparent 60%),
+    radial-gradient(900px 650px at 108% 112%, rgba(231,214,178,.75) 0%, transparent 55%),
+    linear-gradient(180deg, var(--paper) 0%, var(--paper-2) 100%);
+  background-attachment:fixed;
+  min-height:100vh;
+}
+.hidden{display:none!important}
+button{font-family:inherit}
+
+/* ===== header ===== */
+header{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:13px 20px;border-bottom:1px solid rgba(42,36,28,.16);
+  background:rgba(243,235,217,.72);backdrop-filter:blur(4px);
+  position:sticky;top:0;z-index:60;
+}
+.brand{display:flex;align-items:center;gap:11px}
+.brand h1{font-size:19px;font-weight:900;letter-spacing:.42em;margin-left:.42em}
+.brand small{display:block;font-size:11px;color:var(--ink-soft);letter-spacing:.2em}
+.brand .seal{
+  width:34px;height:34px;flex:none;border-radius:7px;background:var(--cinnabar);
+  display:flex;align-items:center;justify-content:center;color:#FBF3E2;
+  font-size:19px;font-weight:900;box-shadow:inset 0 0 0 2px rgba(255,255,255,.25), 0 3px 8px rgba(140,46,36,.4);
+}
+header .back{
+  border:1px solid rgba(42,36,28,.35);background:transparent;color:var(--ink);
+  padding:7px 16px;border-radius:9px;font-size:13px;letter-spacing:.15em;cursor:pointer;transition:.2s;
+}
+header .back:hover{background:var(--ink);color:#F6EFDD}
+header .back.hidden{visibility:hidden}
+.header-actions{display:flex;gap:8px;align-items:center}
+@media(max-width:430px){
+  header{padding:10px 12px}
+  .brand h1{font-size:16px;letter-spacing:.3em;margin-left:.3em}
+  .brand small{font-size:10px;letter-spacing:.14em}
+  .brand .seal{width:30px;height:30px;font-size:16px}
+  header .back{padding:6px 11px;font-size:12px}
 }
 
-/* ===== 选择页面 ===== */
-.select-screen {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  min-height: 100vh;
-  padding: 40px 20px;
-  animation: fadeIn 0.8s ease;
-}
-@keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-.select-title {
-  font-size: 42px;
-  font-weight: 700;
-  background: linear-gradient(135deg, #e94560, #f5a623, #50fa7b);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  margin-bottom: 8px;
-  text-align: center;
-}
-.select-subtitle {
-  font-size: 16px;
-  color: rgba(255,255,255,0.5);
-  margin-bottom: 50px;
-  text-align: center;
-}
-.game-cards {
-  display: flex;
-  gap: 40px;
-  flex-wrap: wrap;
-  justify-content: center;
-}
-.game-card {
-  width: 280px;
-  height: 360px;
-  border-radius: 20px;
-  cursor: pointer;
-  position: relative;
-  overflow: hidden;
-  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-  border: 2px solid rgba(255,255,255,0.1);
-}
-.game-card:hover {
-  transform: translateY(-10px) scale(1.03);
-  border-color: rgba(255,255,255,0.3);
-  box-shadow: 0 20px 60px rgba(0,0,0,0.5);
-}
-.game-card.gomoku {
-  background: linear-gradient(135deg, #2d3436 0%, #636e72 100%);
-}
-.game-card.xiangqi {
-  background: linear-gradient(135deg, #6c3483 0%, #c0392b 100%);
-}
-.card-icon {
-  font-size: 80px;
-  text-align: center;
-  margin-top: 60px;
-  filter: drop-shadow(0 4px 12px rgba(0,0,0,0.3));
-}
-.card-name {
-  font-size: 28px;
-  font-weight: 700;
-  text-align: center;
-  margin-top: 20px;
-}
-.card-desc {
-  font-size: 14px;
-  text-align: center;
-  color: rgba(255,255,255,0.6);
-  margin-top: 10px;
-  padding: 0 20px;
-}
-.card-glow {
-  position: absolute;
-  top: -50%;
-  left: -50%;
-  width: 200%;
-  height: 200%;
-  background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 60%);
-  opacity: 0;
-  transition: opacity 0.4s;
-  pointer-events: none;
-}
-.game-card:hover .card-glow { opacity: 1; }
+/* ===== views ===== */
+.view{padding:24px 16px 46px;max-width:1080px;margin:0 auto}
 
-/* ===== 游戏页面 ===== */
-.game-screen {
-  display: none;
-  min-height: 100vh;
-  padding: 20px;
-  flex-direction: column;
-  align-items: center;
+/* ===== home ===== */
+.home-hero{text-align:center;margin:38px 8px 44px}
+.home-hero h2{
+  font-size:clamp(34px,7vw,58px);font-weight:900;letter-spacing:.32em;margin-left:.32em;color:var(--ink);
+  text-shadow:0 2px 0 rgba(255,255,255,.6);
 }
-.game-screen.active { display: flex; animation: fadeIn 0.5s ease; }
-.game-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  width: 100%;
-  max-width: 700px;
-  margin-bottom: 20px;
+.home-hero .divider{display:flex;align-items:center;justify-content:center;gap:14px;margin:16px auto 14px;color:var(--cinnabar)}
+.home-hero .divider::before,.home-hero .divider::after{content:"";height:1px;width:min(150px,22vw);background:linear-gradient(90deg,transparent,var(--cinnabar))}
+.home-hero .divider::after{background:linear-gradient(90deg,var(--cinnabar),transparent)}
+.home-hero p{color:var(--ink-soft);letter-spacing:.34em;font-size:13px}
+.game-cards{display:grid;grid-template-columns:repeat(2,1fr);gap:28px;max-width:880px;margin:0 auto}
+@media(max-width:760px){.game-cards{grid-template-columns:1fr}}
+.card{
+  position:relative;overflow:hidden;border-radius:20px;cursor:pointer;color:#FDF6E6;
+  background:linear-gradient(160deg,var(--wood-light) 0%,var(--wood) 42%,var(--wood-deep) 100%);
+  border:1px solid rgba(90,62,26,.55);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.28), 0 14px 32px rgba(80,50,10,.24);
+  padding:38px 30px 32px;text-align:center;transition:transform .25s,box-shadow .25s;
 }
-.back-btn {
-  padding: 10px 20px;
-  background: rgba(255,255,255,0.1);
-  border: 1px solid rgba(255,255,255,0.2);
-  border-radius: 10px;
-  color: #fff;
-  cursor: pointer;
-  font-size: 14px;
-  transition: all 0.2s;
+.card::before{
+  content:"";position:absolute;inset:10px;border:1px solid rgba(255,248,228,.3);border-radius:14px;pointer-events:none;
 }
-.back-btn:hover { background: rgba(255,255,255,0.2); }
-.game-title {
-  font-size: 24px;
-  font-weight: 700;
+.card:hover{transform:translateY(-7px);box-shadow:inset 0 1px 0 rgba(255,255,255,.28), 0 22px 44px rgba(80,50,10,.32)}
+.card .icon{width:96px;height:96px;margin:0 auto 20px;display:block;filter:drop-shadow(0 6px 10px rgba(0,0,0,.35))}
+.card h3{font-size:25px;font-weight:900;letter-spacing:.42em;margin-left:.42em}
+.card .desc{font-size:13px;line-height:1.9;opacity:.88;margin:12px auto 22px;max-width:300px;letter-spacing:.08em}
+.card .enter{
+  display:inline-flex;align-items:center;gap:8px;font-size:14px;letter-spacing:.3em;
+  background:rgba(30,20,8,.32);border:1px solid rgba(255,248,228,.35);
+  padding:9px 22px;border-radius:999px;transition:background .2s;
 }
-.game-controls {
-  display: flex;
-  gap: 10px;
-}
-.ctrl-btn {
-  padding: 10px 16px;
-  background: rgba(255,255,255,0.1);
-  border: 1px solid rgba(255,255,255,0.2);
-  border-radius: 10px;
-  color: #fff;
-  cursor: pointer;
-  font-size: 13px;
-  transition: all 0.2s;
-}
-.ctrl-btn:hover { background: rgba(255,255,255,0.2); }
-.status-bar {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  margin-bottom: 16px;
-  padding: 12px 24px;
-  background: rgba(255,255,255,0.08);
-  border-radius: 12px;
-  border: 1px solid rgba(255,255,255,0.1);
-}
-.status-player {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-size: 15px;
-  font-weight: 600;
-}
-.status-dot {
-  width: 16px;
-  height: 16px;
-  border-radius: 50%;
-  border: 2px solid rgba(255,255,255,0.3);
-}
-.status-dot.black { background: #1a1a1a; }
-.status-dot.red { background: #e94560; }
-.status-text { font-size: 14px; color: rgba(255,255,255,0.7); }
+.card:hover .enter{background:rgba(30,20,8,.5)}
+.card .tag{position:absolute;top:14px;right:16px;font-size:11px;letter-spacing:.2em;opacity:.75}
 
-/* ===== 五子棋棋盘 ===== */
-.gomoku-board-wrap {
-  position: relative;
-  padding: 20px;
-  background: linear-gradient(135deg, #d4a574, #c4956a);
-  border-radius: 12px;
-  box-shadow: 0 10px 40px rgba(0,0,0,0.4);
+/* ===== game layout ===== */
+.game-head{text-align:center;margin-bottom:18px}
+.game-head h2{font-size:26px;font-weight:900;letter-spacing:.4em;margin-left:.4em}
+.game-head p{font-size:12px;color:var(--ink-soft);letter-spacing:.24em;margin-top:8px}
+.board-wrap{display:flex;flex-direction:column;align-items:center;gap:16px}
+.board-frame{
+  background:linear-gradient(160deg,var(--wood-light),var(--wood) 45%,var(--wood-deep));
+  padding:13px;border-radius:14px;border:1px solid #8a5a26;
+  box-shadow:inset 0 2px 5px rgba(0,0,0,.28), inset 0 -1px 0 rgba(255,255,255,.25), 0 16px 36px rgba(70,40,10,.3);
 }
-.gomoku-board {
-  position: relative;
-  width: 450px;
-  height: 450px;
-  background: #e8c99b;
-  border-radius: 4px;
+svg.board{display:block;height:auto;border-radius:5px;touch-action:manipulation}
+.board-frame.gomoku svg.board{width:min(92vw,600px)}
+.board-frame.chess svg.board{width:min(94vw,565px)}
+.status{
+  display:flex;align-items:center;gap:10px;font-size:15px;letter-spacing:.16em;min-height:32px;
+  background:rgba(255,251,238,.7);border:1px solid rgba(42,36,28,.18);border-radius:999px;padding:7px 20px;
 }
-.gomoku-grid {
-  position: absolute;
-  top: 15px;
-  left: 15px;
-  width: 420px;
-  height: 420px;
+.turn-dot{width:13px;height:13px;border-radius:50%;border:2px solid var(--ink);flex:none}
+.turn-dot.r{background:var(--cinnabar);border-color:var(--cinnabar-dark)}
+.turn-dot.b{background:var(--stone-black)}
+.status .warn{color:var(--cinnabar);font-weight:900;animation:blink 1s steps(2,start) infinite}
+@keyframes blink{50%{opacity:.3}}
+.toolbar{display:flex;gap:12px;align-items:center;justify-content:center;flex-wrap:wrap}
+.btn{
+  border:1px solid rgba(42,36,28,.35);background:#FFF9EC;color:var(--ink);
+  padding:10px 20px;border-radius:10px;font-size:14px;letter-spacing:.14em;cursor:pointer;transition:.2s;
 }
-.gomoku-cell {
-  position: absolute;
-  width: 30px;
-  height: 30px;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 2;
-}
-.gomoku-cell::before {
-  content: '';
-  position: absolute;
-  width: 100%;
-  height: 1px;
-  background: #5a3e2b;
-  top: 50%;
-}
-.gomoku-cell::after {
-  content: '';
-  position: absolute;
-  width: 1px;
-  height: 100%;
-  background: #5a3e2b;
-  left: 50%;
-}
-.gomoku-cell.edge-top::before { width: 50%; left: 50%; }
-.gomoku-cell.edge-bottom::before { width: 50%; }
-.gomoku-cell.edge-left::after { height: 50%; top: 50%; }
-.gomoku-cell.edge-right::after { height: 50%; }
-.gomoku-stone {
-  width: 26px;
-  height: 26px;
-  border-radius: 50%;
-  position: relative;
-  z-index: 3;
-  animation: stoneDrop 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-}
-@keyframes stoneDrop {
-  0% { transform: scale(0) translateY(-20px); opacity: 0; }
-  100% { transform: scale(1) translateY(0); opacity: 1; }
-}
-.gomoku-stone.black {
-  background: radial-gradient(circle at 35% 30%, #555, #1a1a1a 60%, #000);
-  box-shadow: 0 2px 6px rgba(0,0,0,0.5), inset -2px -2px 4px rgba(0,0,0,0.3);
-}
-.gomoku-stone.white {
-  background: radial-gradient(circle at 35% 30%, #fff, #ddd 60%, #bbb);
-  box-shadow: 0 2px 6px rgba(0,0,0,0.3), inset -2px -2px 4px rgba(0,0,0,0.1);
-}
-.gomoku-stone.win {
-  animation: winPulse 0.8s ease infinite;
-}
-@keyframes winPulse {
-  0%, 100% { box-shadow: 0 0 0 0 rgba(233,69,96,0.7), 0 2px 6px rgba(0,0,0,0.5); }
-  50% { box-shadow: 0 0 0 8px rgba(233,69,96,0), 0 2px 6px rgba(0,0,0,0.5); }
-}
-.gomoku-star {
-  position: absolute;
-  width: 8px;
-  height: 8px;
-  background: #5a3e2b;
-  border-radius: 50%;
-  z-index: 1;
-  transform: translate(-50%, -50%);
-}
+.btn:hover{background:var(--ink);color:#F6EFDD}
+.btn.primary{background:var(--cinnabar);border-color:var(--cinnabar-dark);color:#FBF3E2}
+.btn.primary:hover{background:var(--cinnabar-dark)}
+.btn.ghost{background:transparent}
+.hint-note{font-size:13px;color:var(--ink-soft);letter-spacing:.08em;text-align:center}
 
-/* ===== 象棋棋盘 ===== */
-.xiangqi-board-wrap {
-  position: relative;
-  padding: 16px;
-  background: linear-gradient(135deg, #f5deb3, #deb887);
-  border-radius: 12px;
-  box-shadow: 0 10px 40px rgba(0,0,0,0.4);
+/* ===== board svg internals ===== */
+.grid-lines{stroke:var(--line);stroke-width:1.7}
+.grid-lines.outer{stroke-width:3.4}
+.river{fill:var(--line);opacity:.72;font-size:26px;text-anchor:middle;font-weight:700;letter-spacing:10px}
+.star{fill:var(--line)}
+.piece{cursor:pointer}
+.piece .disc{fill:var(--disc);stroke:#6A4A24;stroke-width:2}
+.piece .inner{fill:none;stroke:rgba(42,36,28,.16);stroke-width:1}
+.piece .ring{fill:none;stroke:var(--gold);stroke-width:4;opacity:0;transition:opacity .15s}
+.piece.sel .ring{opacity:1}
+.piece text{font-size:31px;font-weight:700;text-anchor:middle;font-family:'Noto Serif SC','Songti SC','SimSun',serif}
+.piece.chk .disc{animation:chkPulse .9s ease-in-out infinite}
+@keyframes chkPulse{0%,100%{stroke:#6A4A24;stroke-width:2}50%{stroke:var(--cinnabar);stroke-width:6}}
+.hint-dot{
+  fill:#2E7D32;animation:hintPulse 1.25s ease-out infinite;
+  transform-box:fill-box;transform-origin:center;
 }
-.xiangqi-board {
-  position: relative;
-  width: 450px;
-  height: 500px;
-  background: #f5deb3;
-  border: 3px solid #8b4513;
-  border-radius: 4px;
-  overflow: hidden;
+@keyframes hintPulse{
+  0%{transform:scale(.55);opacity:.95}
+  65%{transform:scale(1.35);opacity:.3}
+  100%{transform:scale(1.1);opacity:.6}
 }
-.xq-line-h {
-  position: absolute;
-  height: 1px;
-  background: #8b4513;
+.hint-ring{
+  fill:none;stroke:var(--cinnabar);stroke-width:4;
+  animation:ringPulse 1.25s ease-out infinite;
+  transform-box:fill-box;transform-origin:center;
 }
-.xq-line-v {
-  position: absolute;
-  width: 1px;
-  background: #8b4513;
+@keyframes ringPulse{
+  0%{transform:scale(.65);opacity:.95}
+  100%{transform:scale(1.5);opacity:.15}
 }
-.xq-river {
-  position: absolute;
-  height: 50px;
-  display: flex;
-  align-items: center;
-  justify-content: space-around;
-  font-size: 22px;
-  font-weight: 700;
-  color: #8b4513;
-  letter-spacing: 8px;
-  font-family: 'KaiTi', 'STKaiti', serif;
-}
-.xq-palace-line {
-  position: absolute;
-  height: 1px;
-  background: #8b4513;
-  transform-origin: left center;
-}
-.xq-cell {
-  position: absolute;
-  width: 44px;
-  height: 44px;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 2;
-}
-.xq-piece {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 22px;
-  font-weight: 700;
-  font-family: 'KaiTi', 'STKaiti', 'SimSun', serif;
-  cursor: pointer;
-  transition: all 0.2s;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  z-index: 3;
-  user-select: none;
-}
-.xq-piece.red {
-  background: radial-gradient(circle at 35% 30%, #fff5e6, #f5deb3 60%, #deb887);
-  color: #c0392b;
-  border: 2px solid #c0392b;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.3), inset 0 -2px 4px rgba(0,0,0,0.1);
-}
-.xq-piece.black {
-  background: radial-gradient(circle at 35% 30%, #fff5e6, #f5deb3 60%, #deb887);
-  color: #1a1a1a;
-  border: 2px solid #1a1a1a;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.3), inset 0 -2px 4px rgba(0,0,0,0.1);
-}
-.xq-piece:hover { transform: translate(-50%, -50%) scale(1.1); }
-.xq-piece.moving {
-  animation: pieceMove 0.3s ease-out;
-}
-@keyframes pieceMove {
-  0% { transform: translate(-50%, -50%) scale(1.3); opacity: 0.5; }
-  100% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
-}
-.xq-piece.selected {
-  transform: translate(-50%, -50%) scale(1.15);
-  box-shadow: 0 0 0 3px #f5a623, 0 4px 12px rgba(0,0,0,0.4);
-  animation: selectPulse 1s ease infinite;
-}
-@keyframes selectPulse {
-  0%, 100% { box-shadow: 0 0 0 3px #f5a623, 0 4px 12px rgba(0,0,0,0.4); }
-  50% { box-shadow: 0 0 0 6px rgba(245,166,35,0.3), 0 4px 12px rgba(0,0,0,0.4); }
-}
-.xq-move-hint {
-  position: absolute;
-  width: 20px;
-  height: 20px;
-  border-radius: 50%;
-  background: rgba(46, 204, 113, 0.7);
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  z-index: 5;
-  pointer-events: none;
-  animation: hintPulse 1.2s ease-in-out infinite;
-}
-@keyframes hintPulse {
-  0%, 100% { opacity: 0.5; transform: translate(-50%, -50%) scale(0.8); }
-  50% { opacity: 1; transform: translate(-50%, -50%) scale(1.1); }
-}
-.xq-move-hint.capture {
-  width: 42px;
-  height: 42px;
-  background: transparent;
-  border: 3px solid rgba(231, 76, 60, 0.9);
-  animation: capturePulse 1s ease-in-out infinite;
-}
-@keyframes capturePulse {
-  0%, 100% { opacity: 0.6; transform: translate(-50%, -50%) scale(0.9); }
-  50% { opacity: 1; transform: translate(-50%, -50%) scale(1.05); }
-}
-.xq-piece.movable-hint {
-  position: relative;
-}
-.xq-move-dot {
-  position: absolute;
-  width: 16px;
-  height: 16px;
-  border-radius: 50%;
-  background: rgba(80,250,123,0.5);
-  border: 2px solid #50fa7b;
-  z-index: 4;
-  pointer-events: none;
-  animation: dotPulse 1s ease infinite;
-}
-@keyframes dotPulse {
-  0%, 100% { transform: scale(1); opacity: 0.8; }
-  50% { transform: scale(1.2); opacity: 1; }
-}
-.xq-capture-hint {
-  position: absolute;
-  width: 46px;
-  height: 46px;
-  border-radius: 50%;
-  border: 3px solid #e94560;
-  z-index: 4;
-  pointer-events: none;
-  animation: capturePulse 0.8s ease infinite;
-}
-@keyframes capturePulse {
-  0%, 100% { transform: scale(1); opacity: 0.7; }
-  50% { transform: scale(1.1); opacity: 1; }
-}
-.xq-piece.check {
-  animation: checkShake 0.5s ease infinite;
-}
-@keyframes checkShake {
-  0%, 100% { transform: translateX(0); }
-  25% { transform: translateX(-3px); }
-  75% { transform: translateX(3px); }
-}
-.xq-piece.check::after {
-  content: '将军!';
-  position: absolute;
-  top: -24px;
-  left: 50%;
-  transform: translateX(-50%);
-  font-size: 12px;
-  color: #e94560;
-  font-weight: 700;
-  white-space: nowrap;
-  animation: checkText 0.5s ease infinite;
-}
-@keyframes checkText {
-  0%, 100% { opacity: 1; transform: translateX(-50%) translateY(0); }
-  50% { opacity: 0.5; transform: translateX(-50%) translateY(-3px); }
-}
+.stone{transform-box:fill-box;transform-origin:center;animation:drop .22s ease-out}
+@keyframes drop{from{transform:scale(.3);opacity:.2}}
+.win-stone{filter:drop-shadow(0 0 7px rgba(201,162,39,.95))}
+.winline{stroke:var(--gold);stroke-linecap:round;stroke-width:8;opacity:.5;animation:fadeLine .5s ease-out}
+@keyframes fadeLine{from{opacity:0}}
 
-/* ===== 胜利弹窗 ===== */
-.win-overlay {
-  position: fixed;
-  top: 0; left: 0; right: 0; bottom: 0;
-  background: rgba(0,0,0,0.8);
-  display: none;
-  align-items: center;
-  justify-content: center;
-  z-index: 1000;
-  animation: fadeIn 0.3s ease;
+/* ===== overlay ===== */
+.overlay{
+  position:fixed;inset:0;z-index:150;display:flex;align-items:center;justify-content:center;
+  background:rgba(28,20,10,.6);backdrop-filter:blur(4px);padding:20px;
 }
-.win-overlay.active { display: flex; }
-.win-modal {
-  background: linear-gradient(135deg, #1a1a2e, #16213e);
-  border: 2px solid rgba(255,255,255,0.2);
-  border-radius: 20px;
-  padding: 50px 60px;
-  text-align: center;
-  animation: winModalIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+.result-card{
+  background:linear-gradient(180deg,#FFF9EC 0%,#F1E7CE 100%);
+  border:2px solid var(--gold);border-radius:22px;padding:40px 44px 36px;text-align:center;
+  max-width:430px;width:100%;box-shadow:0 26px 64px rgba(0,0,0,.45);
+  animation:pop .45s cubic-bezier(.2,1.4,.42,1);
 }
-@keyframes winModalIn {
-  0% { transform: scale(0.5); opacity: 0; }
-  100% { transform: scale(1); opacity: 1; }
+@keyframes pop{from{transform:scale(.6);opacity:0}}
+.badge{
+  display:inline-block;background:var(--cinnabar);color:#FBF3E2;padding:7px 20px;border-radius:999px;
+  letter-spacing:.34em;text-indent:.34em;font-size:13px;font-weight:700;margin-bottom:18px;
 }
-.win-icon {
-  font-size: 72px;
-  margin-bottom: 20px;
-  animation: winIconBounce 1s ease infinite;
-}
-@keyframes winIconBounce {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-10px); }
-}
-.win-text {
-  font-size: 32px;
-  font-weight: 700;
-  margin-bottom: 10px;
-}
-.win-text.red { color: #e94560; }
-.win-text.black { color: #bbb; }
-.win-sub {
-  font-size: 16px;
-  color: rgba(255,255,255,0.6);
-  margin-bottom: 30px;
-}
-.win-btns {
-  display: flex;
-  gap: 16px;
-  justify-content: center;
-}
-.win-btn {
-  padding: 12px 28px;
-  border: none;
-  border-radius: 10px;
-  font-size: 15px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.2s;
-}
-.win-btn.primary {
-  background: linear-gradient(135deg, #e94560, #c0392b);
-  color: #fff;
-}
-.win-btn.primary:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(233,69,96,0.4); }
-.win-btn.secondary {
-  background: rgba(255,255,255,0.1);
-  color: #fff;
-  border: 1px solid rgba(255,255,255,0.2);
-}
-.win-btn.secondary:hover { background: rgba(255,255,255,0.2); }
+.result-card h2{font-size:36px;font-weight:900;letter-spacing:.3em;margin-left:.3em;margin-bottom:12px}
+.result-card .sub{color:var(--ink-soft);line-height:1.9;font-size:14px;margin-bottom:26px}
+.result-card .btns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+.result-card .btn.ghost{background:transparent}
 
-/* 粒子效果 */
-.confetti {
-  position: fixed;
-  width: 10px;
-  height: 10px;
-  pointer-events: none;
-  z-index: 999;
+/* ===== modal ===== */
+.modal{
+  position:fixed;inset:0;z-index:200;display:flex;align-items:center;justify-content:center;
+  background:rgba(28,20,10,.55);backdrop-filter:blur(3px);padding:20px;
 }
+.modal-card{
+  background:linear-gradient(180deg,#FFF9EC,#F1E7CE);border-radius:18px;padding:30px 32px 26px;
+  width:min(90vw,370px);box-shadow:0 22px 54px rgba(0,0,0,.42);text-align:center;
+  animation:pop .35s cubic-bezier(.2,1.4,.42,1);
+}
+.modal-card h3{font-size:20px;font-weight:900;letter-spacing:.3em;text-indent:.3em;margin-bottom:10px}
+.modal-card p{font-size:14px;color:var(--ink-soft);margin-bottom:20px;line-height:1.8}
+.modal-card input{
+  width:100%;padding:12px 14px;border:1.5px solid rgba(42,36,28,.35);border-radius:11px;
+  font-size:17px;font-family:inherit;text-align:center;letter-spacing:.5em;text-indent:.5em;
+  background:#fff;outline:none;color:var(--ink);
+}
+.modal-card input:focus{border-color:var(--cinnabar);box-shadow:0 0 0 3px rgba(176,58,46,.15)}
+.pw-err{color:var(--cinnabar);font-size:13px;min-height:20px;margin-top:9px;letter-spacing:.08em}
+.modal-actions{display:flex;gap:12px;justify-content:center;margin-top:12px}
+.modal-card.shake{animation:shake .42s}
+@keyframes shake{20%{transform:translateX(-9px)}40%{transform:translateX(9px)}60%{transform:translateX(-5px)}80%{transform:translateX(5px)}}
 
-@media (max-width: 520px) {
-  .gomoku-board, .gomoku-board-wrap { transform: scale(0.85); transform-origin: top center; }
-  .xiangqi-board, .xiangqi-board-wrap { transform: scale(0.85); transform-origin: top center; }
-  .game-cards { gap: 20px; }
-  .game-card { width: 240px; height: 320px; }
+/* ===== 结算卡片信息 ===== */
+.result-card{position:relative;overflow:hidden}
+.result-glow{position:absolute;inset:-45%;background:radial-gradient(circle at 50% -5%, rgba(176,58,46,.18), rgba(201,162,39,.08) 40%, transparent 62%);pointer-events:none}
+.info-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin:20px 0 24px;border:1px solid rgba(42,36,28,.14);border-radius:14px;background:rgba(255,251,238,.7);padding:12px 6px;position:relative}
+.info-cell{display:flex;flex-direction:column;align-items:center;gap:5px;animation:infoIn .5s ease-out both}
+.info-cell:nth-child(2){animation-delay:.08s}
+.info-cell:nth-child(3){animation-delay:.16s}
+@keyframes infoIn{from{opacity:0;transform:translateY(8px)}}
+.info-cell + .info-cell{border-left:1px solid rgba(42,36,28,.12)}
+.info-cell .k{font-size:11px;color:var(--ink-soft);letter-spacing:.18em;text-indent:.18em}
+.info-cell .v{font-size:17px;font-weight:900}
+/* ===== 对局历史 ===== */
+.history-card{background:linear-gradient(180deg,#FFF9EC,#F1E7CE);border-radius:18px;padding:24px 20px;width:min(94vw,540px);max-height:86vh;overflow:auto;box-shadow:0 22px 54px rgba(0,0,0,.42);animation:pop .35s cubic-bezier(.2,1.4,.42,1)}
+.history-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
+.history-head h3{font-size:19px;font-weight:900;letter-spacing:.3em;text-indent:.3em}
+.hist-item{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:13px 14px;border:1px solid rgba(42,36,28,.13);border-radius:13px;background:rgba(255,255,255,.62);margin-bottom:10px}
+.hist-line1{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.hist-game{font-weight:900;font-size:14px;letter-spacing:.08em}
+.hist-result{font-weight:900;color:var(--cinnabar);font-size:14px}
+.hist-reason{font-size:11px;color:var(--ink-soft);border:1px solid rgba(42,36,28,.18);border-radius:999px;padding:1px 8px;letter-spacing:.08em}
+.hist-meta{font-size:12px;color:var(--ink-soft);margin-top:5px;letter-spacing:.04em}
+.hist-actions{display:flex;gap:6px;flex-shrink:0}
+.history-empty{text-align:center;color:var(--ink-soft);padding:44px 0;letter-spacing:.16em;font-size:14px;line-height:2}
+.btn.small{padding:6px 12px;font-size:12px;border-radius:8px}
+/* ===== 复盘 Demo ===== */
+.demo-card{background:linear-gradient(180deg,#FFF9EC,#EFE4C8);border-radius:20px;padding:20px 18px 18px;width:min(94vw,660px);max-height:94vh;overflow:auto;box-shadow:0 24px 60px rgba(0,0,0,.45);border:1px solid rgba(169,111,51,.35);animation:pop .35s cubic-bezier(.2,1.4,.42,1)}
+.demo-head{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;margin-bottom:14px}
+.demo-head h3{font-size:18px;font-weight:900;letter-spacing:.2em}
+.demo-meta{font-size:12px;color:var(--ink-soft);margin-top:5px;letter-spacing:.04em}
+.demo-board-wrap{display:flex;justify-content:center;padding:8px;border-radius:14px;background:linear-gradient(160deg,var(--wood-light),var(--wood) 45%,var(--wood-deep));box-shadow:inset 0 2px 5px rgba(0,0,0,.28)}
+#demoGBoard{width:min(84vw,540px)}
+#demoCBoard{width:min(86vw,520px)}
+.demo-status{text-align:center;font-size:14px;letter-spacing:.2em;margin:13px 0 9px;font-weight:900}
+.demo-controls{display:flex;gap:8px;justify-content:center;flex-wrap:wrap}
+
+/* ===== toast ===== */
+.toast{
+  position:fixed;left:50%;bottom:36px;transform:translateX(-50%) translateY(16px);
+  background:var(--ink);color:#F6EFDD;padding:11px 24px;border-radius:999px;
+  font-size:14px;letter-spacing:.1em;opacity:0;pointer-events:none;transition:.3s;z-index:300;
+  box-shadow:0 10px 26px rgba(0,0,0,.3);white-space:nowrap;max-width:92vw;overflow:hidden;text-overflow:ellipsis;
 }
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 </style>
 </head>
 <body>
 
-<!-- ===== 选择页面 ===== -->
-<div class="select-screen" id="selectScreen">
-  <h1 class="select-title">棋艺合集</h1>
-  <p class="select-subtitle">五子棋 · 中国象棋 — 选择你想玩的游戏</p>
-  <div class="game-cards">
-    <div class="game-card gomoku" onclick="startGame('gomoku')">
-      <div class="card-glow"></div>
-      <div class="card-icon">⚫⚪</div>
-      <div class="card-name">五子棋</div>
-      <div class="card-desc">黑白对弈，五子连珠者胜<br>经典策略，简单易学</div>
+<header>
+  <div class="brand">
+    <div class="seal">弈</div>
+    <div>
+      <h1>对弈</h1>
+      <small>五子棋 · 中国象棋</small>
     </div>
-    <div class="game-card xiangqi" onclick="startGame('xiangqi')">
-      <div class="card-glow"></div>
-      <div class="card-icon">🀄</div>
-      <div class="card-name">中国象棋</div>
-      <div class="card-desc">楚河汉界，将帅争锋<br>千年智慧，博大精深</div>
+  </div>
+  <div class="header-actions">
+    <button class="back" id="btnHistory" onclick="toggleHistory()">对局历史</button>
+    <button class="back hidden" id="btnBack" onclick="backHome()">返回</button>
+  </div>
+</header>
+
+<main>
+  <!-- ===== 首页 ===== -->
+  <section id="view-home" class="view">
+    <div class="home-hero">
+      <h2>双棋对弈</h2>
+      <div class="divider">◆</div>
+      <p>黑白纵横 · 楚河汉界</p>
+    </div>
+    <div class="game-cards">
+      <div class="card" onclick="go('#gomoku')">
+        <span class="tag">15 × 15</span>
+        <svg class="icon" viewBox="0 0 96 96" aria-hidden="true">
+          <rect x="6" y="6" width="84" height="84" rx="12" fill="rgba(30,20,8,.38)"/>
+          <g stroke="rgba(255,248,228,.9)" stroke-width="3">
+            <line x1="24" y1="24" x2="72" y2="24"/><line x1="24" y1="48" x2="72" y2="48"/>
+            <line x1="24" y1="72" x2="72" y2="72"/>
+            <line x1="24" y1="24" x2="24" y2="72"/><line x1="48" y1="24" x2="48" y2="72"/>
+            <line x1="72" y1="24" x2="72" y2="72"/>
+          </g>
+          <circle cx="36" cy="36" r="11" fill="#26221C" stroke="rgba(255,255,255,.25)"/>
+          <circle cx="60" cy="60" r="11" fill="#F7F2E7" stroke="#8A7A5C"/>
+        </svg>
+        <h3>五子棋</h3>
+        <p class="desc">黑白双子，五连即胜。点击棋盘交点落子，先连成五枚的一方获胜。</p>
+        <span class="enter">进入棋局</span>
+      </div>
+      <div class="card" onclick="go('#chess')">
+        <span class="tag">楚河 · 汉界</span>
+        <svg class="icon" viewBox="0 0 96 96" aria-hidden="true">
+          <rect x="6" y="6" width="84" height="84" rx="12" fill="rgba(30,20,8,.38)"/>
+          <g stroke="rgba(255,248,228,.9)" stroke-width="3">
+            <line x1="24" y1="24" x2="72" y2="24"/><line x1="24" y1="24" x2="24" y2="72"/>
+            <line x1="72" y1="24" x2="72" y2="72"/><line x1="24" y1="72" x2="72" y2="72"/>
+            <line x1="24" y1="48" x2="72" y2="48"/>
+          </g>
+          <circle cx="48" cy="38" r="15" fill="#F5EDDC" stroke="#6A4A24" stroke-width="2.5"/>
+          <text x="48" y="38" dy="0.36em" text-anchor="middle" font-size="19" font-weight="700" fill="#B03A2E" font-family="'Songti SC','SimSun',serif">帥</text>
+        </svg>
+        <h3>中国象棋</h3>
+        <p class="desc">完整行棋规则，走法提示动画，将军与绝杀判定，将死对方即为胜。</p>
+        <span class="enter">进入棋局</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== 五子棋 ===== -->
+  <section id="view-gomoku" class="view hidden">
+    <div class="game-head">
+      <h2>五子棋</h2>
+      <p>黑白双子 · 五连即胜</p>
+    </div>
+    <div class="board-wrap">
+      <div class="status"><span class="turn-dot b" id="gDot"></span><span id="gStatus">黑方行棋</span></div>
+      <div class="board-frame gomoku">
+        <svg id="gBoard" class="board" viewBox="0 0 640 640">
+          <defs>
+            <linearGradient id="gWood" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0" stop-color="#E0B174"/>
+              <stop offset=".45" stop-color="#C98E4B"/>
+              <stop offset="1" stop-color="#B07A36"/>
+            </linearGradient>
+          </defs>
+          <rect x="0" y="0" width="640" height="640" fill="url(#gWood)" rx="10"/>
+          <rect x="16" y="16" width="608" height="608" fill="none" stroke="#7C5322" stroke-width="2.5"/>
+          <g id="gGrid"></g>
+          <g id="gStars"></g>
+          <g id="gStones"></g>
+          <g id="gWinLine"></g>
+          <circle id="gGhost" r="16" fill="rgba(247,242,231,.55)" stroke="rgba(176,58,46,.8)" stroke-width="1.5" display="none" pointer-events="none"/>
+        </svg>
+      </div>
+      <div class="toolbar">
+        <button class="btn primary" onclick="restartGomoku()">重新开始</button>
+        <button class="btn ghost" onclick="backHome()">返回首页</button>
+      </div>
+      <div class="hint-note">点击棋盘交点落子 · 重新开始需输入管理密码</div>
+    </div>
+  </section>
+
+  <!-- ===== 中国象棋 ===== -->
+  <section id="view-chess" class="view hidden">
+    <div class="game-head">
+      <h2>中国象棋</h2>
+      <p>楚河汉界 · 运筹帷幄</p>
+    </div>
+    <div class="board-wrap">
+      <div class="status"><span class="turn-dot r" id="cDot"></span><span id="cStatus">红方行棋</span></div>
+      <div class="board-frame chess">
+        <svg id="cBoard" class="board" viewBox="0 0 608 672">
+          <defs>
+            <linearGradient id="cWood" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0" stop-color="#E0B174"/>
+              <stop offset=".45" stop-color="#C98E4B"/>
+              <stop offset="1" stop-color="#B07A36"/>
+            </linearGradient>
+          </defs>
+          <rect x="0" y="0" width="608" height="672" fill="url(#cWood)" rx="10"/>
+          <rect x="14" y="14" width="580" height="644" fill="none" stroke="#7C5322" stroke-width="2.5"/>
+          <g id="cGrid"></g>
+          <g id="cMarks"></g>
+          <g id="cPieces"></g>
+          <g id="cHints"></g>
+        </svg>
+      </div>
+      <div class="toolbar">
+        <button class="btn primary" onclick="restartChess()">重新开始</button>
+        <button class="btn ghost" onclick="backHome()">返回首页</button>
+      </div>
+      <div class="hint-note">点击己方棋子查看走法提示 · 点击提示点落子 · 重新开始需输入管理密码</div>
+    </div>
+  </section>
+</main>
+
+<!-- 五子棋结算 -->
+<div id="gOverlay" class="overlay hidden">
+  <div class="result-card">
+    <div class="result-glow"></div>
+    <div class="badge" id="gResultBadge">五子连珠</div>
+    <h2 id="gResultTitle">黑方获胜</h2>
+    <p class="sub" id="gResultSub">五枚棋子连成一线</p>
+    <div class="info-grid">
+      <div class="info-cell"><span class="k">对局时长</span><span class="v" id="gDur">--</span></div>
+      <div class="info-cell"><span class="k">总手数</span><span class="v" id="gMoves">--</span></div>
+      <div class="info-cell"><span class="k">连珠方向</span><span class="v" id="gLine">--</span></div>
+    </div>
+    <div class="btns">
+      <button class="btn primary" onclick="openDemo(currentGRecord)">查看复盘</button>
+      <button class="btn" onclick="restartGomoku()">重新开始</button>
+      <button class="btn ghost" onclick="backHome()">返回首页</button>
     </div>
   </div>
 </div>
 
-<!-- ===== 五子棋页面 ===== -->
-<div class="game-screen" id="gomokuScreen">
-  <div class="game-header">
-    <button class="back-btn" onclick="backToSelect()">← 返回</button>
-    <div class="game-title">⚫ 五子棋</div>
-    <div class="game-controls">
-      <button class="ctrl-btn" onclick="gomokuUndo()">悔棋</button>
-      <button class="ctrl-btn" onclick="gomokuReset()">重新开始</button>
+<!-- 象棋结算 -->
+<div id="cOverlay" class="overlay hidden">
+  <div class="result-card">
+    <div class="result-glow"></div>
+    <div class="badge" id="cResultBadge">绝 杀</div>
+    <h2 id="cResultTitle">红方获胜</h2>
+    <p class="sub" id="cResultSub">对方被将军，无子可解</p>
+    <div class="info-grid">
+      <div class="info-cell"><span class="k">对局时长</span><span class="v" id="cDur">--</span></div>
+      <div class="info-cell"><span class="k">总手数</span><span class="v" id="cMoves">--</span></div>
+      <div class="info-cell"><span class="k">吃子数</span><span class="v" id="cCaptures">--</span></div>
     </div>
-  </div>
-  <div class="status-bar">
-    <div class="status-player"><div class="status-dot black"></div><span id="gomokuTurn">黑方回合</span></div>
-    <div class="status-text" id="gomokuCount">已下 0 手</div>
-  </div>
-  <div class="gomoku-board-wrap">
-    <div class="gomoku-board" id="gomokuBoard"></div>
+    <div class="btns">
+      <button class="btn primary" onclick="openDemo(currentCRecord)">查看复盘</button>
+      <button class="btn" onclick="restartChess()">重新开始</button>
+      <button class="btn ghost" onclick="backHome()">返回首页</button>
+    </div>
   </div>
 </div>
 
-<!-- ===== 象棋页面 ===== -->
-<div class="game-screen" id="xiangqiScreen">
-  <div class="game-header">
-    <button class="back-btn" onclick="backToSelect()">← 返回</button>
-    <div class="game-title">🀄 中国象棋</div>
-    <div class="game-controls">
-      <button class="ctrl-btn" onclick="xiangqiUndo()">悔棋</button>
-      <button class="ctrl-btn" onclick="xiangqiReset()">重新开始</button>
+<!-- 密码弹窗 -->
+<div id="pwModal" class="modal hidden">
+  <div class="modal-card" id="pwCard">
+    <h3>重新开始</h3>
+    <p>重新开局需要管理密码<br/>请输入后确认，本局棋面将被清空</p>
+    <input id="pwInput" type="password" inputmode="numeric" placeholder="••••••" autocomplete="off"/>
+    <div class="pw-err" id="pwErr"></div>
+    <div class="modal-actions">
+      <button class="btn ghost" id="pwCancel">取消</button>
+      <button class="btn primary" id="pwOk">确认重开</button>
     </div>
-  </div>
-  <div class="status-bar">
-    <div class="status-player"><div class="status-dot red" id="xqTurnDot"></div><span id="xqTurn">红方回合</span></div>
-    <div class="status-text" id="xqStatus">点击棋子选择移动</div>
-  </div>
-  <div class="xiangqi-board-wrap">
-    <div class="xiangqi-board" id="xiangqiBoard"></div>
   </div>
 </div>
 
-<!-- ===== 胜利弹窗 ===== -->
-<div class="win-overlay" id="winOverlay">
-  <div class="win-modal">
-    <div class="win-icon" id="winIcon">🎉</div>
-    <div class="win-text" id="winText">黑方胜利!</div>
-    <div class="win-sub" id="winSub">五子连珠，精彩对局</div>
-    <div class="win-btns">
-      <button class="win-btn primary" onclick="restartGame()">再来一局</button>
-      <button class="win-btn secondary" onclick="backToSelect()">返回选择</button>
+<!-- 对局历史 -->
+<div id="historyModal" class="modal hidden">
+  <div class="history-card">
+    <div class="history-head">
+      <h3>对局历史</h3>
+      <button class="btn small ghost" id="histClose">关闭</button>
+    </div>
+    <div id="historyList"></div>
+    <div id="historyEmpty" class="history-empty hidden">暂无对局记录<br/>完成一局后会自动保存在本机</div>
+  </div>
+</div>
+
+<!-- 对局复盘 -->
+<div id="demoModal" class="modal hidden">
+  <div class="demo-card">
+    <div class="demo-head">
+      <div>
+        <h3 id="demoTitle">对局复盘</h3>
+        <div class="demo-meta" id="demoMeta"></div>
+      </div>
+      <button class="btn small ghost" id="demoClose">关闭</button>
+    </div>
+    <div class="demo-board-wrap">
+      <svg id="demoGBoard" class="board hidden" viewBox="0 0 640 640">
+        <defs><linearGradient id="dGWood" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#E0B174"/><stop offset=".45" stop-color="#C98E4B"/><stop offset="1" stop-color="#B07A36"/></linearGradient></defs>
+        <rect x="0" y="0" width="640" height="640" fill="url(#dGWood)" rx="10"/>
+        <rect x="16" y="16" width="608" height="608" fill="none" stroke="#7C5322" stroke-width="2.5"/>
+        <g id="demoGGrid"></g>
+        <g id="demoGStars"></g>
+        <g id="demoGStones"></g>
+        <g id="demoGWin"></g>
+      </svg>
+      <svg id="demoCBoard" class="board hidden" viewBox="0 0 608 672">
+        <defs><linearGradient id="dCWood" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#E0B174"/><stop offset=".45" stop-color="#C98E4B"/><stop offset="1" stop-color="#B07A36"/></linearGradient></defs>
+        <rect x="0" y="0" width="608" height="672" fill="url(#dCWood)" rx="10"/>
+        <rect x="14" y="14" width="580" height="644" fill="none" stroke="#7C5322" stroke-width="2.5"/>
+        <g id="demoCGrid"></g>
+        <g id="demoCPieces"></g>
+      </svg>
+    </div>
+    <div class="demo-status" id="demoStatus">第 0 / 0 手</div>
+    <div class="demo-controls">
+      <button class="btn small" id="demoFirst">首步</button>
+      <button class="btn small" id="demoPrev">上一步</button>
+      <button class="btn small primary" id="demoPlay">播放</button>
+      <button class="btn small" id="demoNext">下一步</button>
+      <button class="btn small" id="demoLast">末步</button>
     </div>
   </div>
 </div>
+
+<!-- 退出确认 -->
+<div id="exitModal" class="modal hidden">
+  <div class="modal-card">
+    <h3>退出对局</h3>
+    <p>对局尚未结束，返回首页将放弃本局进度。是否确认退出？</p>
+    <div class="modal-actions">
+      <button class="btn" id="exitCancel">继续对局</button>
+      <button class="btn primary" id="exitOk">退出并返回</button>
+    </div>
+  </div>
+</div>
+
+<div id="toast" class="toast"></div>
 
 <script>
-// ==================== 通用 ====================
-let currentGame = null;
+"use strict";
 
-function startGame(type) {
-  currentGame = type;
-  document.getElementById('selectScreen').style.display = 'none';
-  document.getElementById('gomokuScreen').classList.remove('active');
-  document.getElementById('xiangqiScreen').classList.remove('active');
-  document.getElementById('winOverlay').classList.remove('active');
-  if (type === 'gomoku') {
-    document.getElementById('gomokuScreen').classList.add('active');
-    gomokuInit();
-  } else {
-    document.getElementById('xiangqiScreen').classList.add('active');
-    xiangqiInit();
-  }
+/* ============ 通用工具 ============ */
+const $ = s => document.querySelector(s);
+function toast(msg){
+  const t = $('#toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(toast._t);
+  toast._t = setTimeout(()=>t.classList.remove('show'), 1700);
+}
+function go(hash){
+  if(location.hash === hash) route();
+  else location.hash = hash;
 }
 
-function backToSelect() {
-  currentGame = null;
-  document.getElementById('selectScreen').style.display = 'flex';
-  document.getElementById('gomokuScreen').classList.remove('active');
-  document.getElementById('xiangqiScreen').classList.remove('active');
-  document.getElementById('winOverlay').classList.remove('active');
+/* 简易 WebAudio 音效 */
+let AC = null;
+function tone(freq, dur, type, vol, delay){
+  try{
+    if(!AC) AC = new (window.AudioContext||window.webkitAudioContext)();
+    if(AC.state === 'suspended') AC.resume();
+    const t0 = AC.currentTime + (delay||0);
+    const o = AC.createOscillator(), g = AC.createGain();
+    o.type = type||'sine'; o.frequency.value = freq;
+    g.gain.setValueAtTime(vol||0.12, t0);
+    g.gain.exponentialRampToValueAtTime(0.0001, t0 + dur);
+    o.connect(g); g.connect(AC.destination);
+    o.start(t0); o.stop(t0 + dur + 0.03);
+  }catch(e){}
+}
+const sfxMove = ()=>tone(340,.07,'sine',.1);
+const sfxCapture = ()=>tone(170,.13,'triangle',.16);
+const sfxCheck = ()=>{tone(660,.14,'square',.07);tone(880,.18,'square',.07,.13);};
+const sfxWin = ()=>[523,659,784,1047].forEach((f,i)=>tone(f,.22,'triangle',.12,i*.12));
+
+/* ============ 对局历史（本地存储） ============ */
+const HISTORY_KEY = 'doubaoBoardGamesHistory';
+let historyList = [];
+try{
+  const raw = localStorage.getItem(HISTORY_KEY);
+  const arr = raw ? JSON.parse(raw) : [];
+  if(Array.isArray(arr)) historyList = arr;
+}catch(e){ historyList = []; }
+function saveHistory(){ try{ localStorage.setItem(HISTORY_KEY, JSON.stringify(historyList)); }catch(e){} }
+function pushHistory(rec){
+  historyList.unshift(rec);
+  if(historyList.length > 60) historyList.pop();
+  saveHistory();
+  renderHistory();
+}
+function deleteHistory(idx){
+  historyList.splice(idx, 1);
+  saveHistory();
+  renderHistory();
+}
+function fmtDate(d){
+  const p = n => String(n).padStart(2,'0');
+  return d.getFullYear()+'-'+p(d.getMonth()+1)+'-'+p(d.getDate())+' '+p(d.getHours())+':'+p(d.getMinutes());
+}
+function fmtDur(sec){
+  sec = Math.max(0, Math.round(sec||0));
+  if(sec < 60) return sec + ' 秒';
+  const m = Math.floor(sec/60), s = sec%60;
+  return m + ' 分' + (s ? s + ' 秒' : '');
+}
+function toggleHistory(){
+  const m = $('#historyModal');
+  if(m.classList.contains('hidden')){ renderHistory(); m.classList.remove('hidden'); }
+  else m.classList.add('hidden');
+}
+function closeHistory(){ $('#historyModal').classList.add('hidden'); }
+function renderHistory(){
+  const list = $('#historyList'), empty = $('#historyEmpty');
+  if(!historyList.length){ list.innerHTML = ''; empty.classList.remove('hidden'); return; }
+  empty.classList.add('hidden');
+  list.innerHTML = historyList.map((r,i)=>{
+    const gname = r.game === 'gomoku' ? '五子棋' : '中国象棋';
+    const reasonHtml = r.reason ? '<span class="hist-reason">' + r.reason + '</span>' : '';
+    return '<div class="hist-item">'
+      + '<div class="hist-main">'
+      + '<div class="hist-line1"><span class="hist-game">' + gname + '</span><span class="hist-result">' + r.result + '</span>' + reasonHtml + '</div>'
+      + '<div class="hist-meta">' + r.moveCount + ' 手 · ' + fmtDur(r.durationSec) + ' · ' + r.date + '</div>'
+      + '</div>'
+      + '<div class="hist-actions">'
+      + '<button class="btn small" onclick="viewHistoryDemo(' + i + ')">复盘</button>'
+      + '<button class="btn small ghost" onclick="deleteHistory(' + i + ')">删除</button>'
+      + '</div>'
+      + '</div>';
+  }).join('');
 }
 
-function restartGame() {
-  document.getElementById('winOverlay').classList.remove('active');
-  if (currentGame === 'gomoku') gomokuReset();
-  else xiangqiReset();
+/* ============ 对局复盘 Demo ============ */
+let currentGRecord = null, currentCRecord = null;
+let demoState = { rec:null, step:0, playing:false, timer:null };
+function viewHistoryDemo(idx){
+  const rec = historyList[idx];
+  if(!rec) return;
+  closeHistory();
+  openDemo(rec);
 }
-
-function showWin(winner, sub, icon) {
-  const overlay = document.getElementById('winOverlay');
-  const text = document.getElementById('winText');
-  const subEl = document.getElementById('winSub');
-  const iconEl = document.getElementById('winIcon');
-  text.textContent = winner + '胜利!';
-  text.className = 'win-text ' + (winner === '红方' ? 'red' : 'black');
-  subEl.textContent = sub;
-  iconEl.textContent = icon || '🎉';
-  overlay.classList.add('active');
-  launchConfetti();
+function openDemo(rec){
+  if(!rec || !rec.moves) return;
+  stopDemoPlay();
+  demoState.rec = rec;
+  demoState.step = 0;
+  $('#demoTitle').textContent = (rec.game === 'gomoku' ? '五子棋' : '中国象棋') + ' · 对局复盘';
+  $('#demoMeta').textContent = rec.result + (rec.reason ? ' · ' + rec.reason : '') + ' · ' + rec.moveCount + ' 手 · ' + fmtDur(rec.durationSec) + ' · ' + rec.date;
+  $('#demoGBoard').classList.toggle('hidden', rec.game !== 'gomoku');
+  $('#demoCBoard').classList.toggle('hidden', rec.game !== 'chess');
+  $('#demoModal').classList.remove('hidden');
+  renderDemo();
 }
-
-function launchConfetti() {
-  const colors = ['#e94560', '#f5a623', '#50fa7b', '#6272a4', '#ff79c6', '#f1fa8c'];
-  for (let i = 0; i < 60; i++) {
-    const c = document.createElement('div');
-    c.className = 'confetti';
-    c.style.left = Math.random() * 100 + 'vw';
-    c.style.top = '-20px';
-    c.style.background = colors[Math.floor(Math.random() * colors.length)];
-    c.style.borderRadius = Math.random() > 0.5 ? '50%' : '0';
-    c.style.transform = `rotate(${Math.random() * 360}deg)`;
-    document.body.appendChild(c);
-    const dur = 2000 + Math.random() * 2000;
-    const xDrift = (Math.random() - 0.5) * 300;
-    c.animate([
-      { transform: `translate(0, 0) rotate(0deg)`, opacity: 1 },
-      { transform: `translate(${xDrift}px, 100vh) rotate(${Math.random()*720}deg)`, opacity: 0 }
-    ], { duration: dur, easing: 'cubic-bezier(0.25, 0.46, 0.45, 0.94)' });
-    setTimeout(() => c.remove(), dur);
-  }
+function closeDemo(){ stopDemoPlay(); $('#demoModal').classList.add('hidden'); }
+function stopDemoPlay(){
+  if(demoState.timer){ clearInterval(demoState.timer); demoState.timer = null; }
+  demoState.playing = false;
+  $('#demoPlay').textContent = '播放';
 }
-
-// ==================== 五子棋 ====================
-const GOMOKU_SIZE = 15;
-let gomokuBoard = [];
-let gomokuTurn = 1; // 1=黑, 2=白
-let gomokuHistory = [];
-let gomokuGameOver = false;
-
-function gomokuInit() {
-  gomokuBoard = Array(GOMOKU_SIZE).fill(null).map(() => Array(GOMOKU_SIZE).fill(0));
-  gomokuTurn = 1;
-  gomokuHistory = [];
-  gomokuGameOver = false;
-  gomokuRender();
-  gomokuUpdateStatus();
+function demoGo(n){
+  demoState.step = Math.max(0, Math.min(demoState.rec.moves.length, n));
+  renderDemo();
 }
-
-function gomokuRender() {
-  const board = document.getElementById('gomokuBoard');
-  board.innerHTML = '';
-  const grid = document.createElement('div');
-  grid.className = 'gomoku-grid';
-  // 星位
-  const stars = [[3,3],[3,11],[7,7],[11,3],[11,11]];
-  stars.forEach(([r,c]) => {
-    const s = document.createElement('div');
-    s.className = 'gomoku-star';
-    s.style.left = (c * 30 + 15) + 'px';
-    s.style.top = (r * 30 + 15) + 'px';
-    grid.appendChild(s);
-  });
-  // 交叉点
-  for (let r = 0; r < GOMOKU_SIZE; r++) {
-    for (let c = 0; c < GOMOKU_SIZE; c++) {
-      const cell = document.createElement('div');
-      cell.className = 'gomoku-cell';
-      if (r === 0) cell.classList.add('edge-top');
-      if (r === GOMOKU_SIZE-1) cell.classList.add('edge-bottom');
-      if (c === 0) cell.classList.add('edge-left');
-      if (c === GOMOKU_SIZE-1) cell.classList.add('edge-right');
-      cell.style.left = (c * 30) + 'px';
-      cell.style.top = (r * 30) + 'px';
-      cell.onclick = () => gomokuPlace(r, c);
-      if (gomokuBoard[r][c]) {
-        const stone = document.createElement('div');
-        stone.className = 'gomoku-stone ' + (gomokuBoard[r][c] === 1 ? 'black' : 'white');
-        cell.appendChild(stone);
-      }
-      grid.appendChild(cell);
-    }
-  }
-  board.appendChild(grid);
+function demoFirst(){ stopDemoPlay(); demoGo(0); }
+function demoPrev(){ stopDemoPlay(); demoGo(demoState.step - 1); }
+function demoNext(){ stopDemoPlay(); demoGo(demoState.step + 1); }
+function demoLast(){ stopDemoPlay(); demoGo(demoState.rec.moves.length); }
+function demoToggle(){
+  if(demoState.playing){ stopDemoPlay(); return; }
+  if(demoState.step >= demoState.rec.moves.length) demoGo(0);
+  demoState.playing = true;
+  $('#demoPlay').textContent = '暂停';
+  demoState.timer = setInterval(()=>{
+    if(demoState.step >= demoState.rec.moves.length){ stopDemoPlay(); return; }
+    demoGo(demoState.step + 1);
+  }, 500);
 }
-
-function gomokuPlace(r, c) {
-  if (gomokuGameOver || gomokuBoard[r][c]) return;
-  gomokuBoard[r][c] = gomokuTurn;
-  gomokuHistory.push({r, c, player: gomokuTurn});
-  const winLine = gomokuCheckWin(r, c, gomokuTurn);
-  if (winLine) {
-    gomokuGameOver = true;
-    gomokuRender();
-    // 高亮胜利棋子
-    setTimeout(() => {
-      winLine.forEach(([wr, wc]) => {
-        const cells = document.querySelectorAll('.gomoku-cell');
-        const idx = wr * GOMOKU_SIZE + wc;
-        if (cells[idx] && cells[idx].firstChild) {
-          cells[idx].firstChild.classList.add('win');
-        }
-      });
-      const winner = gomokuTurn === 1 ? '黑方' : '白方';
-      showWin(winner, '五子连珠，精彩对局!', gomokuTurn === 1 ? '⚫' : '⚪');
-    }, 300);
-    return;
-  }
-  gomokuTurn = gomokuTurn === 1 ? 2 : 1;
-  gomokuRender();
-  gomokuUpdateStatus();
+function renderDemo(){
+  const rec = demoState.rec;
+  if(!rec) return;
+  $('#demoStatus').textContent = '第 ' + demoState.step + ' / ' + rec.moves.length + ' 手';
+  if(rec.game === 'gomoku') renderDemoGomoku(rec);
+  else renderDemoChess(rec);
 }
-
-function gomokuCheckWin(r, c, player) {
-  const dirs = [[0,1],[1,0],[1,1],[1,-1]];
-  for (const [dr, dc] of dirs) {
-    const line = [[r,c]];
-    for (let i = 1; i < 5; i++) {
-      const nr = r + dr*i, nc = c + dc*i;
-      if (nr<0||nr>=GOMOKU_SIZE||nc<0||nc>=GOMOKU_SIZE||gomokuBoard[nr][nc]!==player) break;
-      line.push([nr,nc]);
-    }
-    for (let i = 1; i < 5; i++) {
-      const nr = r - dr*i, nc = c - dc*i;
-      if (nr<0||nr>=GOMOKU_SIZE||nc<0||nc>=GOMOKU_SIZE||gomokuBoard[nr][nc]!==player) break;
-      line.unshift([nr,nc]);
-    }
-    if (line.length >= 5) return line;
-  }
-  return null;
-}
-
-function gomokuUndo() {
-  if (gomokuGameOver || gomokuHistory.length === 0) return;
-  const last = gomokuHistory.pop();
-  gomokuBoard[last.r][last.c] = 0;
-  gomokuTurn = last.player;
-  gomokuRender();
-  gomokuUpdateStatus();
-}
-
-function gomokuReset() { gomokuInit(); }
-
-function gomokuUpdateStatus() {
-  document.getElementById('gomokuTurn').textContent = gomokuTurn === 1 ? '黑方回合' : '白方回合';
-  document.getElementById('gomokuCount').textContent = '已下 ' + gomokuHistory.length + ' 手';
-}
-
-// ==================== 中国象棋 ====================
-// 棋盘: 9列 x 10行, 红方在下(行5-9), 黑方在上(行0-4)
-// 棋子: K=将/帅, A=士/仕, B=象/相, N=马/馬, R=车/車, C=炮/砲, P=卒/兵
-const XQ_INIT = [
-  ['R','N','B','A','K','A','B','N','R'],
-  [0,0,0,0,0,0,0,0,0],
-  [0,'C',0,0,0,0,0,'C',0],
-  ['P',0,'P',0,'P',0,'P',0,'P'],
-  [0,0,0,0,0,0,0,0,0],
-  [0,0,0,0,0,0,0,0,0],
-  ['P',0,'P',0,'P',0,'P',0,'P'],
-  [0,'C',0,0,0,0,0,'C',0],
-  [0,0,0,0,0,0,0,0,0],
-  ['R','N','B','A','K','A','B','N','R']
-];
-// 行0-4为黑方(大写字母表示), 行5-9为红方(小写字母表示)
-// 实际存储: 负数=黑, 正数=红, 绝对值=棋子类型
-const PIECE_CHAR = {
-  1: { red: '帅', black: '将' },
-  2: { red: '仕', black: '士' },
-  3: { red: '相', black: '象' },
-  4: { red: '馬', black: '马' },
-  5: { red: '車', black: '车' },
-  6: { red: '炮', black: '砲' },
-  7: { red: '兵', black: '卒' }
-};
-const CHAR_TO_PIECE = {
-  'K':1, 'A':2, 'B':3, 'N':4, 'R':5, 'C':6, 'P':7
-};
-
-let xqBoard = [];
-let xqTurn = 1; // 1=红, -1=黑
-let xqSelected = null; // {r,c}
-let xqMoves = []; // 可移动位置
-let xqHistory = [];
-let xqGameOver = false;
-
-function xiangqiInit() {
-  xqBoard = Array(10).fill(null).map(() => Array(9).fill(0));
-  for (let r = 0; r < 10; r++) {
-    for (let c = 0; c < 9; c++) {
-      const v = XQ_INIT[r][c];
-      if (v) {
-        const piece = CHAR_TO_PIECE[v];
-        xqBoard[r][c] = r < 5 ? -piece : piece; // 黑方负数, 红方正数
-      }
-    }
-  }
-  xqTurn = 1;
-  xqSelected = null;
-  xqMoves = [];
-  xqHistory = [];
-  xqGameOver = false;
-  xiangqiRender();
-  xqUpdateStatus();
-}
-
-function xiangqiRender() {
-  const board = document.getElementById('xiangqiBoard');
-  board.innerHTML = '';
-  board.style.position = 'relative';
-  
-  // 背景线条层
-  const bgLayer = document.createElement('div');
-  bgLayer.style.cssText = 'position:absolute;inset:0;pointer-events:none;z-index:1;';
-  
-  // 横线
-  for (let i = 0; i < 10; i++) {
-    const line = document.createElement('div');
-    line.style.cssText = `position:absolute;left:0;right:0;top:${i*50+25}px;height:1px;background:#8b4513;`;
-    bgLayer.appendChild(line);
-  }
-  // 竖线（边界2条完整，中间7条在河界断开）
-  for (let i = 0; i < 9; i++) {
-    if (i === 0 || i === 8) {
-      const line = document.createElement('div');
-      line.style.cssText = `position:absolute;top:0;bottom:0;left:${i*50+25}px;width:1px;background:#8b4513;`;
-      bgLayer.appendChild(line);
+function renderDemoGomoku(rec){
+  const b = new Array(225).fill(0);
+  const ms = rec.moves.slice(0, demoState.step);
+  const parts = [];
+  ms.forEach(m=>{
+    b[G.idx(m.r, m.c)] = m.v;
+    const x = GM + m.c*GC, y = GM + m.r*GC;
+    if(m.v === G.BLACK){
+      parts.push(`<circle class="stone" cx="${x}" cy="${y}" r="17" fill="#26221C" stroke="rgba(255,255,255,.22)" stroke-width="1.2"/>`);
+      parts.push(`<circle class="stone" cx="${x-5}" cy="${y-6}" r="5" fill="rgba(255,255,255,.22)"/>`);
     } else {
-      const line1 = document.createElement('div');
-      line1.style.cssText = `position:absolute;top:0;left:${i*50+25}px;width:1px;height:225px;background:#8b4513;`;
-      bgLayer.appendChild(line1);
-      const line2 = document.createElement('div');
-      line2.style.cssText = `position:absolute;top:275px;left:${i*50+25}px;width:1px;height:225px;background:#8b4513;`;
-      bgLayer.appendChild(line2);
+      parts.push(`<circle class="stone" cx="${x}" cy="${y}" r="17" fill="#F7F2E7" stroke="#9C8C6C" stroke-width="1.4"/>`);
+      parts.push(`<circle class="stone" cx="${x-5}" cy="${y-6}" r="5" fill="rgba(255,255,255,.95)"/>`);
+    }
+  });
+  $('#demoGStones').innerHTML = parts.join('');
+  let wl = '';
+  if(demoState.step === ms.length && ms.length && rec.result !== '和棋'){
+    const last = ms[ms.length - 1];
+    const line = G.checkWin(b, last.r, last.c, last.v);
+    if(line){
+      const a = line[0], bb = line[line.length - 1];
+      const ar = Math.floor(a/15), ac = a%15, br = Math.floor(bb/15), bc = bb%15;
+      wl = `<line class="winline" x1="${GM+ac*GC}" y1="${GM+ar*GC}" x2="${GM+bc*GC}" y2="${GM+br*GC}"/>`;
     }
   }
-  // 九宫格斜线
-  const drawDiag = (x1,y1,x2,y2) => {
-    const len = Math.sqrt((x2-x1)**2+(y2-y1)**2);
-    const ang = Math.atan2(y2-y1, x2-x1);
-    const line = document.createElement('div');
-    line.style.cssText = `position:absolute;left:${x1}px;top:${y1}px;width:${len}px;height:1px;background:#8b4513;transform-origin:0 50%;transform:rotate(${ang}rad);`;
-    bgLayer.appendChild(line);
-  };
-  drawDiag(3*50+25, 0, 5*50+25, 2*50);
-  drawDiag(5*50+25, 0, 3*50+25, 2*50);
-  drawDiag(3*50+25, 7*50, 5*50+25, 9*50);
-  drawDiag(5*50+25, 7*50, 3*50+25, 9*50);
-  
-  // 楚河汉界
-  const river = document.createElement('div');
-  river.style.cssText = 'position:absolute;left:0;right:0;top:225px;height:50px;display:flex;align-items:center;justify-content:space-around;font-size:22px;font-weight:700;color:#8b4513;font-family:KaiTi,STKaiti,serif;letter-spacing:8px;';
-  river.innerHTML = '<span>楚 河</span><span>漢 界</span>';
-  bgLayer.appendChild(river);
-  
-  board.appendChild(bgLayer);
-  
-  // 棋子层
-  for (let r = 0; r < 10; r++) {
-    for (let c = 0; c < 9; c++) {
-      const cell = document.createElement('div');
-      cell.style.cssText = `position:absolute;left:${c*50}px;top:${r*50}px;width:50px;height:50px;cursor:pointer;z-index:2;`;
-      cell.onclick = () => xqClick(r, c);
-      
-      const piece = xqBoard[r][c];
-      if (piece) {
-        const el = document.createElement('div');
-        const isRed = piece > 0;
-        el.className = 'xq-piece ' + (isRed ? 'red' : 'black');
-        el.textContent = PIECE_CHAR[Math.abs(piece)][isRed ? 'red' : 'black'];
-        if (xqSelected && xqSelected.r === r && xqSelected.c === c) el.classList.add('selected');
-        if (xqMoves.some(m => m.r === r && m.c === c)) {
-          const hint = document.createElement('div');
-          hint.className = 'xq-move-hint capture';
-          cell.appendChild(hint);
-        }
-        cell.appendChild(el);
-      } else if (xqMoves.some(m => m.r === r && m.c === c)) {
-        const hint = document.createElement('div');
-        hint.className = 'xq-move-hint';
-        cell.appendChild(hint);
-      }
-      
-      board.appendChild(cell);
-    }
+  $('#demoGWin').innerHTML = wl;
+}
+function renderDemoChess(rec){
+  const b = C.newBoard();
+  rec.moves.slice(0, demoState.step).forEach(m=>{
+    b[m.to] = b[m.from];
+    b[m.from] = null;
+  });
+  let parts = '';
+  for(let i=0;i<90;i++){
+    const p = b[i];
+    if(!p) continue;
+    const r = C.rowOf(i), c = C.colOf(i);
+    const x = CM + c*CC, y = CM + r*CC;
+    const ch = C.CHAR[p.side][p.type];
+    const col = p.side === 'r' ? '#B03A2E' : '#241F19';
+    parts += `<g class="piece" transform="translate(${x},${y})"><circle class="disc" r="27"/><circle class="inner" r="21"/><text dy="0.36em" fill="${col}">${ch}</text></g>`;
   }
-  
-  xqUpdateStatus();
+  $('#demoCPieces').innerHTML = parts;
 }
 
-
-function xqClick(r, c) {
-  if (xqGameOver) return;
-  const piece = xqBoard[r][c];
-  // 如果点击了可移动位置
-  if (xqSelected && xqMoves.some(m => m.r === r && m.c === c)) {
-    xqMove(xqSelected.r, xqSelected.c, r, c);
+/* ============ 退出确认与重开 ============ */
+let exitCb = null;
+function showExitConfirm(cb){ exitCb = cb; $('#exitModal').classList.remove('hidden'); }
+function backHome(){
+  const g = location.hash === '#gomoku' ? gomoku : (location.hash === '#chess' ? chess : null);
+  if(g && !g.over && g.moveCount > 0){
+    showExitConfirm(()=>{ g.reset(); go('#home'); });
     return;
   }
-  // 选择己方棋子
-  if (piece && (piece > 0) === (xqTurn > 0)) {
-    xqSelected = {r, c};
-    xqMoves = xqGetMoves(r, c);
-    xiangqiRender();
-    return;
+  if(g) g.reset();
+  go('#home');
+}
+function restartGomoku(){
+  if(gomoku.over || gomoku.moveCount === 0){ gomoku.reset(); return; }
+  pwRequired(()=>gomoku.reset());
+}
+function restartChess(){
+  if(chess.over || chess.moveCount === 0){ chess.reset(); return; }
+  pwRequired(()=>chess.reset());
+}
+function saveGomokuRecord(result, reason){
+  const line = gomoku.winLine || [];
+  let dir = '--';
+  if(line.length){
+    const ar = Math.floor(line[0]/15), ac = line[0]%15, br = Math.floor(line[line.length-1]/15), bc = line[line.length-1]%15;
+    dir = ar === br ? '横向' : (ac === bc ? '纵向' : '斜向');
   }
-  // 取消选择
-  xqSelected = null;
-  xqMoves = [];
-  xiangqiRender();
+  const dur = Math.round((Date.now() - gomoku.startTime) / 1000);
+  $('#gDur').textContent = fmtDur(dur);
+  $('#gMoves').textContent = gomoku.moveCount + ' 手';
+  $('#gLine').textContent = dir;
+  const rec = {
+    id: 'g' + Date.now(),
+    game: 'gomoku',
+    date: fmtDate(new Date()),
+    result: result,
+    reason: reason,
+    moveCount: gomoku.moveCount,
+    durationSec: dur,
+    moves: gomoku.moves.map(m=>({r:m.r, c:m.c, v:m.v}))
+  };
+  currentGRecord = rec;
+  pushHistory(rec);
+}
+function saveChessRecord(winner, reason){
+  const dur = Math.round((Date.now() - chess.startTime) / 1000);
+  $('#cDur').textContent = fmtDur(dur);
+  $('#cMoves').textContent = chess.moveCount + ' 手';
+  $('#cCaptures').textContent = chess.captures + ' 子';
+  const rec = {
+    id: 'c' + Date.now(),
+    game: 'chess',
+    date: fmtDate(new Date()),
+    result: winner + '获胜',
+    reason: reason,
+    moveCount: chess.moveCount,
+    durationSec: dur,
+    captures: chess.captures,
+    moves: chess.moves.map(m=>({from:m.from, to:m.to, side:m.side, piece:m.piece, captured:m.captured}))
+  };
+  currentCRecord = rec;
+  pushHistory(rec);
 }
 
-function xqGetMoves(r, c) {
-  const piece = xqBoard[r][c];
-  if (!piece) return [];
-  const type = Math.abs(piece);
-  const isRed = piece > 0;
-  const moves = [];
-  const add = (nr, nc) => {
-    if (nr<0||nr>=10||nc<0||nc>=9) return;
-    const target = xqBoard[nr][nc];
-    if (target && (target > 0) === isRed) return; // 己方棋子
-    moves.push({r:nr, c:nc});
-  };
-
-  if (type === 1) { // 将/帅
-    const dirs = [[-1,0],[1,0],[0,-1],[0,1]];
-    dirs.forEach(([dr,dc]) => {
-      const nr = r+dr, nc = c+dc;
-      if (isRed) { if (nr>=7&&nr<=9&&nc>=3&&nc<=5) add(nr,nc); }
-      else { if (nr>=0&&nr<=2&&nc>=3&&nc<=5) add(nr,nc); }
-    });
-    // 飞将: 两将在同一列且中间无子
-    for (let nr = 0; nr < 10; nr++) {
-      if (nr === r) continue;
-      const t = xqBoard[nr][c];
-      if (t && Math.abs(t) === 1 && (t > 0) !== isRed) {
-        let blocked = false;
-        const minR = Math.min(r, nr), maxR = Math.max(r, nr);
-        for (let i = minR+1; i < maxR; i++) {
-          if (xqBoard[i][c]) { blocked = true; break; }
+/* ====ENGINE:GOMOKU:START==== */
+const G = {
+  SIZE: 15,
+  EMPTY: 0, BLACK: 1, WHITE: 2,
+  idx: (r,c)=>r*15+c,
+  inB: (r,c)=> r>=0 && r<15 && c>=0 && c<15,
+  newBoard: ()=>new Array(225).fill(0),
+  isFull: b=>b.every(v=>v!==0),
+  checkWin: (board, r, c, val)=>{
+    const dirs = [[1,0],[0,1],[1,1],[1,-1]];
+    for(let d=0; d<dirs.length; d++){
+      const [dr,dc] = dirs[d];
+      const line = [G.idx(r,c)];
+      for(const s of [1,-1]){
+        let nr = r + dr*s, nc = c + dc*s;
+        while(G.inB(nr,nc) && board[G.idx(nr,nc)] === val){
+          line.push(G.idx(nr,nc));
+          nr += dr*s; nc += dc*s;
         }
-        if (!blocked) moves.push({r:nr, c:c});
-        break;
       }
+      if(line.length >= 5) return line;
     }
-  } else if (type === 2) { // 士/仕
-    const dirs = [[-1,-1],[-1,1],[1,-1],[1,1]];
-    dirs.forEach(([dr,dc]) => {
-      const nr = r+dr, nc = c+dc;
-      if (isRed) { if (nr>=7&&nr<=9&&nc>=3&&nc<=5) add(nr,nc); }
-      else { if (nr>=0&&nr<=2&&nc>=3&&nc<=5) add(nr,nc); }
-    });
-  } else if (type === 3) { // 象/相
-    const dirs = [[-2,-2],[-2,2],[2,-2],[2,2]];
-    dirs.forEach(([dr,dc]) => {
-      const nr = r+dr, nc = c+dc;
-      if (isRed && nr < 5) return; // 红象不过河
-      if (!isRed && nr > 4) return; // 黑象不过河
-      // 塞象眼
-      if (xqBoard[r+dr/2][c+dc/2]) return;
-      add(nr, nc);
-    });
-  } else if (type === 4) { // 马
-    const moves2 = [
-      [-2,-1,-1,0],[-2,1,-1,0],[2,-1,1,0],[2,1,1,0],
-      [-1,-2,0,-1],[1,-2,0,-1],[-1,2,0,1],[1,2,0,1]
-    ];
-    moves2.forEach(([dr,dc,br,bc]) => {
-      const nr = r+dr, nc = c+dc;
-      if (xqBoard[r+br][c+bc]) return; // 蹩马腿
-      add(nr, nc);
-    });
-  } else if (type === 5) { // 车
-    const dirs = [[-1,0],[1,0],[0,-1],[0,1]];
-    dirs.forEach(([dr,dc]) => {
+    return null;
+  }
+};
+/* ====ENGINE:GOMOKU:END==== */
+
+/* ====ENGINE:CHESS:START==== */
+const C = {
+  ROWS:10, COLS:9, N:90,
+  idx:(r,c)=>r*9+c,
+  rowOf:i=>Math.floor(i/9),
+  colOf:i=>i%9,
+  inB:(r,c)=>r>=0 && r<10 && c>=0 && c<9,
+  newBoard(){
+    const b = new Array(90).fill(null);
+    const back = (r,side)=>{
+      ['R','H','E','A','G','A','E','H','R'].forEach((t,c)=>{ b[C.idx(r,c)] = {side, type:t}; });
+    };
+    back(0,'b'); back(9,'r');
+    for(const c of [1,7]){ b[C.idx(2,c)] = {side:'b',type:'C'}; b[C.idx(7,c)] = {side:'r',type:'C'}; }
+    for(const c of [0,2,4,6,8]){ b[C.idx(3,c)] = {side:'b',type:'P'}; b[C.idx(6,c)] = {side:'r',type:'P'}; }
+    return b;
+  },
+  CHAR:{ r:{G:'帅',A:'仕',E:'相',H:'马',R:'车',C:'炮',P:'兵'}, b:{G:'将',A:'士',E:'象',H:'马',R:'车',C:'炮',P:'卒'} },
+  palace:(side,r,c)=> side==='r' ? (r>=7 && r<=9 && c>=3 && c<=5) : (r>=0 && r<=2 && c>=3 && c<=5),
+  rawMoves(board, i){
+    const p = board[i]; if(!p) return [];
+    const r = C.rowOf(i), c = C.colOf(i), side = p.side;
+    const out = [];
+    const add = (nr,nc)=>{
+      if(!C.inB(nr,nc)) return;
+      const t = board[C.idx(nr,nc)];
+      if(!t) out.push({r:nr,c:nc,cap:false});
+      else if(t.side !== side) out.push({r:nr,c:nc,cap:true});
+    };
+    const slide = (dr,dc)=>{
       let nr = r+dr, nc = c+dc;
-      while (nr>=0&&nr<10&&nc>=0&&nc<9) {
-        if (xqBoard[nr][nc]) {
-          if ((xqBoard[nr][nc] > 0) !== isRed) moves.push({r:nr,c:nc});
-          break;
-        }
-        moves.push({r:nr,c:nc});
+      while(C.inB(nr,nc)){
+        const t = board[C.idx(nr,nc)];
+        if(!t){ out.push({r:nr,c:nc,cap:false}); }
+        else { if(t.side !== side) out.push({r:nr,c:nc,cap:true}); break; }
         nr += dr; nc += dc;
       }
-    });
-  } else if (type === 6) { // 炮
-    const dirs = [[-1,0],[1,0],[0,-1],[0,1]];
-    dirs.forEach(([dr,dc]) => {
-      let nr = r+dr, nc = c+dc;
-      let jumped = false;
-      while (nr>=0&&nr<10&&nc>=0&&nc<9) {
-        if (!jumped) {
-          if (xqBoard[nr][nc]) jumped = true;
-          else moves.push({r:nr,c:nc});
-        } else {
-          if (xqBoard[nr][nc]) {
-            if ((xqBoard[nr][nc] > 0) !== isRed) moves.push({r:nr,c:nc});
-            break;
+    };
+    switch(p.type){
+      case 'G':
+        [[1,0],[-1,0],[0,1],[0,-1]].forEach(d=>{ const nr=r+d[0], nc=c+d[1]; if(C.palace(side,nr,nc)) add(nr,nc); });
+        break;
+      case 'A':
+        [[1,1],[1,-1],[-1,1],[-1,-1]].forEach(d=>{ const nr=r+d[0], nc=c+d[1]; if(C.palace(side,nr,nc)) add(nr,nc); });
+        break;
+      case 'E': {
+        const lo = side==='r' ? 5 : 0, hi = side==='r' ? 9 : 4;
+        [[2,2],[2,-2],[-2,2],[-2,-2]].forEach(d=>{
+          const nr = r+d[0], nc = c+d[1], mr = r+d[0]/2, mc = c+d[1]/2;
+          if(C.inB(nr,nc) && nr>=lo && nr<=hi && !board[C.idx(mr,mc)]) add(nr,nc);
+        });
+        break; }
+      case 'H': {
+        const legs = [[2,1,1,0],[2,-1,1,0],[-2,1,-1,0],[-2,-1,-1,0],[1,2,0,1],[1,-2,0,-1],[-1,2,0,1],[-1,-2,0,-1]];
+        for(const lg of legs){
+          const mr = r+lg[2], mc = c+lg[3];
+          if(!C.inB(mr,mc) || board[C.idx(mr,mc)]) continue;
+          const nr = r+lg[0], nc = c+lg[1];
+          if(C.inB(nr,nc)) add(nr,nc);
+        }
+        break; }
+      case 'R':
+        [[1,0],[-1,0],[0,1],[0,-1]].forEach(d=>slide(d[0],d[1]));
+        break;
+      case 'C': {
+        for(const d of [[1,0],[-1,0],[0,1],[0,-1]]){
+          let nr = r+d[0], nc = c+d[1], screened = false;
+          while(C.inB(nr,nc)){
+            const t = board[C.idx(nr,nc)];
+            if(!screened){
+              if(!t){ out.push({r:nr,c:nc,cap:false}); }
+              else screened = true;
+            } else {
+              if(t){ if(t.side !== side) out.push({r:nr,c:nc,cap:true}); break; }
+            }
+            nr += d[0]; nc += d[1];
           }
         }
-        nr += dr; nc += dc;
+        break; }
+      case 'P': {
+        const fwd = side==='r' ? -1 : 1;
+        const crossed = side==='r' ? r<=4 : r>=5;
+        add(r+fwd, c);
+        if(crossed){ add(r, c-1); add(r, c+1); }
+        break; }
+    }
+    return out;
+  },
+  findGeneral(board, side){
+    for(let i=0;i<90;i++){ const p=board[i]; if(p && p.side===side && p.type==='G') return i; }
+    return -1;
+  },
+  attacksSquare(board, i, tr, tc){
+    return C.rawMoves(board, i).some(m => m.r===tr && m.c===tc);
+  },
+  isInCheck(board, side){
+    const gi = C.findGeneral(board, side);
+    if(gi < 0) return false;
+    const gr = C.rowOf(gi), gc = C.colOf(gi);
+    for(let i=0;i<90;i++){
+      const p = board[i];
+      if(p && p.side !== side && C.attacksSquare(board, i, gr, gc)) return true;
+    }
+    for(let r=gr-1;r>=0;r--){ const t=board[C.idx(r,gc)]; if(t){ if(t.side!==side && t.type==='G') return true; break; } }
+    for(let r=gr+1;r<10;r++){ const t=board[C.idx(r,gc)]; if(t){ if(t.side!==side && t.type==='G') return true; break; } }
+    return false;
+  },
+  legalMoves(board, i){
+    const p = board[i]; if(!p) return [];
+    const res = [];
+    for(const m of C.rawMoves(board, i)){
+      const to = C.idx(m.r, m.c), captured = board[to];
+      board[i] = null; board[to] = p;
+      const safe = !C.isInCheck(board, p.side);
+      board[i] = p; board[to] = captured;
+      if(safe) res.push(m);
+    }
+    return res;
+  },
+  allMoves(board, side){
+    const moves = [];
+    for(let i=0;i<90;i++){
+      const p = board[i];
+      if(p && p.side === side){
+        for(const m of C.legalMoves(board, i)) moves.push({from:i, to:m});
       }
-    });
-  } else if (type === 7) { // 卒/兵
-    if (isRed) {
-      add(r-1, c); // 红兵向上
-      if (r <= 4) { add(r, c-1); add(r, c+1); } // 过河可左右
+    }
+    return moves;
+  }
+};
+/* ====ENGINE:CHESS:END==== */
+
+/* ============ 视图路由 ============ */
+function route(){
+  const h = (location.hash || '#home').slice(1);
+  const ok = ['home','gomoku','chess'].includes(h) ? h : 'home';
+  ['home','gomoku','chess'].forEach(v=>{
+    $('#view-'+v).classList.toggle('hidden', v!==ok);
+  });
+  $('#btnBack').classList.toggle('hidden', ok==='home');
+  // 离开棋局页时收起浮层
+  $('#gOverlay').classList.add('hidden');
+  $('#cOverlay').classList.add('hidden');
+  $('#pwModal').classList.add('hidden');
+  if(ok==='gomoku') gomoku.reset();
+  if(ok==='chess') chess.reset();
+}
+window.addEventListener('hashchange', route);
+
+/* ============ 五子棋 ============ */
+const GM = 40, GS = 640, GC = 40;
+const gomoku = {
+  board: G.newBoard(),
+  turn: G.BLACK,
+  over: false,
+  last: -1,
+  winLine: null,
+  moveCount: 0,
+  moves: [],
+  startTime: 0,
+  reset(){
+    this.board = G.newBoard();
+    this.turn = G.BLACK;
+    this.over = false;
+    this.last = -1;
+    this.winLine = null;
+    this.moveCount = 0;
+    this.moves = [];
+    this.startTime = Date.now();
+    $('#gOverlay').classList.add('hidden');
+    this.renderAll();
+  },
+  renderAll(){
+    this.render();
+    this.status();
+  },
+  render(){
+    const g = $('#gStones');
+    const parts = [];
+    for(let i=0;i<225;i++){
+      const v = this.board[i];
+      if(!v) continue;
+      const r = Math.floor(i/15), c = i%15;
+      const x = GM + c*GC, y = GM + r*GC;
+      const isWin = this.winLine && this.winLine.includes(i);
+      const cls = 'stone' + (isWin ? ' win-stone' : '');
+      if(v === G.BLACK){
+        parts.push(`<circle class="${cls}" cx="${x}" cy="${y}" r="17" fill="#26221C" stroke="rgba(255,255,255,.22)" stroke-width="1.2"/>`);
+        parts.push(`<circle class="${cls}" cx="${x-5}" cy="${y-6}" r="5" fill="rgba(255,255,255,.22)"/>`);
+      } else {
+        parts.push(`<circle class="${cls}" cx="${x}" cy="${y}" r="17" fill="#F7F2E7" stroke="#9C8C6C" stroke-width="1.4"/>`);
+        parts.push(`<circle class="${cls}" cx="${x-5}" cy="${y-6}" r="5" fill="rgba(255,255,255,.95)"/>`);
+      }
+    }
+    g.innerHTML = parts.join('');
+    // 最后一手标记
+    const wl = $('#gWinLine');
+    if(this.last >= 0 && !this.winLine){
+      const lr = Math.floor(this.last/15), lc = this.last%15;
+      wl.innerHTML = `<circle cx="${GM+lc*GC}" cy="${GM+lr*GC}" r="5" fill="#C0392B" stroke="#FFF9EC" stroke-width="1.5"/>`;
+    } else wl.innerHTML = '';
+    // 胜线
+    if(this.winLine && this.winLine.length){
+      const a = this.winLine[0], b = this.winLine[this.winLine.length-1];
+      const ar = Math.floor(a/15), ac = a%15, br = Math.floor(b/15), bc = b%15;
+      wl.innerHTML += `<line class="winline" x1="${GM+ac*GC}" y1="${GM+ar*GC}" x2="${GM+bc*GC}" y2="${GM+br*GC}"/>`;
+    }
+    $('#gOverlay').classList.toggle('hidden', !this.over);
+  },
+  status(){
+    const name = this.turn === G.BLACK ? '黑方' : '白方';
+    $('#gStatus').textContent = this.over ? '对局结束' : (name + '行棋');
+    const d = $('#gDot');
+    d.className = 'turn-dot ' + (this.turn === G.BLACK ? 'b' : 'r');
+  }
+};
+function gPoint(ev){
+  const r = $('#gBoard').getBoundingClientRect();
+  return { x:(ev.clientX - r.left) * GS / r.width, y:(ev.clientY - r.top) * GS / r.height };
+}
+function gNearest(ev){
+  const p = gPoint(ev);
+  const c = Math.round((p.x - GM)/GC), r = Math.round((p.y - GM)/GC);
+  if(r<0||r>14||c<0||c>14) return null;
+  const dx = p.x - (GM + c*GC), dy = p.y - (GM + r*GC);
+  if(Math.abs(dx) > GC*0.55 || Math.abs(dy) > GC*0.55) return null;
+  return {r, c};
+}
+function buildGomokuGrid(prefix){
+  const g = document.getElementById(prefix + 'Grid');
+  let h = '<g class="grid-lines">';
+  for(let i=0;i<15;i++){
+    const p = GM + i*GC;
+    h += `<line x1="${GM}" y1="${p}" x2="${GM+14*GC}" y2="${p}"/>`;
+    h += `<line x1="${p}" y1="${GM}" x2="${p}" y2="${GM+14*GC}"/>`;
+  }
+  h += '</g>';
+  g.innerHTML = h;
+  const stars = [[7,7,5.2],[3,3,3.4],[11,3,3.4],[3,11,3.4],[11,11,3.4]];
+  document.getElementById(prefix + 'Stars').innerHTML = stars.map(s=>`<circle class="star" cx="${GM+s[0]*GC}" cy="${GM+s[1]*GC}" r="${s[2]}"/>`).join('');
+}
+$('#gBoard').addEventListener('click', ev=>{
+  if(gomoku.over) return;
+  const n = gNearest(ev);
+  if(!n) return;
+  const i = G.idx(n.r, n.c);
+  if(gomoku.board[i] !== G.EMPTY) return;
+  gomoku.board[i] = gomoku.turn;
+  gomoku.last = i;
+  gomoku.moveCount++;
+  gomoku.moves.push({r:n.r, c:n.c, v:gomoku.turn});
+  sfxMove();
+  const line = G.checkWin(gomoku.board, n.r, n.c, gomoku.turn);
+  if(line){
+    gomoku.over = true;
+    gomoku.winLine = line;
+    sfxWin();
+    const name = gomoku.turn === G.BLACK ? '黑方' : '白方';
+    $('#gResultBadge').textContent = '五子连珠';
+    $('#gResultBadge').style.background = '';
+    $('#gResultTitle').textContent = name + '获胜';
+    $('#gResultSub').textContent = '五枚棋子连成一线';
+    saveGomokuRecord(name + '获胜', '五子连珠');
+  } else if(G.isFull(gomoku.board)){
+    gomoku.over = true;
+    $('#gResultBadge').textContent = '和 棋';
+    $('#gResultBadge').style.background = '#C9A227';
+    $('#gResultTitle').textContent = '和 棋';
+    $('#gResultSub').textContent = '棋盘已落满，双方均未连成五子';
+    saveGomokuRecord('和棋', '棋盘已满');
+  } else {
+    gomoku.turn = gomoku.turn === G.BLACK ? G.WHITE : G.BLACK;
+  }
+  gomoku.renderAll();
+});
+// 落子预览提示
+$('#gBoard').addEventListener('pointermove', ev=>{
+  const ghost = $('#gGhost');
+  if(gomoku.over){ ghost.setAttribute('display','none'); return; }
+  const n = gNearest(ev);
+  if(!n || gomoku.board[G.idx(n.r,n.c)] !== G.EMPTY){
+    ghost.setAttribute('display','none'); return;
+  }
+  ghost.setAttribute('display','');
+  ghost.setAttribute('cx', GM + n.c*GC);
+  ghost.setAttribute('cy', GM + n.r*GC);
+  ghost.setAttribute('fill', gomoku.turn === G.BLACK ? 'rgba(38,34,28,.5)' : 'rgba(247,242,231,.7)');
+});
+$('#gBoard').addEventListener('pointerleave', ()=>$('#gGhost').setAttribute('display','none'));
+
+/* ============ 中国象棋 ============ */
+const CM = 48, CW = 608, CH = 672, CC = 64;
+const chess = {
+  board: C.newBoard(),
+  turn: 'r',
+  over: false,
+  selected: -1,
+  hints: [],
+  lastFrom: -1,
+  lastTo: -1,
+  inCheckSide: null,
+  moveCount: 0,
+  moves: [],
+  captures: 0,
+  startTime: 0,
+  reset(){
+    this.board = C.newBoard();
+    this.turn = 'r';
+    this.over = false;
+    this.selected = -1;
+    this.hints = [];
+    this.lastFrom = -1;
+    this.lastTo = -1;
+    this.inCheckSide = null;
+    this.moveCount = 0;
+    this.moves = [];
+    this.captures = 0;
+    this.startTime = Date.now();
+    $('#cOverlay').classList.add('hidden');
+    this.renderAll();
+  },
+  renderAll(){
+    this.render();
+    this.status();
+  },
+  render(){
+    // 落子标记
+    let marks = '';
+    for(const i of [this.lastFrom, this.lastTo]){
+      if(i < 0) continue;
+      const r = C.rowOf(i), c = C.colOf(i);
+      const x = CM + c*CC, y = CM + r*CC;
+      marks += `<rect x="${x-30}" y="${y-30}" width="60" height="60" rx="9" fill="rgba(201,162,39,.24)"/>`;
+    }
+    $('#cMarks').innerHTML = marks;
+    // 提示点
+    let hints = '';
+    for(const m of this.hints){
+      const x = CM + m.c*CC, y = CM + m.r*CC;
+      hints += m.cap
+        ? `<circle class="hint-ring" cx="${x}" cy="${y}" r="15"/>`
+        : `<circle class="hint-dot" cx="${x}" cy="${y}" r="8"/>`;
+    }
+    $('#cHints').innerHTML = hints;
+    // 棋子
+    let parts = '';
+    let chkIdx = -1;
+    if(this.inCheckSide) chkIdx = C.findGeneral(this.board, this.inCheckSide);
+    for(let i=0;i<90;i++){
+      const p = this.board[i];
+      if(!p) continue;
+      const r = C.rowOf(i), c = C.colOf(i);
+      const x = CM + c*CC, y = CM + r*CC;
+      const cls = 'piece'
+        + (i === this.selected ? ' sel' : '')
+        + (i === chkIdx ? ' chk' : '');
+      const ch = C.CHAR[p.side][p.type];
+      const col = p.side === 'r' ? '#B03A2E' : '#241F19';
+      parts += `<g class="${cls}" transform="translate(${x},${y})">
+        <circle class="ring" r="30"/>
+        <circle class="disc" r="27"/>
+        <circle class="inner" r="21"/>
+        <text dy="0.36em" fill="${col}">${ch}</text>
+      </g>`;
+    }
+    $('#cPieces').innerHTML = parts;
+    $('#cOverlay').classList.toggle('hidden', !this.over);
+  },
+  status(){
+    const sideName = this.turn === 'r' ? '红方' : '黑方';
+    let txt = sideName + '行棋';
+    if(this.selected >= 0){
+      const p = this.board[this.selected];
+      if(p) txt += ' · ' + (p.side==='r'?'红':'黑') + C.CHAR[p.side][p.type];
+    }
+    const warn = this.inCheckSide ? `<span class="warn">将军！</span>` : '';
+    $('#cStatus').innerHTML = warn + txt;
+    $('#cDot').className = 'turn-dot ' + (this.turn === 'r' ? 'r' : 'b');
+  }
+};
+function cPoint(ev){
+  const r = $('#cBoard').getBoundingClientRect();
+  return { x:(ev.clientX - r.left) * CW / r.width, y:(ev.clientY - r.top) * CH / r.height };
+}
+function cNearest(ev){
+  const p = cPoint(ev);
+  const c = Math.round((p.x - CM)/CC), r = Math.round((p.y - CM)/CC);
+  if(r<0||r>9||c<0||c>8) return null;
+  const dx = p.x - (CM + c*CC), dy = p.y - (CM + r*CC);
+  if(Math.abs(dx) > CC*0.52 || Math.abs(dy) > CC*0.52) return null;
+  return {r, c};
+}
+function buildChessGrid(prefix){
+  const g = document.getElementById(prefix + 'Grid');
+  let h = '<g class="grid-lines">';
+  for(let r=0;r<10;r++){
+    const y = CM + r*CC;
+    h += `<line x1="${CM}" y1="${y}" x2="${CM+8*CC}" y2="${y}"/>`;
+  }
+  const riverTop = CM + 4*CC, riverBot = CM + 5*CC;
+  for(let c=0;c<9;c++){
+    const x = CM + c*CC;
+    h += `<line x1="${x}" y1="${CM}" y2="${riverTop}" x2="${x}"/>`;
+    h += `<line x1="${x}" y1="${riverBot}" y2="${CM+9*CC}" x2="${x}"/>`;
+  }
+  // 九宫斜线
+  h += `<line x1="${CM+3*CC}" y1="${CM}" x2="${CM+5*CC}" y2="${CM+2*CC}"/>`;
+  h += `<line x1="${CM+5*CC}" y1="${CM}" x2="${CM+3*CC}" y2="${CM+2*CC}"/>`;
+  h += `<line x1="${CM+3*CC}" y1="${CM+7*CC}" x2="${CM+5*CC}" y2="${CM+9*CC}"/>`;
+  h += `<line x1="${CM+5*CC}" y1="${CM+7*CC}" x2="${CM+3*CC}" y2="${CM+9*CC}"/>`;
+  h += '</g>';
+  h += `<text class="river" x="${CM+2.5*CC}" y="${(riverTop+riverBot)/2+9}">楚 河</text>`;
+  h += `<text class="river" x="${CM+6.5*CC}" y="${(riverTop+riverBot)/2+9}">汉 界</text>`;
+  g.innerHTML = h;
+}
+function selectChess(i){
+  chess.selected = i;
+  chess.hints = C.legalMoves(chess.board, i);
+  if(chess.hints.length === 0){
+    toast('该子无合法走法');
+    chess.selected = -1;
+    chess.hints = [];
+  }
+  chess.renderAll();
+}
+function deselectChess(){
+  chess.selected = -1;
+  chess.hints = [];
+  chess.renderAll();
+}
+function doChessMove(from, to){
+  const toIdx = C.idx(to.r, to.c);
+  const mover = chess.turn;
+  const captured = chess.board[toIdx];
+  const piece = chess.board[from];
+  chess.board[toIdx] = piece;
+  chess.board[from] = null;
+  chess.lastFrom = from;
+  chess.lastTo = toIdx;
+  chess.selected = -1;
+  chess.hints = [];
+  chess.moveCount++;
+  chess.moves.push({from: from, to: toIdx, side: mover, piece: piece.type, captured: !!captured});
+  if(captured) chess.captures++;
+  if(captured) sfxCapture(); else sfxMove();
+  chess.turn = chess.turn === 'r' ? 'b' : 'r';
+  const inCheck = C.isInCheck(chess.board, chess.turn);
+  const hasMoves = C.allMoves(chess.board, chess.turn).length > 0;
+  if(!hasMoves){
+    chess.over = true;
+    chess.inCheckSide = null;
+    sfxWin();
+    const winner = chess.turn === 'r' ? '黑方' : '红方';
+    if(inCheck){
+      $('#cResultBadge').textContent = '绝 杀';
+      $('#cResultTitle').textContent = winner + '获胜';
+      $('#cResultSub').textContent = '对方被将军，无子可解';
+      saveChessRecord(winner, '绝杀');
     } else {
-      add(r+1, c); // 黑卒向下
-      if (r >= 5) { add(r, c-1); add(r, c+1); } // 过河可左右
+      $('#cResultBadge').textContent = '困 毙';
+      $('#cResultTitle').textContent = winner + '获胜';
+      $('#cResultSub').textContent = '对方无子可走，按规则判负';
+      saveChessRecord(winner, '困毙');
     }
-  }
-  return moves;
-}
-
-function xqMove(fr, fc, tr, tc) {
-  const piece = xqBoard[fr][fc];
-  const captured = xqBoard[tr][tc];
-  xqHistory.push({fr, fc, tr, tc, piece, captured});
-  xqBoard[tr][tc] = piece;
-  xqBoard[fr][fc] = 0;
-  xqSelected = null;
-  xqMoves = [];
-
-  // 检查是否吃掉将/帅
-  if (captured && Math.abs(captured) === 1) {
-    xqGameOver = true;
-    xiangqiRender();
-    const winner = piece > 0 ? '红方' : '黑方';
-    setTimeout(() => showWin(winner, '擒贼擒王，胜负已分!', '👑'), 300);
-    return;
-  }
-
-  xqTurn = -xqTurn;
-  xiangqiRender();
-  xqUpdateStatus();
-}
-
-function xqIsInCheck(side) {
-  // side: 1=红, -1=黑, 检查该方将是否被将军
-  let kingPos = null;
-  for (let r = 0; r < 10; r++) {
-    for (let c = 0; c < 9; c++) {
-      const p = xqBoard[r][c];
-      if (p && Math.abs(p) === 1 && (p > 0) === (side > 0)) {
-        kingPos = {r, c};
-        break;
-      }
-    }
-    if (kingPos) break;
-  }
-  if (!kingPos) return false;
-  // 检查对方所有棋子是否能吃到将
-  for (let r = 0; r < 10; r++) {
-    for (let c = 0; c < 9; c++) {
-      const p = xqBoard[r][c];
-      if (p && (p > 0) !== (side > 0)) {
-        const moves = xqGetMoves(r, c);
-        if (moves.some(m => m.r === kingPos.r && m.c === kingPos.c)) return true;
-      }
-    }
-  }
-  return false;
-}
-
-function xiangqiUndo() {
-  if (xqGameOver || xqHistory.length === 0) return;
-  const last = xqHistory.pop();
-  xqBoard[last.fr][last.fc] = last.piece;
-  xqBoard[last.tr][last.tc] = last.captured;
-  xqTurn = -xqTurn;
-  xqSelected = null;
-  xqMoves = [];
-  xiangqiRender();
-  xqUpdateStatus();
-}
-
-function xiangqiReset() { xiangqiInit(); }
-
-function xqUpdateStatus() {
-  const turnEl = document.getElementById('xqTurn');
-  const dotEl = document.getElementById('xqTurnDot');
-  const statusEl = document.getElementById('xqStatus');
-  if (xqTurn > 0) {
-    turnEl.textContent = '红方回合';
-    dotEl.className = 'status-dot red';
+  } else if(inCheck){
+    chess.inCheckSide = chess.turn;
+    sfxCheck();
+    toast('将军！' + (chess.turn==='r'?'红':'黑') + '方需应招', 1800);
   } else {
-    turnEl.textContent = '黑方回合';
-    dotEl.className = 'status-dot black';
+    chess.inCheckSide = null;
   }
-  if (xqIsInCheck(xqTurn)) {
-    statusEl.textContent = '⚠️ ' + (xqTurn > 0 ? '红方' : '黑方') + '被将军!';
-    statusEl.style.color = '#e94560';
-  } else {
-    statusEl.textContent = xqSelected ? '选择目标位置移动' : '点击棋子选择移动';
-    statusEl.style.color = 'rgba(255,255,255,0.7)';
-  }
+  chess.renderAll();
 }
+$('#cBoard').addEventListener('click', ev=>{
+  if(chess.over) return;
+  const n = cNearest(ev);
+  if(!n) return;
+  const i = C.idx(n.r, n.c);
+  if(chess.selected >= 0){
+    const hit = chess.hints.find(m => m.r===n.r && m.c===n.c);
+    if(hit){ doChessMove(chess.selected, hit); return; }
+  }
+  const p = chess.board[i];
+  if(p && p.side === chess.turn) selectChess(i);
+  else if(chess.selected >= 0) deselectChess();
+});
+
+/* ============ 密码弹窗 ============ */
+let pwCallback = null;
+function pwRequired(cb){
+  pwCallback = cb;
+  $('#pwInput').value = '';
+  $('#pwErr').textContent = '';
+  $('#pwCard').classList.remove('shake');
+  $('#pwModal').classList.remove('hidden');
+  setTimeout(()=>$('#pwInput').focus(), 50);
+}
+function pwClose(){
+  $('#pwModal').classList.add('hidden');
+  pwCallback = null;
+}
+$('#pwOk').addEventListener('click', ()=>{
+  if($('#pwInput').value === '123456'){
+    const cb = pwCallback;
+    pwClose();
+    if(cb){ cb(); toast('已重新开始'); }
+  } else {
+    $('#pwErr').textContent = '密码错误，请重试';
+    const card = $('#pwCard');
+    card.classList.remove('shake');
+    void card.offsetWidth;
+    card.classList.add('shake');
+    $('#pwInput').select();
+  }
+});
+$('#pwCancel').addEventListener('click', pwClose);
+$('#pwModal').addEventListener('click', ev=>{ if(ev.target.id === 'pwModal') pwClose(); });
+$('#pwInput').addEventListener('keydown', ev=>{ if(ev.key === 'Enter') $('#pwOk').click(); });
+
+/* ============ 初始化 ============ */
+buildGomokuGrid('g');
+buildChessGrid('c');
+buildGomokuGrid('demoG');
+buildChessGrid('demoC');
+$('#histClose').addEventListener('click', closeHistory);
+$('#historyModal').addEventListener('click', ev=>{ if(ev.target.id === 'historyModal') closeHistory(); });
+$('#demoClose').addEventListener('click', closeDemo);
+$('#demoModal').addEventListener('click', ev=>{ if(ev.target.id === 'demoModal') closeDemo(); });
+$('#demoFirst').addEventListener('click', demoFirst);
+$('#demoPrev').addEventListener('click', demoPrev);
+$('#demoPlay').addEventListener('click', demoToggle);
+$('#demoNext').addEventListener('click', demoNext);
+$('#demoLast').addEventListener('click', demoLast);
+$('#exitCancel').addEventListener('click', ()=>{ $('#exitModal').classList.add('hidden'); exitCb = null; });
+$('#exitOk').addEventListener('click', ()=>{ $('#exitModal').classList.add('hidden'); const cb = exitCb; exitCb = null; if(cb) cb(); });
+$('#exitModal').addEventListener('click', ev=>{ if(ev.target.id === 'exitModal'){ $('#exitModal').classList.add('hidden'); exitCb = null; } });
+renderHistory();
+gomoku.renderAll();
+chess.renderAll();
+route();
 </script>
 </body>
 </html>

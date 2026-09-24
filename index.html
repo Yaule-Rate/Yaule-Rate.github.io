@@ -4,24 +4,26 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Yaule · 欢迎你的到来</title>
-<meta name="description" content="欢迎来到 Yaule 的个人主页。">
+<meta name="description" content="欢迎来到 Yaule 的个人主页。这里记录着咖啡、音乐、游戏与作品。">
 <meta name="author" content="Yaule">
 <link rel="canonical" href="https://Yaule-Rate.github.io/">
 <meta property="og:type" content="website">
-<meta property="og:title" content="Yaule · 欢迎">
+<meta property="og:title" content="Yaule · 欢迎你的到来">
 <meta property="og:url" content="https://Yaule-Rate.github.io/">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230284c7'/%3E%3Ctext x='32' y='44' font-family='Georgia, serif' font-size='36' font-weight='bold' fill='%23fff' text-anchor='middle'%3EY%3C/text%3E%3C/svg%3E">
-<link rel="stylesheet" href="https://miaoda.feishu.cn/fonts/css2?family=Noto+Serif+SC:wght@600;700&family=Noto+Sans+SC:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="https://miaoda.feishu.cn/fonts/css2?family=Noto+Serif+SC:wght@600;700&family=Noto+Sans+SC:wght@400;500;600;700&family=Ma+Shan+Zheng&display=swap">
 <style>
   :root {
     --bg: #FAFAF9;
     --ink: #17181C;
     --ink-2: #5B5F66;
     --accent: #0284c7;
+    --accent-2: #38bdf8;
     --line: #E5E5E1;
     --footer-bg: #16181D;
     --footer-ink: #C9CDD4;
     --footer-ink-2: #8B9099;
+    --ink-color: #0f766e;
   }
   * { margin: 0; padding: 0; box-sizing: border-box; }
   html { scroll-behavior: smooth; }
@@ -41,6 +43,14 @@
     min-height: 100vh;
   }
   .wrap { max-width: 1040px; margin: 0 auto; padding: 0 24px; width: 100%; }
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+  }
   a { color: var(--accent); text-decoration: none; }
   a:hover { text-decoration: underline; }
 
@@ -48,7 +58,7 @@
   .loading-overlay {
     position: fixed;
     inset: 0;
-    background: rgba(250, 250, 249, 0.95);
+    background: rgba(250, 250, 249, 0.96);
     backdrop-filter: blur(12px);
     z-index: 9999;
     display: flex;
@@ -101,7 +111,7 @@
     opacity: 0.6;
   }
 
-  /* ===== 首屏 ===== */
+  /* ===== 首屏（苹果激活 · 手写） ===== */
   .hero {
     min-height: 100vh;
     display: flex;
@@ -110,57 +120,75 @@
     align-items: center;
     text-align: center;
     padding: 40px 24px;
-    animation: fadeIn 0.8s ease-out;
+    position: relative;
+    overflow: hidden;
   }
-  @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(20px); }
-    to { opacity: 1; transform: translateY(0); }
+  .lang-roamer {
+    height: 34px;
+    font-family: "Ma Shan Zheng", "Noto Serif SC", serif;
+    font-size: 26px;
+    color: var(--ink-2);
+    margin-bottom: 28px;
+    opacity: 0;
+    transition: opacity 0.5s ease;
+    letter-spacing: 0.04em;
+  }
+  .lang-roamer.show { opacity: 1; }
+  .handwrite-wrap {
+    width: 100%;
+    max-width: 920px;
+    display: flex;
+    justify-content: center;
+  }
+  .handwrite-canvas {
+    width: 100%;
+    max-width: 860px;
+    height: auto;
+    display: block;
   }
   .hero .en-title {
+    margin-top: 36px;
     font-size: 14px;
     color: var(--accent);
     letter-spacing: 0.12em;
     font-weight: 500;
-    margin-bottom: 24px;
     text-transform: uppercase;
+    opacity: 0;
+    transform: translateY(12px);
+    transition: opacity 0.8s ease, transform 0.8s ease;
   }
-  .hero h1 {
-    font-family: "Noto Serif SC", Georgia, "Songti SC", serif;
-    font-size: clamp(44px, 7.5vw, 84px);
-    font-weight: 700;
-    line-height: 1.12;
-    animation: fadeUp 0.8s ease-out 0.1s both;
-  }
+  .hero .en-title.show { opacity: 1; transform: translateY(0); }
   .hero .intro {
-    margin-top: 24px;
+    margin-top: 14px;
     font-size: 16px;
     color: var(--ink-2);
     max-width: 480px;
     line-height: 1.9;
-    animation: fadeUp 0.8s ease-out 0.2s both;
+    opacity: 0;
+    transform: translateY(12px);
+    transition: opacity 0.8s ease, transform 0.8s ease;
   }
-  @keyframes fadeUp {
-    from { opacity: 0; transform: translateY(16px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
+  .hero .intro.show { opacity: 1; transform: translateY(0); }
   .scroll-hint {
-    margin-top: 48px;
+    margin-top: 44px;
     font-size: 14px;
     color: var(--ink-2);
-    opacity: 0.6;
-    animation: bounce 2s infinite, fadeUp 0.8s ease-out 0.4s both;
+    opacity: 0;
+    transform: translateY(8px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
   }
-  @keyframes bounce {
+  .scroll-hint.show { opacity: 0.6; transform: translateY(0); }
+  @keyframes bounceDown {
     0%, 100% { transform: translateY(0); }
     50% { transform: translateY(6px); }
   }
+  .scroll-hint .arrow { display: inline-block; animation: bounceDown 2s infinite; }
 
   /* ===== 进入按钮板块 ===== */
   .enter-section {
     padding: 96px 24px;
     text-align: center;
     border-top: 1px solid var(--line);
-    animation: fadeIn 0.8s ease-out;
   }
   .enter-section .kicker {
     font-size: 13px;
@@ -208,12 +236,8 @@
     padding: 80px 0;
     border-top: 1px solid var(--line);
   }
-  .section.alt {
-    background: #fff;
-  }
-  .section-head {
-    margin-bottom: 40px;
-  }
+  .section.alt { background: #fff; }
+  .section-head { margin-bottom: 48px; }
   .section-head .kicker {
     font-size: 13px;
     color: var(--accent);
@@ -234,13 +258,14 @@
     font-size: 15px;
   }
 
-  /* ===== 作品区 - 图文结合 ===== */
+  /* ===== 作品区 ===== */
   .grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     gap: 20px;
   }
   .card {
+    position: relative;
     display: flex;
     flex-direction: column;
     border: 1px solid var(--line);
@@ -256,12 +281,35 @@
     text-decoration: none;
   }
   .card .card-image {
+    position: relative;
     height: 160px;
     background: linear-gradient(135deg, #e0f2fe, #bae6fd);
     display: flex;
     align-items: center;
     justify-content: center;
     color: var(--accent);
+  }
+  .card-dl {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.92);
+    color: var(--ink-2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+    transition: all .15s;
+    z-index: 2;
+  }
+  .card-dl:hover {
+    background: var(--accent);
+    color: #fff;
+    transform: scale(1.06);
+    text-decoration: none;
   }
   .card .card-body {
     padding: 24px;
@@ -273,7 +321,6 @@
   .card h3 { font-size: 18px; font-weight: 600; }
   .card p { font-size: 14.5px; color: var(--ink-2); flex: 1; line-height: 1.7; }
   .card .meta { font-size: 13px; color: var(--accent); font-weight: 500; }
-
   .btn-more-wrap { text-align: center; margin-top: 36px; }
   .btn-more {
     display: inline-flex;
@@ -288,156 +335,122 @@
     font-weight: 500;
     cursor: pointer;
     transition: all .15s;
+    font-family: inherit;
   }
-  .btn-more:hover {
-    border-color: var(--accent);
-    color: var(--accent);
-  }
-  .hidden { display: none; }
+  .btn-more:hover { border-color: var(--accent); color: var(--accent); }
+  .hidden { display: none !important; }
 
-  /* ===== 快捷入口 ===== */
-  .quick-grid {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 16px;
-  }
-  .quick-item {
+  /* ===== 生活数据（ROG 错峰 + Apple 切换） ===== */
+  .data-stack { display: flex; flex-direction: column; gap: 28px; }
+  .data-card {
     display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 12px;
-    padding: 24px;
+    align-items: center;
+    gap: 40px;
+    padding: 36px 40px;
     background: #fff;
     border: 1px solid var(--line);
-    border-radius: 14px;
-    transition: all .15s;
+    border-radius: 20px;
+    overflow: hidden;
+    min-height: 190px;
   }
-  .quick-item:hover {
-    border-color: var(--accent);
-    transform: translateY(-2px);
-    text-decoration: none;
-  }
-  .quick-item .q-icon {
-    width: 44px;
-    height: 44px;
-    border-radius: 10px;
-    background: linear-gradient(135deg, #e0f2fe, #bae6fd);
+  .data-visual {
+    flex: 0 0 168px;
     display: flex;
     align-items: center;
     justify-content: center;
+  }
+  .data-card.pending .data-visual {
+    opacity: 0;
+    transform: translateY(-46px);
+  }
+  .data-card.pending.in-view .data-visual {
+    opacity: 1;
+    transform: translateY(0);
+    transition: opacity 0.55s ease, transform 0.55s cubic-bezier(0.22, 0.61, 0.36, 1);
+  }
+  .data-visual svg { width: 132px; height: 132px; }
+  .data-info {
+    flex: 1;
+  }
+  .data-card.pending .data-info {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+  .data-card.pending.in-view .data-info {
+    opacity: 1;
+    transform: translateY(0);
+    transition: opacity 0.6s ease 0.18s, transform 0.6s ease 0.18s;
+  }
+  .data-info h3 { font-size: 20px; font-weight: 600; display: flex; align-items: center; gap: 10px; }
+  .data-info h3 .tag {
+    font-size: 12px; font-weight: 500;
     color: var(--accent);
+    border: 1px solid rgba(2, 132, 199, 0.3);
+    background: rgba(2, 132, 199, 0.06);
+    padding: 2px 10px;
+    border-radius: 999px;
   }
-  .quick-item h4 { font-size: 15px; font-weight: 600; color: var(--ink); }
-  .quick-item p { font-size: 13px; color: var(--ink-2); line-height: 1.6; }
+  .data-number {
+    font-family: "Noto Serif SC", Georgia, serif;
+    font-size: 54px;
+    font-weight: 700;
+    line-height: 1.1;
+    margin: 10px 0 6px;
+    font-variant-numeric: tabular-nums;
+  }
+  .data-number small { font-size: 20px; color: var(--ink-2); font-weight: 600; margin-left: 4px; }
+  .data-desc { color: var(--ink-2); font-size: 14px; }
 
-  /* ===== 技能标签 ===== */
-  .skill-list {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 12px;
-  }
-  .skill-tag {
+  /* 我的世界 · Apple 风格切换 */
+  .mc-wrap { width: 100%; }
+  .mc-tabs {
     display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    padding: 10px 20px;
-    background: #fff;
-    border: 1px solid var(--line);
+    background: #F1F2F4;
+    border-radius: 999px;
+    padding: 4px;
+    gap: 4px;
+    margin-bottom: 22px;
+  }
+  .mc-tab {
+    border: 0;
+    background: transparent;
+    padding: 10px 22px;
     border-radius: 999px;
     font-size: 14px;
+    font-weight: 500;
     color: var(--ink-2);
-    transition: all .15s;
+    cursor: pointer;
+    min-height: 44px;
+    transition: all .25s;
+    font-family: inherit;
   }
-  .skill-tag:hover {
-    border-color: var(--accent);
-    color: var(--accent);
-    transform: translateY(-1px);
-  }
-
-  /* ===== 时间线 ===== */
-  .timeline {
-    position: relative;
-    padding-left: 32px;
-  }
-  .timeline::before {
-    content: "";
+  .mc-tab.active { background: #fff; color: var(--ink); box-shadow: 0 1px 6px rgba(0,0,0,0.1); }
+  .mc-panels { position: relative; min-height: 150px; }
+  .mc-panel {
     position: absolute;
-    left: 8px;
-    top: 8px;
-    bottom: 8px;
-    width: 2px;
-    background: var(--line);
+    inset: 0;
+    opacity: 0;
+    transform: translateY(10px) scale(0.985);
+    pointer-events: none;
+    transition: opacity 0.45s ease, transform 0.45s ease;
   }
-  .timeline-item {
+  .mc-panel.active {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    pointer-events: all;
     position: relative;
-    padding-bottom: 32px;
-    animation: fadeUp 0.6s ease-out both;
   }
-  .timeline-item:nth-child(2) { animation-delay: 0.1s; }
-  .timeline-item:nth-child(3) { animation-delay: 0.2s; }
-  .timeline-item:last-child { padding-bottom: 0; }
-  .timeline-item::before {
-    content: "";
-    position: absolute;
-    left: -32px;
-    top: 8px;
-    width: 18px;
-    height: 18px;
-    border-radius: 50%;
-    background: #fff;
-    border: 3px solid var(--accent);
+  .mc-metrics { display: flex; gap: 36px; flex-wrap: wrap; }
+  .mc-metric .m-val {
+    font-family: "Noto Serif SC", Georgia, serif;
+    font-size: 40px;
+    font-weight: 700;
+    line-height: 1.1;
+    font-variant-numeric: tabular-nums;
   }
-  .timeline-item .year {
-    font-size: 13px;
-    color: var(--accent);
-    font-weight: 600;
-    margin-bottom: 4px;
-  }
-  .timeline-item h4 {
-    font-size: 17px;
-    font-weight: 600;
-    margin-bottom: 6px;
-  }
-  .timeline-item p {
-    font-size: 14px;
-    color: var(--ink-2);
-    line-height: 1.7;
-  }
-
-  /* ===== 联系方式 ===== */
-  .contact-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 16px;
-  }
-  .contact-card {
-    display: flex;
-    align-items: center;
-    gap: 16px;
-    padding: 24px;
-    background: #fff;
-    border: 1px solid var(--line);
-    border-radius: 14px;
-    transition: all .15s;
-  }
-  .contact-card:hover {
-    border-color: var(--accent);
-    transform: translateY(-2px);
-    text-decoration: none;
-  }
-  .contact-card .c-icon {
-    width: 48px;
-    height: 48px;
-    border-radius: 12px;
-    background: linear-gradient(135deg, #e0f2fe, #bae6fd);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: var(--accent);
-    flex-shrink: 0;
-  }
-  .contact-card h4 { font-size: 15px; font-weight: 600; color: var(--ink); }
-  .contact-card p { font-size: 13px; color: var(--ink-2); }
+  .mc-metric .m-val small { font-size: 16px; color: var(--ink-2); font-weight: 600; margin-left: 3px; }
+  .mc-metric .m-label { font-size: 13px; color: var(--ink-2); margin-top: 4px; }
+  .mc-note { margin-top: 14px; font-size: 13px; color: var(--ink-2); opacity: 0.8; }
 
   /* ===== Footer ===== */
   footer {
@@ -493,30 +506,47 @@
     height: 0.72em;
   }
 
+  /* ===== Toast ===== */
+  .toast {
+    position: fixed;
+    left: 50%;
+    bottom: 40px;
+    transform: translateX(-50%) translateY(20px);
+    background: var(--ink);
+    color: #fff;
+    padding: 12px 24px;
+    border-radius: 999px;
+    font-size: 14px;
+    z-index: 10000;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity .3s ease, transform .3s ease;
+  }
+  .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
   @media (max-width: 820px) {
     .grid { grid-template-columns: 1fr; }
-    .quick-grid { grid-template-columns: repeat(2, 1fr); }
-    .contact-grid { grid-template-columns: 1fr; }
     .footer-grid { grid-template-columns: 1fr 1fr; gap: 32px; }
+    .data-card { flex-direction: column; gap: 24px; padding: 32px 24px; text-align: center; }
+    .data-visual { flex-basis: auto; }
+    .data-number { font-size: 46px; }
+    .mc-metrics { justify-content: center; }
   }
   @media (max-width: 520px) {
     .footer-grid { grid-template-columns: 1fr; }
-    .hero h1 { font-size: 40px; }
     .enter-section { padding: 60px 20px; }
     .section { padding: 60px 0; }
-    .quick-grid { grid-template-columns: 1fr; }
     .loading-bar { width: 260px; }
+    .lang-roamer { font-size: 21px; }
   }
   @media (prefers-reduced-motion: reduce) {
     html { scroll-behavior: auto; }
-    .card, .quick-item, .contact-card, .btn-enter, .btn-more, .skill-tag { transition: none; }
-    .scroll-hint { animation: none; }
-    .hero h1, .hero .intro, .scroll-hint, .timeline-item { animation: none; }
+    .card, .btn-enter, .btn-more, .card-dl, .mc-tab { transition: none; }
+    .scroll-hint .arrow { animation: none; }
   }
 </style>
 </head>
 <body>
-
 <!-- 伪进度条加载遮罩 -->
 <div class="loading-overlay" id="loadingOverlay">
   <p class="load-title" id="loadTitle">正在进入</p>
@@ -526,17 +556,22 @@
   <p class="loading-percent" id="loadPercent">0%</p>
   <p class="loading-hint">稍等片刻，马上就好…</p>
 </div>
+<div class="toast" id="toast"></div>
 
-<!-- 首屏 -->
-<section class="hero">
-  <p class="en-title">Welcome to Yaule's Space</p>
-  <h1>欢迎你的到来</h1>
-  <p class="intro">这里是我的个人小角落，记录着爱好、作品与日常。不紧不慢，慢慢翻就好。</p>
-  <p class="scroll-hint">向下滑动 ↓</p>
+<!-- 首屏：苹果激活 · 全世界语言的问候 · 手写欢迎 -->
+<section class="hero" id="hero">
+  <h1 class="sr-only">欢迎你的到来</h1>
+  <p class="lang-roamer" id="langRoamer"></p>
+  <div class="handwrite-wrap">
+    <canvas class="handwrite-canvas" id="handwrite"></canvas>
+  </div>
+  <p class="en-title" id="enTitle">Welcome to Yaule's Space</p>
+  <p class="intro" id="intro">这里是我的个人小角落，记录着咖啡、音乐、游戏与作品。不紧不慢，慢慢翻就好。</p>
+  <p class="scroll-hint" id="scrollHint">向下滑动 <span class="arrow">↓</span></p>
 </section>
 
 <!-- 进入按钮板块 -->
-<section class="enter-section">
+<section class="enter-section" id="enter">
   <div class="wrap">
     <p class="kicker">PERSONAL SPACE</p>
     <h2>失眠夜 · 个人空间</h2>
@@ -554,69 +589,93 @@
     <div class="section-head">
       <p class="kicker">PROJECTS</p>
       <h2>精选作品</h2>
-      <p class="desc">从校园工具到游戏辅助，都是一点点写出来的小玩意。</p>
+      <p class="desc">从校园工具到游戏辅助，都是一点点写出来的小玩意。点卡片打开，点右上角下载。</p>
     </div>
     <div class="grid">
-      <a class="card" href="Xinghua%20Middle%20School%20Broadcasting%20Station%20System.html" target="_blank" rel="noopener" data-loading="正在加载作品">
-        <div class="card-image">
+      <div class="card">
+        <a class="card-image" href="Xinghua%20Middle%20School%20Broadcasting%20Station%20System.html" target="_blank" rel="noopener" data-loading="正在加载作品">
           <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 18v-6a9 9 0 0 1 18 0v6"/><path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z"/></svg>
-        </div>
+          
+        </a>
+          <a class="card-dl" href="Xinghua%20Middle%20School%20Broadcasting%20Station%20System.html" download="Xinghua Middle School Broadcasting Station System.html" title="下载作品">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          </a>
         <div class="card-body">
           <h3>兴华中学广播站系统</h3>
           <p>广播排班管理、播放日程控制、站点信息维护，独立设计开发并投入校园实际使用。</p>
           <span class="meta">查看详情 →</span>
         </div>
-      </a>
-      <a class="card" href="Self-service%20accounting%20system%20Pro%20Enhanced%20V6.html" target="_blank" rel="noopener" data-loading="正在加载作品">
-        <div class="card-image">
+      </div>
+      <div class="card">
+        <a class="card-image" href="Self-service%20accounting%20system%20Pro%20Enhanced%20V6.html" target="_blank" rel="noopener" data-loading="正在加载作品">
           <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="2" width="16" height="20" rx="2"/><path d="M8 6h8M8 10h8M8 14h5"/></svg>
-        </div>
+          
+        </a>
+          <a class="card-dl" href="Self-service%20accounting%20system%20Pro%20Enhanced%20V6.html" download="Self-service accounting system Pro Enhanced V6.html" title="下载作品">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          </a>
         <div class="card-body">
           <h3>自助记账系统</h3>
           <p>收支记录、分类统计、数据可视化，轻量化单文件本地工具，开箱即用。</p>
           <span class="meta">查看详情 →</span>
         </div>
-      </a>
-      <a class="card" href="Nayingte%20M4e%20Code%20Writing%20System%20V2.9Pro.html" target="_blank" rel="noopener" data-loading="正在加载作品">
-        <div class="card-image">
+      </div>
+      <div class="card">
+        <a class="card-image" href="Nayingte%20M4e%20Code%20Writing%20System%20V2.9Pro.html" target="_blank" rel="noopener" data-loading="正在加载作品">
           <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
-        </div>
+          
+        </a>
+          <a class="card-dl" href="Nayingte%20M4e%20Code%20Writing%20System%20V2.9Pro.html" download="Nayingte M4e Code Writing System V2.9Pro.html" title="下载作品">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          </a>
         <div class="card-body">
           <h3>代码编写系统</h3>
           <p>可视化拖拽生成 C++ 代码，降低编程入门门槛，助力机器人编程学习。</p>
           <span class="meta">查看详情 →</span>
         </div>
-      </a>
-      <a class="card" href="Fancy-Pattern-Emoji-to-Image-Converter.html" target="_blank" rel="noopener" data-loading="正在加载作品">
-        <div class="card-image">
+      </div>
+      <div class="card">
+        <a class="card-image" href="Fancy-Pattern-Emoji-to-Image-Converter.html" target="_blank" rel="noopener" data-loading="正在加载作品">
           <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="9" cy="9" r="2"/><path d="M21 15l-5-5L5 21"/></svg>
-        </div>
+          
+        </a>
+          <a class="card-dl" href="Fancy-Pattern-Emoji-to-Image-Converter.html" download="Fancy-Pattern-Emoji-to-Image-Converter.html" title="下载作品">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          </a>
         <div class="card-body">
           <h3>表情转图片转换器</h3>
           <p>文字、表情符号一键转图片，支持自定义背景与文字颜色，导出高清 PNG。</p>
           <span class="meta">查看详情 →</span>
         </div>
-      </a>
-      <a class="card hidden" href="CS-Sens-Calibrator.html" target="_blank" rel="noopener" data-loading="正在加载作品">
-        <div class="card-image">
+      </div>
+      <div class="card hidden">
+        <a class="card-image" href="CS-Sens-Calibrator.html" target="_blank" rel="noopener" data-loading="正在加载作品">
           <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>
-        </div>
+          
+        </a>
+          <a class="card-dl" href="CS-Sens-Calibrator.html" download="CS-Sens-Calibrator.html" title="下载作品">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          </a>
         <div class="card-body">
           <h3>CS 灵敏度校准</h3>
           <p>输入 DPI 与灵敏度参数，智能评估输出最佳游戏鼠标灵敏度。</p>
           <span class="meta">查看详情 →</span>
         </div>
-      </a>
-      <a class="card hidden" href="Chess-Gomoku-Collection.html" target="_blank" rel="noopener" data-loading="正在加载作品">
-        <div class="card-image">
+      </div>
+      <div class="card hidden">
+        <a class="card-image" href="Chess-Gomoku-Collection.html" target="_blank" rel="noopener" data-loading="正在加载作品">
           <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8" cy="8" r="1.5"/><circle cx="16" cy="16" r="1.5"/><circle cx="16" cy="8" r="1.5"/><circle cx="8" cy="16" r="1.5"/></svg>
-        </div>
+          
+        </a>
+          <a class="card-dl" href="Chess-Gomoku-Collection.html" download="Chess-Gomoku-Collection.html" title="下载作品">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          </a>
         <div class="card-body">
           <h3>棋类合集</h3>
           <p>五子棋与中国象棋，本地运行，无需联网。</p>
           <span class="meta">查看详情 →</span>
         </div>
-      </a>
+      </div>
     </div>
     <div class="btn-more-wrap">
       <button class="btn-more" id="btnMore">查看更多 ↓</button>
@@ -624,91 +683,111 @@
   </div>
 </section>
 
-<!-- 板块 3：技能标签 -->
-<section class="section alt">
+<!-- 板块 2：生活数据（咖啡 · 音乐 · 游戏） -->
+<section class="section alt" id="life">
   <div class="wrap">
     <div class="section-head">
-      <p class="kicker">SKILLS</p>
-      <h2>擅长的事</h2>
-      <p class="desc">写过的代码、玩过的工具、折腾过的领域。</p>
+      <p class="kicker">LIFE DATA</p>
+      <h2>生活数据</h2>
+      <p class="desc">一些悄悄累积的数字，随时间慢慢长大。</p>
     </div>
-    <div class="skill-list">
-      <span class="skill-tag">HTML / CSS</span>
-      <span class="skill-tag">JavaScript</span>
-      <span class="skill-tag">Python</span>
-      <span class="skill-tag">C++</span>
-      <span class="skill-tag">机器人</span>
-      <span class="skill-tag">效率工具</span>
-      <span class="skill-tag">下棋</span>
-      <span class="skill-tag">CS 游戏</span>
-    </div>
-  </div>
-</section>
-
-<!-- 板块 4：时间线 -->
-<section class="section">
-  <div class="wrap">
-    <div class="section-head">
-      <p class="kicker">JOURNEY</p>
-      <h2>走过的路</h2>
-      <p class="desc">一些值得记下来的节点。</p>
-    </div>
-    <div class="timeline">
-      <div class="timeline-item">
-        <p class="year">2024</p>
-        <h4>广播站系统上线</h4>
-        <p>独立设计开发的校园广播站系统正式投入使用，覆盖排班管理与播放日程控制。</p>
+    <div class="data-stack">
+      <!-- 瑞幸咖啡 -->
+      <div class="data-card" id="cardLuckin">
+        <div class="data-visual">
+          <svg viewBox="0 0 200 200" fill="none" stroke="#17181C" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
+            <!-- 瑞幸风格鹿头线稿 -->
+            <path d="M70 118 c-4 -26 6 -48 26 -58 c6 -3 12 -4 18 -3 c8 -12 22 -18 34 -16 c-2 8 -8 14 -16 16 c8 1 16 4 22 10 c-6 4 -14 5 -20 2 c8 6 13 14 14 24 c-8 -1 -15 -6 -19 -12 c0 14 -7 27 -18 35 c-14 10 -32 12 -41 2 z"/>
+            <path d="M92 62 c4 -2 8 -4 10 -8"/>
+            <path d="M122 68 c5 -1 9 -2 12 -5"/>
+            <circle cx="70" cy="118" r="3"/>
+            <circle cx="88" cy="122" r="3"/>
+            <circle cx="106" cy="118" r="3"/>
+            <!-- 咖啡杯 -->
+            <path d="M58 136 h72 a10 10 0 0 1 10 10 v8 a34 34 0 0 1 -34 34 h-24 a34 34 0 0 1 -34 -34 v-8 a10 10 0 0 1 10 -10 z"/>
+            <path d="M140 150 h10 a12 12 0 0 1 0 24 h-12"/>
+            <path d="M70 100 c0 -10 14 -10 14 -20 c0 10 14 10 14 20"/>
+            <path d="M112 130 c10 -2 18 -8 22 -16"/>
+          </svg>
+        </div>
+        <div class="data-info">
+          <h3>瑞幸咖啡 <span class="tag">续命中</span></h3>
+          <div class="data-number" id="cups">176<small>杯</small></div>
+          <p class="data-desc">已喝掉的咖啡 · 每 3 天多喝一杯</p>
+        </div>
       </div>
-      <div class="timeline-item">
-        <p class="year">2023</p>
-        <h4>代码编写系统</h4>
-        <p>为机器人学习开发可视化拖拽代码生成工具，降低 C++ 编程入门门槛。</p>
+      <!-- 网易云音乐 -->
+      <div class="data-card" id="cardMusic">
+        <div class="data-visual">
+          <svg viewBox="0 0 200 200" fill="none" stroke="#17181C" stroke-width="5" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="100" cy="100" r="68"/>
+            <circle cx="100" cy="100" r="44"/>
+            <circle cx="100" cy="100" r="10" fill="#17181C"/>
+            <path d="M132 62 c14 14 22 32 22 52 c0 26 -18 46 -42 50"/>
+            <path d="M144 48 l8 12"/>
+            <path d="M156 58 l6 9"/>
+          </svg>
+        </div>
+        <div class="data-info">
+          <h3>网易云音乐 <span class="tag">循环播放中</span></h3>
+          <div class="data-number"><span id="songs">305</span><small>首</small></div>
+          <p class="data-desc">累计收听 <span id="hours">2000</span>+ 小时 · 每 2 天多听 25.7 小时</p>
+        </div>
       </div>
-      <div class="timeline-item">
-        <p class="year">2022</p>
-        <h4>第一个开源项目</h4>
-        <p>把自己写的小工具陆续放到 GitHub 上，开始记录折腾的过程。</p>
+      <!-- 我的世界 -->
+      <div class="data-card" id="cardMC">
+        <div class="data-visual">
+          <svg viewBox="0 0 200 200" fill="none" stroke="#17181C" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M60 30 h80 l30 30 v100 l-30 30 h-80 l-30 -30 v-100 z"/>
+            <path d="M60 30 l40 40 v80 l-40 40 M140 30 l-40 40 v80 l40 40 M30 60 l40 40 h80 l40 -40 M30 140 l40 -40 h80 l40 40"/>
+            <path d="M70 70 h20 v20 h-20 z M110 100 h20 v20 h-20 z"/>
+          </svg>
+        </div>
+        <div class="data-info">
+          <div class="mc-wrap">
+            <div class="mc-tabs" role="tablist">
+              <button class="mc-tab active" data-server="bjd" role="tab">布吉岛</button>
+              <button class="mc-tab" data-server="hyt" role="tab">花雨亭</button>
+            </div>
+            <div class="mc-panels">
+              <div class="mc-panel active" id="panelBJD">
+                <div class="mc-metrics">
+                  <div class="mc-metric">
+                    <div class="m-val" id="mcBjdGames">128<small>局</small></div>
+                    <div class="m-label">游戏对局</div>
+                  </div>
+                  <div class="mc-metric">
+                    <div class="m-val" id="mcBjdHours">864<small>h</small></div>
+                    <div class="m-label">在线时长</div>
+                  </div>
+                  <div class="mc-metric">
+                    <div class="m-val" id="mcBjdWins">76<small>胜</small></div>
+                    <div class="m-label">胜场</div>
+                  </div>
+                </div>
+                <p class="mc-note">生存、建筑与联机日常，记录仍在继续。</p>
+              </div>
+              <div class="mc-panel" id="panelHYT">
+                <div class="mc-metrics">
+                  <div class="mc-metric">
+                    <div class="m-val" id="mcHytGames">205<small>局</small></div>
+                    <div class="m-label">游戏对局</div>
+                  </div>
+                  <div class="mc-metric">
+                    <div class="m-val" id="mcHytHours">1216<small>h</small></div>
+                    <div class="m-label">在线时长</div>
+                  </div>
+                  <div class="mc-metric">
+                    <div class="m-val" id="mcHytWins">118<small>胜</small></div>
+                    <div class="m-label">胜场</div>
+                  </div>
+                </div>
+                <p class="mc-note">花雨亭已停服，数据定格在停服前一天。</p>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
-    </div>
-  </div>
-</section>
-
-<!-- 板块 5：联系方式 -->
-<section class="section alt">
-  <div class="wrap">
-    <div class="section-head">
-      <p class="kicker">CONTACT</p>
-      <h2>联系我</h2>
-      <p class="desc">有什么想说的，随时找我。</p>
-    </div>
-    <div class="contact-grid">
-      <a class="contact-card" href="mailto:1957784559@qq.com">
-        <div class="c-icon">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
-        </div>
-        <div>
-          <h4>邮箱</h4>
-          <p>1957784559@qq.com</p>
-        </div>
-      </a>
-      <a class="contact-card" href="https://github.com/Yaule-Rate" target="_blank" rel="noopener">
-        <div class="c-icon">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
-        </div>
-        <div>
-          <h4>GitHub</h4>
-          <p>@Yaule-Rate</p>
-        </div>
-      </a>
-      <a class="contact-card" href="space.html#guestbook" data-loading="正在进入个人空间">
-        <div class="c-icon">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
-        </div>
-        <div>
-          <h4>留言板</h4>
-          <p>在个人空间里留个言</p>
-        </div>
-      </a>
     </div>
   </div>
 </section>
@@ -724,9 +803,10 @@
       <div class="footer-col">
         <h4>导航</h4>
         <ul>
-          <li><a href="#top">首页</a></li>
+          <li><a href="#hero">首页</a></li>
           <li><a href="space.html">个人空间</a></li>
           <li><a href="#works">项目</a></li>
+          <li><a href="#life">生活数据</a></li>
         </ul>
       </div>
       <div class="footer-col">
@@ -752,64 +832,401 @@
   </div>
   <span class="footer-word" aria-hidden="true">Yaule</span>
 </footer>
-
 <script>
   document.getElementById('year').textContent = new Date().getFullYear();
 
-  // 查看更多按钮
+  /* ========== Toast ========== */
+  var toastEl = document.getElementById('toast');
+  var toastTimer = null;
+  function showToast(msg) {
+    toastEl.textContent = msg;
+    toastEl.classList.add('show');
+    if (toastTimer) clearTimeout(toastTimer);
+    toastTimer = setTimeout(function () { toastEl.classList.remove('show'); }, 2600);
+  }
+
+  /* ========== 查看更多按钮 ========== */
   var btn = document.getElementById('btnMore');
   var hiddenCards = document.querySelectorAll('.card.hidden');
   var expanded = false;
   btn.addEventListener('click', function () {
     expanded = !expanded;
-    hiddenCards.forEach(function (c) {
-      c.classList.toggle('hidden', !expanded);
-    });
+    hiddenCards.forEach(function (c) { c.classList.toggle('hidden', !expanded); });
     btn.textContent = expanded ? '收起 ↑' : '查看更多 ↓';
   });
 
-  // 伪进度条加载
+  /* ========== 伪进度条加载（修复：新标签页打开后自动隐藏 + bfcache 返回残留） ========== */
   var overlay = document.getElementById('loadingOverlay');
   var loadBar = document.getElementById('loadBar');
   var loadPercent = document.getElementById('loadPercent');
   var loadTitle = document.getElementById('loadTitle');
   var loadTimer = null;
 
-  function startLoading(targetUrl, title) {
+  function hideLoading() {
+    overlay.classList.remove('active');
+    if (loadTimer) { clearInterval(loadTimer); loadTimer = null; }
+    loadBar.style.width = '0%';
+    loadPercent.textContent = '0%';
+  }
+
+  function startLoading(targetUrl, title, openInNew) {
     loadTitle.textContent = title || '正在进入';
     overlay.classList.add('active');
     var progress = 0;
     loadBar.style.width = '0%';
     loadPercent.textContent = '0%';
-
     loadTimer = setInterval(function () {
       progress += Math.random() * 3;
       if (progress > 95) progress = 95;
       loadBar.style.width = progress + '%';
       loadPercent.textContent = Math.floor(progress) + '%';
     }, 100);
-
-    // 35秒后跳转
     setTimeout(function () {
-      clearInterval(loadTimer);
+      clearInterval(loadTimer); loadTimer = null;
       loadBar.style.width = '100%';
       loadPercent.textContent = '100%';
       setTimeout(function () {
-        window.location.href = targetUrl;
+        if (openInNew) {
+          window.open(targetUrl, '_blank');
+          hideLoading();
+          showToast('已在新标签页打开');
+        } else {
+          window.location.href = targetUrl;
+        }
       }, 300);
     }, 5000);
   }
 
-  // 绑定所有带 data-loading 的链接
   document.querySelectorAll('a[data-loading]').forEach(function (link) {
     link.addEventListener('click', function (e) {
       e.preventDefault();
       var title = this.getAttribute('data-loading');
       var url = this.getAttribute('href');
-      startLoading(url, title);
+      var openInNew = this.getAttribute('target') === '_blank';
+      startLoading(url, title, openInNew);
     });
   });
-</script>
 
+  // 修复：浏览器后退（bfcache 恢复）时进度条残留
+  window.addEventListener('pageshow', function (e) {
+    if (e.persisted || overlay.classList.contains('active')) hideLoading();
+  });
+
+  /* ========== 下载按钮（不触发进度条，直接下载） ========== */
+  document.querySelectorAll('.card-dl').forEach(function (dl) {
+    dl.addEventListener('click', function (e) {
+      e.stopPropagation();
+      e.preventDefault();
+      var url = this.getAttribute('href');
+      var name = this.getAttribute('download') || 'download.html';
+      var a = document.createElement('a');
+      a.href = url;
+      a.download = name;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      showToast('开始下载 ' + name);
+    });
+  });
+
+  /* ========== 首屏：苹果激活式语言轮播 + 手写动画 ========== */
+  (function () {
+    var langs = ['Hello', 'Bonjour', 'Hola', 'こんにちは', '안녕하세요', 'Hallo', 'Ciao', 'Привет', 'مرحبا', '你好'];
+    var roamer = document.getElementById('langRoamer');
+    var canvas = document.getElementById('handwrite');
+    var ctx = canvas.getContext('2d');
+    var enTitle = document.getElementById('enTitle');
+    var intro = document.getElementById('intro');
+    var scrollHint = document.getElementById('scrollHint');
+
+    // 每笔 = 点序列，每 3 点一组构成二次贝塞尔段。坐标网格 700×120，字高约 100。
+    var STROKES = [
+      [/* 欢 */
+        [[16,30],[38,28],[32,66]],
+        [[20,44],[32,60],[44,70]],
+        [[50,18],[54,34],[57,50],[55,58],[53,62]],
+        [[58,24],[68,23],[78,22],[76,36],[74,50]],
+        [[56,56],[59,66],[62,76]],
+        [[62,52],[74,66],[86,78]]
+      ],
+      [/* 迎 */
+        [[12,18],[15,23],[17,28]],
+        [[17,28],[33,29],[50,30],[41,40],[32,52],[38,62],[44,72]],
+        [[44,72],[61,75],[78,78],[83,80],[88,82]],
+        [[52,18],[52,29],[52,40],[62,40],[72,40]],
+        [[66,40],[66,56],[66,72],[73,66],[80,62]],
+        [[56,44],[56,61],[56,78],[63,82],[70,86]],
+        [[78,44],[78,64],[78,84]]
+      ],
+      [/* 你 */
+        [[15,14],[14,31],[13,48]],
+        [[21,26],[21,53],[21,80]],
+        [[33,10],[39,28],[45,46]],
+        [[36,26],[47,25],[58,24],[53,34],[48,44]],
+        [[46,46],[46,59],[46,72],[48,75],[50,78]],
+        [[56,50],[58,55],[61,60]],
+        [[66,54],[68,59],[71,64]]
+      ],
+      [/* 的 */
+        [[15,16],[13,33],[12,50]],
+        [[23,10],[23,44],[23,78]],
+        [[23,20],[37,20],[52,20],[51,44],[50,68],[47,71],[45,74]],
+        [[27,36],[37,36],[48,36]],
+        [[27,52],[37,52],[48,52]],
+        [[60,14],[58,34],[56,54]],
+        [[64,24],[74,23],[84,22],[83,44],[82,66],[78,71],[74,76]],
+        [[78,42],[75,48],[73,54]]
+      ],
+      [/* 到 */
+        [[12,16],[28,16],[44,16]],
+        [[16,26],[26,33],[36,40],[26,41],[16,42]],
+        [[40,42],[38,47],[36,52]],
+        [[14,52],[28,52],[42,52]],
+        [[28,18],[28,43],[28,68]],
+        [[12,66],[28,66],[44,66]],
+        [[58,12],[58,45],[58,78],[61,81],[64,84]],
+        [[76,16],[76,48],[76,80]]
+      ],
+      [/* 来 */
+        [[14,14],[33,14],[52,14]],
+        [[27,22],[25,27],[23,32]],
+        [[41,22],[43,27],[45,32]],
+        [[12,40],[33,40],[54,40]],
+        [[33,18],[33,49],[33,80]],
+        [[33,48],[25,66],[18,84]],
+        [[33,48],[40,66],[48,84]]
+      ]
+    ];
+
+    var W = 700, H = 120; // 内部网格
+
+    function segsOfStroke(stroke) {
+      var segs = [];
+      for (var i = 0; i + 2 < stroke.length;) {
+        segs.push([stroke[i], stroke[i + 1], stroke[i + 2]]);
+        i += 3;
+      }
+      return segs;
+    }
+    // 预计算：字 → 段列表（带长度）
+    var words = STROKES.map(function (strokeList) {
+      var all = [];
+      strokeList.forEach(function (stroke) {
+        segsOfStroke(stroke).forEach(function (seg) {
+          var len = Math.hypot(seg[1][0] - seg[0][0], seg[1][1] - seg[0][1]) +
+                    Math.hypot(seg[2][0] - seg[1][0], seg[2][1] - seg[1][1]);
+          all.push({ seg: seg, len: len });
+        });
+      });
+      return all;
+    });
+    // 每个字的起始时间（秒）：前字总时间 + 间隔
+    var WORD_TIME = 1.15, GAP = 0.3;
+    var wordStart = [];
+    var t = 0;
+    words.forEach(function () {
+      wordStart.push(t);
+      t += WORD_TIME + GAP;
+    });
+    var TOTAL = t - GAP;
+
+    var state = { running: false, start: 0, done: false };
+
+    function bezXY(seg, tt) {
+      var p0 = seg[0], c = seg[1], p1 = seg[2];
+      var u = 1 - tt;
+      return [u * u * p0[0] + 2 * u * tt * c[0] + tt * tt * p1[0],
+              u * u * p0[1] + 2 * u * tt * c[1] + tt * tt * p1[1]];
+    }
+
+    function drawSegPart(seg, tt, s) {
+      ctx.beginPath();
+      var N = 22;
+      for (var i = 0; i <= N; i++) {
+        var p = bezXY(seg, (i / N) * tt);
+        if (i === 0) ctx.moveTo(p[0] * s, p[1] * s);
+        else ctx.lineTo(p[0] * s, p[1] * s);
+      }
+      ctx.stroke();
+    }
+
+    function drawWord(wIdx, scale) {
+      words[wIdx].forEach(function (s) { drawSegPart(s.seg, 1, scale); });
+    }
+
+    function drawPen(p, scale) {
+      ctx.beginPath();
+      ctx.fillStyle = '#0f766e';
+      ctx.arc(p[0] * scale, p[1] * scale, 4.5 * scale, 0, Math.PI * 2);
+      ctx.fill();
+    }
+
+    function drawFrame(now) {
+      var el = (now - state.start) / 1000;
+      if (el >= TOTAL) { finishWrite(); return; }
+      // 找当前字
+      var wIdx = 0;
+      while (wIdx < words.length - 1 && el >= wordStart[wIdx] + WORD_TIME + GAP) wIdx++;
+      var inChar = el - wordStart[wIdx];
+      var isGap = inChar > WORD_TIME;
+      var wd = words[wIdx];
+      var totalLen = wd.reduce(function (a, s) { return a + s.len; }, 0);
+
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.lineCap = 'round';
+      ctx.lineJoin = 'round';
+
+      var scale = canvas.width / W;
+
+      if (isGap) {
+        drawWord(wIdx, scale);
+        var nextW = wIdx + 1;
+        if (nextW < words.length) {
+          var target = words[nextW][0].seg[0];
+          var gapP = (inChar - WORD_TIME) / GAP;
+          var lastSeg = wd[wd.length - 1].seg;
+          var from = bezXY(lastSeg, 1);
+          drawPen([from[0] + (target[0] - from[0]) * gapP,
+                   from[1] + (target[1] - from[1]) * gapP], scale);
+        }
+      } else {
+        var acc = 0;
+        var pen = null;
+        for (var i = 0; i < wd.length; i++) {
+          var s = wd[i];
+          var segDur = (s.len / totalLen) * WORD_TIME;
+          if (inChar >= acc + segDur) {
+            drawSegPart(s.seg, 1, scale);
+            acc += segDur;
+          } else if (inChar > acc) {
+            var tt = (inChar - acc) / segDur;
+            drawSegPart(s.seg, tt, scale);
+            pen = bezXY(s.seg, tt);
+            break;
+          } else {
+            break;
+          }
+        }
+        if (!pen) pen = wd[0].seg[0];
+        drawPen(pen, scale);
+      }
+      requestAnimationFrame(drawFrame);
+    }
+
+    function resizeCanvas() {
+      var wrapW = Math.min(canvas.parentElement.clientWidth, 860);
+      canvas.style.width = wrapW + 'px';
+      canvas.style.height = Math.round(wrapW * (H / W)) + 'px';
+      var dpr = window.devicePixelRatio || 1;
+      canvas.width = Math.round(wrapW * dpr);
+      canvas.height = Math.round(wrapW * (H / W) * dpr);
+      ctx.setTransform(1, 0, 0, 1, 0, 0);
+    }
+
+    function finishWrite() {
+      state.done = true;
+      state.running = false;
+      var scale = canvas.width / W;
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      words.forEach(function (wd, wi) { drawWord(wi, scale); });
+      enTitle.classList.add('show');
+      intro.classList.add('show');
+      scrollHint.classList.add('show');
+    }
+
+    function startHandWrite() {
+      resizeCanvas();
+      ctx.lineWidth = 8 * (canvas.width / W);
+      ctx.strokeStyle = '#0f766e';
+      state.running = true;
+      state.done = false;
+      state.start = performance.now();
+      requestAnimationFrame(drawFrame);
+    }
+
+    // 语言轮播（苹果激活风格）
+    var li = 0;
+    function roamNext() {
+      if (li >= langs.length) {
+        roamer.style.opacity = 0;
+        setTimeout(startHandWrite, 350);
+        return;
+      }
+      roamer.textContent = langs[li];
+      roamer.classList.add('show');
+      li++;
+      setTimeout(function () {
+        roamer.classList.remove('show');
+        setTimeout(roamNext, 450);
+      }, 850);
+    }
+    setTimeout(roamNext, 300);
+
+    window.addEventListener('resize', function () {
+      if (!state.running) {
+        resizeCanvas();
+        if (state.done) finishWrite();
+      }
+    });
+  })();
+
+  /* ========== 生活数据（动态累计） ========== */
+  (function () {
+    // 锚点：2026-09-24，与上线日对齐；之后随时间自动增长
+    var ANCHOR = new Date(2026, 8, 24);
+    var d = Math.max(0, Math.floor((Date.now() - ANCHOR.getTime()) / 86400000));
+    var cups = 176 + Math.floor(d / 3);
+    var songs = 305 + Math.floor(d / 2);
+    var hours = 2000 + Math.floor(d / 2) * 25.7;
+    document.getElementById('cups').innerHTML = cups + '<small>杯</small>';
+    document.getElementById('songs').textContent = songs;
+    document.getElementById('hours').textContent = Math.floor(hours);
+  })();
+
+  /* ========== ROG 幻16 式错峰滚动（图标先下移进入，文字随后浮现） ========== */
+  (function () {
+    var cards = document.querySelectorAll('.data-card');
+    if (!('IntersectionObserver' in window)) return;
+    // 先挂 pending（默认隐藏待动画），IO 不可用时保持可见
+    cards.forEach(function (c) { c.classList.add('pending'); });
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('in-view');
+          io.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.1, rootMargin: '0px 0px -8% 0px' });
+    cards.forEach(function (c) { io.observe(c); });
+    // 兜底：页面加载后 2.5s，仍在首屏附近或已滚过的卡片直接显示
+    setTimeout(function () {
+      cards.forEach(function (c) {
+        if (!c.classList.contains('in-view')) {
+          var r = c.getBoundingClientRect();
+          if (r.top < window.innerHeight) c.classList.add('in-view');
+        }
+      });
+    }, 2500);
+  })();
+
+  /* ========== 我的世界 · Apple 风格切换 ========== */
+  (function () {
+    var tabs = document.querySelectorAll('.mc-tab');
+    var panels = {
+      bjd: document.getElementById('panelBJD'),
+      hyt: document.getElementById('panelHYT')
+    };
+    tabs.forEach(function (tab) {
+      tab.addEventListener('click', function () {
+        tabs.forEach(function (t) { t.classList.remove('active'); });
+        this.classList.add('active');
+        var key = this.getAttribute('data-server');
+        Object.keys(panels).forEach(function (k) {
+          panels[k].classList.toggle('active', k === key);
+        });
+      });
+    });
+  })();
+</script>
 </body>
 </html>
