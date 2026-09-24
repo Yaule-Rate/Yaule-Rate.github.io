@@ -941,17 +941,15 @@
     });
   });
 
-  /* ========== 首屏：全世界语言的欢迎轮播 ========== */
+  /* ========== 首屏：全世界语言的欢迎轮播（循环）+ 小字逐字打字机 ========== */
   (function () {
     var langs = [
       ['Welcome to You', '英语'],
       ['Bienvenue à toi', '法语'],
       ['Bienvenido a ti', '西班牙语'],
-      ['Willkommen bei dir', '德语'],
       ['Benvenuto da te', '意大利语'],
       ['ようこそ', '日语'],
       ['어서 오세요', '韩语'],
-      ['Добро пожаловать к тебе', '俄语'],
       ['أهلاً بك', '阿拉伯语'],
       ['Bem-vindo a você', '葡萄牙语'],
       ['Welkom bij jou', '荷兰语'],
@@ -961,28 +959,52 @@
     var enTitle = document.getElementById('enTitle');
     var intro = document.getElementById('intro');
     var scrollHint = document.getElementById('scrollHint');
+
+    // 小字与向下滚动：一进来就一直存在
+    enTitle.classList.add('show');
+    scrollHint.classList.add('show');
+    intro.classList.add('show');
+
+    // 大标题：全世界语言轮播，循环播放（已排除俄语、德语等过长翻译）
     var li = 0;
     function roamNext() {
-      if (li >= langs.length) {
-        roamer.textContent = langs[langs.length - 1][0];
-        roamer.classList.add('show');
-        setTimeout(function () {
-          enTitle.classList.add('show');
-          intro.classList.add('show');
-          scrollHint.classList.add('show');
-        }, 600);
-        return;
-      }
       roamer.textContent = langs[li][0];
       roamer.classList.add('show');
-      li++;
+      li = (li + 1) % langs.length;
       setTimeout(function () {
         roamer.classList.remove('show');
         setTimeout(roamNext, 320);
-      }, 1150);
+      }, 1500);
     }
     setTimeout(roamNext, 300);
+
+    // 简介：一个字一个字出来，再一个字一个字回去，循环
+    var introText = '这里是我的个人小角落，记录着咖啡、音乐、游戏与作品。不紧不慢，慢慢翻就好。';
+    var pos = introText.length;
+    var deleting = false;
+    function typeLoop() {
+      intro.textContent = introText.slice(0, pos);
+      if (!deleting) {
+        if (pos < introText.length) {
+          pos++;
+          setTimeout(typeLoop, 150);
+        } else {
+          deleting = true;
+          setTimeout(typeLoop, 1800);
+        }
+      } else {
+        if (pos > 0) {
+          pos--;
+          setTimeout(typeLoop, 70);
+        } else {
+          deleting = false;
+          setTimeout(typeLoop, 400);
+        }
+      }
+    }
+    setTimeout(typeLoop, 2000);
   })();
+
 
 
   (function () {
