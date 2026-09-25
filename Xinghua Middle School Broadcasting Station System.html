@@ -372,7 +372,9 @@
                 margin: 6px;
             }
         }
-    </style>
+    
+svg.em { width: 1em; height: 1em; display: inline-block; vertical-align: -0.15em; }
+</style>
 <meta name="description" content="兴华中学广播站系统是 Yaule 独立设计开发并投入校园实际使用的广播管理工具：广播排班管理、播放日程控制、站点信息维护一站式完成，从需求梳理到上线运营全部独立完成。">
 <meta property="og:title" content="兴华中学广播站系统 · 校园广播管理工具 | Yaule 作品">
 <meta property="og:description" content="兴华中学广播站系统是 Yaule 独立设计开发并投入校园实际使用的广播管理工具：广播排班管理、播放日程控制、站点信息维护一站式完成，从需求梳理到上线运营全部独立完成。">
@@ -380,51 +382,51 @@
 </head>
 <body>
     <div class="top-bar">
-        <div class="title">🎙️ 兴华中学广播站系统</div>
+        <div class="title"><svg class=&quot;em&quot; viewBox=&quot;0 0 24 24&quot; fill=&quot;none&quot; stroke=&quot;currentColor&quot; stroke-width=&quot;2&quot; stroke-linecap=&quot;round&quot; stroke-linejoin=&quot;round&quot;><path d=&quot;M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3z&quot;/><path d=&quot;M19 10v2a7 7 0 0 1-14 0v-2&quot;/><line x1=&quot;12&quot; y1=&quot;19&quot; x2=&quot;12&quot; y2=&quot;22&quot;/></svg> 兴华中学广播站系统</div>
         <div class="clock" id="liveClock">--:--:--</div>
     </div>
 
     <div class="main-content">
         <!-- 左：打卡系统 -->
         <div class="panel left-panel">
-            <div class="panel-header">📋 成员打卡</div>
+            <div class="panel-header"><svg class=&quot;em&quot; viewBox=&quot;0 0 24 24&quot; fill=&quot;none&quot; stroke=&quot;currentColor&quot; stroke-width=&quot;2&quot; stroke-linecap=&quot;round&quot; stroke-linejoin=&quot;round&quot;><rect x=&quot;5&quot; y=&quot;3&quot; width=&quot;14&quot; height=&quot;18&quot; rx=&quot;2&quot;/><path d=&quot;M9 8h6M9 12h6M9 16h4&quot;/></svg> 成员打卡</div>
             <div class="panel-body">
                 <div id="checkinStatusBar" style="font-size:13px; font-weight:bold; padding:6px; border-radius:6px; background:rgba(255,255,255,0.5);">⏰ 未到打卡时间</div>
                 <div class="clock-btn-group">
-                    <button class="btn btn-warning" id="noonClockBtn">🌞 中午打卡<br><small id="noonTimeLabel">12:20-12:30</small></button>
-                    <button class="btn btn-danger" id="afternoonClockBtn">🌆 下午打卡<br><small id="afterTimeLabel">17:05-17:25</small></button>
+                    <button class="btn btn-warning" id="noonClockBtn"><svg class=&quot;em&quot; viewBox=&quot;0 0 24 24&quot; fill=&quot;none&quot; stroke=&quot;currentColor&quot; stroke-width=&quot;2&quot; stroke-linecap=&quot;round&quot; stroke-linejoin=&quot;round&quot;><circle cx=&quot;12&quot; cy=&quot;12&quot; r=&quot;4&quot;/><path d=&quot;M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4&quot;/></svg> 中午打卡<br><small id="noonTimeLabel">12:20-12:30</small></button>
+                    <button class="btn btn-danger" id="afternoonClockBtn"><svg class=&quot;em&quot; viewBox=&quot;0 0 24 24&quot; fill=&quot;none&quot; stroke=&quot;currentColor&quot; stroke-width=&quot;2&quot; stroke-linecap=&quot;round&quot; stroke-linejoin=&quot;round&quot;><path d=&quot;M17 18a5 5 0 0 0-10 0&quot;/><line x1=&quot;12&quot; y1=&quot;9&quot; x2=&quot;12&quot; y2=&quot;2&quot;/><line x1=&quot;4.22&quot; y1=&quot;10.22&quot; x2=&quot;5.64&quot; y2=&quot;11.64&quot;/><line x1=&quot;1&quot; y1=&quot;18&quot; x2=&quot;3&quot; y2=&quot;18&quot;/><line x1=&quot;21&quot; y1=&quot;18&quot; x2=&quot;23&quot; y2=&quot;18&quot;/><line x1=&quot;18.36&quot; y1=&quot;11.64&quot; x2=&quot;19.78&quot; y2=&quot;10.22&quot;/><line x1=&quot;23&quot; y1=&quot;22&quot; x2=&quot;1&quot; y2=&quot;22&quot;/></svg> 下午打卡<br><small id="afterTimeLabel">17:05-17:25</small></button>
                 </div>
                 <!-- 纵向单列功能按钮（移除清除冗余成员） -->
                 <div style="display: flex; flex-direction: column; gap: 8px;">
-                    <button class="btn" id="viewAttendanceBtn">📊 打卡统计</button>
-                    <button class="btn" id="exportAttendanceBtn">📤 导出记录(CSV)</button>
+                    <button class="btn" id="viewAttendanceBtn"><svg class=&quot;em&quot; viewBox=&quot;0 0 24 24&quot; fill=&quot;none&quot; stroke=&quot;currentColor&quot; stroke-width=&quot;2&quot; stroke-linecap=&quot;round&quot; stroke-linejoin=&quot;round&quot;><line x1=&quot;18&quot; y1=&quot;20&quot; x2=&quot;18&quot; y2=&quot;10&quot;/><line x1=&quot;12&quot; y1=&quot;20&quot; x2=&quot;12&quot; y2=&quot;4&quot;/><line x1=&quot;6&quot; y1=&quot;20&quot; x2=&quot;6&quot; y2=&quot;14&quot;/></svg> 打卡统计</button>
+                    <button class="btn" id="exportAttendanceBtn"><svg class=&quot;em&quot; viewBox=&quot;0 0 24 24&quot; fill=&quot;none&quot; stroke=&quot;currentColor&quot; stroke-width=&quot;2&quot; stroke-linecap=&quot;round&quot; stroke-linejoin=&quot;round&quot;><path d=&quot;M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4&quot;/><polyline points=&quot;17 8 12 3 7 8&quot;/><line x1=&quot;12&quot; y1=&quot;3&quot; x2=&quot;12&quot; y2=&quot;15&quot;/></svg> 导出记录(CSV)</button>
                     <button class="btn" id="showLateBtn">⏰ 查看迟到</button>
                     <button class="btn" id="setCheckinTimeBtn">⏱️ 设置打卡时间</button>
-                    <button class="btn" id="clearAllRecordsBtn">🗑️ 清除打卡记录</button>
+                    <button class="btn" id="clearAllRecordsBtn"><svg class=&quot;em&quot; viewBox=&quot;0 0 24 24&quot; fill=&quot;none&quot; stroke=&quot;currentColor&quot; stroke-width=&quot;2&quot; stroke-linecap=&quot;round&quot; stroke-linejoin=&quot;round&quot;><polyline points=&quot;3 6 5 6 21 6&quot;/><path d=&quot;M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2&quot;/></svg> 清除打卡记录</button>
                 </div>
                 <div style="margin-top:auto; border-top:1px solid #e0e0e0; padding-top:8px;">
                     <strong style="font-size:13px;">今日值班：</strong>
                     <div class="duty-member-list" id="dutyMembersDisplay"></div>
                     <div style="display:flex; gap:6px; margin-top:6px;">
-                        <button class="btn btn-sm" id="editDutyBtn">🖊️ 编辑</button>
-                        <button class="btn btn-sm" id="genDutyBtn">🎲 随机</button>
+                        <button class="btn btn-sm" id="editDutyBtn"><svg class=&quot;em&quot; viewBox=&quot;0 0 24 24&quot; fill=&quot;none&quot; stroke=&quot;currentColor&quot; stroke-width=&quot;2&quot; stroke-linecap=&quot;round&quot; stroke-linejoin=&quot;round&quot;><path d=&quot;M12 20h9&quot;/><path d=&quot;M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z&quot;/></svg> 编辑</button>
+                        <button class="btn btn-sm" id="genDutyBtn"><svg class=&quot;em&quot; viewBox=&quot;0 0 24 24&quot; fill=&quot;none&quot; stroke=&quot;currentColor&quot; stroke-width=&quot;2&quot; stroke-linecap=&quot;round&quot; stroke-linejoin=&quot;round&quot;><rect x=&quot;3&quot; y=&quot;3&quot; width=&quot;18&quot; height=&quot;18&quot; rx=&quot;2&quot;/><circle cx=&quot;8&quot; cy=&quot;8&quot; r=&quot;1&quot;/><circle cx=&quot;16&quot; cy=&quot;8&quot; r=&quot;1&quot;/><circle cx=&quot;12&quot; cy=&quot;12&quot; r=&quot;1&quot;/><circle cx=&quot;8&quot; cy=&quot;16&quot; r=&quot;1&quot;/><circle cx=&quot;16&quot; cy=&quot;16&quot; r=&quot;1&quot;/></svg> 随机</button>
                     </div>
                 </div>
-                <button class="btn" id="manageMembersBtn" style="margin-top:8px;">👥 成员管理</button>
+                <button class="btn" id="manageMembersBtn" style="margin-top:8px;"><svg class=&quot;em&quot; viewBox=&quot;0 0 24 24&quot; fill=&quot;none&quot; stroke=&quot;currentColor&quot; stroke-width=&quot;2&quot; stroke-linecap=&quot;round&quot; stroke-linejoin=&quot;round&quot;><path d=&quot;M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2&quot;/><circle cx=&quot;9&quot; cy=&quot;7&quot; r=&quot;4&quot;/><path d=&quot;M23 21v-2a4 4 0 0 0-3-3.87&quot;/><path d=&quot;M16 3.13a4 4 0 0 1 0 7.75&quot;/></svg> 成员管理</button>
             </div>
         </div>
 
         <!-- 中：歌曲搜索播放 -->
         <div class="panel center-panel">
-            <div class="panel-header">🎵 歌曲搜索播放</div>
+            <div class="panel-header"><svg class=&quot;em&quot; viewBox=&quot;0 0 24 24&quot; fill=&quot;none&quot; stroke=&quot;currentColor&quot; stroke-width=&quot;2&quot; stroke-linecap=&quot;round&quot; stroke-linejoin=&quot;round&quot;><path d=&quot;M9 18V5l12-2v13&quot;/><circle cx=&quot;6&quot; cy=&quot;18&quot; r=&quot;3&quot;/><circle cx=&quot;18&quot; cy=&quot;16&quot; r=&quot;3&quot;/></svg> 歌曲搜索播放</div>
             <div class="panel-body">
                 <div class="search-box">
                     <input type="text" id="searchInput" placeholder="输入歌名关键词搜索...">
-                    <button class="btn btn-primary" id="searchBtn">🔍 搜索</button>
+                    <button class="btn btn-primary" id="searchBtn"><svg class=&quot;em&quot; viewBox=&quot;0 0 24 24&quot; fill=&quot;none&quot; stroke=&quot;currentColor&quot; stroke-width=&quot;2&quot; stroke-linecap=&quot;round&quot; stroke-linejoin=&quot;round&quot;><circle cx=&quot;11&quot; cy=&quot;11&quot; r=&quot;8&quot;/><line x1=&quot;21&quot; y1=&quot;21&quot; x2=&quot;16.65&quot; y2=&quot;16.65&quot;/></svg> 搜索</button>
                 </div>
                 <div style="display:flex; gap:6px;">
-                    <button class="btn" id="refreshMusicBtn">🔄 刷新歌曲</button>
-                    <button class="btn btn-warning" id="randomPlayBtn">🎲 随机播放</button>
+                    <button class="btn" id="refreshMusicBtn"><svg class=&quot;em&quot; viewBox=&quot;0 0 24 24&quot; fill=&quot;none&quot; stroke=&quot;currentColor&quot; stroke-width=&quot;2&quot; stroke-linecap=&quot;round&quot; stroke-linejoin=&quot;round&quot;><polyline points=&quot;23 4 23 10 17 10&quot;/><path d=&quot;M20.49 15a9 9 0 1 1-2.12-9.36L23 10&quot;/></svg> 刷新歌曲</button>
+                    <button class="btn btn-warning" id="randomPlayBtn"><svg class=&quot;em&quot; viewBox=&quot;0 0 24 24&quot; fill=&quot;none&quot; stroke=&quot;currentColor&quot; stroke-width=&quot;2&quot; stroke-linecap=&quot;round&quot; stroke-linejoin=&quot;round&quot;><rect x=&quot;3&quot; y=&quot;3&quot; width=&quot;18&quot; height=&quot;18&quot; rx=&quot;2&quot;/><circle cx=&quot;8&quot; cy=&quot;8&quot; r=&quot;1&quot;/><circle cx=&quot;16&quot; cy=&quot;8&quot; r=&quot;1&quot;/><circle cx=&quot;12&quot; cy=&quot;12&quot; r=&quot;1&quot;/><circle cx=&quot;8&quot; cy=&quot;16&quot; r=&quot;1&quot;/><circle cx=&quot;16&quot; cy=&quot;16&quot; r=&quot;1&quot;/></svg> 随机播放</button>
                 </div>
                 <div class="player-controls">
                     <div class="now-playing" id="nowPlaying">未选择歌曲</div>
@@ -434,7 +436,7 @@
                         <span id="duration">00:00</span>
                     </div>
                     <div class="volume-row">
-                        <span>🔊</span>
+                        <span><svg class=&quot;em&quot; viewBox=&quot;0 0 24 24&quot; fill=&quot;none&quot; stroke=&quot;currentColor&quot; stroke-width=&quot;2&quot; stroke-linecap=&quot;round&quot; stroke-linejoin=&quot;round&quot;><polygon points=&quot;11 5 6 9 2 9 2 15 6 15 11 19 11 5&quot;/><path d=&quot;M15.54 8.46a5 5 0 0 1 0 7.07&quot;/></svg></span>
                         <input type="range" id="volumeBar" min="0" max="1" step="0.05" value="0.8">
                         <span id="volumePercent">80%</span>
                     </div>
@@ -445,15 +447,15 @@
                     </div>
                     <div class="control-btns">
                         <button class="btn btn-sm" id="stopBtn">⏹️ 停止</button>
-                        <button class="btn btn-sm" id="loopToggleBtn" data-loop="false">🔁 顺序播放</button>
+                        <button class="btn btn-sm" id="loopToggleBtn" data-loop="false"><svg class=&quot;em&quot; viewBox=&quot;0 0 24 24&quot; fill=&quot;none&quot; stroke=&quot;currentColor&quot; stroke-width=&quot;2&quot; stroke-linecap=&quot;round&quot; stroke-linejoin=&quot;round&quot;><polyline points=&quot;17 1 21 5 17 9&quot;/><path d=&quot;M3 11V9a4 4 0 0 1 4-4h14&quot;/><polyline points=&quot;7 23 3 19 7 15&quot;/><path d=&quot;M21 13v2a4 4 0 0 1-4 4H3&quot;/></svg> 顺序播放</button>
                     </div>
                 </div>
                 <details>
-                    <summary style="cursor:pointer; font-weight:600; font-size:14px;">📜 播放历史</summary>
+                    <summary style="cursor:pointer; font-weight:600; font-size:14px;"><svg class=&quot;em&quot; viewBox=&quot;0 0 24 24&quot; fill=&quot;none&quot; stroke=&quot;currentColor&quot; stroke-width=&quot;2&quot; stroke-linecap=&quot;round&quot; stroke-linejoin=&quot;round&quot;><path d=&quot;M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z&quot;/><polyline points=&quot;14 2 14 8 20 8&quot;/><line x1=&quot;16&quot; y1=&quot;13&quot; x2=&quot;8&quot; y2=&quot;13&quot;/><line x1=&quot;16&quot; y1=&quot;17&quot; x2=&quot;8&quot; y2=&quot;17&quot;/></svg> 播放历史</summary>
                     <div class="log-list" id="playHistoryList" style="max-height:100px;"></div>
                 </details>
                 <details open>
-                    <summary style="cursor:pointer; font-weight:600; font-size:14px;">📝 操作记录</summary>
+                    <summary style="cursor:pointer; font-weight:600; font-size:14px;"><svg class=&quot;em&quot; viewBox=&quot;0 0 24 24&quot; fill=&quot;none&quot; stroke=&quot;currentColor&quot; stroke-width=&quot;2&quot; stroke-linecap=&quot;round&quot; stroke-linejoin=&quot;round&quot;><path d=&quot;M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z&quot;/><polyline points=&quot;14 2 14 8 20 8&quot;/><line x1=&quot;16&quot; y1=&quot;13&quot; x2=&quot;8&quot; y2=&quot;13&quot;/><line x1=&quot;16&quot; y1=&quot;17&quot; x2=&quot;8&quot; y2=&quot;17&quot;/></svg> 操作记录</summary>
                     <div class="log-list" id="operationLogList" style="max-height:140px;"></div>
                 </details>
             </div>
@@ -461,18 +463,18 @@
 
         <!-- 右：播放控制 -->
         <div class="panel right-panel">
-            <div class="panel-header">🎛️ 播放控制</div>
+            <div class="panel-header"><svg class=&quot;em&quot; viewBox=&quot;0 0 24 24&quot; fill=&quot;none&quot; stroke=&quot;currentColor&quot; stroke-width=&quot;2&quot; stroke-linecap=&quot;round&quot; stroke-linejoin=&quot;round&quot;><line x1=&quot;4&quot; y1=&quot;21&quot; x2=&quot;4&quot; y2=&quot;14&quot;/><line x1=&quot;4&quot; y1=&quot;10&quot; x2=&quot;4&quot; y2=&quot;3&quot;/><line x1=&quot;12&quot; y1=&quot;21&quot; x2=&quot;12&quot; y2=&quot;12&quot;/><line x1=&quot;12&quot; y1=&quot;8&quot; x2=&quot;12&quot; y2=&quot;3&quot;/><line x1=&quot;20&quot; y1=&quot;21&quot; x2=&quot;20&quot; y2=&quot;16&quot;/><line x1=&quot;20&quot; y1=&quot;12&quot; x2=&quot;20&quot; y2=&quot;3&quot;/><line x1=&quot;1&quot; y1=&quot;14&quot; x2=&quot;7&quot; y2=&quot;14&quot;/><line x1=&quot;9&quot; y1=&quot;8&quot; x2=&quot;15&quot; y2=&quot;8&quot;/><line x1=&quot;17&quot; y1=&quot;16&quot; x2=&quot;23&quot; y2=&quot;16&quot;/></svg> 播放控制</div>
             <div class="panel-body" style="align-items: stretch;">
-                <button class="btn btn-lg btn-primary" id="playOpeningBtn" style="width:100%;">🔊 开场白</button>
-                <button class="btn btn-lg btn-danger" id="playEndingBtn" style="width:100%;">🎵 结束音乐</button>
-                <button class="btn" id="managePlaylistBtn" style="width:100%;">📋 排班歌单</button>
+                <button class="btn btn-lg btn-primary" id="playOpeningBtn" style="width:100%;"><svg class=&quot;em&quot; viewBox=&quot;0 0 24 24&quot; fill=&quot;none&quot; stroke=&quot;currentColor&quot; stroke-width=&quot;2&quot; stroke-linecap=&quot;round&quot; stroke-linejoin=&quot;round&quot;><polygon points=&quot;11 5 6 9 2 9 2 15 6 15 11 19 11 5&quot;/><path d=&quot;M15.54 8.46a5 5 0 0 1 0 7.07&quot;/></svg> 开场白</button>
+                <button class="btn btn-lg btn-danger" id="playEndingBtn" style="width:100%;"><svg class=&quot;em&quot; viewBox=&quot;0 0 24 24&quot; fill=&quot;none&quot; stroke=&quot;currentColor&quot; stroke-width=&quot;2&quot; stroke-linecap=&quot;round&quot; stroke-linejoin=&quot;round&quot;><path d=&quot;M9 18V5l12-2v13&quot;/><circle cx=&quot;6&quot; cy=&quot;18&quot; r=&quot;3&quot;/><circle cx=&quot;18&quot; cy=&quot;16&quot; r=&quot;3&quot;/></svg> 结束音乐</button>
+                <button class="btn" id="managePlaylistBtn" style="width:100%;"><svg class=&quot;em&quot; viewBox=&quot;0 0 24 24&quot; fill=&quot;none&quot; stroke=&quot;currentColor&quot; stroke-width=&quot;2&quot; stroke-linecap=&quot;round&quot; stroke-linejoin=&quot;round&quot;><rect x=&quot;5&quot; y=&quot;3&quot; width=&quot;14&quot; height=&quot;18&quot; rx=&quot;2&quot;/><path d=&quot;M9 8h6M9 12h6M9 16h4&quot;/></svg> 排班歌单</button>
                 <hr style="border-color: var(--glass-border); margin: 6px 0;">
                 <div style="display: flex; align-items: center; gap: 6px;">
                     <span style="font-size:13px;">自动播放</span>
-                    <button class="btn btn-sm" id="autoPlayToggleBtn" style="flex:1;">✅ 已启用</button>
+                    <button class="btn btn-sm" id="autoPlayToggleBtn" style="flex:1;"><svg class=&quot;em&quot; viewBox=&quot;0 0 24 24&quot; fill=&quot;none&quot; stroke=&quot;currentColor&quot; stroke-width=&quot;2&quot; stroke-linecap=&quot;round&quot; stroke-linejoin=&quot;round&quot;><circle cx=&quot;12&quot; cy=&quot;12&quot; r=&quot;10&quot;/><polyline points=&quot;8 12 11 15 16 9&quot;/></svg> 已启用</button>
                 </div>
                 <button class="btn" id="setAutoPlayTimeBtn" style="width:100%; margin-top:6px;">⏰ 设置自动播放时间</button>
-                <button class="btn" id="holidayManageBtn" style="width:100%; margin-top:6px;">🗓️ 节假日</button>
+                <button class="btn" id="holidayManageBtn" style="width:100%; margin-top:6px;"><svg class=&quot;em&quot; viewBox=&quot;0 0 24 24&quot; fill=&quot;none&quot; stroke=&quot;currentColor&quot; stroke-width=&quot;2&quot; stroke-linecap=&quot;round&quot; stroke-linejoin=&quot;round&quot;><rect x=&quot;3&quot; y=&quot;4&quot; width=&quot;18&quot; height=&quot;18&quot; rx=&quot;2&quot;/><line x1=&quot;16&quot; y1=&quot;2&quot; x2=&quot;16&quot; y2=&quot;6&quot;/><line x1=&quot;8&quot; y1=&quot;2&quot; x2=&quot;8&quot; y2=&quot;6&quot;/><line x1=&quot;3&quot; y1=&quot;10&quot; x2=&quot;21&quot; y2=&quot;10&quot;/></svg> 节假日</button>
                 <!-- 歌曲列表（排除特殊歌曲） -->
                 <div style="margin-top:8px; max-height:150px; overflow-y:auto; border:1px solid var(--glass-border); border-radius:8px; padding:6px; font-size:12px;" id="songListRight">
                     <p style="color:#888;">暂无歌曲</p>
@@ -565,7 +567,7 @@
 
             function showPasswordModal(actionTitle, callback) {
                 const content = `
-                    <h3>🔐 输入安全密码</h3>
+                    <h3><svg class=&quot;em&quot; viewBox=&quot;0 0 24 24&quot; fill=&quot;none&quot; stroke=&quot;currentColor&quot; stroke-width=&quot;2&quot; stroke-linecap=&quot;round&quot; stroke-linejoin=&quot;round&quot;><rect x=&quot;3&quot; y=&quot;11&quot; width=&quot;18&quot; height=&quot;11&quot; rx=&quot;2&quot;/><path d=&quot;M7 11V7a5 5 0 0 1 10 0v4&quot;/></svg> 输入安全密码</h3>
                     <p>${actionTitle}</p>
                     <input type="password" id="passwordInput" placeholder="请输入密码" style="margin:12px 0;">
                     <div style="display:flex; gap:10px; justify-content:flex-end;">
@@ -673,10 +675,10 @@
                 afternoonBtn.disabled = !afterActive;
 
                 if (noonActive) {
-                    statusBar.innerHTML = `🟢 中午打卡时间：${pad(noonStart.h)}:${pad(noonStart.m)}-${pad(noonEnd.h)}:${pad(noonEnd.m)}`;
+                    statusBar.innerHTML = `<svg class=&quot;em&quot; viewBox=&quot;0 0 24 24&quot; fill=&quot;none&quot; stroke=&quot;currentColor&quot; stroke-width=&quot;2&quot; stroke-linecap=&quot;round&quot; stroke-linejoin=&quot;round&quot;><circle cx=&quot;12&quot; cy=&quot;12&quot; r=&quot;6&quot; fill=&quot;currentColor&quot; stroke=&quot;none&quot;/></svg> 中午打卡时间：${pad(noonStart.h)}:${pad(noonStart.m)}-${pad(noonEnd.h)}:${pad(noonEnd.m)}`;
                     statusBar.style.background = '#d4edda';
                 } else if (afterActive) {
-                    statusBar.innerHTML = `🟢 下午打卡时间：${pad(afterStart.h)}:${pad(afterStart.m)}-${pad(afterEnd.h)}:${pad(afterEnd.m)}`;
+                    statusBar.innerHTML = `<svg class=&quot;em&quot; viewBox=&quot;0 0 24 24&quot; fill=&quot;none&quot; stroke=&quot;currentColor&quot; stroke-width=&quot;2&quot; stroke-linecap=&quot;round&quot; stroke-linejoin=&quot;round&quot;><circle cx=&quot;12&quot; cy=&quot;12&quot; r=&quot;6&quot; fill=&quot;currentColor&quot; stroke=&quot;none&quot;/></svg> 下午打卡时间：${pad(afterStart.h)}:${pad(afterStart.m)}-${pad(afterEnd.h)}:${pad(afterEnd.m)}`;
                     statusBar.style.background = '#d4edda';
                 } else {
                     statusBar.innerHTML = '⏰ 未到打卡时间';
@@ -696,10 +698,10 @@
             // ========== 文件夹加载 ==========
             function showFolderPickerModal() {
                 showModal(`
-                    <h3>📁 请选择“GBZ”文件夹</h3>
+                    <h3><svg class=&quot;em&quot; viewBox=&quot;0 0 24 24&quot; fill=&quot;none&quot; stroke=&quot;currentColor&quot; stroke-width=&quot;2&quot; stroke-linecap=&quot;round&quot; stroke-linejoin=&quot;round&quot;><path d=&quot;M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z&quot;/></svg> 请选择“GBZ”文件夹</h3>
                     <p>系统需读取 GBZ/music 目录下的音乐文件。</p>
                     <div class="file-picker-area" onclick="document.getElementById('folderPicker').click()">
-                        📂 点击此处选择文件夹
+                        <svg class=&quot;em&quot; viewBox=&quot;0 0 24 24&quot; fill=&quot;none&quot; stroke=&quot;currentColor&quot; stroke-width=&quot;2&quot; stroke-linecap=&quot;round&quot; stroke-linejoin=&quot;round&quot;><path d=&quot;M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z&quot;/><line x1=&quot;6&quot; y1=&quot;14&quot; x2=&quot;18&quot; y2=&quot;14&quot;/></svg> 点击此处选择文件夹
                     </div>
                 `, false);
             }
@@ -728,14 +730,14 @@
                     songListRight.innerHTML = '<p style="color:#888;">无常规歌曲</p>';
                     return;
                 }
-                songListRight.innerHTML = regularSongs.map(s => `<div style="padding:2px 0;">🎵 ${s.name}</div>`).join('');
+                songListRight.innerHTML = regularSongs.map(s => `<div style="padding:2px 0;"><svg class=&quot;em&quot; viewBox=&quot;0 0 24 24&quot; fill=&quot;none&quot; stroke=&quot;currentColor&quot; stroke-width=&quot;2&quot; stroke-linecap=&quot;round&quot; stroke-linejoin=&quot;round&quot;><path d=&quot;M9 18V5l12-2v13&quot;/><circle cx=&quot;6&quot; cy=&quot;18&quot; r=&quot;3&quot;/><circle cx=&quot;18&quot; cy=&quot;16&quot; r=&quot;3&quot;/></svg> ${s.name}</div>`).join('');
             }
 
             // ========== 值班管理 ==========
             function showEditDutyModal() {
                 const options = memberList.map(m => `<option value="${m}" ${dutyMembers.includes(m) ? 'selected' : ''}>${m}</option>`).join('');
                 showModal(`
-                    <h3>🖊️ 编辑今日值班人员</h3>
+                    <h3><svg class=&quot;em&quot; viewBox=&quot;0 0 24 24&quot; fill=&quot;none&quot; stroke=&quot;currentColor&quot; stroke-width=&quot;2&quot; stroke-linecap=&quot;round&quot; stroke-linejoin=&quot;round&quot;><path d=&quot;M12 20h9&quot;/><path d=&quot;M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z&quot;/></svg> 编辑今日值班人员</h3>
                     <label>值班人员1</label>
                     <select id="duty1Select">
                         <option value="">-- 请选择 --</option>
@@ -780,7 +782,7 @@
                     dutyMembersDisplay.innerHTML = '<span style="color:#888;">未设置</span>';
                 } else {
                     dutyMembersDisplay.innerHTML = dutyMembers.map((name, idx) =>
-                        `<span class="duty-tag">${name} <span class="del-btn" data-idx="${idx}">✕</span></span>`
+                        `<span class="duty-tag">${name} <span class="del-btn" data-idx="${idx}"><svg class=&quot;em&quot; viewBox=&quot;0 0 24 24&quot; fill=&quot;none&quot; stroke=&quot;currentColor&quot; stroke-width=&quot;2&quot; stroke-linecap=&quot;round&quot; stroke-linejoin=&quot;round&quot;><line x1=&quot;18&quot; y1=&quot;6&quot; x2=&quot;6&quot; y2=&quot;18&quot;/><line x1=&quot;6&quot; y1=&quot;6&quot; x2=&quot;18&quot; y2=&quot;18&quot;/></svg></span></span>`
                     ).join('');
                     document.querySelectorAll('.del-btn').forEach(btn => {
                         btn.addEventListener('click', function(e) {
@@ -831,7 +833,7 @@
                     else stats[r.name].afternoon++;
                     if (r.status === '迟到') stats[r.name].late++;
                 });
-                let html = '<h3>📊 打卡统计</h3><table><tr><th>姓名</th><th>中午</th><th>下午</th><th>迟到</th></tr>';
+                let html = '<h3><svg class=&quot;em&quot; viewBox=&quot;0 0 24 24&quot; fill=&quot;none&quot; stroke=&quot;currentColor&quot; stroke-width=&quot;2&quot; stroke-linecap=&quot;round&quot; stroke-linejoin=&quot;round&quot;><line x1=&quot;18&quot; y1=&quot;20&quot; x2=&quot;18&quot; y2=&quot;10&quot;/><line x1=&quot;12&quot; y1=&quot;20&quot; x2=&quot;12&quot; y2=&quot;4&quot;/><line x1=&quot;6&quot; y1=&quot;20&quot; x2=&quot;6&quot; y2=&quot;14&quot;/></svg> 打卡统计</h3><table><tr><th>姓名</th><th>中午</th><th>下午</th><th>迟到</th></tr>';
                 for (const [name, s] of Object.entries(stats)) {
                     html += `<tr><td>${name}</td><td>${s.noon}</td><td>${s.afternoon}</td><td>${s.late}</td></tr>`;
                 }
@@ -949,7 +951,7 @@
             }
 
             function showSongListModal(songs) {
-                let html = '<h3>🎵 搜索结果</h3>';
+                let html = '<h3><svg class=&quot;em&quot; viewBox=&quot;0 0 24 24&quot; fill=&quot;none&quot; stroke=&quot;currentColor&quot; stroke-width=&quot;2&quot; stroke-linecap=&quot;round&quot; stroke-linejoin=&quot;round&quot;><path d=&quot;M9 18V5l12-2v13&quot;/><circle cx=&quot;6&quot; cy=&quot;18&quot; r=&quot;3&quot;/><circle cx=&quot;18&quot; cy=&quot;16&quot; r=&quot;3&quot;/></svg> 搜索结果</h3>';
                 songs.forEach(song => {
                     const idx = musicFiles.indexOf(song);
                     html += `<div class="song-list-item" data-idx="${idx}">${song.name}</div>`;
@@ -1046,7 +1048,7 @@
 
             function toggleLoopMode() {
                 loopMode = !loopMode;
-                loopToggleBtn.textContent = loopMode ? '🔂 单曲循环' : '🔁 顺序播放';
+                loopToggleBtn.textContent = loopMode ? '<svg class=&quot;em&quot; viewBox=&quot;0 0 24 24&quot; fill=&quot;none&quot; stroke=&quot;currentColor&quot; stroke-width=&quot;2&quot; stroke-linecap=&quot;round&quot; stroke-linejoin=&quot;round&quot;><polyline points=&quot;17 1 21 5 17 9&quot;/><path d=&quot;M3 11V9a4 4 0 0 1 4-4h14&quot;/><line x1=&quot;5&quot; y1=&quot;19&quot; x2=&quot;5&quot; y2=&quot;21&quot;/></svg> 单曲循环' : '<svg class=&quot;em&quot; viewBox=&quot;0 0 24 24&quot; fill=&quot;none&quot; stroke=&quot;currentColor&quot; stroke-width=&quot;2&quot; stroke-linecap=&quot;round&quot; stroke-linejoin=&quot;round&quot;><polyline points=&quot;17 1 21 5 17 9&quot;/><path d=&quot;M3 11V9a4 4 0 0 1 4-4h14&quot;/><polyline points=&quot;7 23 3 19 7 15&quot;/><path d=&quot;M21 13v2a4 4 0 0 1-4 4H3&quot;/></svg> 顺序播放';
                 loopToggleBtn.dataset.loop = loopMode ? 'true' : 'false';
                 addLog(`切换循环模式：${loopMode ? '单曲循环' : '顺序播放'}`);
             }
@@ -1110,7 +1112,7 @@
                 addLog(autoPlayEnabled ? '启用自动播放' : '禁用自动播放');
             }
             function updateAutoPlayButton() {
-                autoPlayToggleBtn.textContent = autoPlayEnabled ? '✅ 已启用' : '❌ 已禁用';
+                autoPlayToggleBtn.textContent = autoPlayEnabled ? '<svg class=&quot;em&quot; viewBox=&quot;0 0 24 24&quot; fill=&quot;none&quot; stroke=&quot;currentColor&quot; stroke-width=&quot;2&quot; stroke-linecap=&quot;round&quot; stroke-linejoin=&quot;round&quot;><circle cx=&quot;12&quot; cy=&quot;12&quot; r=&quot;10&quot;/><polyline points=&quot;8 12 11 15 16 9&quot;/></svg> 已启用' : '<svg class=&quot;em&quot; viewBox=&quot;0 0 24 24&quot; fill=&quot;none&quot; stroke=&quot;currentColor&quot; stroke-width=&quot;2&quot; stroke-linecap=&quot;round&quot; stroke-linejoin=&quot;round&quot;><circle cx=&quot;12&quot; cy=&quot;12&quot; r=&quot;10&quot;/><line x1=&quot;15&quot; y1=&quot;9&quot; x2=&quot;9&quot; y2=&quot;15&quot;/><line x1=&quot;9&quot; y1=&quot;9&quot; x2=&quot;15&quot; y2=&quot;15&quot;/></svg> 已禁用';
                 localStorage.setItem('autoPlayEnabled', autoPlayEnabled);
             }
 
@@ -1138,7 +1140,7 @@
                     </div>`
                 ).join('') || '<p style="color:#888;">歌单为空</p>';
                 showModal(`
-                    <h3>📋 排班歌单</h3>
+                    <h3><svg class=&quot;em&quot; viewBox=&quot;0 0 24 24&quot; fill=&quot;none&quot; stroke=&quot;currentColor&quot; stroke-width=&quot;2&quot; stroke-linecap=&quot;round&quot; stroke-linejoin=&quot;round&quot;><rect x=&quot;5&quot; y=&quot;3&quot; width=&quot;14&quot; height=&quot;18&quot; rx=&quot;2&quot;/><path d=&quot;M9 8h6M9 12h6M9 16h4&quot;/></svg> 排班歌单</h3>
                     <div style="margin-bottom:10px;">
                         <input type="text" id="newPlSong" placeholder="歌名（需精确匹配）" style="width:70%; display:inline;">
                         <button class="btn btn-sm btn-primary" id="addPlBtn" style="width:25%;">添加</button>
@@ -1215,7 +1217,7 @@
                     </div>`
                 ).join('') || '<p style="color:#888;">暂无节假日</p>';
                 showModal(`
-                    <h3>🗓️ 节假日设置</h3>
+                    <h3><svg class=&quot;em&quot; viewBox=&quot;0 0 24 24&quot; fill=&quot;none&quot; stroke=&quot;currentColor&quot; stroke-width=&quot;2&quot; stroke-linecap=&quot;round&quot; stroke-linejoin=&quot;round&quot;><rect x=&quot;3&quot; y=&quot;4&quot; width=&quot;18&quot; height=&quot;18&quot; rx=&quot;2&quot;/><line x1=&quot;16&quot; y1=&quot;2&quot; x2=&quot;16&quot; y2=&quot;6&quot;/><line x1=&quot;8&quot; y1=&quot;2&quot; x2=&quot;8&quot; y2=&quot;6&quot;/><line x1=&quot;3&quot; y1=&quot;10&quot; x2=&quot;21&quot; y2=&quot;10&quot;/></svg> 节假日设置</h3>
                     <input type="date" id="newHoliday" style="width:70%;">
                     <button class="btn btn-sm btn-primary" id="addHolidayBtn" style="width:25%;">添加</button>
                     <div style="max-height:200px; overflow-y:auto; margin-top:10px;">${hHtml}</div>
@@ -1251,12 +1253,12 @@
                     </div>`
                 ).join('') || '<p style="color:#888;">暂无成员</p>';
                 showModal(`
-                    <h3>👥 成员管理</h3>
+                    <h3><svg class=&quot;em&quot; viewBox=&quot;0 0 24 24&quot; fill=&quot;none&quot; stroke=&quot;currentColor&quot; stroke-width=&quot;2&quot; stroke-linecap=&quot;round&quot; stroke-linejoin=&quot;round&quot;><path d=&quot;M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2&quot;/><circle cx=&quot;9&quot; cy=&quot;7&quot; r=&quot;4&quot;/><path d=&quot;M23 21v-2a4 4 0 0 0-3-3.87&quot;/><path d=&quot;M16 3.13a4 4 0 0 1 0 7.75&quot;/></svg> 成员管理</h3>
                     <input type="text" id="newMember" placeholder="姓名" style="width:70%;">
                     <button class="btn btn-sm btn-primary" id="addMemberBtn" style="width:25%;">添加</button>
                     <div style="max-height:200px; overflow-y:auto; margin-top:10px;">${mHtml}</div>
                     <div style="margin-top:10px; display:flex; gap:8px; justify-content:space-between;">
-                        <button class="btn btn-sm btn-danger" id="clearAllMembersBtn">🗑️ 一键清除所有成员</button>
+                        <button class="btn btn-sm btn-danger" id="clearAllMembersBtn"><svg class=&quot;em&quot; viewBox=&quot;0 0 24 24&quot; fill=&quot;none&quot; stroke=&quot;currentColor&quot; stroke-width=&quot;2&quot; stroke-linecap=&quot;round&quot; stroke-linejoin=&quot;round&quot;><polyline points=&quot;3 6 5 6 21 6&quot;/><path d=&quot;M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2&quot;/></svg> 一键清除所有成员</button>
                         <button class="btn btn-sm" id="closeMemberModal">关闭</button>
                     </div>
                 `, true);

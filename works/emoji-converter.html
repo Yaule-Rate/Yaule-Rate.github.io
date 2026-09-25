@@ -123,6 +123,11 @@ footer a { color: var(--accent); text-decoration: none; }
   .page-loader .load-skip:active { background: rgba(2,132,199,0.16); }
   .page-loader .load-skip small { font-size: 11px; opacity: 0.75; }
 
+
+  .rating { display: flex; align-items: center; gap: 10px; margin: 14px 0 2px; flex-wrap: wrap; }
+  .rating-stars { display: inline-flex; gap: 3px; color: var(--accent); }
+  .rating-score { font-size: 17px; font-weight: 700; color: var(--ink); font-variant-numeric: tabular-nums; }
+  .rating-note { font-size: 12px; color: var(--ink-2); }
 </style>
 </head>
 <body>
@@ -155,7 +160,13 @@ footer a { color: var(--accent); text-decoration: none; }
     <h1>表情转图片转换器</h1>
     <p class="sub">文字、表情符号一键转图片，支持自定义背景与文字颜色，导出高清 PNG。</p>
     <div class="tags"><span class="tag">创意工具</span><span class="tag">表情包</span><span class="tag">PNG 导出</span><span class="tag">自定义配色</span></div>
-    <div class="actions">
+    
+    <div class="rating">
+      <span class="rating-stars"><svg viewBox="0 0 24 24" fill="currentColor" style="width:18px;height:18px"><path d="M12 2l2.9 6.2 6.8.8-5 4.6 1.3 6.7L12 17.8 5.9 20.3l1.3-6.7-5-4.6 6.8-.8z"/></svg><svg viewBox="0 0 24 24" fill="currentColor" style="width:18px;height:18px"><path d="M12 2l2.9 6.2 6.8.8-5 4.6 1.3 6.7L12 17.8 5.9 20.3l1.3-6.7-5-4.6 6.8-.8z"/></svg><svg viewBox="0 0 24 24" fill="currentColor" style="width:18px;height:18px"><path d="M12 2l2.9 6.2 6.8.8-5 4.6 1.3 6.7L12 17.8 5.9 20.3l1.3-6.7-5-4.6 6.8-.8z"/></svg><svg viewBox="0 0 24 24" fill="currentColor" style="width:18px;height:18px"><path d="M12 2l2.9 6.2 6.8.8-5 4.6 1.3 6.7L12 17.8 5.9 20.3l1.3-6.7-5-4.6 6.8-.8z"/></svg><svg viewBox="0 0 24 24" fill="currentColor" style="width:18px;height:18px"><path d="M12 2l2.9 6.2 6.8.8-5 4.6 1.3 6.7L12 17.8 5.9 20.3l1.3-6.7-5-4.6 6.8-.8z"/></svg></span>
+      <span class="rating-score">5.0</span>
+      <span class="rating-note">用户评分 · 满分 5.0</span>
+    </div>
+<div class="actions">
       <a class="btn btn-primary" href="../Fancy-Pattern-Emoji-to-Image-Converter.html" data-nodl>
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="12" x2="2" y2="12"/><polyline points="5 9 12 16 19 9" transform="rotate(90 12 12)"/></svg>
         立即体验
