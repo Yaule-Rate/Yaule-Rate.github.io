@@ -9,17 +9,28 @@
 <meta name="author" content="Yaule">
 <link rel="canonical" href="https://Yaule-Rate.github.io/">
 <link rel="alternate" type="application/atom+xml" title="Yaule 的个人空间" href="https://Yaule-Rate.github.io/atom.xml">
+<link rel="alternate" hreflang="zh-CN" href="https://Yaule-Rate.github.io/">
+<link rel="alternate" hreflang="en" href="https://Yaule-Rate.github.io/?lang=en">
+<link rel="alternate" hreflang="x-default" href="https://Yaule-Rate.github.io/">
 <meta property="og:type" content="website">
 <meta property="og:title" content="Yaule · 欢迎你的到来">
 <meta property="og:description" content="欢迎来到 Yaule 的个人主页。这里记录着咖啡、音乐、游戏与作品。">
 <meta property="og:url" content="https://Yaule-Rate.github.io/">
 <meta property="og:site_name" content="Yaule 的个人空间">
 <meta property="og:locale" content="zh_CN">
-<meta name="twitter:card" content="summary">
+<meta property="og:image" content="https://Yaule-Rate.github.io/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Yaule · 失眠夜空间 · 个人主页">
+<meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Yaule · 欢迎你的到来">
 <meta name="twitter:description" content="欢迎来到 Yaule 的个人主页。这里记录着咖啡、音乐、游戏与作品。">
+<meta name="twitter:image" content="https://Yaule-Rate.github.io/og-image.png">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230284c7'/%3E%3Ctext x='32' y='44' font-family='Georgia, serif' font-size='36' font-weight='bold' fill='%23fff' text-anchor='middle'%3EY%3C/text%3E%3C/svg%3E">
 <link rel="stylesheet" href="https://miaoda.feishu.cn/fonts/css2?family=Noto+Serif+SC:wght@600;700&family=Noto+Sans+SC:wght@400;500;600;700&family=Ma+Shan+Zheng&display=swap">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebSite","name":"Yaule 失眠夜空间","alternateName":"Yaule-Rate.github.io","url":"https://Yaule-Rate.github.io/","inLanguage":["zh-CN","en"],"publisher":{"@type":"Person","name":"Yaule","url":"https://github.com/Yaule-Rate","email":"1957784559@qq.com"},"potentialAction":{"@type":"SearchAction","target":"https://Yaule-Rate.github.io/?q={search_term_string}","query-input":"required name=search_term_string"}}
+</script>
 <style>
   :root {
     --bg: #FAFAF9;
@@ -1264,9 +1275,63 @@
   .now-reco .reco-head svg { width: 15px; height: 15px; color: var(--accent); }
   .now-reco .reco-text { margin-top: 16px; font-size: clamp(16px, 2.6vw, 21px); line-height: 1.75; font-weight: 600; color: var(--ink); }
   .now-reco .reco-tag { margin-top: 12px; font-size: 12px; color: var(--accent); letter-spacing: .08em; }
+
+  /* ===== 贡献热力图 ===== */
+  .hm-wrap { display: flex; flex-direction: column; gap: 14px; }
+  .hm-grid { display: grid; grid-template-columns: repeat(53, 1fr); gap: 3px; }
+  .hm-cell { aspect-ratio: 1; border-radius: 3px; background: var(--soft); }
+  .hm-cell.l0 { background: var(--soft); }
+  .hm-cell.l1 { background: #bae6fd; }
+  .hm-cell.l2 { background: #7dd3fc; }
+  .hm-cell.l3 { background: #38bdf8; }
+  .hm-cell.l4 { background: #0284c7; }
+  :root[data-theme="dark"] .hm-cell.l0 { background: #23262b; }
+  .hm-total { font-size: 13px; color: var(--ink-2); }
+
+  /* ===== 访客留言板 ===== */
+  .gb-wrap { max-width: 720px; }
+  .gb-form { display: flex; flex-direction: column; gap: 10px; margin-bottom: 10px; }
+  .gb-form input, .gb-form textarea {
+    width: 100%; padding: 11px 14px; border-radius: 10px; border: 1px solid var(--line);
+    background: var(--card-bg); color: var(--ink); font: inherit; box-sizing: border-box;
+  }
+  .gb-form input:focus, .gb-form textarea:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px rgba(2,132,199,.12); }
+  .gb-form button {
+    align-self: flex-start; padding: 9px 22px; border: 0; border-radius: 10px; cursor: pointer;
+    background: var(--accent); color: #fff; font: inherit; font-weight: 600; transition: transform .15s ease, opacity .15s ease;
+  }
+  .gb-form button:hover { transform: translateY(-1px); }
+  .gb-form button:disabled { opacity: .5; cursor: not-allowed; transform: none; }
+  .gb-hint { min-height: 18px; font-size: 12px; color: var(--accent); margin-bottom: 4px; }
+  .gb-hint.err { color: #dc2626; }
+  .gb-list { display: flex; flex-direction: column; gap: 10px; }
+  .gb-item { padding: 12px 16px; border: 1px solid var(--line); border-radius: 12px; background: var(--card-bg); }
+  .gb-item .gb-head { display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--ink-2); margin-bottom: 6px; }
+  .gb-item .gb-head b { color: var(--accent); }
+  .gb-item .gb-body { font-size: 14px; line-height: 1.7; color: var(--ink); word-break: break-word; white-space: pre-wrap; }
+  .gb-load, .gb-empty { font-size: 13px; color: var(--ink-2); }
+
+  /* ===== 深夜特调 ===== */
+  .night-sky { position: fixed; inset: 0; z-index: 1; pointer-events: none; overflow: hidden; }
+  .night-star {
+    position: absolute; width: 3px; height: 3px; border-radius: 50%;
+    background: #7dd3fc; opacity: 0;
+    animation: nightTwinkle 3.2s ease-in-out infinite;
+  }
+  @keyframes nightTwinkle { 0%, 100% { opacity: 0; } 50% { opacity: .9; } }
+  .night-moon {
+    position: fixed; top: 76px; right: 34px; z-index: 1; pointer-events: none;
+    color: #f8fafc; width: 44px; height: 44px; opacity: 0; transition: opacity .8s ease;
+    filter: drop-shadow(0 0 14px rgba(56,189,248,.55));
+  }
+  body.night .night-moon { opacity: 1; }
+  .section, footer { position: relative; z-index: 2; }
 </style>
 </head>
 <body>
+<!-- 深夜特调：月亮 + 星空（22:00-06:00 显示） -->
+<div class="night-sky" id="nightSky" aria-hidden="true"></div>
+<div class="night-moon" id="nightMoon" aria-hidden="true"><svg viewBox="0 0 64 64" fill="currentColor"><path d="M40.6 4a30 30 0 1 0 19.4 28.2A26.5 26.5 0 0 1 40.6 4z"/></svg></div>
 <!-- 开屏简笔画：青色 Y 一笔画 + Yaule -->
 <div class="page-loader" id="pageLoader">
   <svg class="loader-svg" viewBox="0 0 120 120" fill="none" stroke="currentColor" stroke-width="7" stroke-linecap="round" stroke-linejoin="round">
@@ -1657,6 +1722,21 @@
   </div>
 </section>
 
+<!-- 板块 6.5：开源足迹 · GitHub 贡献热力图 -->
+<section class="section alt" id="heatmap">
+  <div class="wrap">
+    <div class="section-head">
+      <p class="kicker">CONTRIBUTIONS</p>
+      <h2 data-i18n="heatmap.h2">开源足迹</h2>
+      <p class="desc" data-i18n="heatmap.desc">过去一年在 GitHub 上的每一天，青色越深代表越活跃。</p>
+    </div>
+    <div class="hm-wrap">
+      <div class="hm-grid" id="hmGrid"></div>
+      <p class="hm-total" id="hmTotal"></p>
+    </div>
+  </div>
+</section>
+
 <!-- 板块 7：技能雷达图 -->
 <section class="section alt" id="skills">
   <div class="wrap">
@@ -1692,6 +1772,28 @@
       </a>
     </div>
     <div class="vs-log" id="mcLog"></div>
+  </div>
+</section>
+
+<!-- 板块 8.5：访客留言板（GitHub Issues 驱动，防注入 + 违禁词过滤） -->
+<section class="section alt" id="guestbook">
+  <div class="wrap">
+    <div class="section-head">
+      <p class="kicker">GUESTBOOK</p>
+      <h2 data-i18n="guestbook.h2">访客留言板</h2>
+      <p class="desc" data-i18n="guestbook.desc">来过的人都可以留下一句话。提交后跳转 GitHub 确认，内容同步显示在这里。</p>
+    </div>
+    <div class="gb-wrap">
+      <form class="gb-form" id="gbForm">
+        <input type="text" id="gbName" maxlength="20" autocomplete="nickname" data-i18n="guestbook.name" data-i18n-ph="guestbook.name">
+        <textarea id="gbText" maxlength="300" rows="3" data-i18n="guestbook.text" data-i18n-ph="guestbook.text"></textarea>
+        <button type="submit" id="gbSubmit" data-i18n="guestbook.submit">写下留言</button>
+      </form>
+      <p class="gb-hint" id="gbHint"></p>
+      <div class="gb-list" id="gbList">
+        <p class="gb-load" data-i18n="guestbook.load">正在读取留言…</p>
+      </div>
+    </div>
   </div>
 </section>
 
@@ -2282,6 +2384,17 @@
       ['One day or day one. You decide.', 'Unknown'],
       ['Every night is a new version of you.', 'Yaule']
     ];
+    var NIGHTQ = [
+      ['深夜适合想念，也适合慢慢把事情做完。', 'Yaule'],
+      ['失眠夜不孤单，还有代码陪你。', 'Yaule'],
+      ['月亮不睡我不睡，我是人间小宝贝。', '网络'],
+      ['晚安，世界；早安，自己。', 'Yaule'],
+      ['夜晚是白天的另一个版本，安静而有光。', 'Yaule'],
+      ['把今天熬成明天，把咖啡换成月亮。', 'Yaule'],
+      ['夜再深，星星也会替你点灯。', 'Yaule'],
+      ['凌晨的风很轻，适合想一些重要的小事。', 'Yaule']
+    ];
+    function isNight() { var hh = new Date().getHours(); return hh >= 22 || hh < 6; }
     function render(q) {
       text.textContent = '“' + q[0] + '”' + (q[1] ? ' —— ' + q[1] : '');
     }
@@ -2297,7 +2410,7 @@
         .catch(function () { clearTimeout(timer); ok(null); });
     }
     function pickLocal(random) {
-      var pool = (window.YAULE_LANG === 'en') ? ENQ : quotes;
+      var pool = (window.YAULE_LANG === 'en') ? ENQ : (isNight() ? NIGHTQ : quotes);
       if (random) {
         var i;
         do { i = Math.floor(Math.random() * pool.length); } while (i === cur);
@@ -2677,7 +2790,13 @@
 
   /* ========== 更新日志（VSCode 风格）全量数据 + 主页简短渲染 + localStorage 同步 ========== */
   var YAULE_CHANGELOG = [
-    { ver: "v22", date: "2026-09-25 21:30:00", current: true, list: [
+    { ver: "v22.2", date: "2026-09-25 22:02:00", current: true, list: [
+      { lv: "[ADD]", time: "2026-09-25 22:02:00", text: "深夜特调：22:00-06:00 自动点亮星空与月亮，一言切换深夜语料库。", en: "Night mode: stars & moon light up from 22:00 to 06:00, quotes switch to a late-night pool." },
+      { lv: "[ADD]", time: "2026-09-25 22:01:00", text: "访客留言板：GitHub Issues 驱动，违禁词过滤 + 防脚本注入 + 30 秒冷却，提交跳转 GitHub 一键发布。", en: "Guestbook: powered by GitHub Issues, with banned-word filter, XSS protection and a 30s cooldown; submitting opens GitHub for one-click publish." },
+      { lv: "[ADD]", time: "2026-09-25 22:00:00", text: "开源足迹：GitHub 官方 API 跨仓库聚合，过去一年贡献热力图（青色深浅）。", en: "Open-source footprint: contribution heatmap of the last year aggregated across repos via the official GitHub API." },
+      { lv: "[ADD]", time: "2026-09-25 21:58:00", text: "SEO 升级：JSON-LD 结构化数据、hreflang 中英声明、og:image 与 Twitter 大图卡片。", en: "SEO upgrade: JSON-LD structured data, hreflang zh/en declarations, og:image and a large Twitter card." }
+    ]},
+    { ver: "v22", date: "2026-09-25 21:30:00", current: false, list: [
       { lv: "[ADD]", time: "2026-09-25 21:30:00", text: "i18n 补全：英文模式下全部可见文字英译（生活瞬间 / 作品 / 纪念日 / 此刻 / 技能 / 清单 / 页脚），切换进度条平滑并显示百分比。", en: "i18n complete: every visible string now translates to English (life moments / works / anniversaries / now / skills / bucket / footer); the switch progress bar is now smooth with a live percentage." },
       { lv: "[FIX]", time: "2026-09-25 21:28:00", text: "修复英文模式下载数、分享弹窗、推荐标签与紫外线单位未翻译的问题。", en: "Fixed download counts, share popup, daily-pick tag and UV unit staying untranslated in English mode." },
       { lv: "[FIX]", time: "2026-09-25 21:52:00", text: "补英译：页脚访问计数、今日幸运（色名 + 签语）、下载按钮提示均随语言切换。", en: "More i18n: footer visit counter, today's lucky (color name + tip) and download-button tooltip now follow the language." },
@@ -2885,6 +3004,192 @@
     setInterval(draw, 120);
   })();
 
+  /* ========== 深夜特调：22:00-06:00 星空 + 月亮 ========== */
+  (function () {
+    var hh = new Date().getHours();
+    if (hh >= 22 || hh < 6) {
+      document.body.classList.add('night');
+      var sky = document.getElementById('nightSky');
+      if (sky) {
+        var frag = document.createDocumentFragment();
+        for (var i = 0; i < 46; i++) {
+          var st = document.createElement('span');
+          st.className = 'night-star';
+          st.style.left = (Math.random() * 100) + '%';
+          st.style.top = (Math.random() * 100) + '%';
+          st.style.animationDelay = (Math.random() * 3.2) + 's';
+          st.style.animationDuration = (2.5 + Math.random() * 3) + 's';
+          frag.appendChild(st);
+        }
+        sky.appendChild(frag);
+      }
+    }
+  })();
+
+  /* ========== 访客留言板（GitHub Issues 驱动，防注入 + 违禁词） ========== */
+  (function () {
+    var REPO = 'Yaule-Rate/Yaule-Rate.github.io';
+    var list = document.getElementById('gbList');
+    var form = document.getElementById('gbForm');
+    var hint = document.getElementById('gbHint');
+    var nameEl = document.getElementById('gbName');
+    var textEl = document.getElementById('gbText');
+    var badWords = ['色情', '赌博', '博彩', '诈骗', '传销', '刷单', '毒品', '冰毒', '海洛因', '大麻', '违禁品', '假币', '枪支', '裸聊', '约炮', '援交', '代购'];
+    function hasBad(t) {
+      var low = String(t || '').toLowerCase();
+      for (var i = 0; i < badWords.length; i++) { if (low.indexOf(badWords[i]) !== -1) return true; }
+      if (/<script|javascript:|onerror=|onclick=|<iframe|<svg/i.test(low)) return true;
+      return false;
+    }
+    function esc(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
+    function fmtTime(t) {
+      var d = new Date(t);
+      if (isNaN(d.getTime())) return '';
+      return d.toLocaleDateString() + ' ' + d.toTimeString().slice(0, 5);
+    }
+    function syncNewI18n() {
+      var L = window.YAULE_LANG;
+      if (!L || !window.I18N) return;
+      document.querySelectorAll('#gbList [data-i18n]').forEach(function (el) {
+        var k2 = el.getAttribute('data-i18n');
+        if (k2 in window.I18N[L]) el.textContent = window.I18N[L][k2];
+      });
+    }
+    function load() {
+      fetch('https://api.github.com/repos/' + REPO + '/issues?state=all&sort=created&direction=desc&per_page=20')
+        .then(function (r) { if (!r.ok) throw new Error('http'); return r.json(); })
+        .then(function (arr) {
+          var msgs = (arr || []).filter(function (it) { return it && it.title && it.title.indexOf('[留言]') === 0; });
+          if (!msgs.length) {
+            list.innerHTML = '<p class="gb-empty" data-i18n="guestbook.empty">还没有留言，来做第一个吧。</p>';
+            syncNewI18n();
+            return;
+          }
+          var html = '';
+          msgs.forEach(function (m) {
+            html += '<div class="gb-item"><div class="gb-head"><b>' + esc(m.user ? m.user.login : 'guest') + '</b><span>' + esc(fmtTime(m.created_at)) + '</span></div><div class="gb-body">' + esc(m.body || '') + '</div></div>';
+          });
+          list.innerHTML = html;
+        })
+        .catch(function () {
+          list.innerHTML = '<p class="gb-empty" data-i18n="guestbook.loadfail">暂时读不到留言（网络或接口限制），稍后再来看看。</p>';
+          syncNewI18n();
+        });
+    }
+    var CD_KEY = 'yaule_gb_cd';
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      var en = window.YAULE_LANG === 'en';
+      var name = String(nameEl.value || '').trim().slice(0, 20);
+      var body = String(textEl.value || '').trim().slice(0, 300);
+      if (!name) { hint.textContent = en ? 'Please enter a nickname.' : '请先填写昵称。'; hint.className = 'gb-hint err'; return; }
+      if (!body) { hint.textContent = en ? 'Please write something.' : '请写下想说的话。'; hint.className = 'gb-hint err'; return; }
+      if (hasBad(name) || hasBad(body)) { hint.textContent = en ? 'Contains banned words, please rewrite.' : '内容包含违禁词，请修改后重试。'; hint.className = 'gb-hint err'; return; }
+      var cd = 0;
+      try { cd = parseInt(localStorage.getItem(CD_KEY) || '0', 10) || 0; } catch (err) {}
+      if (Date.now() < cd) {
+        var left = Math.ceil((cd - Date.now()) / 1000);
+        hint.textContent = en ? 'Please wait ' + left + 's before the next message.' : '请 ' + left + ' 秒后再留言。';
+        hint.className = 'gb-hint err';
+        return;
+      }
+      try { localStorage.setItem(CD_KEY, String(Date.now() + 30000)); } catch (err) {}
+      var title = '[留言] ' + name;
+      var issueBody = body + '\n\n---\nvia guestbook on ' + new Date().toLocaleString();
+      var url = 'https://github.com/' + REPO + '/issues/new?title=' + encodeURIComponent(title) + '&body=' + encodeURIComponent(issueBody);
+      var w = window.open(url, '_blank');
+      if (w) w.opener = null;
+      hint.textContent = en ? 'Opened GitHub. Sign in and click \"Submit new issue\" to publish.' : '已跳转 GitHub，登录后点击「Submit new issue」即可发布。';
+      hint.className = 'gb-hint';
+      textEl.value = '';
+    });
+    load();
+  })();
+
+  /* ========== 开源足迹 · GitHub 贡献热力图（官方 API 跨仓库聚合） ========== */
+  (function () {
+    var grid = document.getElementById('hmGrid');
+    var totalEl = document.getElementById('hmTotal');
+    if (!grid || !totalEl) return;
+    var lastSum = 0;
+    var WEEKS = 53, DAYS = 7;
+    function paint(days) {
+      var html = '';
+      var sum = 0;
+      var today = new Date();
+      var start = new Date(today.getFullYear(), today.getMonth(), today.getDate() - 364);
+      while (start.getDay() !== 0) start.setDate(start.getDate() - 1);
+      var cell = new Date(start);
+      for (var w = 0; w < WEEKS; w++) {
+        for (var d = 0; d < DAYS; d++) {
+          var iso = cell.toISOString().slice(0, 10);
+          var c = days[iso] || 0;
+          sum += c;
+          var lvl = c === 0 ? 0 : (c <= 2 ? 1 : c <= 4 ? 2 : c <= 7 ? 3 : 4);
+          html += '<span class="hm-cell l' + lvl + '" title="' + iso + ': ' + c + '"></span>';
+          cell.setDate(cell.getDate() + 1);
+        }
+      }
+      lastSum = sum;
+      grid.innerHTML = html;
+      if (window.__renderHmTotal) window.__renderHmTotal();
+    }
+    window.__renderHmTotal = function () {
+      if (!totalEl) return;
+      var en = window.YAULE_LANG === 'en';
+      totalEl.textContent = window.__hmFallback
+        ? (en ? 'Preview data (API unavailable)' : '预览数据（接口暂不可用）')
+        : (en ? 'Contributions in the last year: ' + lastSum : '过去一年累计贡献：' + lastSum);
+    };
+    function fetchJson(url) {
+      return fetch(url).then(function (r) { if (!r.ok) throw new Error(String(r.status)); return r.json(); });
+    }
+    function collect() {
+      var days = {};
+      fetchJson('https://api.github.com/users/Yaule-Rate/repos?per_page=30&sort=pushed')
+        .then(function (repos) {
+          if (!repos || !repos.length) throw new Error('no repos');
+          var jobs = repos.slice(0, 6).map(function (repo) {
+            return fetchJson('https://api.github.com/repos/' + repo.full_name + '/commits?per_page=100')
+              .then(function (list) {
+                return (list || []).map(function (c) {
+                  return c && c.commit && c.commit.committer && c.commit.committer.date;
+                }).filter(Boolean);
+              })
+              .catch(function () { return []; });
+          });
+          return Promise.all(jobs);
+        })
+        .then(function (groups) {
+          var all = [];
+          groups.forEach(function (g) { all = all.concat(g); });
+          if (!all.length) throw new Error('empty');
+          all.forEach(function (dt) {
+            var iso = new Date(dt).toISOString().slice(0, 10);
+            days[iso] = (days[iso] || 0) + 1;
+          });
+          paint(days);
+        })
+        .catch(function () {
+          window.__hmFallback = true;
+          var fake = {};
+          var d = new Date();
+          var cnt = 0;
+          for (var i = 0; i < 365; i++) {
+            d.setDate(d.getDate() - 1);
+            var w = d.getDay();
+            var n = 0;
+            if (i % 13 === 0) n = 3 + (i % 5);
+            else if (i % 29 === 0) n = 1;
+            if (w === 0 || w === 6) n = 0;
+            if (n > 0) { fake[d.toISOString().slice(0, 10)] = n; cnt++; }
+          }
+          paint(fake);
+        });
+    }
+    collect();
+  })();
+
   /* ========== 幸运今日（按日期固定） ========== */
   (function () {
     var el = document.getElementById('luckyToday');
@@ -3083,6 +3388,10 @@
       'footer.nav': '导航', 'footer.home': '首页', 'footer.space': '个人空间', 'footer.projects': '项目', 'footer.lifedata': '生活数据',
       'footer.works': '作品', 'footer.space2': '失眠夜个人空间', 'footer.awards': '荣誉奖项', 'footer.contactme': '联系我',
       'footer.contact': '联系', 'footer.email': '邮箱', 'footer.rss': 'RSS 订阅', 'footer.visit1': '本站访问', 'footer.visit2': ' 次',
+      'heatmap.h2': '开源足迹', 'heatmap.desc': '过去一年在 GitHub 上的每一天，青色越深代表越活跃。',
+      'guestbook.h2': '访客留言板', 'guestbook.desc': '来过的人都可以留下一句话。提交后跳转 GitHub 确认，内容同步显示在这里。',
+      'guestbook.name': '昵称', 'guestbook.text': '想说的话（300 字以内）', 'guestbook.submit': '写下留言',
+      'guestbook.load': '正在读取留言…', 'guestbook.empty': '还没有留言，来做第一个吧。', 'guestbook.loadfail': '暂时读不到留言（网络或接口限制），稍后再来看看。',
       'hero.quoteTitle': '换一句',
       'life.c1': '瑞幸咖啡', 'life.tag1': '续命中', 'life.un2': '杯',
       'life.d1': '从第一杯咖啡开始，悄悄记录每一次续命时刻',
@@ -3135,6 +3444,10 @@
       'footer.nav': 'Navigate', 'footer.home': 'Home', 'footer.space': 'My Space', 'footer.projects': 'Projects', 'footer.lifedata': 'Life Data',
       'footer.works': 'Works', 'footer.space2': 'Insomnia Night Space', 'footer.awards': 'Awards', 'footer.contactme': 'Contact',
       'footer.contact': 'Contact', 'footer.email': 'Email', 'footer.rss': 'RSS Feed', 'footer.visit1': 'Visits', 'footer.visit2': '',
+      'heatmap.h2': 'Open-Source Footprint', 'heatmap.desc': 'Every day on GitHub over the past year — the deeper the cyan, the more active.',
+      'guestbook.h2': 'Guestbook', 'guestbook.desc': 'Leave a word if you have been here. Submitting opens GitHub to confirm, then it shows up here.',
+      'guestbook.name': 'Nickname', 'guestbook.text': 'Your message (up to 300 chars)', 'guestbook.submit': 'Leave a message',
+      'guestbook.load': 'Loading messages…', 'guestbook.empty': 'No messages yet. Be the first!', 'guestbook.loadfail': 'Could not load messages right now (network or rate limit). Check back later.',
       'hero.quoteTitle': 'Another quote',
       'life.c1': 'Luckin Coffee', 'life.tag1': 'LIVE', 'life.un2': 'cups',
       'life.d1': 'From the first cup, quietly counting every refuel',
@@ -3180,6 +3493,10 @@
       var k = el.getAttribute('data-i18n');
       if (I18N[L] && k in I18N[L]) el.textContent = I18N[L][k];
     });
+    document.querySelectorAll('[data-i18n-ph]').forEach(function (el) {
+      var kp = el.getAttribute('data-i18n-ph');
+      if (I18N[L] && kp in I18N[L]) el.setAttribute('placeholder', I18N[L][kp]);
+    });
     var lb = document.getElementById('langLabel');
     if (lb) lb.textContent = L === 'en' ? 'EN' : '中';
     var st = document.getElementById('stayTime');
@@ -3213,6 +3530,7 @@
     if (window.__renderChangelog) window.__renderChangelog();
     if (window.__renderLucky) window.__renderLucky();
     document.querySelectorAll('.card-dl').forEach(function (a) { a.title = L === 'en' ? 'Download work' : '下载作品'; });
+    if (window.__renderHmTotal) window.__renderHmTotal();
     window.dispatchEvent(new CustomEvent('yaule-langchange'));
   }
   var langBusy = false;
