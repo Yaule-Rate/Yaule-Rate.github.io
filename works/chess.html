@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>棋类合集 · Yaule 作品详情</title>
+<meta name="description" content="五子棋与中国象棋，本地运行，无需联网。约上好友面对面来一局。">
+<style>
+:root {
+  --bg: #f6fafc; --card: #ffffff; --ink: #0f172a; --ink-2: #5b6b7e;
+  --line: #e2e8f0; --accent: #0284c7; --accent-2: #38bdf8; --soft: #e0f2fe;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  background: var(--bg); color: var(--ink);
+  font-family: "Noto Sans SC", "PingFang SC", "Microsoft YaHei", sans-serif;
+  line-height: 1.75; -webkit-font-smoothing: antialiased;
+}
+.wrap { max-width: 860px; margin: 0 auto; padding: 40px 24px 90px; }
+.topbar { display: flex; align-items: center; gap: 14px; margin-bottom: 34px; }
+.back-btn {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-size: 13.5px; color: var(--ink-2); text-decoration: none;
+  border: 1px solid var(--line); background: var(--card);
+  padding: 7px 15px; border-radius: 999px; transition: all 0.18s ease;
+}
+.back-btn:hover { color: var(--accent); border-color: var(--accent); transform: translateX(-2px); }
+.back-btn svg { width: 14px; height: 14px; }
+.breadcrumb { font-size: 12.5px; color: var(--ink-2); }
+.breadcrumb a { color: var(--accent); text-decoration: none; }
+.hero { margin-bottom: 30px; }
+.kicker { font-size: 12px; letter-spacing: 2.5px; color: var(--accent); font-weight: 600; margin-bottom: 8px; }
+h1 { font-size: 34px; font-weight: 700; line-height: 1.35; margin-bottom: 10px; }
+.sub { font-size: 15px; color: var(--ink-2); max-width: 640px; }
+.panel {
+  background: var(--card); border: 1px solid var(--line); border-radius: 18px;
+  padding: 26px 30px; margin-bottom: 22px;
+}
+.panel h2 {
+  font-size: 16px; font-weight: 600; margin-bottom: 14px;
+  display: flex; align-items: center; gap: 9px;
+}
+.panel h2::before {
+  content: ""; width: 4px; height: 16px; border-radius: 3px;
+  background: linear-gradient(180deg, var(--accent), var(--accent-2));
+}
+.panel p, .panel li { font-size: 14.5px; color: var(--ink-2); }
+.panel ul { padding-left: 20px; }
+.panel ul li { margin-bottom: 6px; }
+.tags { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; }
+.tag {
+  font-size: 12px; color: var(--accent); border: 1px solid rgba(2,132,199,0.3);
+  background: rgba(2,132,199,0.05); border-radius: 999px; padding: 2px 12px;
+}
+.actions { display: flex; gap: 12px; margin-top: 18px; flex-wrap: wrap; }
+.btn {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-size: 14px; font-weight: 500; text-decoration: none;
+  border-radius: 12px; padding: 10px 22px; transition: all 0.18s ease;
+}
+.btn-primary { background: var(--accent); color: #fff; box-shadow: 0 6px 16px rgba(2,132,199,0.3); }
+.btn-primary:hover { background: #0369a1; transform: translateY(-2px); }
+.btn-ghost { border: 1px solid var(--line); color: var(--ink-2); background: var(--card); }
+.btn-ghost:hover { border-color: var(--accent); color: var(--accent); }
+.btn svg { width: 15px; height: 15px; }
+.spec-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; }
+.spec {
+  background: var(--bg); border: 1px solid var(--line); border-radius: 12px;
+  padding: 13px 15px;
+}
+.spec .k { font-size: 11.5px; color: var(--ink-2); letter-spacing: 1px; margin-bottom: 3px; }
+.spec .v { font-size: 14px; font-weight: 600; }
+.vlog {
+  border-left: 2px solid var(--line); padding-left: 18px; margin-top: 4px;
+  display: flex; flex-direction: column; gap: 12px;
+}
+.vlog .v-item { position: relative; }
+.vlog .v-item::before {
+  content: ""; position: absolute; left: -23.5px; top: 7px;
+  width: 7px; height: 7px; border-radius: 50%; background: var(--accent);
+}
+.vlog .v-ver { font-weight: 600; font-size: 14px; }
+.vlog .v-desc { font-size: 13.5px; color: var(--ink-2); margin-top: 2px; }
+footer { margin-top: 44px; padding-top: 22px; border-top: 1px solid var(--line); }
+footer p { font-size: 12.5px; color: var(--ink-2); text-align: center; }
+footer a { color: var(--accent); text-decoration: none; }
+@media (max-width: 640px) {
+  .wrap { padding: 26px 16px 60px; }
+  h1 { font-size: 27px; }
+  .panel { padding: 20px 18px; }
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="topbar">
+    <a class="back-btn" href="../index.html">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+      返回标签页
+    </a>
+    <span class="breadcrumb"><a href="../index.html">首页</a> / <a href="../index.html#works">精选作品</a> / 棋类合集</span>
+  </div>
+
+  <div class="hero">
+    <p class="kicker">SELECTED WORK</p>
+    <h1>棋类合集</h1>
+    <p class="sub">五子棋与中国象棋同页双开，本地运行，无需联网。</p>
+    <div class="tags"><span class="tag">游戏</span><span class="tag">象棋</span><span class="tag">五子棋</span><span class="tag">本地对战</span></div>
+    <div class="actions">
+      <a class="btn btn-primary" href="../Chess-Gomoku-Collection.html" data-nodl>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="12" x2="2" y2="12"/><polyline points="5 9 12 16 19 9" transform="rotate(90 12 12)"/></svg>
+        开始使用
+      </a>
+      <a class="btn btn-ghost" href="../Chess-Gomoku-Collection.html" download="../Chess-Gomoku-Collection.html">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        下载文件
+      </a>
+    </div>
+  </div>
+
+  <div class="panel">
+    <h2>项目简介</h2>
+    <p>一个把五子棋与中国象棋放在同一个页面里的棋类合集。无需联网、无需登录，打开就能和身边的朋友来一局。棋子、棋盘、规则判断全部本地实现，界面清爽，手感流畅，是聚会与课间的解闷利器。</p>
+    <div class="spec-grid"><div class="spec"><div class="k">开发形式</div><div class="v">单文件 HTML</div></div><div class="spec"><div class="k">游戏数量</div><div class="v">2 款</div></div><div class="spec"><div class="k">对战方式</div><div class="v">本地双人</div></div><div class="spec"><div class="k">运行要求</div><div class="v">浏览器即可</div></div></div>
+  </div>
+
+  <div class="panel">
+    <h2>核心功能</h2>
+    <ul><li>五子棋：标准 15×15 棋盘，禁手之外的规则完整实现，支持悔棋。</li><li>中国象棋：完整棋规——马走日、象走田、蹩马腿、塞象眼、将帅对脸判定。</li><li>同页切换：两款游戏一键互切，无需刷新页面。</li><li>胜负判定自动完成：五子连珠、将军、绝杀即时提示。</li><li>悔棋与复盘：下错可悔，结束后可回放整局。</li></ul>
+  </div>
+
+  <div class="panel">
+    <h2>技术细节</h2>
+    <ul><li>棋盘以 Canvas 渲染，落子动画流畅，移动端同样顺滑。</li><li>象棋走法合法性校验完整覆盖，包含吃子与将军状态检测。</li><li>规则引擎独立实现，不依赖任何第三方库。</li><li>本地会话内保留对局状态，误刷新前可恢复。</li></ul>
+  </div>
+
+  <div class="panel">
+    <h2>使用指南</h2>
+    <ul><li>打开页面后在顶部切换「五子棋 / 中国象棋」。</li><li>执黑 / 执红一方先手，点击棋盘落子。</li><li>对局结束自动弹出胜负提示，可点击复盘或重新开始。</li><li>「悔棋」按钮可回退上一步，适合友谊局。</li></ul>
+  </div>
+
+  <div class="panel">
+    <h2>版本记录</h2>
+    <div class="vlog"><div class="v-item"><div class="v-ver">v2.1</div><div class="v-desc">当前版本：修复象棋异常判断，新增悔棋与复盘。</div></div><div class="v-item"><div class="v-ver">v1.0</div><div class="v-desc">初版：五子棋上线。</div></div><div class="v-item"><div class="v-ver">v1.5</div><div class="v-desc">新增中国象棋，双棋合璧。</div></div></div>
+  </div>
+
+  <footer>
+    <p>© 2026 <a href="../index.html">Yaule</a> · 一个藏在失眠夜里的小作品</p>
+  </footer>
+</div>
+</body>
+</html>

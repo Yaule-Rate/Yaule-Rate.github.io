@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>兴华中学广播站系统 · Yaule 作品详情</title>
+<meta name="description" content="广播排班管理、播放日程控制、站点信息维护，独立设计开发并投入校园实际使用。">
+<style>
+:root {
+  --bg: #f6fafc; --card: #ffffff; --ink: #0f172a; --ink-2: #5b6b7e;
+  --line: #e2e8f0; --accent: #0284c7; --accent-2: #38bdf8; --soft: #e0f2fe;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  background: var(--bg); color: var(--ink);
+  font-family: "Noto Sans SC", "PingFang SC", "Microsoft YaHei", sans-serif;
+  line-height: 1.75; -webkit-font-smoothing: antialiased;
+}
+.wrap { max-width: 860px; margin: 0 auto; padding: 40px 24px 90px; }
+.topbar { display: flex; align-items: center; gap: 14px; margin-bottom: 34px; }
+.back-btn {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-size: 13.5px; color: var(--ink-2); text-decoration: none;
+  border: 1px solid var(--line); background: var(--card);
+  padding: 7px 15px; border-radius: 999px; transition: all 0.18s ease;
+}
+.back-btn:hover { color: var(--accent); border-color: var(--accent); transform: translateX(-2px); }
+.back-btn svg { width: 14px; height: 14px; }
+.breadcrumb { font-size: 12.5px; color: var(--ink-2); }
+.breadcrumb a { color: var(--accent); text-decoration: none; }
+.hero { margin-bottom: 30px; }
+.kicker { font-size: 12px; letter-spacing: 2.5px; color: var(--accent); font-weight: 600; margin-bottom: 8px; }
+h1 { font-size: 34px; font-weight: 700; line-height: 1.35; margin-bottom: 10px; }
+.sub { font-size: 15px; color: var(--ink-2); max-width: 640px; }
+.panel {
+  background: var(--card); border: 1px solid var(--line); border-radius: 18px;
+  padding: 26px 30px; margin-bottom: 22px;
+}
+.panel h2 {
+  font-size: 16px; font-weight: 600; margin-bottom: 14px;
+  display: flex; align-items: center; gap: 9px;
+}
+.panel h2::before {
+  content: ""; width: 4px; height: 16px; border-radius: 3px;
+  background: linear-gradient(180deg, var(--accent), var(--accent-2));
+}
+.panel p, .panel li { font-size: 14.5px; color: var(--ink-2); }
+.panel ul { padding-left: 20px; }
+.panel ul li { margin-bottom: 6px; }
+.tags { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; }
+.tag {
+  font-size: 12px; color: var(--accent); border: 1px solid rgba(2,132,199,0.3);
+  background: rgba(2,132,199,0.05); border-radius: 999px; padding: 2px 12px;
+}
+.actions { display: flex; gap: 12px; margin-top: 18px; flex-wrap: wrap; }
+.btn {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-size: 14px; font-weight: 500; text-decoration: none;
+  border-radius: 12px; padding: 10px 22px; transition: all 0.18s ease;
+}
+.btn-primary { background: var(--accent); color: #fff; box-shadow: 0 6px 16px rgba(2,132,199,0.3); }
+.btn-primary:hover { background: #0369a1; transform: translateY(-2px); }
+.btn-ghost { border: 1px solid var(--line); color: var(--ink-2); background: var(--card); }
+.btn-ghost:hover { border-color: var(--accent); color: var(--accent); }
+.btn svg { width: 15px; height: 15px; }
+.spec-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; }
+.spec {
+  background: var(--bg); border: 1px solid var(--line); border-radius: 12px;
+  padding: 13px 15px;
+}
+.spec .k { font-size: 11.5px; color: var(--ink-2); letter-spacing: 1px; margin-bottom: 3px; }
+.spec .v { font-size: 14px; font-weight: 600; }
+.vlog {
+  border-left: 2px solid var(--line); padding-left: 18px; margin-top: 4px;
+  display: flex; flex-direction: column; gap: 12px;
+}
+.vlog .v-item { position: relative; }
+.vlog .v-item::before {
+  content: ""; position: absolute; left: -23.5px; top: 7px;
+  width: 7px; height: 7px; border-radius: 50%; background: var(--accent);
+}
+.vlog .v-ver { font-weight: 600; font-size: 14px; }
+.vlog .v-desc { font-size: 13.5px; color: var(--ink-2); margin-top: 2px; }
+footer { margin-top: 44px; padding-top: 22px; border-top: 1px solid var(--line); }
+footer p { font-size: 12.5px; color: var(--ink-2); text-align: center; }
+footer a { color: var(--accent); text-decoration: none; }
+@media (max-width: 640px) {
+  .wrap { padding: 26px 16px 60px; }
+  h1 { font-size: 27px; }
+  .panel { padding: 20px 18px; }
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="topbar">
+    <a class="back-btn" href="../index.html">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+      返回标签页
+    </a>
+    <span class="breadcrumb"><a href="../index.html">首页</a> / <a href="../index.html#works">精选作品</a> / 兴华中学广播站系统</span>
+  </div>
+
+  <div class="hero">
+    <p class="kicker">SELECTED WORK</p>
+    <h1>兴华中学广播站系统</h1>
+    <p class="sub">为校园广播站量身定制的排班与播放管理系统，已在兴华中学投入日常使用。</p>
+    <div class="tags"><span class="tag">校园工具</span><span class="tag">排班管理</span><span class="tag">广播系统</span><span class="tag">实际部署</span></div>
+    <div class="actions">
+      <a class="btn btn-primary" href="../Xinghua%20Middle%20School%20Broadcasting%20Station%20System.html" data-nodl>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="12" x2="2" y2="12"/><polyline points="5 9 12 16 19 9" transform="rotate(90 12 12)"/></svg>
+        开始使用
+      </a>
+      <a class="btn btn-ghost" href="../Xinghua%20Middle%20School%20Broadcasting%20Station%20System.html" download="../Xinghua%20Middle%20School%20Broadcasting%20Station%20System.html">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        下载文件
+      </a>
+    </div>
+  </div>
+
+  <div class="panel">
+    <h2>项目简介</h2>
+    <p>这是为兴华中学广播站独立设计开发的综合管理系统。从广播员的排班表、每日播放日程的编排，到站点设备与栏目信息的维护，全部集中在一个轻量化的网页里完成。系统已在校园实际运行，替代了原先手写排班表与纸质日程的方式，让每天的广播工作有章可循。</p>
+    <div class="spec-grid"><div class="spec"><div class="k">开发形式</div><div class="v">单文件 HTML</div></div><div class="spec"><div class="k">适用场景</div><div class="v">校园广播站</div></div><div class="spec"><div class="k">部署状态</div><div class="v">已实际使用</div></div><div class="spec"><div class="k">数据存储</div><div class="v">本地结构</div></div></div>
+  </div>
+
+  <div class="panel">
+    <h2>核心功能</h2>
+    <ul><li>广播员排班管理：按周生成值班表，支持多人轮值、调班与请假标记。</li><li>播放日程控制：为每个时段编排曲目与栏目，到点提醒，不漏播不空播。</li><li>站点信息维护：维护栏目介绍、设备清单与广播文案等站点资料。</li><li>一目了然的周视图：本周谁值班、今天播什么，打开页面就能看到。</li><li>轻量单文件：无需安装任何依赖，浏览器打开即可使用，方便部署到校园公共电脑。</li></ul>
+  </div>
+
+  <div class="panel">
+    <h2>技术细节</h2>
+    <ul><li>纯 HTML + CSS + JavaScript 实现，零第三方依赖，离线可用。</li><li>数据以结构化方式保存在本地，刷新页面不丢失，随开随用。</li><li>排班逻辑采用周期计算，跨周自动滚动，节假日可手动跳过。</li><li>界面遵循校园使用习惯，字号偏大、操作路径短，值班同学上手即会。</li></ul>
+  </div>
+
+  <div class="panel">
+    <h2>使用指南</h2>
+    <ul><li>打开页面后，默认进入本周排班视图，可直接查看当日值班人与播放内容。</li><li>点击「编辑排班」可调整任意时段的栏目与人员，修改即时保存。</li><li>设备与栏目资料在「站点信息」中维护，供全站复用。</li><li>建议在广播站电脑上固定一个浏览器窗口常驻使用。</li></ul>
+  </div>
+
+  <div class="panel">
+    <h2>版本记录</h2>
+    <div class="vlog"><div class="v-item"><div class="v-ver">v1.0</div><div class="v-desc">首个可用版本：排班表 + 播放日程 + 站点信息三大模块上线。</div></div><div class="v-item"><div class="v-ver">v1.1</div><div class="v-desc">增加周视图自动滚动到当日，优化移动端浏览。</div></div><div class="v-item"><div class="v-ver">v1.2</div><div class="v-desc">修复排班跨周滚动边界问题，补充节假日跳过功能。</div></div></div>
+  </div>
+
+  <footer>
+    <p>© 2026 <a href="../index.html">Yaule</a> · 一个藏在失眠夜里的小作品</p>
+  </footer>
+</div>
+</body>
+</html>

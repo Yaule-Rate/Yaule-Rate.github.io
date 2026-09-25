@@ -249,7 +249,7 @@
   }
   .quote-btn:hover { transform: rotate(180deg); background: var(--soft); }
   .quote-btn svg { width: 15px; height: 15px; }
-  #quoteText { font-size: 14px; }
+  #quoteText { font-size: 14px; flex: 1; min-width: 0; overflow-wrap: anywhere; word-break: break-word; }
   .theme-toggle {
     position: fixed;
     top: 18px;
@@ -329,6 +329,18 @@
   }
   .section.alt { background: var(--card-bg); }
   .section-head { margin-bottom: 48px; }
+.section-head h2 { position: relative; padding-bottom: 10px; }
+  .section-head h2::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 46px;
+    height: 3px;
+    border-radius: 3px;
+    background: linear-gradient(90deg, var(--accent), var(--accent-2));
+  }
+  .section-head { margin-bottom: 34px; }
   .section-head .kicker {
     font-size: 13px;
     color: var(--accent);
@@ -670,9 +682,10 @@
   /* ===== 此刻（时钟与天气）板块 ===== */
   .now-grid {
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-columns: 1fr 1fr;
     gap: 20px;
   }
+  .now-weather { grid-column: 1 / -1; }
   .now-card {
     background: var(--card-bg);
     border: 1px solid var(--line);
@@ -680,6 +693,19 @@
     padding: 34px 32px;
     min-height: 150px;
   }
+  .now-weather { padding: 28px 32px; }
+  .weather-detail {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px 22px;
+    margin-top: 18px;
+    padding-top: 16px;
+    border-top: 1px dashed var(--line);
+    font-size: 13.5px;
+    color: var(--ink-2);
+  }
+  .weather-detail span { display: inline-flex; align-items: baseline; gap: 4px; }
+  .weather-detail b { color: var(--accent); font-weight: 600; font-variant-numeric: tabular-nums; }
   .now-card .clock-row {
     font-size: 18px;
     margin-top: 0;
@@ -814,7 +840,7 @@
   .skill-bar-row { display: flex; align-items: center; gap: 12px; font-size: 13px; }
   .skill-bar-row .sb-name { width: 74px; flex: none; color: var(--ink-2); }
   .skill-bar-row .sb-track { flex: 1; height: 6px; background: var(--line); border-radius: 999px; overflow: hidden; }
-  .skill-bar-row .sb-fill { height: 100%; background: linear-gradient(90deg, var(--accent), var(--accent-2)); border-radius: 999px; width: 0; transition: width 0.9s ease; }
+  .skill-bar-row .sb-fill { display: block; height: 100%; background: linear-gradient(90deg, var(--accent), var(--accent-2)); border-radius: 999px; }
   .skill-bar-row .sb-num { width: 30px; text-align: right; color: var(--accent); font-weight: 600; }
   @media (max-width: 640px) { .skill-wrap { grid-template-columns: 1fr; gap: 24px; } .radar-box { max-width: 100%; } }
 
@@ -852,6 +878,68 @@
   .tl-title { font-size: 14.5px; font-weight: 600; color: var(--ink); line-height: 1.5; }
   .tl-desc { font-size: 13px; color: var(--ink-2); margin-top: 4px; line-height: 1.7; }
   .tl-tag { display: inline-block; font-size: 11px; color: var(--accent); border: 1px solid rgba(2,132,199,0.3); background: rgba(2,132,199,0.05); border-radius: 999px; padding: 1px 9px; margin-left: 8px; vertical-align: 2px; }
+
+  /* ===== 更新日志（我的世界启动器风格） ===== */
+  .mc-log { display: flex; flex-direction: column; gap: 14px; max-width: 860px; margin: 0 auto; }
+  .mc-ver {
+    background: var(--card-bg);
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    padding: 20px 26px 14px;
+    position: relative;
+    transition: border-color 0.18s ease;
+  }
+  .mc-ver:hover { border-color: rgba(2,132,199,0.45); }
+  .mc-ver.current { border-color: rgba(2,132,199,0.55); box-shadow: 0 0 0 3px rgba(2,132,199,0.08); }
+  .mc-ver-head { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; flex-wrap: wrap; }
+  .mc-ver-badge {
+    font-family: "Noto Serif SC", Georgia, serif;
+    font-weight: 700;
+    font-size: 16px;
+    color: #fff;
+    background: linear-gradient(135deg, var(--accent), var(--accent-2));
+    padding: 4px 14px;
+    border-radius: 9px;
+    letter-spacing: 0.5px;
+    box-shadow: 0 4px 12px rgba(2,132,199,0.28);
+  }
+  .mc-ver.current .mc-ver-badge { animation: badgeGlow 2.4s ease infinite; }
+  @keyframes badgeGlow { 0%,100% { box-shadow: 0 4px 12px rgba(2,132,199,0.28); } 50% { box-shadow: 0 4px 20px rgba(56,189,248,0.55); } }
+  .mc-ver-date { font-size: 12.5px; color: var(--ink-2); letter-spacing: 0.4px; }
+  .mc-ver-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 7px; }
+  .mc-ver-list li {
+    position: relative;
+    padding-left: 17px;
+    font-size: 13.5px;
+    color: var(--ink-2);
+    line-height: 1.75;
+  }
+  .mc-ver-list li::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0.72em;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--line-strong);
+  }
+  .mc-ver-list li b {
+    font-weight: 600;
+    font-size: 12px;
+    color: var(--ink);
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    padding: 0 7px;
+    margin-right: 8px;
+    background: var(--bg);
+  }
+  .mc-ver-list li.cat-new b { color: #15803d; border-color: rgba(34,197,94,0.35); background: rgba(34,197,94,0.06); }
+  .mc-ver-list li.cat-new::before { background: #22c55e; }
+  .mc-ver-list li.cat-chg b { color: var(--accent); border-color: rgba(2,132,199,0.35); background: rgba(2,132,199,0.06); }
+  .mc-ver-list li.cat-chg::before { background: var(--accent); }
+  .mc-ver-list li.cat-fix b { color: #c2410c; border-color: rgba(249,115,22,0.35); background: rgba(249,115,22,0.06); }
+  .mc-ver-list li.cat-fix::before { background: #f97316; }
 
   /* ===== 人生清单 ===== */
   .bucket-head { display: flex; align-items: baseline; gap: 14px; margin-bottom: 18px; flex-wrap: wrap; }
@@ -1065,7 +1153,7 @@
       <p class="desc">从校园工具到游戏辅助，都是一点点写出来的小玩意。点卡片打开，点右上角下载。</p>
     </div>
     <div class="grid">
-      <div class="card">
+      <div class="card" data-detail="works/xinghua.html">
         <a class="card-image" href="Xinghua%20Middle%20School%20Broadcasting%20Station%20System.html" rel="noopener" data-loading="正在加载作品">
           <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 18v-6a9 9 0 0 1 18 0v6"/><path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z"/></svg>
           
@@ -1083,7 +1171,7 @@
           <span class="meta"></span>
         </div>
       </div>
-      <div class="card">
+      <div class="card" data-detail="works/accounting.html">
         <a class="card-image" href="Self-service%20accounting%20system%20Pro%20Enhanced%20V6.html" rel="noopener" data-loading="正在加载作品">
           <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="2" width="16" height="20" rx="2"/><path d="M8 6h8M8 10h8M8 14h5"/></svg>
           
@@ -1101,7 +1189,7 @@
           <span class="meta"></span>
         </div>
       </div>
-      <div class="card">
+      <div class="card" data-detail="works/code-system.html">
         <a class="card-image" href="Nayingte%20M4e%20Code%20Writing%20System%20V2.9Pro.html" rel="noopener" data-loading="正在加载作品">
           <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
           
@@ -1119,7 +1207,7 @@
           <span class="meta"></span>
         </div>
       </div>
-      <div class="card">
+      <div class="card" data-detail="works/emoji-converter.html">
         <a class="card-image" href="Fancy-Pattern-Emoji-to-Image-Converter.html" rel="noopener" data-loading="正在加载作品">
           <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="9" cy="9" r="2"/><path d="M21 15l-5-5L5 21"/></svg>
           
@@ -1137,7 +1225,7 @@
           <span class="meta"></span>
         </div>
       </div>
-      <div class="card hidden">
+      <div class="card hidden" data-detail="works/cs-sens.html">
         <a class="card-image" href="CS-Sens-Calibrator.html" rel="noopener" data-loading="正在加载作品">
           <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>
           
@@ -1155,7 +1243,7 @@
           <span class="meta"></span>
         </div>
       </div>
-      <div class="card hidden">
+      <div class="card hidden" data-detail="works/chess.html">
         <a class="card-image" href="Chess-Gomoku-Collection.html" rel="noopener" data-loading="正在加载作品">
           <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8" cy="8" r="1.5"/><circle cx="16" cy="16" r="1.5"/><circle cx="16" cy="8" r="1.5"/><circle cx="8" cy="16" r="1.5"/></svg>
           
@@ -1197,20 +1285,7 @@
       <!-- 界面 1：瑞幸咖啡 -->
       <div class="life-panel active" id="lifeCoffee">
         <div class="life-visual">
-          <svg viewBox="0 0 200 200" fill="none" stroke="#17181C" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
-            <!-- 瑞幸标志：圆形徽标 + 鹿头 -->
-            <circle cx="60" cy="92" r="48"/>
-            <circle cx="60" cy="92" r="40"/>
-            <path d="M48 66 c2 -12 12 -19 21 -15 c-4 -2 -5 -7 -2 -9 c3 -3 9 -1 9 3 c4 -7 13 -9 17 -4 c-5 -1 -10 2 -11 8 c7 1 11 4 13 9 c-5 0 -11 -3 -13 -8 c0 7 -6 14 -15 18 c-8 5 -17 3 -19 -2 z"/>
-            <circle cx="50" cy="86" r="3.5" fill="#17181C"/>
-            <circle cx="70" cy="86" r="3.5" fill="#17181C"/>
-            <path d="M56 98 q5 5 9 0"/>
-            <!-- 咖啡杯 -->
-            <path d="M98 116 h74 a12 12 0 0 1 12 12 v8 a32 32 0 0 1 -32 32 h-34 a32 32 0 0 1 -32 -32 v-8 a12 12 0 0 1 12 -12 z"/>
-            <path d="M172 124 h9 a13 13 0 0 1 0 26 h-11"/>
-            <circle cx="130" cy="152" r="8"/>
-            <path d="M130 144 v16"/>
-          </svg>
+          <svg viewBox="0 0 48 48" fill="none" stroke="#17181C" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M8.59 7.185C16.616 26.679 36.858 17.289 37.163 5.5"/><path d="M5.36 11.748c14.195 11.548 29.842 6.712 37.28-3.931M26.07 27.054c-4.152.607-8.14 7.827-.56 11.304c4.427 2.03 11.45-.182 13.69 4.142M16.874 22.28c-4.253 4.097-6.784 9.884-6.178 18.745"/><path d="M23.45 18.408c.43 2.522 4.259 2.63 8.168 2.679a6.18 6.18 0 0 1-.983 3.861a6.54 6.54 0 0 1-4.564 2.107m-9.197-4.775a8.5 8.5 0 0 1-9.303-2.036c2.148-.837 4.314-1.66 9.478-.21c1.378-.36 1.532-1.208 2.139-1.875m11.979 5.809l-2.814.48"/></svg>
         </div>
         <div class="life-info">
           <h3>瑞幸咖啡 <span class="tag">续命中</span></h3>
@@ -1222,18 +1297,7 @@
       <!-- 界面 2：网易云音乐 -->
       <div class="life-panel" id="lifeMusic">
         <div class="life-visual">
-          <svg viewBox="0 0 200 200" fill="none" stroke="#17181C" stroke-width="5" stroke-linecap="round" stroke-linejoin="round">
-            <!-- 唱片外圈 -->
-            <circle cx="100" cy="100" r="78"/>
-            <circle cx="100" cy="100" r="60"/>
-            <!-- 音符：椭圆头 + 符杆 + 旗 -->
-            <ellipse cx="108" cy="80" rx="10" ry="7.5" fill="#17181C"/>
-            <path d="M118 80 l0 -36 c0 -4 4 -7 9 -5 l10 4"/>
-            <path d="M137 43 l-10 -4"/>
-            <path d="M118 44 l-12 -5"/>
-            <!-- 唱片中心 -->
-            <circle cx="100" cy="100" r="9" fill="#17181C"/>
-          </svg>
+          <svg viewBox="0 0 24 24" fill="#17181C" xmlns="http://www.w3.org/2000/svg"><path d="M13.046 9.388a3.919 3.919 0 0 0-.66.19c-.809.312-1.447.991-1.666 1.775a2.269 2.269 0 0 0-.074.81c.048.546.333 1.05.764 1.35a1.483 1.483 0 0 0 2.01-.286c.406-.531.355-1.183.24-1.636-.098-.387-.22-.816-.345-1.249a64.76 64.76 0 0 1-.269-.954zm-.82 10.07c-3.984 0-7.224-3.24-7.224-7.223 0-.98.226-3.02 1.884-4.822A7.188 7.188 0 0 1 9.502 5.6a.792.792 0 1 1 .587 1.472 5.619 5.619 0 0 0-2.795 2.462 5.538 5.538 0 0 0-.707 2.7 5.645 5.645 0 0 0 5.638 5.638c1.844 0 3.627-.953 4.542-2.428 1.042-1.68.772-3.931-.627-5.238a3.299 3.299 0 0 0-1.437-.777c.172.589.334 1.18.494 1.772.284 1.12.1 2.181-.519 2.989-.39.51-.956.888-1.592 1.064a3.038 3.038 0 0 1-2.58-.44 3.45 3.45 0 0 1-1.44-2.514c-.04-.467.002-.93.128-1.376.35-1.256 1.356-2.339 2.622-2.826a5.5 5.5 0 0 1 .823-.246l-.134-.505c-.37-1.371.25-2.579 1.547-3.007.329-.109.68-.145 1.025-.105.792.09 1.476.592 1.709 1.023.258.507-.096 1.153-.706 1.153a.788.788 0 0 1-.54-.213c-.088-.08-.163-.174-.259-.247a.825.825 0 0 0-.632-.166.807.807 0 0 0-.634.551c-.056.191-.031.406.02.595.07.256.159.597.217.82 1.11.098 2.162.54 2.97 1.296 1.974 1.844 2.35 4.886.892 7.233-1.197 1.93-3.509 3.177-5.889 3.177zM0 12c0 6.627 5.373 12 12 12s12-5.373 12-12S18.627 0 12 0 0 5.373 0 12Z"/></svg>
         </div>
         <div class="life-info">
           <h3>网易云音乐 <span class="tag">循环播放中</span></h3>
@@ -1246,21 +1310,7 @@
       <!-- 界面 3：我的世界 -->
       <div class="life-panel" id="lifeGame">
         <div class="life-visual">
-          <svg viewBox="0 0 200 200" fill="none" stroke="#17181C" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
-            <!-- 等轴测方块：顶面（草） + 两个侧面（土） -->
-            <path d="M100 26 L168 66 L100 106 L32 66 Z"/>
-            <path d="M32 66 L100 106 L100 168 L32 128 Z"/>
-            <path d="M168 66 L100 106 L100 168 L168 128 Z"/>
-            <!-- 顶面草纹理 -->
-            <path d="M58 60 l8 6 M76 68 l8 6 M94 76 l8 6 M112 84 l8 6 M56 74 l8 6 M90 88 l8 6"/>
-            <!-- 侧面土粒 -->
-            <circle cx="60" cy="118" r="2.5" fill="#17181C"/>
-            <circle cx="80" cy="132" r="2.5" fill="#17181C"/>
-            <circle cx="100" cy="146" r="2.5" fill="#17181C"/>
-            <circle cx="128" cy="116" r="2.5" fill="#17181C"/>
-            <circle cx="144" cy="130" r="2.5" fill="#17181C"/>
-            <circle cx="74" cy="152" r="2.5" fill="#17181C"/>
-          </svg>
+          <svg viewBox="0 0 24 24" fill="#17181C" xmlns="http://www.w3.org/2000/svg"><path d="M23.7397 10.0058l-2.4424.0023-.076.1198-.03-.1175h-2.4586l-.0599.136-.023-.136-2.4793.0023-.0438.1613-.0161-.1613-2.5023.0023-.023.265-.007-.265-2.5184.0046-.0092.242-.0254-.242-2.4954.0023-.016.1567-.0439-.1567H7.2673l-.0968.6705-.0553-.1382-.0254-.0024-.2096-.53-1.189.0024-.023.129-.0622-.129H4.431l-.03.1198-.0691-.1198-1.1659.0023-.136.523h-.3156l-.06.2282-.5506-.7512-1.1337.0023L0 13.0403l1.03.954h1.1244l.1774-.6706.0876.0968h.2995l.5.5737h1.1544l.023-.1082.0807.1082h1.1636l.0207-.1175.0737.1175h1.1751l.09-.629.3018.629h1.1889l.0138-.1451.0507.1451H11.03l.0093-.228.0276.228h2.4954l.023-.2511.0093.2511h1.2235l.0392-.175.0115.175h1.2097l.0506-.152.0139.152h1.1958l.0622-.1336.0185.1336h1.1843l.0714-.122.0208.122h1.175l.6798-.9677-.0323-.1544h.3756l.5346-.7396.4562 1.8594h1.152L24 13.0334l-.0184-.0737-.0738-.2535-.069-.2327s-.219-.712-.2466-.8065c-.0346-.1152-.0714-.2327-.1037-.3456l-.0046-.0184.4838-.583zm-2.325.1682h2.2005l.1567.493h-.6383l.0046.0162c.0254.1083.0554.2189.0853.3295.03.1129.0645.2258.0968.3433.0345.1152.069.235.106.3525.0368.1199.0737.2374.1083.3572.023.0737.0438.1451.0668.2189.023.0737.046.1497.0691.2235l.0692.228c.023.0761.0437.1522.0667.2282h-.9976l-.6268-2.2973h-.6405zm-.3548.0023l.1222.493h-1.295l.1175.56h1.3134l.136.553h-1.3342l.2466 1.182-.9954.0023-.5093-2.788zm-2.553.0023l.4816 2.788h-.9954l-.129-.8986h-.3733l.1221.8986h-.9954l-.3064-2.7857zm-2.5484.0023l.1037 1.0322h-.3272l.03.3111h.3272l.1451 1.4424h-.993l-.09-1.1751-.3686-.0092.076 1.1843h-.993l-.1037-2.7834zm-2.546.0023l.0138.493h-1.272l-.0299 1.719h1.3503l.016.5737h-2.364l.0945-2.7834zm-2.5438.0023l-.0208.493H9.56l-.0415.5692 1.3042.0023-.023.5369-1.3296.0023-.0437.6014 1.3456.0045-.0253.5738H8.387l.2926-2.7811zm-2.5392.0023l-.3226 2.781h-.9908l.1245-.8847-.3273-.0092.083-.5737-.3594-.007-.235 1.477H5.311l.5184-2.7811h.917l-.0806.5138.3157.0092-.076.5369.3548.0046L7.41 10.19zm-5.0346.0046h.9171l-.6475 2.7788h-.9884l.2972-1.1797H2.516l-.1543.5737h-.6406l.159-.5737h-.3595l-.3502 1.1797h-.97l.8917-2.7765h.8986l-.1475.5046.3134.0115L2 11.257h.6959l.1451-.5391h.318zm2.182.0046l-.546 2.7811h-.9885l.6175-2.7788zm12.1683.4217l.0391.3248-.341-.0023-.0437-.3202h-.4217l.0438.3525h.387l.0185.129h-.1936l.0715.5461h.2327l-.0184-.1843.3456-.0023.03.1866h.2373l-.083-.5414h-.1935l-.0162-.1314.3963-.0023-.0553-.3548zm-2.9286.0553l.0369.5737h.364l-.0438-.5737zm-1.1958 1.0046l.0184.5484-1.2166-.0023.0115-.4102h1.1774Z"/></svg>
         </div>
         <div class="life-info">
           <div class="mc-subtabs" role="tablist">
@@ -1340,11 +1390,17 @@
           <span id="clockDate"></span>
         </p>
       </div>
-      <div class="now-card">
+      <div class="now-card now-weather">
         <p class="weather-row" id="weatherRow">
           <svg id="weatherIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z"/></svg>
           <span id="weatherText">衢州 · 正在读取天气…</span>
         </p>
+        <div class="weather-detail" id="weatherDetail">
+          <span>体感 <b id="wFeels">--</b>°C</span>
+          <span>湿度 <b id="wHum">--</b>%</span>
+          <span>风速 <b id="wWind">--</b> km/h</span>
+          <span>紫外线 <b id="wUvi">--</b></span>
+        </div>
       </div>
       <div class="now-card now-progress">
         <div class="ring-wrap">
@@ -1410,25 +1466,106 @@
       <h2>更新日志</h2>
       <p class="desc">这个页面是怎么一点点长成现在这样的。</p>
     </div>
-    <div class="timeline">
-      <div class="tl-time">2026-09-25</div>
-      <div class="tl-axis"><span class="tl-dot now"></span></div>
-      <div class="tl-item"><span class="tl-title">站点增强 v14</span><span class="tl-tag">当前</span><div class="tl-desc">RSS 订阅、访问计数、SEO 标签、作品展开预览、图标呼吸、今年进度环。</div></div>
-      <div class="tl-time">2026-09-25</div>
-      <div class="tl-axis"><span class="tl-dot"></span></div>
-      <div class="tl-item"><span class="tl-title">此刻板块 v12</span><div class="tl-desc">时钟与天气独立成板块，新增翻牌时钟、节日飘浮与专属欢迎语。</div></div>
-      <div class="tl-time">2026-09-24</div>
-      <div class="tl-axis"><span class="tl-dot"></span></div>
-      <div class="tl-item"><span class="tl-title">天气与纪念日 v9</span><div class="tl-desc">接入实时天气（Open-Meteo），纪念日倒计时上线。</div></div>
-      <div class="tl-time">2026-09-22</div>
-      <div class="tl-axis"><span class="tl-dot"></span></div>
-      <div class="tl-item"><span class="tl-title">作品卡片 v3</span><div class="tl-desc">精选作品上架，支持下载与伪进度条进入。</div></div>
-      <div class="tl-time">2026-09-19</div>
-      <div class="tl-axis"><span class="tl-dot"></span></div>
-      <div class="tl-item"><span class="tl-title">生活瞬间 v2</span><div class="tl-desc">瑞幸咖啡、网易云音乐、我的世界三块生活数据。</div></div>
-      <div class="tl-time">2026-09-18</div>
-      <div class="tl-axis"><span class="tl-dot"></span></div>
-      <div class="tl-item"><span class="tl-title">站点上线 v1</span><div class="tl-desc">全世界语言的「欢迎你的到来」打字机欢迎页，部署到 GitHub Pages。</div></div>
+    <div class="mc-log">
+      <div class="mc-ver current">
+        <div class="mc-ver-head">
+          <span class="mc-ver-badge">v14</span>
+          <span class="mc-ver-date">2026-09-25 · 当前版本</span>
+        </div>
+        <ul class="mc-ver-list">
+          <li class="cat-new"><b>新增</b>RSS / Atom 订阅源，访客可订阅站点每一次更新。</li>
+          <li class="cat-new"><b>新增</b>busuanzi 访问计数，页脚实时显示访客与浏览量。</li>
+          <li class="cat-new"><b>新增</b>作品卡展开预览：扩展简介、技术标签，点卡片任意处即展开。</li>
+          <li class="cat-new"><b>新增</b>呼吸动效 favicon 与「幸运今日」每日签文。</li>
+          <li class="cat-chg"><b>优化</b>SEO：补全 keywords / og / twitter 标签，利于搜索引擎收录。</li>
+          <li class="cat-chg"><b>优化</b>卡片「查看详情」改为同页打开，不再被浏览器拦截。</li>
+        </ul>
+      </div>
+      <div class="mc-ver">
+        <div class="mc-ver-head">
+          <span class="mc-ver-badge">v13</span>
+          <span class="mc-ver-date">2026-09-25</span>
+        </div>
+        <ul class="mc-ver-list">
+          <li class="cat-new"><b>新增</b>「今年进度环」：2026 年已过百分比与剩余天数。</li>
+          <li class="cat-new"><b>新增</b>今日一言 3 秒自动轮播，点击可复制。</li>
+          <li class="cat-new"><b>新增</b>页面加载「Y」一笔画动画。</li>
+        </ul>
+      </div>
+      <div class="mc-ver">
+        <div class="mc-ver-head">
+          <span class="mc-ver-badge">v12</span>
+          <span class="mc-ver-date">2026-09-25</span>
+        </div>
+        <ul class="mc-ver-list">
+          <li class="cat-new"><b>新增</b>「此刻」板块独立：时钟与天气单独成卡。</li>
+          <li class="cat-new"><b>新增</b>翻牌时钟与页脚停留计时。</li>
+          <li class="cat-new"><b>新增</b>作品下载次数统计（本地记录）。</li>
+          <li class="cat-chg"><b>移除</b>语言标签小字，保持欢迎页纯粹。</li>
+        </ul>
+      </div>
+      <div class="mc-ver">
+        <div class="mc-ver-head">
+          <span class="mc-ver-badge">v10</span>
+          <span class="mc-ver-date">2026-09-25</span>
+        </div>
+        <ul class="mc-ver-list">
+          <li class="cat-new"><b>新增</b>节日飘浮：自动拉取中国法定节假日，中秋的月亮与灯笼飘 3 秒。</li>
+          <li class="cat-new"><b>新增</b>节日专属欢迎语（春节、端午、中秋等 8 个节日）。</li>
+        </ul>
+      </div>
+      <div class="mc-ver">
+        <div class="mc-ver-head">
+          <span class="mc-ver-badge">v9</span>
+          <span class="mc-ver-date">2026-09-24</span>
+        </div>
+        <ul class="mc-ver-list">
+          <li class="cat-new"><b>新增</b>实时天气（Open-Meteo 免费接口，衢州定位）。</li>
+          <li class="cat-new"><b>新增</b>纪念日板块：「活着的第 N 天」与「本站上线第 N 天」。</li>
+        </ul>
+      </div>
+      <div class="mc-ver">
+        <div class="mc-ver-head">
+          <span class="mc-ver-badge">v7</span>
+          <span class="mc-ver-date">2026-09-23</span>
+        </div>
+        <ul class="mc-ver-list">
+          <li class="cat-new"><b>新增</b>「生活瞬间」板块：瑞幸咖啡、网易云音乐、我的世界三块数据。</li>
+          <li class="cat-new"><b>新增</b>ROG 幻 16 式错峰滚动：图标先下移进入，文字随后浮现。</li>
+          <li class="cat-fix"><b>修复</b>奇异类合集布局错误与键盘异常。</li>
+        </ul>
+      </div>
+      <div class="mc-ver">
+        <div class="mc-ver-head">
+          <span class="mc-ver-badge">v6</span>
+          <span class="mc-ver-date">2026-09-22</span>
+        </div>
+        <ul class="mc-ver-list">
+          <li class="cat-new"><b>新增</b>26 种语言打字机轮播：打出 → 停留 → 逐字消失。</li>
+          <li class="cat-new"><b>新增</b>今日一言（hitokoto 联网，失败本地降级）。</li>
+          <li class="cat-chg"><b>优化</b>彩蛋模式全部改青色，移除紫色残留。</li>
+        </ul>
+      </div>
+      <div class="mc-ver">
+        <div class="mc-ver-head">
+          <span class="mc-ver-badge">v4</span>
+          <span class="mc-ver-date">2026-09-21</span>
+        </div>
+        <ul class="mc-ver-list">
+          <li class="cat-new"><b>新增</b>精选作品卡片：六个作品上架，支持下载。</li>
+          <li class="cat-new"><b>新增</b>5 秒伪进度条，模拟进入作品。</li>
+        </ul>
+      </div>
+      <div class="mc-ver">
+        <div class="mc-ver-head">
+          <span class="mc-ver-badge">v1</span>
+          <span class="mc-ver-date">2026-09-18</span>
+        </div>
+        <ul class="mc-ver-list">
+          <li class="cat-new"><b>新增</b>站点上线：全世界语言的「欢迎你的到来」欢迎页。</li>
+          <li class="cat-new"><b>新增</b>深色页脚 + 灰白大字 Yaule，WorkBuddy 风格。</li>
+        </ul>
+      </div>
     </div>
   </div>
 </section>
@@ -1602,6 +1739,8 @@
         return;
       }
       if (e.target.closest('.meta')) {
+        var dd = this.getAttribute('data-detail');
+        if (dd) { window.location.href = dd; return; }
         var link = this.querySelector('a.card-image');
         if (link) link.click();
         return;
@@ -1743,12 +1882,12 @@
     };
     tabs.forEach(function (tab) {
       tab.addEventListener('click', function () {
+        if (this.classList.contains('active')) return;
         tabs.forEach(function (t) { t.classList.remove('active'); });
         this.classList.add('active');
         var key = this.getAttribute('data-life');
-        Object.keys(panels).forEach(function (k2) {
-          panels[k2].classList.toggle('active', k2 === key);
-        });
+        Object.keys(panels).forEach(function (k2) { panels[k2].classList.remove('active'); });
+        setTimeout(function () { panels[key].classList.add('active'); }, 70);
       });
     });
   })();
@@ -1982,12 +2121,20 @@
       if (code <= 86) return '阵雪';
       return '雷阵雨';
     }
-    fetch('https://api.open-meteo.com/v1/forecast?latitude=28.94&longitude=118.87&current=temperature_2m,weather_code&timezone=Asia%2FShanghai&forecast_days=1')
+    fetch('https://api.open-meteo.com/v1/forecast?latitude=28.94&longitude=118.87&current=temperature_2m,relative_humidity_2m,apparent_temperature,weather_code,wind_speed_10m,uv_index&timezone=Asia%2FShanghai&forecast_days=1')
       .then(function (r) { if (!r.ok) throw new Error('weather'); return r.json(); })
       .then(function (d) {
         var c = d.current;
         icon.innerHTML = svgFor(c.weather_code);
         txt.innerHTML = '<span>衢州</span><span class="weather-temp">' + Math.round(c.temperature_2m) + '°C</span><span>' + textFor(c.weather_code) + '</span>';
+        var fe = document.getElementById('wFeels');
+        var hu = document.getElementById('wHum');
+        var wi = document.getElementById('wWind');
+        var uv = document.getElementById('wUvi');
+        if (fe) fe.textContent = Math.round(c.apparent_temperature);
+        if (hu) hu.textContent = Math.round(c.relative_humidity_2m);
+        if (wi) wi.textContent = Math.round(c.wind_speed_10m);
+        if (uv) uv.textContent = Math.round(c.uv_index);
       })
       .catch(function () { txt.textContent = '衢州 · 天气暂时不可用'; });
   })();
@@ -2316,11 +2463,8 @@
     svg.innerHTML = defs + grid + axes + area + dots + labels;
     if (bars) {
       bars.innerHTML = skills.map(function (s) {
-        return '<div class="skill-bar-row"><span class="sb-name">' + s.name + '</span><span class="sb-track"><span class="sb-fill" data-w="' + (s.val * 10) + '"></span></span><span class="sb-num">' + s.val + '</span></div>';
+        return '<div class="skill-bar-row"><span class="sb-name">' + s.name + '</span><span class="sb-track"><span class="sb-fill" style="width:' + (s.val * 10) + '%"></span></span><span class="sb-num">' + s.val + '</span></div>';
       }).join('');
-      setTimeout(function () {
-        bars.querySelectorAll('.sb-fill').forEach(function (f) { f.style.width = f.getAttribute('data-w') + '%'; });
-      }, 300);
     }
   })();
 
@@ -2328,10 +2472,10 @@
   (function () {
     var grid = document.getElementById('bucketGrid');
     if (!grid) return;
+    // 预设完成状态：默认写死在程序里（第1行2、3；第2行1、2、3；第3行1、2、3、4；第4行1、2、3、4；第5行2、3、4）
     var items = ['去看一次现场演唱会', '看一场完整的日出', '学会弹一首完整的曲子', '写一本属于自己的小说', '跑一次五公里', '去一次西藏', '给爸妈买一份大礼物', '养一盆活过一年的绿植', '亲手做一顿年夜饭', '学会一门新的外语', '看一次极光', '独自去一座陌生城市旅行', '学会做咖啡拉花', '给十年后的自己写一封信', '种一棵属于自己的树', '养一只猫', '跳一次伞', '读完《三国演义》', '做一次公益志愿者', '发一张自己的专辑', '开一家小店', '通宵看一次流星雨', '把房间布置成喜欢的样子', '拍一支 Vlog 记录一天'];
-    var KEY = 'yaule_bucket';
-    var done = {};
-    try { done = JSON.parse(localStorage.getItem(KEY) || '{}') || {}; } catch (e) {}
+    var doneMap = {};
+    [1, 2, 4, 5, 6, 8, 9, 10, 11, 12, 13, 14, 15, 17, 18, 19].forEach(function (i) { doneMap[i] = 1; });
     var doneN = document.getElementById('bkDone');
     var totalN = document.getElementById('bkTotal');
     var fill = document.getElementById('bkFill');
@@ -2345,24 +2489,9 @@
       if (fill) fill.style.width = (n / items.length * 100) + '%';
     }
     grid.innerHTML = items.map(function (t, idx) {
-      var on = done[idx];
-      return '<div class="bucket-item' + (on ? ' done' : '') + '" data-i="' + idx + '" role="button" tabindex="0"><span class="bk-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span><span class="bk-text">' + t + '</span></div>';
+      var on = doneMap[idx];
+      return '<div class="bucket-item' + (on ? ' done' : '') + '"><span class="bk-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span><span class="bk-text">' + t + '</span></div>';
     }).join('');
-    grid.addEventListener('click', function (e) {
-      var item = e.target.closest('.bucket-item');
-      if (!item) return;
-      var i = item.getAttribute('data-i');
-      item.classList.toggle('done');
-      done[i] = item.classList.contains('done') ? 1 : 0;
-      try { localStorage.setItem(KEY, JSON.stringify(done)); } catch (err) {}
-      refresh();
-    });
-    grid.addEventListener('keydown', function (e) {
-      if ((e.key === 'Enter' || e.key === ' ') && e.target.classList.contains('bucket-item')) {
-        e.preventDefault();
-        e.target.click();
-      }
-    });
     refresh();
   })();
 </script>
