@@ -36,7 +36,7 @@
     --soft: #F1F2F4;
     --soft-2: #FAFAF9;
     --overlay: rgba(250, 250, 249, 0.96);
-    --card-image: linear-gradient(135deg, #e0f2fe, #bae6fd);
+    --card-image: linear-gradient(135deg, #d7effc, #9fd9f3);
   }
   :root[data-theme="dark"] {
     --bg: #131519;
@@ -139,18 +139,23 @@
     font-size: 13px;
     color: var(--ink-2);
     opacity: 0.6;
+    cursor: pointer;
+    user-select: none;
+    -webkit-user-select: none;
+    transition: color 0.2s;
   }
+  .loading-hint:active { color: var(--accent); }
   .load-skip {
     margin-top: 20px;
     display: inline-flex; align-items: center; gap: 7px;
     font-size: 12.5px; color: var(--accent);
     border: 1px solid rgba(2,132,199,0.35); background: rgba(2,132,199,0.06);
     border-radius: 999px; padding: 9px 20px; cursor: pointer;
-    opacity: 0; transform: translateY(8px);
-    transition: opacity 0.35s ease, transform 0.35s ease;
+    opacity: 0;
+    transition: opacity 0.35s ease;
     font-family: inherit; user-select: none; -webkit-user-select: none;
   }
-  .load-skip.show { opacity: 1; transform: translateY(0); }
+  .load-skip.show { opacity: 1; }
   .load-skip svg { width: 14px; height: 14px; }
   .load-skip:active { background: rgba(2,132,199,0.16); }
   .load-skip small { font-size: 11px; opacity: 0.75; }
@@ -453,17 +458,17 @@
     align-items: center;
     gap: 8px;
     padding: 14px 32px;
-    border: 1px solid var(--line);
+    border: 1px solid rgba(2,132,199,0.35);
     border-radius: 999px;
-    background: var(--card-bg);
-    color: var(--ink);
+    background: rgba(2,132,199,0.05);
+    color: var(--accent);
     font-size: 15px;
     font-weight: 500;
     cursor: pointer;
     transition: all .15s;
     font-family: inherit;
   }
-  .btn-more:hover { border-color: var(--accent); color: var(--accent); }
+  .btn-more:hover { border-color: var(--accent); color: var(--accent); background: rgba(2,132,199,0.12); }
   .hidden { display: none !important; }
 
   /* ===== 生活瞬间（Apple 风格三界面切换） ===== */
@@ -580,14 +585,14 @@
   }
   .mc-metric {
     padding: 14px 16px;
-    border: 1.5px solid #17181C;
+    border: 1.5px solid rgba(2,132,199,0.38);
     border-radius: 12px;
     background: transparent;
   }
-  .mc-metric .m-val { color: #17181C; }
+  .mc-metric .m-val { color: var(--accent); }
   .mc-metric .m-label { color: #17181C; opacity: 0.62; }
-  :root[data-theme="dark"] .mc-metric { border-color: #E8EAED; }
-  :root[data-theme="dark"] .mc-metric .m-val { color: #E8EAED; }
+  :root[data-theme="dark"] .mc-metric { border-color: rgba(56,189,248,0.42); }
+  :root[data-theme="dark"] .mc-metric .m-val { color: #7dd3fc; }
   :root[data-theme="dark"] .mc-metric .m-label { color: #E8EAED; }
   .mc-metric .m-val {
     font-family: "Noto Serif SC", Georgia, serif;
@@ -1005,6 +1010,20 @@
   .mc-ver-list li.cat-chg::before { background: var(--accent); }
   .mc-ver-list li.cat-fix b { color: #c2410c; border-color: rgba(249,115,22,0.4); background: rgba(249,115,22,0.07); }
   .mc-ver-list li.cat-fix::before { background: #f97316; }
+
+  /* ===== v18 视觉统一：下方板块注入青色血脉（顶部渐变分线） ===== */
+  .card, .repo-card, .mc-ver, .now-card, .bucket-item { position: relative; }
+  .card::before, .repo-card::before, .mc-ver::before, .now-card::before, .bucket-item::before {
+    content: "";
+    position: absolute; top: 0; left: 0; right: 0; height: 3px;
+    border-radius: 999px 999px 0 0;
+    background: linear-gradient(90deg, var(--accent), var(--accent-2));
+    opacity: 0.9;
+    pointer-events: none;
+    z-index: 1;
+  }
+  .bucket-item { transition: border-color 0.15s, transform 0.15s; }
+  .bucket-item:hover { border-color: rgba(2,132,199,0.45); transform: translateY(-2px); }
 
   /* ===== 人生清单 ===== */
   .bucket-head { display: flex; align-items: baseline; gap: 14px; margin-bottom: 18px; flex-wrap: wrap; }
@@ -1776,11 +1795,15 @@
   var loadPercent = document.getElementById('loadPercent');
   var loadTitle = document.getElementById('loadTitle');
   var loadSkip = document.getElementById('loadSkip');
+  var loadHint = document.querySelector('.loading-hint');
   var loadTimer = null;
   var skipTimer = null;
   var endTimer = null;
   var boostTimer = null;
   var progress = 0;
+  var finished = false;
+  var pendingUrl = '';
+  var pendingNew = false;
 
   function hideLoading() {
     overlay.classList.remove('active');
@@ -1793,10 +1816,34 @@
     if (loadSkip) loadSkip.classList.remove('show');
   }
 
+  // 收尾：进度冲到 100% 并执行跳转（常速 8 秒到点 / 长按提前冲满 都会走到这里）
+  function completeLoading() {
+    if (finished) return;
+    finished = true;
+    if (loadTimer) { clearInterval(loadTimer); loadTimer = null; }
+    if (skipTimer) { clearTimeout(skipTimer); skipTimer = null; }
+    if (boostTimer) { clearInterval(boostTimer); boostTimer = null; }
+    if (endTimer) { clearTimeout(endTimer); endTimer = null; }
+    loadBar.style.width = '100%';
+    loadPercent.textContent = '100%';
+    setTimeout(function () {
+      if (pendingNew) {
+        window.open(pendingUrl, '_blank');
+        hideLoading();
+        showToast('已在新标签页打开');
+      } else {
+        window.location.href = pendingUrl;
+      }
+    }, 250);
+  }
+
   function startLoading(targetUrl, title, openInNew) {
     loadTitle.textContent = title || '正在进入';
     overlay.classList.add('active');
     progress = 0;
+    finished = false;
+    pendingUrl = targetUrl;
+    pendingNew = openInNew;
     loadBar.style.width = '0%';
     loadPercent.textContent = '0%';
     if (loadSkip) loadSkip.classList.remove('show');
@@ -1809,41 +1856,45 @@
     }, 100);
     // 第 3 秒弹出「长按加速」按钮
     skipTimer = setTimeout(function () { if (loadSkip) loadSkip.classList.add('show'); }, 3000);
-    endTimer = setTimeout(function () {
-      clearInterval(loadTimer); loadTimer = null;
-      clearTimeout(skipTimer); skipTimer = null;
-      loadBar.style.width = '100%';
-      loadPercent.textContent = '100%';
-      setTimeout(function () {
-        if (openInNew) {
-          window.open(targetUrl, '_blank');
-          hideLoading();
-          showToast('已在新标签页打开');
-        } else {
-          window.location.href = targetUrl;
-        }
-      }, 300);
-    }, 8000);
+    endTimer = setTimeout(function () { completeLoading(); }, 8000);
   }
 
-  // 长按加速：按住不放，每 70ms 前进 6%
+  // 长按加速：按得越久加载越快（0 秒约 57%/s，每秒递增约 12%/70ms）；到 95% 直接冲满并立即进入
+  var boostStart = 0;
+  function startBoost() {
+    if (boostTimer) return;
+    boostStart = Date.now();
+    boostTimer = setInterval(function () {
+      var hold = (Date.now() - boostStart) / 1000;
+      var inc = 2 + hold * 4;
+      progress += inc;
+      if (progress >= 95) {
+        progress = 95;
+        loadBar.style.width = '95%';
+        loadPercent.textContent = '95%';
+        completeLoading();
+        return;
+      }
+      loadBar.style.width = progress + '%';
+      loadPercent.textContent = Math.floor(progress) + '%';
+    }, 70);
+  }
+  function stopBoost() {
+    if (boostTimer) { clearInterval(boostTimer); boostTimer = null; }
+  }
+  // 热区 = 加速按钮 + 提示文字：按钮第 3 秒才出现，但它的位置和提示文字从第 0 秒就可按住加速
   if (loadSkip) {
-    function startBoost() {
-      if (boostTimer) return;
-      boostTimer = setInterval(function () {
-        progress += 6;
-        if (progress > 95) progress = 95;
-        loadBar.style.width = progress + '%';
-        loadPercent.textContent = Math.floor(progress) + '%';
-      }, 70);
-    }
-    function stopBoost() {
-      if (boostTimer) { clearInterval(boostTimer); boostTimer = null; }
-    }
     loadSkip.addEventListener('mousedown', startBoost);
     loadSkip.addEventListener('touchstart', startBoost, { passive: true });
     ['mouseup', 'mouseleave', 'touchend', 'touchcancel'].forEach(function (ev) {
       loadSkip.addEventListener(ev, stopBoost);
+    });
+  }
+  if (loadHint) {
+    loadHint.addEventListener('mousedown', startBoost);
+    loadHint.addEventListener('touchstart', startBoost, { passive: true });
+    ['mouseup', 'mouseleave', 'touchend', 'touchcancel'].forEach(function (ev) {
+      loadHint.addEventListener(ev, stopBoost);
     });
   }
 

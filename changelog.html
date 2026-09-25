@@ -122,10 +122,10 @@
     font-size: 12.5px; color: var(--accent);
     border: 1px solid rgba(2,132,199,0.35); background: rgba(2,132,199,0.06);
     border-radius: 999px; padding: 9px 20px; cursor: pointer;
-    opacity: 0; transform: translateY(8px); transition: opacity 0.35s ease, transform 0.35s ease;
+    opacity: 0; transition: opacity 0.35s ease;
     font-family: inherit; user-select: none; -webkit-user-select: none;
   }
-  .load-skip.show { opacity: 1; transform: translateY(0); }
+  .load-skip.show { opacity: 1; }
   .load-skip svg { width: 14px; height: 14px; }
   .load-skip:active { background: rgba(2,132,199,0.16); }
   .load-skip small { font-size: 11px; opacity: 0.75; }
@@ -337,6 +337,8 @@ render();
   var skip = document.getElementById('loadSkip');
   var progress = 0;
   var boost = null;
+  var boostStart = 0;
+  var doneFlag = false;
   var timer = setInterval(function () {
     progress += Math.random() * 2.2;
     if (progress > 95) progress = 95;
@@ -344,12 +346,35 @@ render();
     pct.textContent = Math.floor(progress) + '%';
   }, 100);
   var skipTimer = setTimeout(function () { if (skip) skip.classList.add('show'); }, 3000);
+  function finishLoad() {
+    if (doneFlag) return;
+    doneFlag = true;
+    if (timer) clearInterval(timer);
+    if (skipTimer) clearTimeout(skipTimer);
+    if (boost) clearInterval(boost);
+    bar.style.width = '100%';
+    pct.textContent = '100%';
+    setTimeout(function () {
+      loader.classList.add('done');
+      setTimeout(function () { if (loader.parentNode) loader.parentNode.removeChild(loader); }, 500);
+    }, 300);
+  }
+  // 长按加速：按得越久越快；到 95% 冲满并立即进入（按钮第 3 秒出现，但其位置从第 0 秒就可按住）
   if (skip) {
     function startBoost() {
       if (boost) return;
+      boostStart = Date.now();
       boost = setInterval(function () {
-        progress += 6;
-        if (progress > 95) progress = 95;
+        var hold = (Date.now() - boostStart) / 1000;
+        var inc = 2 + hold * 4;
+        progress += inc;
+        if (progress >= 95) {
+          progress = 95;
+          bar.style.width = '95%';
+          pct.textContent = '95%';
+          finishLoad();
+          return;
+        }
         bar.style.width = progress + '%';
         pct.textContent = Math.floor(progress) + '%';
       }, 70);
@@ -363,16 +388,7 @@ render();
       skip.addEventListener(ev, stopBoost);
     });
   }
-  setTimeout(function () {
-    clearInterval(timer);
-    clearTimeout(skipTimer);
-    bar.style.width = '100%';
-    pct.textContent = '100%';
-    setTimeout(function () {
-      loader.classList.add('done');
-      setTimeout(function () { if (loader.parentNode) loader.parentNode.removeChild(loader); }, 500);
-    }, 300);
-  }, 8000);
+  setTimeout(finishLoad, 8000);
 })();
 
 /* ========== 主题切换 ========== */
