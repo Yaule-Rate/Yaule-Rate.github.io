@@ -810,7 +810,38 @@
   /* ===== 一言过渡 ===== */
   #quoteText { transition: opacity 0.22s ease; }
 
-  /* ===== （旧独立开屏动画已合并进 loadingOverlay，见上方加载遮罩样式） ===== */
+  /* ===== 开屏简笔画：青色 Y 一笔画 + Yaule（首次进入 / 返回主页时播放，约 1.7 秒） ===== */
+  .page-loader {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    background: var(--bg);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 18px;
+    transition: opacity 0.5s ease, visibility 0.5s ease;
+  }
+  .page-loader.done { opacity: 0; visibility: hidden; }
+  .loader-svg { width: 84px; height: 84px; color: var(--accent); }
+  .loader-path {
+    stroke-dasharray: 100;
+    stroke-dashoffset: 100;
+    animation: loaderDraw 1.1s ease forwards;
+  }
+  @keyframes loaderDraw { to { stroke-dashoffset: 0; } }
+  .loader-name {
+    font-family: "Noto Serif SC", Georgia, serif;
+    font-size: 20px;
+    font-weight: 700;
+    letter-spacing: 0.24em;
+    color: var(--ink);
+    opacity: 0;
+    transform: translateY(6px);
+    animation: loaderName 0.6s ease 0.55s forwards;
+  }
+  @keyframes loaderName { to { opacity: 1; transform: translateY(0); } }
   /* ===== 作品展开预览 ===== */
   .card-preview {
     max-height: 0;
@@ -1201,7 +1232,14 @@
 </style>
 </head>
 <body>
-<!-- 加载遮罩（统一为「进入日志」样式：Y 一笔画 + 名字 + 8 秒进度条） -->
+<!-- 开屏简笔画：青色 Y 一笔画 + Yaule -->
+<div class="page-loader" id="pageLoader">
+  <svg class="loader-svg" viewBox="0 0 120 120" fill="none" stroke="currentColor" stroke-width="7" stroke-linecap="round" stroke-linejoin="round">
+    <path class="loader-path" pathLength="100" d="M22 18 L60 54 L98 18 M60 54 L60 102"/>
+  </svg>
+  <p class="loader-name">Yaule</p>
+</div>
+<!-- 跳转进度条（统一为「进入日志」样式：Y 一笔画 + 名字 + 8 秒进度条） -->
 <div class="loading-overlay" id="loadingOverlay">
   <svg class="loader-svg" viewBox="0 0 120 120" fill="none" stroke="currentColor" stroke-width="7" stroke-linecap="round" stroke-linejoin="round">
     <path class="loader-path" pathLength="100" d="M22 18 L60 54 L98 18 M60 54 L60 102"/>
@@ -1350,7 +1388,7 @@
     </div>
     <div class="grid">
       <div class="card" data-detail="works/xinghua.html">
-        <a class="card-image" href="Xinghua%20Middle%20School%20Broadcasting%20Station%20System.html" rel="noopener" data-loading="正在加载作品">
+        <a class="card-image" href="Xinghua%20Middle%20School%20Broadcasting%20Station%20System.html" rel="noopener">
           <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 18v-6a9 9 0 0 1 18 0v6"/><path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z"/></svg>
           
         </a>
@@ -1368,7 +1406,7 @@
         </div>
       </div>
       <div class="card" data-detail="works/accounting.html">
-        <a class="card-image" href="Self-service%20accounting%20system%20Pro%20Enhanced%20V6.html" rel="noopener" data-loading="正在加载作品">
+        <a class="card-image" href="Self-service%20accounting%20system%20Pro%20Enhanced%20V6.html" rel="noopener">
           <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="2" width="16" height="20" rx="2"/><path d="M8 6h8M8 10h8M8 14h5"/></svg>
           
         </a>
@@ -1386,7 +1424,7 @@
         </div>
       </div>
       <div class="card" data-detail="works/code-system.html">
-        <a class="card-image" href="Nayingte%20M4e%20Code%20Writing%20System%20V2.9Pro.html" rel="noopener" data-loading="正在加载作品">
+        <a class="card-image" href="Nayingte%20M4e%20Code%20Writing%20System%20V2.9Pro.html" rel="noopener">
           <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
           
         </a>
@@ -1404,7 +1442,7 @@
         </div>
       </div>
       <div class="card" data-detail="works/emoji-converter.html">
-        <a class="card-image" href="Fancy-Pattern-Emoji-to-Image-Converter.html" rel="noopener" data-loading="正在加载作品">
+        <a class="card-image" href="Fancy-Pattern-Emoji-to-Image-Converter.html" rel="noopener">
           <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="9" cy="9" r="2"/><path d="M21 15l-5-5L5 21"/></svg>
           
         </a>
@@ -1422,7 +1460,7 @@
         </div>
       </div>
       <div class="card hidden" data-detail="works/cs-sens.html">
-        <a class="card-image" href="CS-Sens-Calibrator.html" rel="noopener" data-loading="正在加载作品">
+        <a class="card-image" href="CS-Sens-Calibrator.html" rel="noopener">
           <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>
           
         </a>
@@ -1440,7 +1478,7 @@
         </div>
       </div>
       <div class="card hidden" data-detail="works/chess.html">
-        <a class="card-image" href="Chess-Gomoku-Collection.html" rel="noopener" data-loading="正在加载作品">
+        <a class="card-image" href="Chess-Gomoku-Collection.html" rel="noopener">
           <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8" cy="8" r="1.5"/><circle cx="16" cy="16" r="1.5"/><circle cx="16" cy="8" r="1.5"/><circle cx="8" cy="16" r="1.5"/></svg>
           
         </a>
@@ -2015,28 +2053,20 @@
     });
   });
 
-  // 作品卡片：点卡片展开预览；点「查看详情」打开作品；下载按钮除外
+  // 作品卡片：点击一次即进入详情页（下载 / 分享按钮除外）；详情页内再点「立即体验」进入作品
   document.querySelectorAll('.card').forEach(function (card) {
     card.addEventListener('click', function (e) {
       if (e.target.closest('.card-dl')) return;
-      if (e.target.closest('a.card-image')) {
-        e.preventDefault();
-        this.classList.toggle('expanded');
-        return;
-      }
-      if (e.target.closest('.meta')) {
-        var dd = this.getAttribute('data-detail');
-        if (dd) { window.location.href = dd; return; }
-        var link = this.querySelector('a.card-image');
-        if (link) link.click();
-        return;
-      }
-      this.classList.toggle('expanded');
+      if (e.target.closest('.card-share')) return;
+      e.preventDefault();
+      var dd = this.getAttribute('data-detail');
+      if (dd) { window.location.href = dd; }
     });
     card.addEventListener('keydown', function (e) {
       if ((e.key === 'Enter' || e.key === ' ') && e.target === card) {
         e.preventDefault();
-        this.classList.toggle('expanded');
+        var dd = this.getAttribute('data-detail');
+        if (dd) { window.location.href = dd; }
       }
     });
   });
@@ -2638,10 +2668,30 @@
     } catch (e) {}
   })();
 
-  /* ========== 每次进入本站自动播放开屏（Y 一笔画 + 8 秒进度条，与进入日志一致；含返回 / 浏览器后退） ========== */
+  /* ========== 开屏简笔画：每次进入本站（含作品页 / 日志返回、浏览器后退）播放 Y 一笔画 ========== */
+  var splashTimer = null;
   function playSplash() {
+    if (splashTimer) { clearTimeout(splashTimer); splashTimer = null; }
     window.scrollTo(0, 0);
-    startLoading('', '', false);
+    var loader = document.getElementById('pageLoader');
+    if (!loader) {
+      // bfcache 返回时原 loader 已从 DOM 移除：重建并播放
+      loader = document.createElement('div');
+      loader.className = 'page-loader';
+      loader.id = 'pageLoader';
+      loader.innerHTML = '<svg class="loader-svg" viewBox="0 0 120 120" fill="none" stroke="currentColor" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"><path class="loader-path" pathLength="100" d="M22 18 L60 54 L98 18 M60 54 L60 102"/></svg><p class="loader-name">Yaule</p>';
+      document.body.insertBefore(loader, document.body.firstChild);
+    } else {
+      // 重播：克隆路径与名字节点以重新触发 CSS 动画
+      var path = loader.querySelector('.loader-path');
+      if (path) { var c1 = path.cloneNode(true); path.parentNode.replaceChild(c1, path); }
+      var name = loader.querySelector('.loader-name');
+      if (name) { var c2 = name.cloneNode(true); name.parentNode.replaceChild(c2, name); }
+      loader.classList.remove('done');
+    }
+    splashTimer = setTimeout(function () {
+      loader.classList.add('done');
+    }, 1700);
   }
   playSplash();
 
