@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title>Yaule 的个人空间</title>
+  <subtitle>欢迎你的到来 · 记录咖啡、音乐、游戏与作品</subtitle>
+  <link href="https://Yaule-Rate.github.io/"/>
+  <link rel="self" href="https://Yaule-Rate.github.io/atom.xml"/>
+  <id>https://Yaule-Rate.github.io/</id>
+  <updated>2026-09-25T08:00:00Z</updated>
+  <author>
+    <name>Yaule</name>
+    <email>1957784559@qq.com</email>
+  </author>
+  <entry>
+    <title>主页更新：今年进度环、一言轮播、加载动画与站点增强</title>
+    <link href="https://Yaule-Rate.github.io/"/>
+    <id>https://Yaule-Rate.github.io/update-2026-09-25</id>
+    <updated>2026-09-25T08:00:00Z</updated>
+    <summary>个人标签页持续迭代：新增今年进度环、一言每 3 秒轮播、页面加载动画、RSS 订阅、访问计数与 SEO 增强。</summary>
+  </entry>
+  <entry>
+    <title>兴华中学广播站系统</title>
+    <link href="https://Yaule-Rate.github.io/Xinghua%20Middle%20School%20Broadcasting%20Station%20System.html"/>
+    <id>https://Yaule-Rate.github.io/Xinghua%20Middle%20School%20Broadcasting%20Station%20System.html</id>
+    <updated>2026-09-25T08:00:00Z</updated>
+    <summary>广播排班管理、播放日程控制、站点信息维护，独立设计开发并投入校园实际使用。</summary>
+  </entry>
+  <entry>
+    <title>自助记账系统 Pro 增强版</title>
+    <link href="https://Yaule-Rate.github.io/Self-service%20accounting%20system%20Pro%20Enhanced%20V6.html"/>
+    <id>https://Yaule-Rate.github.io/Self-service%20accounting%20system%20Pro%20Enhanced%20V6.html</id>
+    <updated>2026-09-25T08:00:00Z</updated>
+    <summary>收支流水、分类统计、报表导出，让每一笔账都清清楚楚。</summary>
+  </entry>
+  <entry>
+    <title>奶音特 M4e 代码编写系统</title>
+    <link href="https://Yaule-Rate.github.io/Nayingte%20M4e%20Code%20Writing%20System%20V2.9Pro.html"/>
+    <id>https://Yaule-Rate.github.io/Nayingte%20M4e%20Code%20Writing%20System%20V2.9Pro.html</id>
+    <updated>2026-09-25T08:00:00Z</updated>
+    <summary>代码编写辅助工作台，模板化快速生成，提升日常编码效率。</summary>
+  </entry>
+  <entry>
+    <title>Fancy 图案 Emoji 转换器</title>
+    <link href="https://Yaule-Rate.github.io/Fancy-Pattern-Emoji-to-Image-Converter.html"/>
+    <id>https://Yaule-Rate.github.io/Fancy-Pattern-Emoji-to-Image-Converter.html</id>
+    <updated>2026-09-25T08:00:00Z</updated>
+    <summary>把文字图案一键转成 Emoji 图片，分享更有趣。</summary>
+  </entry>
+  <entry>
+    <title>CS 灵敏度校准器</title>
+    <link href="https://Yaule-Rate.github.io/CS-Sens-Calibrator.html"/>
+    <id>https://Yaule-Rate.github.io/CS-Sens-Calibrator.html</id>
+    <updated>2026-09-25T08:00:00Z</updated>
+    <summary>FPS 游戏鼠标灵敏度科学校准，找到属于自己的手感。</summary>
+  </entry>
+  <entry>
+    <title>象棋五子棋合集</title>
+    <link href="https://Yaule-Rate.github.io/Chess-Gomoku-Collection.html"/>
+    <id>https://Yaule-Rate.github.io/Chess-Gomoku-Collection.html</id>
+    <updated>2026-09-25T08:00:00Z</updated>
+    <summary>象棋与五子棋同页双开，和好友面对面来一局。</summary>
+  </entry>
+</feed>

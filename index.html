@@ -4,12 +4,20 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Yaule · 欢迎你的到来</title>
-<meta name="description" content="欢迎来到 Yaule 的个人主页。这里记录着咖啡、音乐、游戏与作品。">
+<meta name="description" content="欢迎来到 Yaule 的个人主页。这里记录着咖啡、音乐、游戏与作品，还有全世界的「欢迎你的到来」。">
+<meta name="keywords" content="Yaule,个人主页,个人空间,欢迎你的到来,博客,作品集,GitHub Pages,失眠夜">
 <meta name="author" content="Yaule">
 <link rel="canonical" href="https://Yaule-Rate.github.io/">
+<link rel="alternate" type="application/atom+xml" title="Yaule 的个人空间" href="https://Yaule-Rate.github.io/atom.xml">
 <meta property="og:type" content="website">
 <meta property="og:title" content="Yaule · 欢迎你的到来">
+<meta property="og:description" content="欢迎来到 Yaule 的个人主页。这里记录着咖啡、音乐、游戏与作品。">
 <meta property="og:url" content="https://Yaule-Rate.github.io/">
+<meta property="og:site_name" content="Yaule 的个人空间">
+<meta property="og:locale" content="zh_CN">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Yaule · 欢迎你的到来">
+<meta name="twitter:description" content="欢迎来到 Yaule 的个人主页。这里记录着咖啡、音乐、游戏与作品。">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230284c7'/%3E%3Ctext x='32' y='44' font-family='Georgia, serif' font-size='36' font-weight='bold' fill='%23fff' text-anchor='middle'%3EY%3C/text%3E%3C/svg%3E">
 <link rel="stylesheet" href="https://miaoda.feishu.cn/fonts/css2?family=Noto+Serif+SC:wght@600;700&family=Noto+Sans+SC:wght@400;500;600;700&family=Ma+Shan+Zheng&display=swap">
 <style>
@@ -736,6 +744,35 @@
     animation: loaderName 0.6s ease 0.55s forwards;
   }
   @keyframes loaderName { to { opacity: 1; transform: translateY(0); } }
+  /* ===== 作品展开预览 ===== */
+  .card-preview {
+    max-height: 0;
+    overflow: hidden;
+    opacity: 0;
+    transition: max-height 0.35s ease, opacity 0.35s ease, margin-top 0.35s ease;
+    font-size: 13.5px;
+    color: var(--ink-2);
+    line-height: 1.7;
+  }
+  .card.expanded .card-preview { max-height: 180px; opacity: 1; margin-top: 10px; }
+  .card-tags { display: inline-flex; gap: 6px; flex-wrap: wrap; }
+  .card-tags span {
+    font-size: 11px;
+    color: var(--accent);
+    border: 1px solid rgba(2, 132, 199, 0.3);
+    background: rgba(2, 132, 199, 0.05);
+    border-radius: 999px;
+    padding: 2px 10px;
+  }
+  .card { cursor: pointer; }
+  .card .meta { transition: color 0.2s ease; }
+  .card.expanded .meta { color: var(--accent); }
+
+  /* ===== 页脚新增项 ===== */
+  .footer-bottom .visit b { color: var(--accent-2); font-weight: 600; }
+  .footer-bottom .lucky b { font-weight: 600; }
+  .footer-bottom .lucky { white-space: nowrap; }
+
   @media (prefers-reduced-motion: reduce) {
     .page-loader { display: none; }
   }
@@ -922,6 +959,10 @@
         <div class="card-body">
           <h3>兴华中学广播站系统</h3>
           <p>广播排班管理、播放日程控制、站点信息维护，独立设计开发并投入校园实际使用。</p>
+          <div class="card-preview">
+            <p>广播排班、播放日程、站点信息一站式维护，从零开发并投入校园日常使用。</p>
+            <span class="card-tags"><span>广播</span><span>管理</span></span>
+          </div>
           <span class="meta">查看详情 →</span>
         </div>
       </div>
@@ -936,6 +977,10 @@
         <div class="card-body">
           <h3>自助记账系统</h3>
           <p>收支记录、分类统计、数据可视化，轻量化单文件本地工具，开箱即用。</p>
+          <div class="card-preview">
+            <p>收支流水、分类统计、报表导出，让每一笔账都清清楚楚。</p>
+            <span class="card-tags"><span>记账</span><span>工具</span></span>
+          </div>
           <span class="meta">查看详情 →</span>
         </div>
       </div>
@@ -950,6 +995,10 @@
         <div class="card-body">
           <h3>代码编写系统</h3>
           <p>可视化拖拽生成 C++ 代码，降低编程入门门槛，助力机器人编程学习。</p>
+          <div class="card-preview">
+            <p>代码编写辅助工作台，模板化快速生成，让日常编码更顺手。</p>
+            <span class="card-tags"><span>编码</span><span>效率</span></span>
+          </div>
           <span class="meta">查看详情 →</span>
         </div>
       </div>
@@ -964,6 +1013,10 @@
         <div class="card-body">
           <h3>表情转图片转换器</h3>
           <p>文字、表情符号一键转图片，支持自定义背景与文字颜色，导出高清 PNG。</p>
+          <div class="card-preview">
+            <p>把文字图案一键转成 Emoji 图片，分享出来更有趣。</p>
+            <span class="card-tags"><span>趣味</span><span>图像</span></span>
+          </div>
           <span class="meta">查看详情 →</span>
         </div>
       </div>
@@ -978,6 +1031,10 @@
         <div class="card-body">
           <h3>CS 灵敏度校准</h3>
           <p>输入 DPI 与灵敏度参数，智能评估输出最佳游戏鼠标灵敏度。</p>
+          <div class="card-preview">
+            <p>FPS 游戏鼠标灵敏度科学校准，找到真正属于自己的手感。</p>
+            <span class="card-tags"><span>游戏</span><span>外设</span></span>
+          </div>
           <span class="meta">查看详情 →</span>
         </div>
       </div>
@@ -992,6 +1049,10 @@
         <div class="card-body">
           <h3>棋类合集</h3>
           <p>五子棋与中国象棋，本地运行，无需联网。</p>
+          <div class="card-preview">
+            <p>象棋与五子棋同页双开，约上好友面对面来一局。</p>
+            <span class="card-tags"><span>游戏</span><span>对战</span></span>
+          </div>
           <span class="meta">查看详情 →</span>
         </div>
       </div>
@@ -1215,18 +1276,22 @@
         <ul>
           <li><a href="https://github.com/Yaule-Rate" target="_blank" rel="noopener">GitHub</a></li>
           <li><a href="mailto:1957784559@qq.com">邮箱</a></li>
+          <li><a href="atom.xml">RSS 订阅</a></li>
         </ul>
       </div>
     </div>
     <div class="footer-bottom">
       <span>© <span id="year">2026</span> Yaule. All rights reserved.</span>
       <span class="stay-time" id="stayTime">已停留 0 分 0 秒</span>
+      <span class="visit">本站访问 <b id="pvCount" class="busuanzi_value_site_pv">--</b> 次</span>
+      <span class="lucky" id="luckyToday">今日幸运 · --</span>
       <span>Powered by GitHub Pages</span>
     </div>
   </div>
   <span class="footer-word" aria-hidden="true">Yaule</span>
 </footer>
 <div class="fest-layer" id="festLayer"></div>
+<script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
 <script>
   document.getElementById('year').textContent = new Date().getFullYear();
 
@@ -1324,20 +1389,22 @@
     });
   });
 
-  // 作品卡片：整卡可点击（单击卡片任意处打开作品，下载按钮除外）
+  // 作品卡片：点卡片展开预览；点「查看详情」打开作品；下载按钮除外
   document.querySelectorAll('.card').forEach(function (card) {
     card.addEventListener('click', function (e) {
       if (e.target.closest('.card-dl')) return;
       var link = this.querySelector('a.card-image');
-      if (link && !e.target.closest('a.card-image')) {
-        link.click();
+      if (e.target.closest('a.card-image')) return;
+      if (e.target.closest('.meta')) {
+        if (link) link.click();
+        return;
       }
+      this.classList.toggle('expanded');
     });
     card.addEventListener('keydown', function (e) {
       if ((e.key === 'Enter' || e.key === ' ') && e.target === card) {
         e.preventDefault();
-        var link = this.querySelector('a.card-image');
-        if (link) link.click();
+        this.classList.toggle('expanded');
       }
     });
   });
@@ -1881,6 +1948,80 @@
         if (loader.parentNode) loader.parentNode.removeChild(loader);
       }, 600);
     }, 1700);
+  })();
+
+  /* ========== 视差滚动：首屏随滚动上移淡出 ========== */
+  (function () {
+    var hero = document.getElementById('hero');
+    if (!hero) return;
+    var inner = hero.querySelector('.hero-inner');
+    if (!inner) return;
+    var ticking = false;
+    function update() {
+      var y = window.pageYOffset || document.documentElement.scrollTop;
+      if (y < window.innerHeight) {
+        inner.style.transform = 'translateY(' + (y * 0.22) + 'px)';
+        inner.style.opacity = String(Math.max(0, 1 - y / 520));
+      }
+      ticking = false;
+    }
+    window.addEventListener('scroll', function () {
+      if (!ticking) { ticking = true; requestAnimationFrame(update); }
+    }, { passive: true });
+    update();
+  })();
+
+  /* ========== favicon 呼吸 ========== */
+  (function () {
+    var link = document.querySelector('link[rel="icon"]');
+    if (!link) return;
+    var cv = document.createElement('canvas');
+    cv.width = 32; cv.height = 32;
+    var ctx = cv.getContext('2d');
+    function roundRect(x, y, w, h, r) {
+      ctx.beginPath();
+      ctx.moveTo(x + r, y);
+      ctx.arcTo(x + w, y, x + w, y + h, r);
+      ctx.arcTo(x + w, y + h, x, y + h, r);
+      ctx.arcTo(x, y + h, x, y, r);
+      ctx.arcTo(x, y, x + w, y, r);
+      ctx.closePath();
+    }
+    var t = 0;
+    function draw() {
+      t += 0.12;
+      var a = 0.45 + 0.55 * (Math.sin(t) * 0.5 + 0.5);
+      ctx.clearRect(0, 0, 32, 32);
+      ctx.fillStyle = 'rgba(2,132,199,' + a.toFixed(3) + ')';
+      roundRect(1, 1, 30, 30, 7); ctx.fill();
+      ctx.strokeStyle = '#ffffff'; ctx.lineWidth = 2.4; ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+      ctx.beginPath();
+      ctx.moveTo(8.5, 8.5); ctx.lineTo(16, 16); ctx.lineTo(23.5, 8.5);
+      ctx.moveTo(16, 16); ctx.lineTo(16, 25);
+      ctx.stroke();
+      link.href = cv.toDataURL();
+    }
+    draw();
+    setInterval(draw, 120);
+  })();
+
+  /* ========== 幸运今日（按日期固定） ========== */
+  (function () {
+    var el = document.getElementById('luckyToday');
+    if (!el) return;
+    var d = new Date();
+    var key = d.getFullYear() * 10000 + (d.getMonth() + 1) * 100 + d.getDate();
+    var h = 0, s = String(key);
+    for (var i = 0; i < s.length; i++) { h = (h * 31 + s.charCodeAt(i)) >>> 0; }
+    var lucky = (h % 100) + 1;
+    var colors = [
+      ['#0284c7', '晴蓝'], ['#0ea5e9', '天青'], ['#38bdf8', '云青'],
+      ['#22d3ee', '湖青'], ['#06b6d4', '碧波'], ['#0891b2', '松青']
+    ];
+    var c = colors[h % colors.length];
+    var tips = ['宜写代码', '宜喝咖啡', '宜听歌', '宜发呆', '宜早睡', '宜整理', '宜散步', '宜收藏', '宜分享', '宜读书'];
+    var tip = tips[(h >> 4) % tips.length];
+    el.innerHTML = '今日幸运 <b style="color:' + c[0] + '">' + lucky + '</b> · ' + c[1] + ' ' + tip;
   })();
 </script>
 </body>
