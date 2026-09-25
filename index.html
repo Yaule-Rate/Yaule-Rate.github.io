@@ -1747,7 +1747,7 @@
     <div class="footer-bottom">
       <span>© <span id="year">2026</span> Yaule. All rights reserved.</span>
       <span class="stay-time" id="stayTime">已停留 0 分 0 秒</span>
-      <span class="visit">本站访问 <b id="pvCount" class="busuanzi_value_site_pv">--</b> 次</span>
+      <span class="visit"><span data-i18n="footer.visit1">本站访问</span> <b id="pvCount" class="busuanzi_value_site_pv">--</b><span data-i18n="footer.visit2"> 次</span></span>
       <span class="lucky" id="luckyToday">今日幸运 · --</span>
       <span>Powered by GitHub Pages</span>
     </div>
@@ -2680,6 +2680,7 @@
     { ver: "v22", date: "2026-09-25 21:30:00", current: true, list: [
       { lv: "[ADD]", time: "2026-09-25 21:30:00", text: "i18n 补全：英文模式下全部可见文字英译（生活瞬间 / 作品 / 纪念日 / 此刻 / 技能 / 清单 / 页脚），切换进度条平滑并显示百分比。", en: "i18n complete: every visible string now translates to English (life moments / works / anniversaries / now / skills / bucket / footer); the switch progress bar is now smooth with a live percentage." },
       { lv: "[FIX]", time: "2026-09-25 21:28:00", text: "修复英文模式下载数、分享弹窗、推荐标签与紫外线单位未翻译的问题。", en: "Fixed download counts, share popup, daily-pick tag and UV unit staying untranslated in English mode." },
+      { lv: "[FIX]", time: "2026-09-25 21:52:00", text: "补英译：页脚访问计数、今日幸运（色名 + 签语）、下载按钮提示均随语言切换。", en: "More i18n: footer visit counter, today's lucky (color name + tip) and download-button tooltip now follow the language." },
       { lv: "[ADD]", time: "2026-09-25 20:18:00", text: "整站 i18n：右上角中英一键切换，独立 3 秒伪进度条。", en: "Site-wide i18n: one-click EN/CN switch top-right, with a dedicated 3-second pseudo progress bar." },
       { lv: "[ADD]", time: "2026-09-25 20:09:47", text: "此刻 · 每日推荐：结合节日 / 天气 / 星期，每天一条。", en: "Right Now · Daily pick: holidays / weather / weekday, one per day." },
       { lv: "[ADD]", time: "2026-09-25 19:58:32", text: "页面转场：返回标签页时 View Transitions 衔接。", en: "Page transitions: View Transitions when navigating back to the tab page." },
@@ -2894,15 +2895,25 @@
     for (var i = 0; i < s.length; i++) { h = (h * 31 + s.charCodeAt(i)) >>> 0; }
     var lucky = (h % 100) + 1;
     var colors = [
-      ['#0284c7', '晴蓝'], ['#0ea5e9', '天青'], ['#38bdf8', '云青'],
-      ['#22d3ee', '湖青'], ['#06b6d4', '碧波'], ['#0891b2', '松青']
+      ['#0284c7', '晴蓝', 'sky blue'], ['#0ea5e9', '天青', 'azure'], ['#38bdf8', '云青', 'cloud cyan'],
+      ['#22d3ee', '湖青', 'lake cyan'], ['#06b6d4', '碧波', 'wave blue'], ['#0891b2', '松青', 'pine cyan']
     ];
-    var c = colors[h % colors.length];
-    var tips = ['宜写代码', '宜喝咖啡', '宜听歌', '宜发呆', '宜早睡', '宜整理', '宜散步', '宜收藏', '宜分享', '宜读书'];
-    var tip = tips[(h >> 4) % tips.length];
-    el.innerHTML = (window.YAULE_LANG === 'en'
-      ? 'Today\'s luck <b style="color:' + c[0] + '">' + lucky + '</b> · ' + c[1] + ' ' + tip
-      : '今日幸运 <b style="color:' + c[0] + '">' + lucky + '</b> · ' + c[1] + ' ' + tip);
+    var tipsZh = ['宜写代码', '宜喝咖啡', '宜听歌', '宜发呆', '宜早睡', '宜整理', '宜散步', '宜收藏', '宜分享', '宜读书'];
+    var tipsEn = ['code today', 'have a coffee', 'listen to music', 'daydream', 'sleep early', 'tidy up', 'take a walk', 'collect something', 'share with a friend', 'read a book'];
+    function renderLucky() {
+      var d2 = new Date();
+      var key2 = d2.getFullYear() * 10000 + (d2.getMonth() + 1) * 100 + d2.getDate();
+      var h2 = 0, ss = String(key2);
+      for (var j = 0; j < ss.length; j++) { h2 = (h2 * 31 + ss.charCodeAt(j)) >>> 0; }
+      var lk = (h2 % 100) + 1;
+      var cc = colors[h2 % colors.length];
+      var tk = (window.YAULE_LANG === 'en') ? tipsEn[(h2 >> 4) % tipsEn.length] : tipsZh[(h2 >> 4) % tipsZh.length];
+      el.innerHTML = (window.YAULE_LANG === 'en'
+        ? 'Today\'s luck <b style="color:' + cc[0] + '">' + lk + '</b> · ' + cc[2] + ' ' + tk
+        : '今日幸运 <b style="color:' + cc[0] + '">' + lk + '</b> · ' + cc[1] + ' ' + tk);
+    }
+    window.__renderLucky = renderLucky;
+    renderLucky();
   })();
 
   /* ========== 开源仓库墙（GitHub API） ========== */
@@ -3071,7 +3082,7 @@
       'footer.brand': '个人空间入口：这里收录我的作品与项目，全部开源托管在 GitHub 上。',
       'footer.nav': '导航', 'footer.home': '首页', 'footer.space': '个人空间', 'footer.projects': '项目', 'footer.lifedata': '生活数据',
       'footer.works': '作品', 'footer.space2': '失眠夜个人空间', 'footer.awards': '荣誉奖项', 'footer.contactme': '联系我',
-      'footer.contact': '联系', 'footer.email': '邮箱', 'footer.rss': 'RSS 订阅',
+      'footer.contact': '联系', 'footer.email': '邮箱', 'footer.rss': 'RSS 订阅', 'footer.visit1': '本站访问', 'footer.visit2': ' 次',
       'hero.quoteTitle': '换一句',
       'life.c1': '瑞幸咖啡', 'life.tag1': '续命中', 'life.un2': '杯',
       'life.d1': '从第一杯咖啡开始，悄悄记录每一次续命时刻',
@@ -3123,7 +3134,7 @@
       'footer.brand': 'Entry to my space: my works and projects, all open-sourced on GitHub.',
       'footer.nav': 'Navigate', 'footer.home': 'Home', 'footer.space': 'My Space', 'footer.projects': 'Projects', 'footer.lifedata': 'Life Data',
       'footer.works': 'Works', 'footer.space2': 'Insomnia Night Space', 'footer.awards': 'Awards', 'footer.contactme': 'Contact',
-      'footer.contact': 'Contact', 'footer.email': 'Email', 'footer.rss': 'RSS Feed',
+      'footer.contact': 'Contact', 'footer.email': 'Email', 'footer.rss': 'RSS Feed', 'footer.visit1': 'Visits', 'footer.visit2': '',
       'hero.quoteTitle': 'Another quote',
       'life.c1': 'Luckin Coffee', 'life.tag1': 'LIVE', 'life.un2': 'cups',
       'life.d1': 'From the first cup, quietly counting every refuel',
@@ -3200,6 +3211,8 @@
     }
     if (window.__renderShares) window.__renderShares();
     if (window.__renderChangelog) window.__renderChangelog();
+    if (window.__renderLucky) window.__renderLucky();
+    document.querySelectorAll('.card-dl').forEach(function (a) { a.title = L === 'en' ? 'Download work' : '下载作品'; });
     window.dispatchEvent(new CustomEvent('yaule-langchange'));
   }
   var langBusy = false;
