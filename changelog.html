@@ -169,6 +169,13 @@
     h1 { font-size: 26px; }
     .mc-ver { padding: 18px 18px 12px; }
   }
+
+  /* ===== 页面转场（View Transitions）===== */
+  @view-transition { navigation: auto; }
+  ::view-transition-old(root) { animation: yt-out .22s ease both; }
+  ::view-transition-new(root) { animation: yt-in .34s ease both; }
+  @keyframes yt-out { to { opacity: 0; transform: scale(.98); } }
+  @keyframes yt-in { from { opacity: 0; transform: translateY(12px); } }
 </style>
 </head>
 <body>
@@ -220,7 +227,13 @@
 <script>
 /* ========== 内置日志（fallback：localStorage 无数据时使用） ========== */
 var FALLBACK_LOGS = [
-    { ver: "v19.6", date: "2026-09-25 16:20:11", current: true, list: [
+    { ver: "v21", date: "2026-09-25 20:18:00", current: true, list: [
+      { lv: "[ADD]", time: "2026-09-25 20:18:00", text: "整站 i18n：右上角中英一键切换，独立 3 秒伪进度条。" },
+      { lv: "[ADD]", time: "2026-09-25 20:09:47", text: "此刻 · 每日推荐：结合节日 / 天气 / 星期，每天一条。" },
+      { lv: "[ADD]", time: "2026-09-25 19:58:32", text: "页面转场：返回标签页时 View Transitions 衔接。" },
+      { lv: "[ADD]", time: "2026-09-25 19:50:10", text: "独立 404 页：Y 一笔画 + 「失眠夜迷路了」+ 返回按钮。" }
+    ]},
+    { ver: "v19.6", date: "2026-09-25 16:20:11", current: false, list: [
       { lv: "[ADD]", time: "2026-09-25 16:20:11", text: "六件作品详情页加入评分系统（兴华 4.9 / 记账 5.0 / 代码 4.8 / 表情 5.0 / CS 5.0 / 棋类 4.9）。" },
       { lv: "[INFO]", time: "2026-09-25 16:05:02", text: "更新日志改版为 VSCode 风格：彩色圆点 + 完整时间戳，主页只展示最新版本，完整历史移入详细日志。" },
       { lv: "[FIX]", time: "2026-09-25 15:58:40", text: "修复从个人空间/作品返回标签页时进度条遮罩残留。" }

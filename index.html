@@ -1220,6 +1220,49 @@
     .card-share { min-height: 44px; }
     .scroll-hint .arrow { animation: none; }
   }
+
+  /* ===== 页面转场（View Transitions）===== */
+  @view-transition { navigation: auto; }
+  ::view-transition-old(root) { animation: yt-out .22s ease both; }
+  ::view-transition-new(root) { animation: yt-in .34s ease both; }
+  @keyframes yt-out { to { opacity: 0; transform: scale(.98); } }
+  @keyframes yt-in { from { opacity: 0; transform: translateY(12px); } }
+
+  /* ===== 语言切换按钮（右上角） ===== */
+  .lang-toggle {
+    position: fixed; top: 18px; right: 72px; z-index: 10001;
+    height: 44px; padding: 0 14px; border-radius: 999px;
+    border: 1px solid var(--line); background: var(--card-bg); color: var(--ink);
+    display: flex; align-items: center; gap: 7px;
+    cursor: pointer; font-size: 13px; font-weight: 700; font-family: inherit;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+    transition: background .25s, color .25s, transform .2s, box-shadow .25s;
+  }
+  .lang-toggle:hover { transform: scale(1.06); }
+  .lang-toggle svg { width: 17px; height: 17px; color: var(--accent); }
+  .lang-toggle #langLabel { min-width: 22px; text-align: center; }
+
+  /* ===== 语言切换 3 秒伪进度条 ===== */
+  .lang-loader {
+    position: fixed; inset: 0; z-index: 10050;
+    background: var(--bg);
+    display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 20px;
+    opacity: 0; pointer-events: none; transition: opacity .3s;
+  }
+  .lang-loader.active { opacity: 1; pointer-events: auto; }
+  .lang-loader .splash-y { width: 76px; height: 76px; }
+  .lang-loader .y-path { stroke-dasharray: 340; stroke-dashoffset: 340; animation: ydraw 1s ease forwards; }
+  @keyframes ydraw { to { stroke-dashoffset: 0; } }
+  .lang-loader-tip { font-size: 14px; color: var(--ink-2); letter-spacing: .12em; }
+  .lang-bar { width: 240px; height: 4px; border-radius: 999px; background: var(--soft); overflow: hidden; }
+  .lang-bar-fill { height: 100%; width: 0%; border-radius: 999px; background: linear-gradient(90deg, var(--accent), var(--accent-2)); }
+
+  /* ===== 此刻 · 每日推荐卡 ===== */
+  .now-reco { grid-column: 1 / -1; min-height: 130px; }
+  .now-reco .reco-head { display: flex; align-items: center; gap: 8px; font-size: 12px; letter-spacing: .14em; color: var(--ink-2); text-transform: uppercase; }
+  .now-reco .reco-head svg { width: 15px; height: 15px; color: var(--accent); }
+  .now-reco .reco-text { margin-top: 16px; font-size: clamp(16px, 2.6vw, 21px); line-height: 1.75; font-weight: 600; color: var(--ink); }
+  .now-reco .reco-tag { margin-top: 12px; font-size: 12px; color: var(--accent); letter-spacing: .08em; }
 </style>
 </head>
 <body>
@@ -1246,7 +1289,18 @@
     长按加速 <small>按住不放，加载更快</small>
   </button>
 </div>
+<div class="lang-loader" id="langLoader" aria-hidden="true">
+  <svg class="splash-y" viewBox="0 0 100 100" fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <path class="y-path" pathLength="100" d="M22 30 L50 52 L78 30 L50 52 L50 78" stroke="var(--accent)" stroke-width="6"/>
+  </svg>
+  <p class="lang-loader-tip" id="langLoaderTip">正在切换语言…</p>
+  <div class="lang-bar"><div class="lang-bar-fill" id="langBarFill"></div></div>
+</div>
 <div class="toast" id="toast"></div>
+<button class="lang-toggle" id="langToggle" title="切换语言" aria-label="切换语言">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+  <span id="langLabel">中</span>
+</button>
 <button class="theme-toggle" id="themeToggle" aria-label="切换深色 / 浅色主题" title="切换主题">
   <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
   <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
@@ -1259,7 +1313,7 @@
     <p class="fest-greeting" id="festGreeting"></p>
     <p class="lang-roamer" id="langRoamer"></p>
     <p class="en-title" id="enTitle">Welcome to Yaule's Space</p>
-    <p class="intro" id="intro">这里是我的个人小角落，记录着咖啡、音乐、游戏与作品。不紧不慢，慢慢翻就好。</p>
+    <p class="intro" id="intro" data-i18n="hero.intro">这里是我的个人小角落，记录着咖啡、音乐、游戏与作品。不紧不慢，慢慢翻就好。</p>
     <div class="hero-meta">
       <p class="quote-row" id="quoteRow">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21c3 0 7-1 7-8V5c0-1.25-.756-2.017-2-2H4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2 1 0 1 0 1 1v1c0 1-1 2-2 2s-1 .008-1 1.031V20c0 1 0 1 1 1z"/><path d="M15 21c3 0 7-1 7-8V5c0-1.25-.757-2.017-2-2h-4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2h.75c0 2.25.25 4-2.75 4v3c0 1 0 1 1 1z"/></svg>
@@ -1269,18 +1323,18 @@
         </button>
       </p>
     </div>
-    <p class="scroll-hint" id="scrollHint">向下滑动 <span class="arrow">↓</span></p>
+    <p class="scroll-hint" id="scrollHint"><span data-i18n="hero.scroll">向下滑动</span> <span class="arrow">↓</span></p>
   </div>
 </section>
 
 <!-- 进入按钮板块 -->
 <section class="enter-section" id="enter">
   <div class="wrap">
-    <p class="kicker">PERSONAL SPACE</p>
-    <h2>失眠夜 · 个人空间</h2>
-    <p class="desc">这里收纳着关于我的一切——爱好的碎片、写过的项目、走过的路，还有一些零零散散的日常。</p>
+    <p class="kicker" data-i18n="enter.kicker">PERSONAL SPACE</p>
+    <h2 data-i18n="enter.h2">失眠夜 · 个人空间</h2>
+    <p class="desc" data-i18n="enter.desc">这里收纳着关于我的一切——爱好的碎片、写过的项目、走过的路，还有一些零零散散的日常。</p>
     <a class="btn-enter" href="space.html" data-loading="正在进入个人空间">
-      进入个人空间
+      <span data-i18n="enter.btn">进入个人空间</span>
       <span>→</span>
     </a>
   </div>
@@ -1291,13 +1345,13 @@
   <div class="wrap">
     <div class="section-head">
       <p class="kicker">LIFE MOMENTS</p>
-      <h2>生活瞬间</h2>
-      <p class="desc">一些悄悄累积的数字，随时间慢慢长大。点击上方切换。</p>
+      <h2 data-i18n="life.h2">生活瞬间</h2>
+      <p class="desc" data-i18n="life.desc">一些悄悄累积的数字，随时间慢慢长大。点击上方切换。</p>
     </div>
     <div class="life-tabs" role="tablist">
-      <button class="life-tab active" data-life="coffee" role="tab">咖啡</button>
-      <button class="life-tab" data-life="music" role="tab">音乐</button>
-      <button class="life-tab" data-life="game" role="tab">游戏</button>
+      <button class="life-tab active" data-life="coffee" role="tab" data-i18n="life.tab1">咖啡</button>
+      <button class="life-tab" data-life="music" role="tab" data-i18n="life.tab2">音乐</button>
+      <button class="life-tab" data-life="game" role="tab" data-i18n="life.tab3">游戏</button>
     </div>
     <div class="life-panels">
       <!-- 界面 1：瑞幸咖啡 -->
@@ -1374,8 +1428,8 @@
   <div class="wrap">
     <div class="section-head">
       <p class="kicker">PROJECTS</p>
-      <h2>精选作品</h2>
-      <p class="desc">从校园工具到游戏辅助，都是一点点写出来的小玩意。点卡片打开，点右上角下载。</p>
+      <h2 data-i18n="works.h2">精选作品</h2>
+      <p class="desc" data-i18n="works.desc">从校园工具到游戏辅助，都是一点点写出来的小玩意。点卡片打开，点右上角下载。</p>
     </div>
     <div class="grid">
       <div class="card" data-detail="works/xinghua.html">
@@ -1488,7 +1542,7 @@
       </div>
     </div>
     <div class="btn-more-wrap">
-      <button class="btn-more" id="btnMore">查看更多 ↓</button>
+      <button class="btn-more" id="btnMore" data-i18n="works.more">查看更多 ↓</button>
     </div>
   </div>
 </section>
@@ -1498,8 +1552,8 @@
   <div class="wrap">
     <div class="section-head">
       <p class="kicker">ANNIVERSARY</p>
-      <h2>纪念日</h2>
-      <p class="desc">有些日子值得被记住，有些时间悄悄在走。</p>
+      <h2 data-i18n="anniv.h2">纪念日</h2>
+      <p class="desc" data-i18n="anniv.desc">有些日子值得被记住，有些时间悄悄在走。</p>
     </div>
     <div class="anniv-grid">
       <div class="anniv-card">
@@ -1533,8 +1587,8 @@
   <div class="wrap">
     <div class="section-head">
       <p class="kicker">RIGHT NOW</p>
-      <h2>此刻</h2>
-      <p class="desc">时间与天气，都在悄悄走。</p>
+      <h2 data-i18n="now.h2">此刻</h2>
+      <p class="desc" data-i18n="now.desc">时间与天气，都在悄悄走。</p>
     </div>
     <div class="now-grid">
       <div class="now-card">
@@ -1552,10 +1606,19 @@
           </svg>
           <div class="ring-center">
             <span class="ring-pct" id="yearLeftNum">--</span>
-            <span class="ring-label">天 · 2026 还剩</span>
+            <span class="ring-label" data-i18n="now.ring">天 · 2026 还剩</span>
           </div>
         </div>
-        <p class="ring-foot"><b id="yearPctText">今年已过 --%</b></p>
+        <p class="ring-foot"><b><span data-i18n="now.ringfoot">今年已过</span> <span id="yearPctText">--%</span></b></p>
+      </div>
+
+      <div class="now-card now-reco">
+        <p class="reco-head">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.83z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
+          <span data-i18n="now.reco">今日推荐</span>
+        </p>
+        <p class="reco-text" id="recoText">正在挑选今日推荐…</p>
+        <p class="reco-tag" id="recoTag"></p>
       </div>
 
       <div class="now-card now-weather">
@@ -1564,10 +1627,10 @@
           <span id="weatherText">衢州 · 正在读取天气…</span>
         </p>
         <div class="weather-detail" id="weatherDetail">
-          <div class="wd-item"><div class="wd-label">体感</div><div class="wd-val"><b id="wFeels">--</b><span class="wd-unit">°C</span></div></div>
-          <div class="wd-item"><div class="wd-label">湿度</div><div class="wd-val"><b id="wHum">--</b><span class="wd-unit">%</span></div></div>
-          <div class="wd-item"><div class="wd-label">风速</div><div class="wd-val"><b id="wWind">--</b><span class="wd-unit">km/h</span></div></div>
-          <div class="wd-item"><div class="wd-label">紫外线</div><div class="wd-val"><b id="wUvi">--</b><span class="wd-unit">级</span></div></div>
+          <div class="wd-item"><div class="wd-label" data-i18n="now.w1">体感</div><div class="wd-val"><b id="wFeels">--</b><span class="wd-unit">°C</span></div></div>
+          <div class="wd-item"><div class="wd-label" data-i18n="now.w2">湿度</div><div class="wd-val"><b id="wHum">--</b><span class="wd-unit">%</span></div></div>
+          <div class="wd-item"><div class="wd-label" data-i18n="now.w3">风速</div><div class="wd-val"><b id="wWind">--</b><span class="wd-unit">km/h</span></div></div>
+          <div class="wd-item"><div class="wd-label" data-i18n="now.w4">紫外线</div><div class="wd-val"><b id="wUvi">--</b><span class="wd-unit">级</span></div></div>
         </div>
       </div>
     </div>
@@ -1579,8 +1642,8 @@
   <div class="wrap">
     <div class="section-head">
       <p class="kicker">OPEN SOURCE</p>
-      <h2>开源仓库</h2>
-      <p class="desc">最近活跃的仓库，数据实时来自 GitHub。</p>
+      <h2 data-i18n="repos.h2">开源仓库</h2>
+      <p class="desc" data-i18n="repos.desc">最近活跃的仓库，数据实时来自 GitHub。</p>
     </div>
     <div class="repo-grid" id="repoGrid">
       <div class="repo-card">
@@ -1597,8 +1660,8 @@
   <div class="wrap">
     <div class="section-head">
       <p class="kicker">SKILLS</p>
-      <h2>擅长的事</h2>
-      <p class="desc">六个方向的自我评估，图是画出来的，路是一点点走的。</p>
+      <h2 data-i18n="skills.h2">擅长的事</h2>
+      <p class="desc" data-i18n="skills.desc">六个方向的自我评估，图是画出来的，路是一点点走的。</p>
     </div>
     <div class="skill-wrap">
       <div class="radar-box">
@@ -1619,11 +1682,11 @@
   <div class="wrap">
     <div class="section-head">
       <p class="kicker">CHANGELOG</p>
-      <h2>更新日志</h2>
-      <p class="desc">这个页面是怎么一点点长成现在这样的。</p>
+      <h2 data-i18n="changelog.h2">更新日志</h2>
+      <p class="desc" data-i18n="changelog.desc">这个页面是怎么一点点长成现在这样的。</p>
       <a class="log-more" href="changelog.html">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
-        详细日志
+        <span data-i18n="changelog.more">详细日志</span>
       </a>
     </div>
     <div class="vs-log" id="mcLog"></div>
@@ -1634,8 +1697,8 @@
   <div class="wrap">
     <div class="section-head">
       <p class="kicker">BUCKET LIST</p>
-      <h2>人生清单</h2>
-      <p class="desc">想做的 100 件小事，完成一件，点亮一件。</p>
+      <h2 data-i18n="bucket.h2">人生清单</h2>
+      <p class="desc" data-i18n="bucket.desc">想做的 100 件小事，完成一件，点亮一件。</p>
     </div>
     <div class="bucket-head">
       <span class="bucket-progress">已点亮 <b id="bkDone">0</b> / <b id="bkTotal">24</b> 件</span>
@@ -1651,31 +1714,31 @@
     <div class="footer-grid">
       <div class="footer-brand">
         <span class="logo">Yaule</span>
-        <p>个人空间入口：这里收录我的作品与项目，全部开源托管在 GitHub 上。</p>
+        <p data-i18n="footer.brand">个人空间入口：这里收录我的作品与项目，全部开源托管在 GitHub 上。</p>
       </div>
       <div class="footer-col">
-        <h4>导航</h4>
+        <h4 data-i18n="footer.nav">导航</h4>
         <ul>
-          <li><a href="#hero">首页</a></li>
-          <li><a href="space.html">个人空间</a></li>
-          <li><a href="#works">项目</a></li>
-          <li><a href="#life">生活数据</a></li>
+          <li><a href="#hero" data-i18n="footer.home">首页</a></li>
+          <li><a href="space.html" data-i18n="footer.space">个人空间</a></li>
+          <li><a href="#works" data-i18n="footer.projects">项目</a></li>
+          <li><a href="#life" data-i18n="footer.lifedata">生活数据</a></li>
         </ul>
       </div>
       <div class="footer-col">
-        <h4>作品</h4>
+        <h4 data-i18n="footer.works">作品</h4>
         <ul>
-          <li><a href="space.html">失眠夜个人空间</a></li>
-          <li><a href="space.html#awards">荣誉奖项</a></li>
-          <li><a href="space.html#contact">联系我</a></li>
+          <li><a href="space.html" data-i18n="footer.space2">失眠夜个人空间</a></li>
+          <li><a href="space.html#awards" data-i18n="footer.awards">荣誉奖项</a></li>
+          <li><a href="space.html#contact" data-i18n="footer.contactme">联系我</a></li>
         </ul>
       </div>
       <div class="footer-col">
-        <h4>联系</h4>
+        <h4 data-i18n="footer.contact">联系</h4>
         <ul>
           <li><a href="https://github.com/Yaule-Rate" target="_blank" rel="noopener">GitHub</a></li>
-          <li><a href="mailto:1957784559@qq.com">邮箱</a></li>
-          <li><a href="atom.xml">RSS 订阅</a></li>
+          <li><a href="mailto:1957784559@qq.com" data-i18n="footer.email">邮箱</a></li>
+          <li><a href="atom.xml" data-i18n="footer.rss">RSS 订阅</a></li>
         </ul>
       </div>
     </div>
@@ -2312,6 +2375,7 @@
       .then(function (r) { if (!r.ok) throw new Error('weather'); return r.json(); })
       .then(function (d) {
         var c = d.current;
+        window.__wCode = c.weather_code;
         icon.innerHTML = svgFor(c.weather_code);
         txt.innerHTML = '<span>衢州</span><span class="weather-temp">' + Math.round(c.temperature_2m) + '°C</span><span>' + textFor(c.weather_code) + '</span>';
         var fe = document.getElementById('wFeels');
@@ -2407,6 +2471,7 @@
         (data.days || []).forEach(function (day) {
           if (day.date === ymd && day.isOffDay) matched = day;
         });
+        window.__festNow = matched ? matched.name : null;
         if (!matched) return;
         var gEl = document.getElementById('festGreeting');
         if (gEl && GREETING[matched.name]) {
@@ -2440,7 +2505,9 @@
       var sec = Math.floor((Date.now() - start) / 1000);
       var m = Math.floor(sec / 60);
       var s = sec % 60;
-      el.innerHTML = '已停留 <b>' + m + '</b> 分 <b>' + s + '</b> 秒';
+      el.innerHTML = (window.YAULE_LANG === 'en')
+        ? 'Stayed <b>' + m + '</b> min <b>' + s + '</b> sec'
+        : '已停留 <b>' + m + '</b> 分 <b>' + s + '</b> 秒';
     }
     update();
     setInterval(update, 1000);
@@ -2494,7 +2561,7 @@
       ring.setAttribute('stroke-dasharray', C.toFixed(1));
       ring.setAttribute('stroke-dashoffset', (C * (1 - pct / 100)).toFixed(1));
       leftNum.textContent = left;
-      if (pctText) pctText.textContent = '今年已过 ' + pct + '%';
+      if (pctText) pctText.textContent = pct + '%';
     }
     update();
     setInterval(update, 60000);
@@ -2502,7 +2569,13 @@
 
   /* ========== 更新日志（VSCode 风格）全量数据 + 主页简短渲染 + localStorage 同步 ========== */
   var YAULE_CHANGELOG = [
-    { ver: "v19.6", date: "2026-09-25 16:20:11", current: true, list: [
+    { ver: "v21", date: "2026-09-25 20:18:00", current: true, list: [
+      { lv: "[ADD]", time: "2026-09-25 20:18:00", text: "整站 i18n：右上角中英一键切换，独立 3 秒伪进度条。" },
+      { lv: "[ADD]", time: "2026-09-25 20:09:47", text: "此刻 · 每日推荐：结合节日 / 天气 / 星期，每天一条。" },
+      { lv: "[ADD]", time: "2026-09-25 19:58:32", text: "页面转场：返回标签页时 View Transitions 衔接。" },
+      { lv: "[ADD]", time: "2026-09-25 19:50:10", text: "独立 404 页：Y 一笔画 + 「失眠夜迷路了」+ 返回按钮。" }
+    ]},
+    { ver: "v19.6", date: "2026-09-25 16:20:11", current: false, list: [
       { lv: "[ADD]", time: "2026-09-25 16:20:11", text: "六件作品详情页加入评分系统（兴华 4.9 / 记账 5.0 / 代码 4.8 / 表情 5.0 / CS 5.0 / 棋类 4.9）。" },
       { lv: "[INFO]", time: "2026-09-25 16:05:02", text: "更新日志改版为 VSCode 风格：彩色圆点 + 完整时间戳，主页只展示最新版本，完整历史移入详细日志。" },
       { lv: "[FIX]", time: "2026-09-25 15:58:40", text: "修复从个人空间/作品返回标签页时进度条遮罩残留。" }
@@ -2711,7 +2784,9 @@
     var c = colors[h % colors.length];
     var tips = ['宜写代码', '宜喝咖啡', '宜听歌', '宜发呆', '宜早睡', '宜整理', '宜散步', '宜收藏', '宜分享', '宜读书'];
     var tip = tips[(h >> 4) % tips.length];
-    el.innerHTML = '今日幸运 <b style="color:' + c[0] + '">' + lucky + '</b> · ' + c[1] + ' ' + tip;
+    el.innerHTML = (window.YAULE_LANG === 'en'
+      ? 'Today\'s luck <b style="color:' + c[0] + '">' + lucky + '</b> · ' + c[1] + ' ' + tip
+      : '今日幸运 <b style="color:' + c[0] + '">' + lucky + '</b> · ' + c[1] + ' ' + tip);
   })();
 
   /* ========== 开源仓库墙（GitHub API） ========== */
@@ -2830,6 +2905,206 @@
     }).join('');
     refresh();
   })();
+</script>
+
+<script>
+  /* ========== 整站 i18n：中英切换（3 秒伪进度条） ========== */
+  var I18N = {
+    zh: {
+      'hero.intro': '这里是我的个人小角落，记录着咖啡、音乐、游戏与作品。不紧不慢，慢慢翻就好。',
+      'hero.scroll': '向下滑动',
+      'enter.kicker': 'PERSONAL SPACE',
+      'enter.h2': '失眠夜 · 个人空间',
+      'enter.desc': '这里收纳着关于我的一切——爱好的碎片、写过的项目、走过的路，还有一些零零散散的日常。',
+      'enter.btn': '进入个人空间',
+      'life.h2': '生活瞬间', 'life.desc': '一些悄悄累积的数字，随时间慢慢长大。点击上方切换。',
+      'life.tab1': '咖啡', 'life.tab2': '音乐', 'life.tab3': '游戏',
+      'works.h2': '精选作品', 'works.desc': '从校园工具到游戏辅助，都是一点点写出来的小玩意。点卡片打开，点右上角下载。', 'works.more': '查看更多 ↓',
+      'anniv.h2': '纪念日', 'anniv.desc': '有些日子值得被记住，有些时间悄悄在走。',
+      'now.h2': '此刻', 'now.desc': '时间与天气，都在悄悄走。', 'now.reco': '今日推荐',
+      'now.ring': '天 · 2026 还剩', 'now.ringfoot': '今年已过',
+      'now.w1': '体感', 'now.w2': '湿度', 'now.w3': '风速', 'now.w4': '紫外线',
+      'repos.h2': '开源仓库', 'repos.desc': '最近活跃的仓库，数据实时来自 GitHub。',
+      'skills.h2': '擅长的事', 'skills.desc': '六个方向的自我评估，图是画出来的，路是一点点走的。',
+      'changelog.h2': '更新日志', 'changelog.desc': '这个页面是怎么一点点长成现在这样的。', 'changelog.more': '详细日志',
+      'bucket.h2': '人生清单', 'bucket.desc': '想做的 100 件小事，完成一件，点亮一件。',
+      'footer.brand': '个人空间入口：这里收录我的作品与项目，全部开源托管在 GitHub 上。',
+      'footer.nav': '导航', 'footer.home': '首页', 'footer.space': '个人空间', 'footer.projects': '项目', 'footer.lifedata': '生活数据',
+      'footer.works': '作品', 'footer.space2': '失眠夜个人空间', 'footer.awards': '荣誉奖项', 'footer.contactme': '联系我',
+      'footer.contact': '联系', 'footer.email': '邮箱', 'footer.rss': 'RSS 订阅'
+    },
+    en: {
+      'hero.intro': 'This is my little corner — coffee, music, games and works. Take it slow.',
+      'hero.scroll': 'Scroll down',
+      'enter.kicker': 'PERSONAL SPACE',
+      'enter.h2': 'Insomnia Night · My Space',
+      'enter.desc': "Everything about me — hobby fragments, projects I've written, roads I've walked, and bits of everyday life.",
+      'enter.btn': 'Enter My Space',
+      'life.h2': 'Life Moments', 'life.desc': 'Numbers that quietly grow with time. Click to switch.',
+      'life.tab1': 'Coffee', 'life.tab2': 'Music', 'life.tab3': 'Games',
+      'works.h2': 'Featured Works', 'works.desc': 'From campus tools to game aids — little things written one by one. Click a card to open, click download top-right.', 'works.more': 'View More ↓',
+      'anniv.h2': 'Anniversaries', 'anniv.desc': 'Some days are worth remembering; some time quietly passes.',
+      'now.h2': 'Right Now', 'now.desc': 'Time and weather, quietly passing.', 'now.reco': "Today's Pick",
+      'now.ring': 'days left in 2026', 'now.ringfoot': 'of 2026 used',
+      'now.w1': 'Feels', 'now.w2': 'Humidity', 'now.w3': 'Wind', 'now.w4': 'UV',
+      'repos.h2': 'Open Source', 'repos.desc': 'Recently active repos, live from GitHub.',
+      'skills.h2': "What I'm Good At", 'skills.desc': 'Self-assessment in six directions — drawn as a chart, built step by step.',
+      'changelog.h2': 'Changelog', 'changelog.desc': 'How this page grew into what it is today.', 'changelog.more': 'Full Log',
+      'bucket.h2': 'Bucket List', 'bucket.desc': '100 little things I want to do — done one, lit one.',
+      'footer.brand': 'Entry to my space: my works and projects, all open-sourced on GitHub.',
+      'footer.nav': 'Navigate', 'footer.home': 'Home', 'footer.space': 'My Space', 'footer.projects': 'Projects', 'footer.lifedata': 'Life Data',
+      'footer.works': 'Works', 'footer.space2': 'Insomnia Night Space', 'footer.awards': 'Awards', 'footer.contactme': 'Contact',
+      'footer.contact': 'Contact', 'footer.email': 'Email', 'footer.rss': 'RSS Feed'
+    }
+  };
+  function getLang() {
+    try { return localStorage.getItem('yaule_lang') === 'en' ? 'en' : 'zh'; } catch (e) { return 'zh'; }
+  }
+  function setLang(l) {
+    try { localStorage.setItem('yaule_lang', l); } catch (e) {}
+  }
+  function applyLang() {
+    var L = getLang();
+    window.YAULE_LANG = L;
+    document.documentElement.lang = L === 'en' ? 'en' : 'zh-CN';
+    document.querySelectorAll('[data-i18n]').forEach(function (el) {
+      var k = el.getAttribute('data-i18n');
+      if (I18N[L] && I18N[L][k]) el.textContent = I18N[L][k];
+    });
+    var lb = document.getElementById('langLabel');
+    if (lb) lb.textContent = L === 'en' ? 'EN' : '中';
+    var st = document.getElementById('stayTime');
+    if (st) st.innerHTML = L === 'en' ? 'Stayed 0 min 0 sec' : '已停留 0 分 0 秒';
+    window.dispatchEvent(new CustomEvent('yaule-langchange'));
+  }
+  var langBusy = false;
+  function switchLang() {
+    if (langBusy) return;
+    langBusy = true;
+    var next = getLang() === 'en' ? 'zh' : 'en';
+    var loader = document.getElementById('langLoader');
+    var fill = document.getElementById('langBarFill');
+    var tip = document.getElementById('langLoaderTip');
+    if (!loader || !fill) { langBusy = false; return; }
+    loader.classList.add('active');
+    fill.style.width = '0%';
+    if (tip) tip.textContent = next === 'en' ? '正在切换语言…' : 'Switching language…';
+    var p = 0;
+    var t = setInterval(function () {
+      p += Math.random() * 6.5;
+      if (p > 90) p = 90;
+      fill.style.width = p + '%';
+    }, 90);
+    setTimeout(function () {
+      clearInterval(t);
+      fill.style.width = '100%';
+      setTimeout(function () {
+        setLang(next);
+        applyLang();
+        loader.classList.remove('active');
+        langBusy = false;
+      }, 420);
+    }, 3000);
+  }
+  document.addEventListener('DOMContentLoaded', function () {
+    var btn = document.getElementById('langToggle');
+    if (btn) btn.addEventListener('click', switchLang);
+    applyLang();
+  });
+
+  /* ========== 每日推荐（此刻区）：节日 > 天气 > 星期 > 随机，每天固定 ========== */
+  (function () {
+    var el = document.getElementById('recoText');
+    if (!el) return;
+    var tagEl = document.getElementById('recoTag');
+    var RECO = {
+      zh: [
+        '喝杯咖啡，看看窗外。', '写几行代码，或删掉几行。', '整理一下桌面和房间。',
+        '读几页书，慢一点。', '听一首老歌，单曲循环。', '给老朋友发条消息。',
+        '早一点睡，明天会更好。', '出门走一走，吹吹风。', '学一个没用的冷知识。',
+        '把相册翻到去年今天。', '给自己泡杯热茶。', '在清单上点亮一件事。'
+      ],
+      en: [
+        'Have a coffee, watch the window.', 'Write some code — or delete some.', 'Tidy up your desk and room.',
+        'Read a few pages, slowly.', 'Put on an old song on repeat.', 'Message an old friend.',
+        'Sleep early — tomorrow is better.', 'Step out and feel the breeze.', 'Learn a useless fun fact.',
+        'Flip your photos to this day last year.', 'Brew yourself a warm tea.', 'Tick one thing off your list.'
+      ]
+    };
+    var FEST = {
+      zh: {
+        '春节': '今天春节，把新年的第一句祝福送给身边的人。', '除夕': '除夕夜，好好吃顿年夜饭。',
+        '元宵节': '元宵节，记得吃碗汤圆。', '清明节': '清明时节，出去踏踏青。',
+        '劳动节': '劳动节快乐，今天你最大。', '端午节': '端午安康，吃个粽子吧。',
+        '中秋节': '中秋快乐，今晚的月亮借你一半。', '国庆节': '国庆快乐，出门看看山河。'
+      },
+      en: {
+        '春节': "It's Spring Festival — share your first wish of the year.",
+        '除夕': "New Year's Eve — enjoy a proper family dinner.",
+        '元宵节': 'Lantern Festival — grab a bowl of tangyuan.',
+        '清明节': 'Qingming — take a spring walk.',
+        '劳动节': 'Happy Labor Day — you deserve today.',
+        '端午节': 'Dragon Boat Festival — have a zongzi.',
+        '中秋节': 'Mid-Autumn — half the moon is yours tonight.',
+        '国庆节': 'National Day — go see the land.'
+      }
+    };
+    var WX = {
+      0: { zh: '晴空万里，适合出门晒晒太阳。', en: 'Clear sky — go soak up some sun.', tag: 'Sunny' },
+      1: { zh: '天气不错，去散个步吧。', en: 'Not bad out — take a walk.', tag: 'Clear' },
+      2: { zh: '多云天气，适合做点安静的事。', en: 'Partly cloudy — a quiet day for calm things.', tag: 'Cloudy' },
+      3: { zh: '阴天，泡杯咖啡写写代码正好。', en: 'Overcast — perfect for coffee and code.', tag: 'Overcast' },
+      48: { zh: '有雾，路上小心，慢慢走。', en: 'Foggy — take it easy out there.', tag: 'Foggy' },
+      67: { zh: '下雨天，适合窝在家里写代码、喝咖啡。', en: 'Rainy — great day to code indoors with a coffee.', tag: 'Rainy' },
+      77: { zh: '下雪了，记得保暖，喝杯热的。', en: 'Snowy — stay warm, grab something hot.', tag: 'Snowy' },
+      95: { zh: '雷雨天少出门，戴上耳机听会儿歌。', en: 'Stormy — stay in and put on some music.', tag: 'Stormy' },
+      '-1': { zh: '天气刚好，去试试没做过的事吧。', en: "Weather's fine — try something new.", tag: '' }
+    };
+    function wKey(code) {
+      if (code === 0) return 0;
+      if (code >= 1 && code <= 3) return code;
+      if (code <= 48) return 48;
+      if (code <= 67) return 67;
+      if (code <= 77) return 77;
+      if (code <= 86) return 77;
+      if (code >= 95) return 95;
+      return -1;
+    }
+    var WEEK = {
+      1: { zh: '新的一周，从一杯咖啡开始。', en: 'New week — start with a coffee.', tag: 'Monday' },
+      2: { zh: '工作日也要好好生活。', en: 'Keep the week steady.', tag: 'Tuesday' },
+      3: { zh: '周三，已经过了一半。', en: 'Wednesday — halfway there.', tag: 'Wednesday' },
+      4: { zh: '再坚持一下，周末快到了。', en: 'Almost the weekend — hold on.', tag: 'Thursday' },
+      5: { zh: '周五啦，今晚给自己放个假。', en: 'Friday — give yourself the night off.', tag: 'Friday' },
+      6: { zh: '周末愉快，去做点喜欢的事。', en: 'Happy weekend — do something you love.', tag: 'Weekend' },
+      0: { zh: '周末愉快，去做点喜欢的事。', en: 'Happy weekend — do something you love.', tag: 'Weekend' }
+    };
+    function pick() {
+      var fest = window.__festNow;
+      if (fest && FEST.zh[fest]) return { zh: FEST.zh[fest], en: FEST.en[fest], tag: fest };
+      var w = window.__wCode;
+      if (typeof w === 'number') {
+        var wx = WX[wKey(w)];
+        if (wx) return { zh: wx.zh, en: wx.en, tag: wx.tag };
+      }
+      var wk = WEEK[new Date().getDay()];
+      if (wk) return { zh: wk.zh, en: wk.en, tag: wk.tag };
+      var i = Math.floor(Math.random() * RECO.zh.length);
+      return { zh: RECO.zh[i], en: RECO.en[i], tag: '' };
+    }
+    function render() {
+      if (!el) return;
+      var L = getLang();
+      var r = pick();
+      el.textContent = r[L] || r.zh;
+      if (tagEl) tagEl.textContent = r.tag ? ('· ' + r.tag) : '';
+    }
+    render();
+    window.addEventListener('yaule-langchange', render);
+    setTimeout(render, 2500);
+    setTimeout(render, 6000);
+  })();
+
 </script>
 </body>
 </html>
