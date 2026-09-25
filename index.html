@@ -1256,6 +1256,7 @@
   .lang-loader-tip { font-size: 14px; color: var(--ink-2); letter-spacing: .12em; }
   .lang-bar { width: 240px; height: 4px; border-radius: 999px; background: var(--soft); overflow: hidden; }
   .lang-bar-fill { height: 100%; width: 0%; border-radius: 999px; background: linear-gradient(90deg, var(--accent), var(--accent-2)); }
+  .lang-pct { font-size: 13px; color: var(--ink-2); font-variant-numeric: tabular-nums; letter-spacing: .06em; margin-top: -6px; }
 
   /* ===== 此刻 · 每日推荐卡 ===== */
   .now-reco { grid-column: 1 / -1; min-height: 130px; }
@@ -1283,10 +1284,10 @@
     <div class="loading-bar-fill" id="loadBar"></div>
   </div>
   <p class="loading-percent" id="loadPercent">0%</p>
-  <p class="loading-hint">稍等片刻，马上就好…</p>
+  <p class="loading-hint" data-i18n="loading.hint">稍等片刻，马上就好…</p>
   <button class="load-skip" id="loadSkip" type="button">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
-    长按加速 <small>按住不放，加载更快</small>
+    <span data-i18n="loading.skip1">长按加速</span> <small data-i18n="loading.skip2">按住不放，加载更快</small>
   </button>
 </div>
 <div class="lang-loader" id="langLoader" aria-hidden="true">
@@ -1295,6 +1296,7 @@
   </svg>
   <p class="lang-loader-tip" id="langLoaderTip">正在切换语言…</p>
   <div class="lang-bar"><div class="lang-bar-fill" id="langBarFill"></div></div>
+  <p class="lang-pct" id="langBarPct">0%</p>
 </div>
 <div class="toast" id="toast"></div>
 <button class="lang-toggle" id="langToggle" title="切换语言" aria-label="切换语言">
@@ -1360,10 +1362,10 @@
           <svg viewBox="0 0 48 48" fill="none" stroke="#17181C" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M8.59 7.185C16.616 26.679 36.858 17.289 37.163 5.5"/><path d="M5.36 11.748c14.195 11.548 29.842 6.712 37.28-3.931M26.07 27.054c-4.152.607-8.14 7.827-.56 11.304c4.427 2.03 11.45-.182 13.69 4.142M16.874 22.28c-4.253 4.097-6.784 9.884-6.178 18.745"/><path d="M23.45 18.408c.43 2.522 4.259 2.63 8.168 2.679a6.18 6.18 0 0 1-.983 3.861a6.54 6.54 0 0 1-4.564 2.107m-9.197-4.775a8.5 8.5 0 0 1-9.303-2.036c2.148-.837 4.314-1.66 9.478-.21c1.378-.36 1.532-1.208 2.139-1.875m11.979 5.809l-2.814.48"/></svg>
         </div>
         <div class="life-info">
-          <h3>瑞幸咖啡 <span class="tag">续命中</span></h3>
-          <div class="data-number" id="cups">176<small>杯</small></div>
-          <p class="data-desc">从第一杯咖啡开始，悄悄记录每一次续命时刻</p>
-          <p class="data-desc" style="margin-top:8px">美式、拿铁、生椰……每一杯都是生活的续命剂。</p>
+          <h3><span data-i18n="life.c1">瑞幸咖啡</span> <span class="tag" data-i18n="life.tag1">续命中</span></h3>
+          <div class="data-number" id="cups">176<small data-i18n="life.un2">杯</small></div>
+          <p class="data-desc" data-i18n="life.d1">从第一杯咖啡开始，悄悄记录每一次续命时刻</p>
+          <p class="data-desc" style="margin-top:8px" data-i18n="life.d2">美式、拿铁、生椰……每一杯都是生活的续命剂。</p>
         </div>
       </div>
       <!-- 界面 2：网易云音乐 -->
@@ -1372,11 +1374,11 @@
           <svg viewBox="0 0 24 24" fill="#17181C" xmlns="http://www.w3.org/2000/svg"><path d="M13.046 9.388a3.919 3.919 0 0 0-.66.19c-.809.312-1.447.991-1.666 1.775a2.269 2.269 0 0 0-.074.81c.048.546.333 1.05.764 1.35a1.483 1.483 0 0 0 2.01-.286c.406-.531.355-1.183.24-1.636-.098-.387-.22-.816-.345-1.249a64.76 64.76 0 0 1-.269-.954zm-.82 10.07c-3.984 0-7.224-3.24-7.224-7.223 0-.98.226-3.02 1.884-4.822A7.188 7.188 0 0 1 9.502 5.6a.792.792 0 1 1 .587 1.472 5.619 5.619 0 0 0-2.795 2.462 5.538 5.538 0 0 0-.707 2.7 5.645 5.645 0 0 0 5.638 5.638c1.844 0 3.627-.953 4.542-2.428 1.042-1.68.772-3.931-.627-5.238a3.299 3.299 0 0 0-1.437-.777c.172.589.334 1.18.494 1.772.284 1.12.1 2.181-.519 2.989-.39.51-.956.888-1.592 1.064a3.038 3.038 0 0 1-2.58-.44 3.45 3.45 0 0 1-1.44-2.514c-.04-.467.002-.93.128-1.376.35-1.256 1.356-2.339 2.622-2.826a5.5 5.5 0 0 1 .823-.246l-.134-.505c-.37-1.371.25-2.579 1.547-3.007.329-.109.68-.145 1.025-.105.792.09 1.476.592 1.709 1.023.258.507-.096 1.153-.706 1.153a.788.788 0 0 1-.54-.213c-.088-.08-.163-.174-.259-.247a.825.825 0 0 0-.632-.166.807.807 0 0 0-.634.551c-.056.191-.031.406.02.595.07.256.159.597.217.82 1.11.098 2.162.54 2.97 1.296 1.974 1.844 2.35 4.886.892 7.233-1.197 1.93-3.509 3.177-5.889 3.177zM0 12c0 6.627 5.373 12 12 12s12-5.373 12-12S18.627 0 12 0 0 5.373 0 12Z"/></svg>
         </div>
         <div class="life-info">
-          <h3>网易云音乐 <span class="tag">循环播放中</span></h3>
-          <div class="data-number"><span id="songs">305</span><small>首</small></div>
-          <p class="data-desc">累计收听 <span id="hours">2000</span>+ 小时，旋律里藏着无数个夜晚</p>
-          <p class="data-desc" style="margin-top:8px">深夜的旋律，陪我度过每一个失眠夜。</p>
-          <p class="data-desc daily-song" style="margin-top:8px">今日推荐：<a id="dailySong" href="#" target="_blank" rel="noopener">正在挑选…</a></p>
+          <h3><span data-i18n="life.c2">网易云音乐</span> <span class="tag" data-i18n="life.tag2">循环播放中</span></h3>
+          <div class="data-number"><span id="songs">305</span><small data-i18n="life.un1">首</small></div>
+          <p class="data-desc"><span data-i18n="life.h1">累计收听</span> <span id="hours">2000</span><span data-i18n="life.h2">+ 小时，旋律里藏着无数个夜晚</span></p>
+          <p class="data-desc" style="margin-top:8px" data-i18n="life.d3">深夜的旋律，陪我度过每一个失眠夜。</p>
+          <p class="data-desc daily-song" style="margin-top:8px"><span data-i18n="life.song">今日推荐：</span><a id="dailySong" href="#" target="_blank" rel="noopener" data-i18n="life.songload">正在挑选…</a></p>
         </div>
       </div>
       <!-- 界面 3：我的世界 -->
@@ -1386,35 +1388,35 @@
         </div>
         <div class="life-info">
           <div class="mc-subtabs" role="tablist">
-            <button class="mc-subtab active" data-server="bjd" role="tab">布吉岛</button>
-            <button class="mc-subtab" data-server="hyt" role="tab">花雨亭</button>
+            <button class="mc-subtab active" data-server="bjd" role="tab" data-i18n="mc.sub1">布吉岛</button>
+            <button class="mc-subtab" data-server="hyt" role="tab" data-i18n="mc.sub2">花雨亭</button>
           </div>
           <div id="mcBody">
             <div id="mcPanelBJD">
               <div class="mc-metrics">
-                <div class="mc-metric"><div class="m-val" data-bjd="games">128<small>局</small></div><div class="m-label">游戏对局</div></div>
-                <div class="mc-metric"><div class="m-val" data-bjd="hours">864<small>h</small></div><div class="m-label">在线时长</div></div>
-                <div class="mc-metric"><div class="m-val" data-bjd="wins">76<small>胜</small></div><div class="m-label">胜场</div></div>
-                <div class="mc-metric"><div class="m-val" data-bjd="placed">15320<small>个</small></div><div class="m-label">放置方块</div></div>
-                <div class="mc-metric"><div class="m-val" data-bjd="mined">28460<small>个</small></div><div class="m-label">挖掘方块</div></div>
-                <div class="mc-metric"><div class="m-val" data-bjd="achv">42<small>个</small></div><div class="m-label">成就解锁</div></div>
-                <div class="mc-metric"><div class="m-val" data-bjd="days">356<small>天</small></div><div class="m-label">游玩天数</div></div>
-                <div class="mc-metric"><div class="m-val" data-bjd="days_online">128<small>天</small></div><div class="m-label">累计上线</div></div>
+                <div class="mc-metric"><div class="m-val" data-bjd="games">128<small data-i18n="mc.u1">局</small></div><div class="m-label" data-i18n="mc.l1">游戏对局</div></div>
+                <div class="mc-metric"><div class="m-val" data-bjd="hours">864<small data-i18n="mc.u2">h</small></div><div class="m-label" data-i18n="mc.l2">在线时长</div></div>
+                <div class="mc-metric"><div class="m-val" data-bjd="wins">76<small data-i18n="mc.u3">胜</small></div><div class="m-label" data-i18n="mc.l3">胜场</div></div>
+                <div class="mc-metric"><div class="m-val" data-bjd="placed">15320<small data-i18n="mc.u4">个</small></div><div class="m-label" data-i18n="mc.l4">放置方块</div></div>
+                <div class="mc-metric"><div class="m-val" data-bjd="mined">28460<small data-i18n="mc.u4">个</small></div><div class="m-label" data-i18n="mc.l5">挖掘方块</div></div>
+                <div class="mc-metric"><div class="m-val" data-bjd="achv">42<small data-i18n="mc.u4">个</small></div><div class="m-label" data-i18n="mc.l6">成就解锁</div></div>
+                <div class="mc-metric"><div class="m-val" data-bjd="days">356<small data-i18n="mc.u5">天</small></div><div class="m-label" data-i18n="mc.l7">游玩天数</div></div>
+                <div class="mc-metric"><div class="m-val" data-bjd="days_online">128<small data-i18n="mc.u5">天</small></div><div class="m-label" data-i18n="mc.l8">累计上线</div></div>
               </div>
-              <p class="mc-note">生存、建筑与联机日常，记录仍在继续。</p>
+              <p class="mc-note" data-i18n="mc.n1">生存、建筑与联机日常，记录仍在继续。</p>
             </div>
             <div id="mcPanelHYT" class="hidden">
               <div class="mc-metrics">
-                <div class="mc-metric"><div class="m-val" data-hyt="games">205<small>局</small></div><div class="m-label">游戏对局</div></div>
-                <div class="mc-metric"><div class="m-val" data-hyt="hours">1216<small>h</small></div><div class="m-label">在线时长</div></div>
-                <div class="mc-metric"><div class="m-val" data-hyt="wins">118<small>胜</small></div><div class="m-label">胜场</div></div>
-                <div class="mc-metric"><div class="m-val" data-hyt="placed">24880<small>个</small></div><div class="m-label">放置方块</div></div>
-                <div class="mc-metric"><div class="m-val" data-hyt="mined">45120<small>个</small></div><div class="m-label">挖掘方块</div></div>
-                <div class="mc-metric"><div class="m-val" data-hyt="achv">58<small>个</small></div><div class="m-label">成就解锁</div></div>
-                <div class="mc-metric"><div class="m-val" data-hyt="days">612<small>天</small></div><div class="m-label">游玩天数</div></div>
-                <div class="mc-metric"><div class="m-val" data-hyt="days_online">240<small>天</small></div><div class="m-label">累计上线</div></div>
+                <div class="mc-metric"><div class="m-val" data-hyt="games">205<small data-i18n="mc.u1">局</small></div><div class="m-label" data-i18n="mc.l1">游戏对局</div></div>
+                <div class="mc-metric"><div class="m-val" data-hyt="hours">1216<small data-i18n="mc.u2">h</small></div><div class="m-label" data-i18n="mc.l2">在线时长</div></div>
+                <div class="mc-metric"><div class="m-val" data-hyt="wins">118<small data-i18n="mc.u3">胜</small></div><div class="m-label" data-i18n="mc.l3">胜场</div></div>
+                <div class="mc-metric"><div class="m-val" data-hyt="placed">24880<small data-i18n="mc.u4">个</small></div><div class="m-label" data-i18n="mc.l4">放置方块</div></div>
+                <div class="mc-metric"><div class="m-val" data-hyt="mined">45120<small data-i18n="mc.u4">个</small></div><div class="m-label" data-i18n="mc.l5">挖掘方块</div></div>
+                <div class="mc-metric"><div class="m-val" data-hyt="achv">58<small data-i18n="mc.u4">个</small></div><div class="m-label" data-i18n="mc.l6">成就解锁</div></div>
+                <div class="mc-metric"><div class="m-val" data-hyt="days">612<small data-i18n="mc.u5">天</small></div><div class="m-label" data-i18n="mc.l7">游玩天数</div></div>
+                <div class="mc-metric"><div class="m-val" data-hyt="days_online">240<small data-i18n="mc.u5">天</small></div><div class="m-label" data-i18n="mc.l8">累计上线</div></div>
               </div>
-              <p class="mc-note">花雨亭已停服，数据定格在停服前一天（2025-06-14）。</p>
+              <p class="mc-note" data-i18n="mc.n2">花雨亭已停服，数据定格在停服前一天（2025-06-14）。</p>
             </div>
           </div>
         </div>
@@ -1441,11 +1443,11 @@
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
           </a>
         <div class="card-body">
-          <h3>兴华中学广播站系统</h3>
-          <p>广播排班管理、播放日程控制、站点信息维护，独立设计开发并投入校园实际使用。</p>
+          <h3 data-i18n="works.t1">兴华中学广播站系统</h3>
+          <p data-i18n="works.t1d">广播排班管理、播放日程控制、站点信息维护，独立设计开发并投入校园实际使用。</p>
           <div class="card-preview">
-            <p>广播排班、播放日程、站点信息一站式维护，从零开发并投入校园日常使用。</p>
-            <span class="card-tags"><span>广播</span><span>管理</span></span>
+            <p data-i18n="works.t1p">广播排班、播放日程、站点信息一站式维护，从零开发并投入校园日常使用。</p>
+            <span class="card-tags"><span data-i18n="works.tag1a">广播</span><span data-i18n="works.tag1b">管理</span></span>
           </div>
           <span class="meta"></span>
         </div>
@@ -1459,11 +1461,11 @@
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
           </a>
         <div class="card-body">
-          <h3>自助记账系统</h3>
-          <p>收支记录、分类统计、数据可视化，轻量化单文件本地工具，开箱即用。</p>
+          <h3 data-i18n="works.t2">自助记账系统</h3>
+          <p data-i18n="works.t2d">收支记录、分类统计、数据可视化，轻量化单文件本地工具，开箱即用。</p>
           <div class="card-preview">
-            <p>收支流水、分类统计、报表导出，让每一笔账都清清楚楚。</p>
-            <span class="card-tags"><span>记账</span><span>工具</span></span>
+            <p data-i18n="works.t2p">收支流水、分类统计、报表导出，让每一笔账都清清楚楚。</p>
+            <span class="card-tags"><span data-i18n="works.tag2a">记账</span><span data-i18n="works.tag2b">工具</span></span>
           </div>
           <span class="meta"></span>
         </div>
@@ -1477,11 +1479,11 @@
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
           </a>
         <div class="card-body">
-          <h3>代码编写系统</h3>
-          <p>可视化拖拽生成 C++ 代码，降低编程入门门槛，助力机器人编程学习。</p>
+          <h3 data-i18n="works.t3">代码编写系统</h3>
+          <p data-i18n="works.t3d">可视化拖拽生成 C++ 代码，降低编程入门门槛，助力机器人编程学习。</p>
           <div class="card-preview">
-            <p>代码编写辅助工作台，模板化快速生成，让日常编码更顺手。</p>
-            <span class="card-tags"><span>编码</span><span>效率</span></span>
+            <p data-i18n="works.t3p">代码编写辅助工作台，模板化快速生成，让日常编码更顺手。</p>
+            <span class="card-tags"><span data-i18n="works.tag3a">编码</span><span data-i18n="works.tag3b">效率</span></span>
           </div>
           <span class="meta"></span>
         </div>
@@ -1495,11 +1497,11 @@
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
           </a>
         <div class="card-body">
-          <h3>表情转图片转换器</h3>
-          <p>文字、表情符号一键转图片，支持自定义背景与文字颜色，导出高清 PNG。</p>
+          <h3 data-i18n="works.t4">表情转图片转换器</h3>
+          <p data-i18n="works.t4d">文字、表情符号一键转图片，支持自定义背景与文字颜色，导出高清 PNG。</p>
           <div class="card-preview">
-            <p>把文字图案一键转成 Emoji 图片，分享出来更有趣。</p>
-            <span class="card-tags"><span>趣味</span><span>图像</span></span>
+            <p data-i18n="works.t4p">把文字图案一键转成 Emoji 图片，分享出来更有趣。</p>
+            <span class="card-tags"><span data-i18n="works.tag4a">趣味</span><span data-i18n="works.tag4b">图像</span></span>
           </div>
           <span class="meta"></span>
         </div>
@@ -1513,11 +1515,11 @@
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
           </a>
         <div class="card-body">
-          <h3>CS 灵敏度校准</h3>
-          <p>输入 DPI 与灵敏度参数，智能评估输出最佳游戏鼠标灵敏度。</p>
+          <h3 data-i18n="works.t5">CS 灵敏度校准</h3>
+          <p data-i18n="works.t5d">输入 DPI 与灵敏度参数，智能评估输出最佳游戏鼠标灵敏度。</p>
           <div class="card-preview">
-            <p>FPS 游戏鼠标灵敏度科学校准，找到真正属于自己的手感。</p>
-            <span class="card-tags"><span>游戏</span><span>外设</span></span>
+            <p data-i18n="works.t5p">FPS 游戏鼠标灵敏度科学校准，找到真正属于自己的手感。</p>
+            <span class="card-tags"><span data-i18n="works.tag5a">游戏</span><span data-i18n="works.tag5b">外设</span></span>
           </div>
           <span class="meta"></span>
         </div>
@@ -1531,18 +1533,18 @@
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
           </a>
         <div class="card-body">
-          <h3>棋类合集</h3>
-          <p>五子棋与中国象棋，本地运行，无需联网。</p>
+          <h3 data-i18n="works.t6">棋类合集</h3>
+          <p data-i18n="works.t6d">五子棋与中国象棋，本地运行，无需联网。</p>
           <div class="card-preview">
-            <p>象棋与五子棋同页双开，约上好友面对面来一局。</p>
-            <span class="card-tags"><span>游戏</span><span>对战</span></span>
+            <p data-i18n="works.t6p">象棋与五子棋同页双开，约上好友面对面来一局。</p>
+            <span class="card-tags"><span data-i18n="works.tag6a">游戏</span><span data-i18n="works.tag6b">对战</span></span>
           </div>
           <span class="meta"></span>
         </div>
       </div>
     </div>
     <div class="btn-more-wrap">
-      <button class="btn-more" id="btnMore" data-i18n="works.more">查看更多 ↓</button>
+      <button class="btn-more" id="btnMore">查看更多 ↓</button>
     </div>
   </div>
 </section>
@@ -1559,24 +1561,24 @@
       <div class="anniv-card">
         <div class="anniv-top">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-          <span>与这个世界相遇</span>
+          <span data-i18n="anniv.a1">与这个世界相遇</span>
         </div>
         <div class="anniv-num" id="annivDays">--</div>
-        <div class="anniv-label">活着的第 <span id="annivDaysN">--</span> 天</div>
+        <div class="anniv-label"><span data-i18n="anniv.l1">活着的第</span> <span id="annivDaysN">--</span> <span data-i18n="anniv.l2">天</span></div>
         <div class="anniv-track"><div class="anniv-fill" id="lifeFill"></div></div>
-        <div class="anniv-meta" id="lifeMeta">人生进度计算中…</div>
-        <div class="anniv-date">自 2012 年 1 月 17 日起</div>
+        <div class="anniv-meta" id="lifeMeta" data-i18n="anniv.meta1">人生进度计算中…</div>
+        <div class="anniv-date" data-i18n="anniv.d1">自 2012 年 1 月 17 日起</div>
       </div>
       <div class="anniv-card">
         <div class="anniv-top">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19l7-7 3 3-7 7-3-3z"/><path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"/><path d="M2 2l7.586 7.586"/><circle cx="11" cy="11" r="2"/></svg>
-          <span>与这座小站相遇</span>
+          <span data-i18n="anniv.a2">与这座小站相遇</span>
         </div>
         <div class="anniv-num" id="siteDays">--</div>
-        <div class="anniv-label">本站上线第 <span id="siteDaysN">--</span> 天</div>
+        <div class="anniv-label"><span data-i18n="anniv.l3">本站上线第</span> <span id="siteDaysN">--</span> <span data-i18n="anniv.l4">天</span></div>
         <div class="anniv-track"><div class="anniv-fill" id="siteFill"></div></div>
-        <div class="anniv-meta" id="siteMeta">下一个里程碑计算中…</div>
-        <div class="anniv-date">自 2026 年 9 月 18 日起</div>
+        <div class="anniv-meta" id="siteMeta" data-i18n="anniv.meta2">下一个里程碑计算中…</div>
+        <div class="anniv-date" data-i18n="anniv.d2">自 2026 年 9 月 18 日起</div>
       </div>
     </div>
   </div>
@@ -1630,7 +1632,7 @@
           <div class="wd-item"><div class="wd-label" data-i18n="now.w1">体感</div><div class="wd-val"><b id="wFeels">--</b><span class="wd-unit">°C</span></div></div>
           <div class="wd-item"><div class="wd-label" data-i18n="now.w2">湿度</div><div class="wd-val"><b id="wHum">--</b><span class="wd-unit">%</span></div></div>
           <div class="wd-item"><div class="wd-label" data-i18n="now.w3">风速</div><div class="wd-val"><b id="wWind">--</b><span class="wd-unit">km/h</span></div></div>
-          <div class="wd-item"><div class="wd-label" data-i18n="now.w4">紫外线</div><div class="wd-val"><b id="wUvi">--</b><span class="wd-unit">级</span></div></div>
+          <div class="wd-item"><div class="wd-label" data-i18n="now.w4">紫外线</div><div class="wd-val"><b id="wUvi">--</b><span class="wd-unit" data-i18n="now.uvi">级</span></div></div>
         </div>
       </div>
     </div>
@@ -1647,8 +1649,8 @@
     </div>
     <div class="repo-grid" id="repoGrid">
       <div class="repo-card">
-        <div class="repo-name"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 .5C5.65.5.5 5.65.5 12c0 5.08 3.29 9.39 7.86 10.91.58.11.79-.25.79-.56 0-.27-.01-1.02-.02-2-3.2.7-3.88-1.54-3.88-1.54-.52-1.33-1.28-1.68-1.28-1.68-1.04-.71.08-.7.08-.7 1.15.08 1.76 1.18 1.76 1.18 1.02 1.75 2.69 1.25 3.35.95.1-.74.4-1.25.72-1.54-2.55-.29-5.23-1.28-5.23-5.68 0-1.26.45-2.28 1.18-3.09-.12-.29-.51-1.46.11-3.05 0 0 .96-.31 3.15 1.18a10.9 10.9 0 0 1 5.74 0c2.19-1.49 3.15-1.18 3.15-1.18.62 1.59.23 2.76.11 3.05.74.81 1.18 1.83 1.18 3.09 0 4.41-2.69 5.39-5.25 5.67.41.36.78 1.06.78 2.14 0 1.55-.01 2.79-.01 3.17 0 .31.21.68.8.56A10.52 10.52 0 0 0 23.5 12C23.5 5.65 18.35.5 12 .5Z"/></svg>正在读取仓库…</div>
-        <div class="repo-desc">连接 GitHub API 中，稍等片刻。</div>
+        <div class="repo-name"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 .5C5.65.5.5 5.65.5 12c0 5.08 3.29 9.39 7.86 10.91.58.11.79-.25.79-.56 0-.27-.01-1.02-.02-2-3.2.7-3.88-1.54-3.88-1.54-.52-1.33-1.28-1.68-1.28-1.68-1.04-.71.08-.7.08-.7 1.15.08 1.76 1.18 1.76 1.18 1.02 1.75 2.69 1.25 3.35.95.1-.74.4-1.25.72-1.54-2.55-.29-5.23-1.28-5.23-5.68 0-1.26.45-2.28 1.18-3.09-.12-.29-.51-1.46.11-3.05 0 0 .96-.31 3.15 1.18a10.9 10.9 0 0 1 5.74 0c2.19-1.49 3.15-1.18 3.15-1.18.62 1.59.23 2.76.11 3.05.74.81 1.18 1.83 1.18 3.09 0 4.41-2.69 5.39-5.25 5.67.41.36.78 1.06.78 2.14 0 1.55-.01 2.79-.01 3.17 0 .31.21.68.8.56A10.52 10.52 0 0 0 23.5 12C23.5 5.65 18.35.5 12 .5Z"/></svg><span data-i18n="repos.loading">正在读取仓库…</span></div>
+        <div class="repo-desc" data-i18n="repos.connecting">连接 GitHub API 中，稍等片刻。</div>
         <div class="repo-meta"><span><i class="lang-dot"></i>--</span><span>0 ★</span><span>0 ⑂</span></div>
       </div>
     </div>
@@ -1668,8 +1670,8 @@
         <svg id="radarSvg" viewBox="0 0 100 100" width="100%" role="img" aria-label="技能雷达图"></svg>
       </div>
       <div class="skill-text">
-        <h3>从校园工具到小游戏，什么都想试一试。</h3>
-        <p>广播站系统、记账工具、代码生成器、棋类游戏……都是一个人从零写完的。爱折腾前端交互，也愿意沉下去做工具；会调音视频，也会为一个小游戏磨上几个晚上。</p>
+        <h3 data-i18n="skills.h3">从校园工具到小游戏，什么都想试一试。</h3>
+        <p data-i18n="skills.p">广播站系统、记账工具、代码生成器、棋类游戏……都是一个人从零写完的。爱折腾前端交互，也愿意沉下去做工具；会调音视频，也会为一个小游戏磨上几个晚上。</p>
         <div class="skill-bars" id="skillBars"></div>
       </div>
     </div>
@@ -1701,7 +1703,7 @@
       <p class="desc" data-i18n="bucket.desc">想做的 100 件小事，完成一件，点亮一件。</p>
     </div>
     <div class="bucket-head">
-      <span class="bucket-progress">已点亮 <b id="bkDone">0</b> / <b id="bkTotal">24</b> 件</span>
+      <span class="bucket-progress"><span data-i18n="bucket.progress">已点亮</span> <b id="bkDone">0</b> / <b id="bkTotal">24</b> <span data-i18n="bucket.progress2">件</span></span>
       <div class="bucket-track"><div class="bucket-fill" id="bkFill"></div></div>
     </div>
     <div class="bucket-grid" id="bucketGrid"></div>
@@ -1774,7 +1776,9 @@
   btn.addEventListener('click', function () {
     expanded = !expanded;
     hiddenCards.forEach(function (c) { c.classList.toggle('hidden', !expanded); });
-    btn.textContent = expanded ? '收起 ↑' : '查看更多 ↓';
+    btn.textContent = (window.YAULE_LANG === 'en')
+      ? (expanded ? 'Collapse ↑' : 'View More ↓')
+      : (expanded ? '收起 ↑' : '查看更多 ↓');
   });
 
   /* ========== 伪进度条加载（修复：新标签页打开后自动隐藏 + bfcache 返回残留） ========== */
@@ -1817,7 +1821,7 @@
       if (pendingNew) {
         window.open(pendingUrl, '_blank');
         hideLoading();
-        showToast('已在新标签页打开');
+        showToast(window.YAULE_LANG === 'en' ? 'Opened in a new tab' : '已在新标签页打开');
       } else if (pendingUrl) {
         window.location.href = pendingUrl;
       } else {
@@ -1842,7 +1846,14 @@
       '正在泡咖啡…', '正在数星星…', '正在整理作品…', '正在点亮灯笼…',
       '正在问候全世界…', '正在翻今天的日记…', '正在检查进度条…', '正在等你…'
     ];
-    if (loadHint) loadHint.textContent = LOAD_LINES[Math.floor(Math.random() * LOAD_LINES.length)];
+    var LOAD_LINES_EN = [
+      'Brewing coffee…', 'Counting stars…', 'Polishing works…', 'Lighting lanterns…',
+      'Greeting the world…', "Flipping today's diary…", 'Checking the progress bar…', 'Waiting for you…'
+    ];
+    if (loadHint) {
+      var LPOOL = (window.YAULE_LANG === 'en') ? LOAD_LINES_EN : LOAD_LINES;
+      loadHint.textContent = LPOOL[Math.floor(Math.random() * LPOOL.length)];
+    }
     progress = 0;
     finished = false;
     pendingUrl = targetUrl;
@@ -1923,6 +1934,27 @@
     function closeShares() {
       document.querySelectorAll('.share-pop.show').forEach(function (p) { p.classList.remove('show'); });
     }
+    function renderShareTexts() {
+      var en = window.YAULE_LANG === 'en';
+      document.querySelectorAll('.card').forEach(function (card) {
+        var h3 = card.querySelector('h3');
+        var btn = card.querySelector('.card-share');
+        var pop = card.querySelector('.share-pop');
+        if (!h3 || !btn || !pop) return;
+        var name = h3.textContent.trim() || (en ? 'work' : '作品');
+        var detail = card.getAttribute('data-detail') || '';
+        var shareUrl = detail ? base.replace(/\/[^/]*$/, '/') + detail : base;
+        var text = en ? 'Yaule\'s work "' + name + '" — Insomnia Night Space' : '来自 Yaule 的作品「' + name + '」——失眠夜个人空间';
+        var wb = pop.querySelector('.sp-wb');
+        var qq = pop.querySelector('.sp-qq');
+        if (wb) { wb.href = 'https://service.weibo.com/share/share.php?url=' + encodeURIComponent(shareUrl) + '&title=' + encodeURIComponent(text); wb.lastChild.textContent = en ? ' Weibo' : '微博'; }
+        if (qq) { qq.href = 'https://connect.qq.com/widget/shareqq/index.html?url=' + encodeURIComponent(shareUrl) + '&title=' + encodeURIComponent(text) + '&summary=' + encodeURIComponent(en ? 'Take a look at this work' : '点开看看这个作品'); qq.lastChild.textContent = 'QQ'; }
+        btn.title = en ? 'Share work' : '分享作品';
+        btn.setAttribute('aria-label', en ? 'Share work' : '分享作品');
+        btn.lastChild.textContent = en ? ' Share' : '分享';
+      });
+    }
+    window.__renderShares = renderShareTexts;
     document.querySelectorAll('.card').forEach(function (card) {
       var meta = card.querySelector('.meta');
       var h3 = card.querySelector('h3');
@@ -1975,7 +2007,7 @@
       document.body.appendChild(a);
       a.click();
       document.body.removeChild(a);
-      showToast('开始下载 ' + name);
+      showToast((window.YAULE_LANG === 'en' ? 'Downloading ' : '开始下载 ') + name);
     });
   });
 
@@ -2085,9 +2117,17 @@
     var cups = 176 + Math.floor(d / 3);
     var songs = 305 + Math.floor(d / 2);
     var hours = 2000 + Math.floor(d / 2) * 25.7;
-    document.getElementById('cups').innerHTML = cups + '<small>杯</small>';
-    document.getElementById('songs').textContent = songs;
-    document.getElementById('hours').textContent = Math.floor(hours);
+    function render() {
+      var en = window.YAULE_LANG === 'en';
+      var ce = document.getElementById('cups');
+      if (ce) ce.innerHTML = cups + '<small>' + (en ? 'cups' : '杯') + '</small>';
+      var se = document.getElementById('songs');
+      if (se) se.textContent = songs;
+      var he = document.getElementById('hours');
+      if (he) he.textContent = Math.floor(hours);
+    }
+    window.__renderLife = render;
+    render();
   })();
 
   /* ========== ROG 幻16 式错峰滚动（图标先下移进入，文字随后浮现） ========== */
@@ -2178,7 +2218,10 @@
       }
       timeEl.innerHTML = html;
       prev = s;
-      dateEl.textContent = d.getFullYear() + ' 年 ' + (d.getMonth() + 1) + ' 月 ' + d.getDate() + ' 日 · 星期' + week[d.getDay()];
+      var en = window.YAULE_LANG === 'en';
+      dateEl.textContent = en
+        ? ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'][d.getDay()] + ', ' + ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][d.getMonth()] + ' ' + d.getDate() + ', ' + d.getFullYear()
+        : d.getFullYear() + ' 年 ' + (d.getMonth() + 1) + ' 月 ' + d.getDate() + ' 日 · 星期' + week[d.getDay()];
     }
     tick();
     setInterval(tick, 1000);
@@ -2221,6 +2264,24 @@
     var text = document.getElementById('quoteText');
     var next = document.getElementById('quoteNext');
     var cur = 0;
+    var ENQ = [
+      ['Stay hungry, stay foolish.', 'Steve Jobs'],
+      ['The only way to do great work is to love what you do.', 'Steve Jobs'],
+      ['Simplicity is the ultimate sophistication.', 'Leonardo da Vinci'],
+      ['It always seems impossible until it\'s done.', 'Nelson Mandela'],
+      ['Code is poetry.', 'WordPress'],
+      ['Sleep is the best meditation.', 'Dalai Lama'],
+      ['Make it work, make it right, make it fast.', 'Kent Beck'],
+      ['Talk is cheap. Show me the code.', 'Linus Torvalds'],
+      ['Good artists copy; great artists steal.', 'Steve Jobs'],
+      ['Do not go gentle into that good night.', 'Dylan Thomas'],
+      ['The night is darkest just before the dawn.', 'English proverb'],
+      ['Dreams are the answers to questions we haven\'t asked yet.', 'Unknown'],
+      ['Coffee first. Schemes later.', 'Unknown'],
+      ['Keep it simple, make it beautiful.', 'Unknown'],
+      ['One day or day one. You decide.', 'Unknown'],
+      ['Every night is a new version of you.', 'Yaule']
+    ];
     function render(q) {
       text.textContent = '“' + q[0] + '”' + (q[1] ? ' —— ' + q[1] : '');
     }
@@ -2236,17 +2297,19 @@
         .catch(function () { clearTimeout(timer); ok(null); });
     }
     function pickLocal(random) {
+      var pool = (window.YAULE_LANG === 'en') ? ENQ : quotes;
       if (random) {
         var i;
-        do { i = Math.floor(Math.random() * quotes.length); } while (i === cur);
+        do { i = Math.floor(Math.random() * pool.length); } while (i === cur);
         cur = i;
       } else {
         var d = new Date();
         var key = d.getFullYear() * 10000 + (d.getMonth() + 1) * 100 + d.getDate();
-        cur = key % quotes.length;
+        cur = key % pool.length;
       }
-      render(quotes[cur]);
+      render(pool[cur]);
     }
+    window.__reQuote = function () { pickLocal(false); };
     // 一言：每 3 秒自动换（联网优先，失败本地随机）；点击复制
     function fallbackCopy(t) {
       var ta = document.createElement('textarea');
@@ -2264,6 +2327,7 @@
       setTimeout(function () { fn(); text.style.opacity = '1'; }, 220);
     }
     function nextQuote() {
+      if (window.YAULE_LANG === 'en') { fadeSwap(function () { pickLocal(true); }); return; }
       fetchNet(function (q) {
         if (q) { fadeSwap(function () { render(q); }); }
         else { fadeSwap(function () { pickLocal(true); }); }
@@ -2281,7 +2345,7 @@
     text.title = '点击复制一言';
     text.addEventListener('click', function () {
       var t = text.textContent.replace(/^“|”$/g, '');
-      function done() { showToast('一言已复制'); }
+      function done() { showToast(window.YAULE_LANG === 'en' ? 'Quote copied' : '一言已复制'); }
       if (navigator.clipboard && navigator.clipboard.writeText) {
         navigator.clipboard.writeText(t).then(done).catch(function () { fallbackCopy(t); done(); });
       } else { fallbackCopy(t); done(); }
@@ -2371,13 +2435,35 @@
       if (code <= 86) return '阵雪';
       return '雷阵雨';
     }
+    function textForEn(code) {
+      if (code === 0) return 'Clear';
+      if (code === 1) return 'Mostly clear';
+      if (code === 2) return 'Partly cloudy';
+      if (code === 3) return 'Overcast';
+      if (code <= 48) return 'Fog';
+      if (code <= 56) return 'Drizzle';
+      if (code <= 67) return 'Rain';
+      if (code <= 77) return 'Snow';
+      if (code <= 82) return 'Showers';
+      if (code <= 86) return 'Snow showers';
+      return 'Thunderstorm';
+    }
+    var wData = null;
+    function renderWeather() {
+      if (!wData) return;
+      var c = wData;
+      var en = window.YAULE_LANG === 'en';
+      icon.innerHTML = svgFor(c.weather_code);
+      txt.innerHTML = '<span>' + (en ? 'Quzhou' : '衢州') + '</span><span class="weather-temp">' + Math.round(c.temperature_2m) + '°C</span><span>' + (en ? textForEn(c.weather_code) : textFor(c.weather_code)) + '</span>';
+    }
+    window.__renderWeather = renderWeather;
     fetch('https://api.open-meteo.com/v1/forecast?latitude=28.94&longitude=118.87&current=temperature_2m,relative_humidity_2m,apparent_temperature,weather_code,wind_speed_10m,uv_index&timezone=Asia%2FShanghai&forecast_days=1')
       .then(function (r) { if (!r.ok) throw new Error('weather'); return r.json(); })
       .then(function (d) {
         var c = d.current;
         window.__wCode = c.weather_code;
-        icon.innerHTML = svgFor(c.weather_code);
-        txt.innerHTML = '<span>衢州</span><span class="weather-temp">' + Math.round(c.temperature_2m) + '°C</span><span>' + textFor(c.weather_code) + '</span>';
+        wData = c;
+        renderWeather();
         var fe = document.getElementById('wFeels');
         var hu = document.getElementById('wHum');
         var wi = document.getElementById('wWind');
@@ -2387,7 +2473,7 @@
         if (wi) wi.textContent = Math.round(c.wind_speed_10m);
         if (uv) uv.textContent = Math.round(c.uv_index);
       })
-      .catch(function () { txt.textContent = '衢州 · 天气暂时不可用'; });
+      .catch(function () { txt.textContent = (window.YAULE_LANG === 'en') ? 'Quzhou · weather unavailable right now' : '衢州 · 天气暂时不可用'; });
   })();
 
   /* ========== 纪念日：活着第几天 / 网站上线天数 ========== */
@@ -2408,27 +2494,27 @@
     if (e2) e2.textContent = a;
     if (e3) e3.textContent = s;
     if (e4) e4.textContent = s;
-    // 生命进度条：以 80 岁（29200 天）为参考
+    // 生命进度条：以 80 岁（29200 天）为参考；站点里程碑：下一个 30 / 100 / 365 / 1000 天
     var lifeFill = document.getElementById('lifeFill');
     var lifeMeta = document.getElementById('lifeMeta');
-    if (lifeFill && lifeMeta) {
-      var span = 29200;
-      var pct = Math.min(100, Math.round((a / span) * 1000) / 10);
-      setTimeout(function () { lifeFill.style.width = pct + '%'; }, 120);
-      lifeMeta.textContent = '人生进度约 ' + pct + '%（参考 80 岁）';
-    }
-    // 站点里程碑：下一个 30 / 100 / 365 / 1000 天
     var siteFill = document.getElementById('siteFill');
     var siteMeta = document.getElementById('siteMeta');
-    if (siteFill && siteMeta) {
-      var goals = [30, 100, 365, 1000, 3650];
-      var next = 3650;
-      for (var i = 0; i < goals.length; i++) {
-        if (s < goals[i]) { next = goals[i]; break; }
-      }
-      setTimeout(function () { siteFill.style.width = Math.min(100, (s / next) * 100) + '%'; }, 120);
-      siteMeta.textContent = '距离 ' + next + ' 天里程碑还有 ' + (next - s) + ' 天';
+    var span = 29200;
+    var pct = Math.min(100, Math.round((a / span) * 1000) / 10);
+    var goals = [30, 100, 365, 1000, 3650];
+    var next = 3650;
+    for (var i = 0; i < goals.length; i++) {
+      if (s < goals[i]) { next = goals[i]; break; }
     }
+    function renderAnniv() {
+      var en = window.YAULE_LANG === 'en';
+      if (lifeFill) setTimeout(function () { lifeFill.style.width = pct + '%'; }, 120);
+      if (lifeMeta) lifeMeta.textContent = en ? 'About ' + pct + '% of a life lived (based on 80 years)' : '人生进度约 ' + pct + '%（参考 80 岁）';
+      if (siteFill) setTimeout(function () { siteFill.style.width = Math.min(100, (s / next) * 100) + '%'; }, 120);
+      if (siteMeta) siteMeta.textContent = en ? (next - s) + ' days to the ' + next + '-day milestone' : '距离 ' + next + ' 天里程碑还有 ' + (next - s) + ' 天';
+    }
+    window.__renderAnniv = renderAnniv;
+    renderAnniv();
   })();
 
   /* ========== 节日飘浮：自动拉取中国法定节假日，节日当天飘 3 秒 ========== */
@@ -2444,6 +2530,22 @@
       '端午节': '端午安康，粽叶飘香。',
       '中秋节': '今晚的月亮，借你一半。',
       '国庆节': '山河远阔，人间烟火。'
+    };
+    var GREETING_EN = {
+      '春节': 'Happy Spring Festival — share your first wish of the year.',
+      '除夕': "New Year's Eve — enjoy a proper family dinner.",
+      '元宵节': 'Happy Lantern Festival — grab a bowl of tangyuan.',
+      '清明节': 'Clear and bright — take a spring walk.',
+      '劳动节': 'Happy Labor Day — you deserve today.',
+      '端午节': 'Dragon Boat Festival — have a zongzi.',
+      '中秋节': 'Mid-Autumn — half the moon is yours tonight.',
+      '国庆节': 'National Day — go see the land.'
+    };
+    window.__setFest = function () {
+      var gEl = document.getElementById('festGreeting');
+      if (!gEl || !window.__festName) return;
+      var v = (window.YAULE_LANG === 'en') ? GREETING_EN : GREETING;
+      if (v[window.__festName]) { gEl.textContent = v[window.__festName]; gEl.classList.add('show'); }
     };
     var FEST = {
       '春节': ['lantern', 'firework', 'lantern', 'couplet'],
@@ -2474,10 +2576,8 @@
         window.__festNow = matched ? matched.name : null;
         if (!matched) return;
         var gEl = document.getElementById('festGreeting');
-        if (gEl && GREETING[matched.name]) {
-          gEl.textContent = GREETING[matched.name];
-          gEl.classList.add('show');
-        }
+        window.__festName = matched.name;
+        if (gEl) window.__setFest();
         var icons = FEST[matched.name] || ['star', 'firework'];
         for (var i = 0; i < 7; i++) {
           (function (i) {
@@ -2522,12 +2622,20 @@
       var dl = card.querySelector('.card-dl');
       return dl ? (dl.getAttribute('download') || 'unknown') : 'unknown';
     }
+    function badgeText(n) { return (window.YAULE_LANG === 'en') ? n + ' downloads' : '下载 ' + n + ' 次'; }
+    function renderAllBadges() {
+      document.querySelectorAll('.card-dl-count').forEach(function (b) {
+        var card = b.closest('.card');
+        if (card) b.textContent = badgeText(store[nameOf(card)] || 0);
+      });
+    }
+    window.__renderDl = renderAllBadges;
     document.querySelectorAll('.card').forEach(function (card) {
       var body = card.querySelector('.card-body');
       if (!body) return;
       var badge = document.createElement('span');
       badge.className = 'card-dl-count';
-      badge.textContent = '下载 ' + (store[nameOf(card)] || 0) + ' 次';
+      badge.textContent = badgeText(store[nameOf(card)] || 0);
       body.appendChild(badge);
     });
     document.querySelectorAll('.card-dl').forEach(function (dl) {
@@ -2537,7 +2645,7 @@
         store[name] = (store[name] || 0) + 1;
         try { localStorage.setItem(KEY, JSON.stringify(store)); } catch (e) {}
         var badge = card ? card.querySelector('.card-dl-count') : null;
-        if (badge) badge.textContent = '下载 ' + store[name] + ' 次';
+        if (badge) badge.textContent = badgeText(store[name]);
       }, true);
     });
   })();
@@ -2569,11 +2677,13 @@
 
   /* ========== 更新日志（VSCode 风格）全量数据 + 主页简短渲染 + localStorage 同步 ========== */
   var YAULE_CHANGELOG = [
-    { ver: "v21", date: "2026-09-25 20:18:00", current: true, list: [
-      { lv: "[ADD]", time: "2026-09-25 20:18:00", text: "整站 i18n：右上角中英一键切换，独立 3 秒伪进度条。" },
-      { lv: "[ADD]", time: "2026-09-25 20:09:47", text: "此刻 · 每日推荐：结合节日 / 天气 / 星期，每天一条。" },
-      { lv: "[ADD]", time: "2026-09-25 19:58:32", text: "页面转场：返回标签页时 View Transitions 衔接。" },
-      { lv: "[ADD]", time: "2026-09-25 19:50:10", text: "独立 404 页：Y 一笔画 + 「失眠夜迷路了」+ 返回按钮。" }
+    { ver: "v22", date: "2026-09-25 21:30:00", current: true, list: [
+      { lv: "[ADD]", time: "2026-09-25 21:30:00", text: "i18n 补全：英文模式下全部可见文字英译（生活瞬间 / 作品 / 纪念日 / 此刻 / 技能 / 清单 / 页脚），切换进度条平滑并显示百分比。", en: "i18n complete: every visible string now translates to English (life moments / works / anniversaries / now / skills / bucket / footer); the switch progress bar is now smooth with a live percentage." },
+      { lv: "[FIX]", time: "2026-09-25 21:28:00", text: "修复英文模式下载数、分享弹窗、推荐标签与紫外线单位未翻译的问题。", en: "Fixed download counts, share popup, daily-pick tag and UV unit staying untranslated in English mode." },
+      { lv: "[ADD]", time: "2026-09-25 20:18:00", text: "整站 i18n：右上角中英一键切换，独立 3 秒伪进度条。", en: "Site-wide i18n: one-click EN/CN switch top-right, with a dedicated 3-second pseudo progress bar." },
+      { lv: "[ADD]", time: "2026-09-25 20:09:47", text: "此刻 · 每日推荐：结合节日 / 天气 / 星期，每天一条。", en: "Right Now · Daily pick: holidays / weather / weekday, one per day." },
+      { lv: "[ADD]", time: "2026-09-25 19:58:32", text: "页面转场：返回标签页时 View Transitions 衔接。", en: "Page transitions: View Transitions when navigating back to the tab page." },
+      { lv: "[ADD]", time: "2026-09-25 19:50:10", text: "独立 404 页：Y 一笔画 + 「失眠夜迷路了」+ 返回按钮。", en: "Dedicated 404 page: Y stroke animation + 'Lost in the Insomnia Night' + back buttons." }
     ]},
     { ver: "v19.6", date: "2026-09-25 16:20:11", current: false, list: [
       { lv: "[ADD]", time: "2026-09-25 16:20:11", text: "六件作品详情页加入评分系统（兴华 4.9 / 记账 5.0 / 代码 4.8 / 表情 5.0 / CS 5.0 / 棋类 4.9）。" },
@@ -2660,18 +2770,24 @@
     function esc(s) { return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
     function rowHtml(item) {
       var cls = lvClass[item.lv] || 'cat-info';
-      return '<div class="vs-row ' + cls + '"><span class="vs-dot"></span><span class="vs-time">' + esc(item.time || '') + '</span><span class="vs-tag">' + esc(item.lv || '') + '</span><span class="vs-text">' + esc(item.text || '') + '</span></div>';
+      var t = (window.YAULE_LANG === 'en' && item.en) ? item.en : (item.text || '');
+      return '<div class="vs-row ' + cls + '"><span class="vs-dot"></span><span class="vs-time">' + esc(item.time || '') + '</span><span class="vs-tag">' + esc(item.lv || '') + '</span><span class="vs-text">' + esc(t) + '</span></div>';
     }
     function verHtml(v) {
       var rows = (v.list || []).map(rowHtml).join('');
-      return '<div class="vs-ver' + (v.current ? ' current' : '') + '"><div class="vs-ver-head"><span class="vs-ver-tab">' + esc(v.ver) + '</span><span class="vs-ver-date">' + esc(v.date) + '</span>' + (v.current ? '<span class="vs-ver-badge">当前版本</span>' : '') + '</div><div class="vs-rows">' + rows + '</div></div>';
+      var badge = (window.YAULE_LANG === 'en') ? 'Current' : '当前版本';
+      return '<div class="vs-ver' + (v.current ? ' current' : '') + '"><div class="vs-ver-head"><span class="vs-ver-tab">' + esc(v.ver) + '</span><span class="vs-ver-date">' + esc(v.date) + '</span>' + (v.current ? '<span class="vs-ver-badge">' + badge + '</span>' : '') + '</div><div class="vs-rows">' + rows + '</div></div>';
     }
-    var box = document.getElementById('mcLog');
-    if (box) {
-      // 主页只展示最新版本（简短），完整历史见详细日志 changelog.html
-      var top = YAULE_CHANGELOG[0];
-      if (top) box.innerHTML = verHtml(top);
+    function renderTop() {
+      var box2 = document.getElementById('mcLog');
+      if (box2) {
+        // 主页只展示最新版本（简短），完整历史见详细日志 changelog.html
+        var top2 = YAULE_CHANGELOG[0];
+        if (top2) box2.innerHTML = verHtml(top2);
+      }
     }
+    window.__renderChangelog = renderTop;
+    renderTop();
     try { localStorage.setItem('yaule_changelog', JSON.stringify(YAULE_CHANGELOG)); } catch (e) {}
   })();
 
@@ -2796,17 +2912,24 @@
     var fallback = [
       { name: 'Yaule-Rate.github.io', desc: '本站源码：全世界语言的欢迎页与个人标签页。', lang: 'HTML', stars: 0, forks: 0, updated: '2026-09-25', color: '#e34c26' }
     ];
+    var fallbackEn = [
+      { name: 'Yaule-Rate.github.io', desc: 'Source of this site: multilingual welcome page & personal hub.', lang: 'HTML', stars: 0, forks: 0, updated: '2026-09-25', color: '#e34c26' }
+    ];
     var langColor = { 'HTML': '#e34c26', 'CSS': '#563d7c', 'JavaScript': '#f1e05a', 'TypeScript': '#3178c6', 'Python': '#3572A5', 'Java': '#b07219', 'C++': '#f34b7d', 'C#': '#178600', 'PHP': '#4F5D95', 'Shell': '#89e051', 'Vue': '#41b883', 'Jupyter Notebook': '#DA5B0B', 'MDX': '#fcb32c' };
     function esc(s) { return String(s == null ? '' : s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
     function render(list) {
-      if (!list || !list.length) list = fallback;
+      if (!list || !list.length) list = (window.YAULE_LANG === 'en') ? fallbackEn : fallback;
+      window.__reposList = list;
       var htmls = list.slice(0, 6).map(function (r) {
         var c = langColor[r.lang] || '#8b949e';
         var date = (r.updated || '').slice(0, 10);
-        return '<div class="repo-card"><div class="repo-name"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 .5C5.65.5.5 5.65.5 12c0 5.08 3.29 9.39 7.86 10.91.58.11.79-.25.79-.56 0-.27-.01-1.02-.02-2-3.2.7-3.88-1.54-3.88-1.54-.52-1.33-1.28-1.68-1.28-1.68-1.04-.71.08-.7.08-.7 1.15.08 1.76 1.18 1.76 1.18 1.02 1.75 2.69 1.25 3.35.95.1-.74.4-1.25.72-1.54-2.55-.29-5.23-1.28-5.23-5.68 0-1.26.45-2.28 1.18-3.09-.12-.29-.51-1.46.11-3.05 0 0 .96-.31 3.15 1.18a10.9 10.9 0 0 1 5.74 0c2.19-1.49 3.15-1.18 3.15-1.18.62 1.59.23 2.76.11 3.05.74.81 1.18 1.83 1.18 3.09 0 4.41-2.69 5.39-5.25 5.67.41.36.78 1.06.78 2.14 0 1.55-.01 2.79-.01 3.17 0 .31.21.68.8.56A10.52 10.52 0 0 0 23.5 12C23.5 5.65 18.35.5 12 .5Z"/></svg>' + esc(r.name) + '</div><div class="repo-desc">' + esc(r.desc || '暂无简介') + '</div><div class="repo-meta"><span><i class="lang-dot" style="background:' + c + '"></i>' + esc(r.lang || '—') + '</span><span><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 17.27 18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>' + (r.stars || 0) + '</span><span><svg viewBox="0 0 24 24" fill="currentColor"><path d="M7 7h10v2H7zm0 4h10v2H7zm0 4h6v2H7zM4 21V3h16v18h-2V5H6v16H4z"/></svg>' + (r.forks || 0) + '</span><span class="repo-updated">' + date + '</span></div></div>';
+        var desc = r.desc;
+        if (!desc) desc = (window.YAULE_LANG === 'en') ? 'No description' : '暂无简介';
+        return '<div class="repo-card"><div class="repo-name"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 .5C5.65.5.5 5.65.5 12c0 5.08 3.29 9.39 7.86 10.91.58.11.79-.25.79-.56 0-.27-.01-1.02-.02-2-3.2.7-3.88-1.54-3.88-1.54-.52-1.33-1.28-1.68-1.28-1.68-1.04-.71.08-.7.08-.7 1.15.08 1.76 1.18 1.76 1.18 1.02 1.75 2.69 1.25 3.35.95.1-.74.4-1.25.72-1.54-2.55-.29-5.23-1.28-5.23-5.68 0-1.26.45-2.28 1.18-3.09-.12-.29-.51-1.46.11-3.05 0 0 .96-.31 3.15 1.18a10.9 10.9 0 0 1 5.74 0c2.19-1.49 3.15-1.18 3.15-1.18.62 1.59.23 2.76.11 3.05.74.81 1.18 1.83 1.18 3.09 0 4.41-2.69 5.39-5.25 5.67.41.36.78 1.06.78 2.14 0 1.55-.01 2.79-.01 3.17 0 .31.21.68.8.56A10.52 10.52 0 0 0 23.5 12C23.5 5.65 18.35.5 12 .5Z"/></svg>' + esc(r.name) + '</div><div class="repo-desc">' + esc(desc) + '</div><div class="repo-meta"><span><i class="lang-dot" style="background:' + c + '"></i>' + esc(r.lang || '—') + '</span><span><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 17.27 18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>' + (r.stars || 0) + '</span><span><svg viewBox="0 0 24 24" fill="currentColor"><path d="M7 7h10v2H7zm0 4h10v2H7zm0 4h6v2H7zM4 21V3h16v18h-2V5H6v16H4z"/></svg>' + (r.forks || 0) + '</span><span class="repo-updated">' + date + '</span></div></div>';
       }).join('');
       grid.innerHTML = htmls;
     }
+    window.__renderRepos = function () { if (window.__reposList) render(window.__reposList); };
     var ctrl = ('AbortController' in window) ? new AbortController() : null;
     var timer = setTimeout(function () { if (ctrl) ctrl.abort(); }, 6000);
     fetch('https://api.github.com/users/Yaule-Rate/repos?sort=updated&per_page=6', ctrl ? { signal: ctrl.signal } : {})
@@ -2823,17 +2946,19 @@
 
   /* ========== 技能雷达图 ========== */
   (function () {
+    function renderSkills() {
     var svg = document.getElementById('radarSvg');
     var bars = document.getElementById('skillBars');
     if (!svg) return;
     var skills = [
-      { name: '前端开发', val: 8 },
-      { name: '效率工具', val: 9 },
-      { name: '音视频', val: 7 },
-      { name: '游戏开发', val: 8 },
-      { name: '界面设计', val: 6 },
-      { name: '后端开发', val: 6 }
+      { name: '前端开发', en: 'Front-end', val: 8 },
+      { name: '效率工具', en: 'Tools', val: 9 },
+      { name: '音视频', en: 'AV Media', val: 7 },
+      { name: '游戏开发', en: 'Game Dev', val: 8 },
+      { name: '界面设计', en: 'UI Design', val: 6 },
+      { name: '后端开发', en: 'Back-end', val: 6 }
     ];
+    function sname(i) { return (window.YAULE_LANG === 'en') ? skills[i].en : skills[i].name; }
     var C = 50, R = 36;
     function pt(i, r) {
       var a = (i * 60 - 90) * Math.PI / 180;
@@ -2869,14 +2994,17 @@
       if (i5 === 3) dy = 1.6;
       if (i5 === 1 || i5 === 5) dx = 1.5;
       if (i5 === 2 || i5 === 4) dx = -1.5;
-      labels += '<text class="radar-label" x="' + (lx + dx).toFixed(1) + '" y="' + (ly + dy).toFixed(1) + '" text-anchor="' + anchors[i5] + '" dominant-baseline="middle">' + skills[i5].name + '</text>';
+      labels += '<text class="radar-label" x="' + (lx + dx).toFixed(1) + '" y="' + (ly + dy).toFixed(1) + '" text-anchor="' + anchors[i5] + '" dominant-baseline="middle">' + sname(i5) + '</text>';
     }
     svg.innerHTML = defs + grid + axes + area + dots + labels;
     if (bars) {
-      bars.innerHTML = skills.map(function (s) {
-        return '<div class="skill-bar-row"><span class="sb-name">' + s.name + '</span><span class="sb-track"><span class="sb-fill" style="width:' + (s.val * 10) + '%"></span></span><span class="sb-num">' + s.val + '</span></div>';
+      bars.innerHTML = skills.map(function (s, si) {
+        return '<div class="skill-bar-row"><span class="sb-name">' + sname(si) + '</span><span class="sb-track"><span class="sb-fill" style="width:' + (s.val * 10) + '%"></span></span><span class="sb-num">' + s.val + '</span></div>';
       }).join('');
     }
+    }
+    window.__renderSkills = renderSkills;
+    renderSkills();
   })();
 
   /* ========== 人生清单 ========== */
@@ -2884,7 +3012,8 @@
     var grid = document.getElementById('bucketGrid');
     if (!grid) return;
     // 预设完成状态：默认写死在程序里（第1行2、3；第2行1、2、3；第3行1、2、3、4；第4行1、2、3、4；第5行2、3、4）
-    var items = ['去看一次现场演唱会', '看一场完整的日出', '学会弹一首完整的曲子', '写一本属于自己的小说', '跑一次五公里', '去一次西藏', '给爸妈买一份大礼物', '养一盆活过一年的绿植', '亲手做一顿年夜饭', '学会一门新的外语', '看一次极光', '独自去一座陌生城市旅行', '学会做咖啡拉花', '给十年后的自己写一封信', '种一棵属于自己的树', '养一只猫', '跳一次伞', '读完《三国演义》', '做一次公益志愿者', '发一张自己的专辑', '开一家小店', '通宵看一次流星雨', '把房间布置成喜欢的样子', '拍一支 Vlog 记录一天'];
+    var itemsZh = ['去看一次现场演唱会', '看一场完整的日出', '学会弹一首完整的曲子', '写一本属于自己的小说', '跑一次五公里', '去一次西藏', '给爸妈买一份大礼物', '养一盆活过一年的绿植', '亲手做一顿年夜饭', '学会一门新的外语', '看一次极光', '独自去一座陌生城市旅行', '学会做咖啡拉花', '给十年后的自己写一封信', '种一棵属于自己的树', '养一只猫', '跳一次伞', '读完《三国演义》', '做一次公益志愿者', '发一张自己的专辑', '开一家小店', '通宵看一次流星雨', '把房间布置成喜欢的样子', '拍一支 Vlog 记录一天'];
+    var itemsEn = ['Watch a live concert', 'See a full sunrise', 'Learn to play a song on an instrument', 'Write a novel of my own', 'Run 5 kilometers', 'Travel to Tibet', 'Buy a big gift for my parents', 'Keep a plant alive for a year', 'Cook the New Year dinner myself', 'Learn a new language', 'See the aurora', 'Travel alone to a strange city', 'Learn latte art', 'Write a letter to my future self in 10 years', 'Plant a tree of my own', 'Adopt a cat', 'Go skydiving', 'Finish reading Romance of the Three Kingdoms', 'Volunteer for charity once', 'Release my own album', 'Open a little shop', 'Stay up all night for a meteor shower', 'Decorate my room the way I like', 'Make a day-in-my-life Vlog'];
     var doneMap = {};
     [1, 2, 4, 5, 6, 8, 9, 10, 11, 12, 13, 14, 15, 17, 18, 19].forEach(function (i) { doneMap[i] = 1; });
     var doneN = document.getElementById('bkDone');
@@ -2896,14 +3025,25 @@
         if (el.classList.contains('done')) n++;
       });
       if (doneN) doneN.textContent = n;
-      if (totalN) totalN.textContent = items.length;
-      if (fill) fill.style.width = (n / items.length * 100) + '%';
+      if (totalN) totalN.textContent = (window.YAULE_LANG === 'en' ? itemsEn : itemsZh).length;
+      if (fill) fill.style.width = (n / (window.YAULE_LANG === 'en' ? itemsEn : itemsZh).length * 100) + '%';
     }
-    grid.innerHTML = items.map(function (t, idx) {
-      var on = doneMap[idx];
-      return '<div class="bucket-item' + (on ? ' done' : '') + '"><span class="bk-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span><span class="bk-text">' + t + '</span></div>';
-    }).join('');
-    refresh();
+    function render() {
+      var arr = (window.YAULE_LANG === 'en') ? itemsEn : itemsZh;
+      grid.innerHTML = arr.map(function (t, idx) {
+        var on = doneMap[idx];
+        return '<div class="bucket-item' + (on ? ' done' : '') + '"><span class="bk-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span><span class="bk-text">' + t + '</span></div>';
+      }).join('');
+      var n = 0;
+      grid.querySelectorAll('.bucket-item').forEach(function (el) {
+        if (el.classList.contains('done')) n++;
+      });
+      if (doneN) doneN.textContent = n;
+      if (totalN) totalN.textContent = arr.length;
+      if (fill) fill.style.width = (n / arr.length * 100) + '%';
+    }
+    window.__renderBucket = render;
+    render();
   })();
 </script>
 
@@ -2923,7 +3063,7 @@
       'anniv.h2': '纪念日', 'anniv.desc': '有些日子值得被记住，有些时间悄悄在走。',
       'now.h2': '此刻', 'now.desc': '时间与天气，都在悄悄走。', 'now.reco': '今日推荐',
       'now.ring': '天 · 2026 还剩', 'now.ringfoot': '今年已过',
-      'now.w1': '体感', 'now.w2': '湿度', 'now.w3': '风速', 'now.w4': '紫外线',
+      'now.w1': '体感', 'now.w2': '湿度', 'now.w3': '风速', 'now.w4': '紫外线', 'now.uvi': '级',
       'repos.h2': '开源仓库', 'repos.desc': '最近活跃的仓库，数据实时来自 GitHub。',
       'skills.h2': '擅长的事', 'skills.desc': '六个方向的自我评估，图是画出来的，路是一点点走的。',
       'changelog.h2': '更新日志', 'changelog.desc': '这个页面是怎么一点点长成现在这样的。', 'changelog.more': '详细日志',
@@ -2931,7 +3071,36 @@
       'footer.brand': '个人空间入口：这里收录我的作品与项目，全部开源托管在 GitHub 上。',
       'footer.nav': '导航', 'footer.home': '首页', 'footer.space': '个人空间', 'footer.projects': '项目', 'footer.lifedata': '生活数据',
       'footer.works': '作品', 'footer.space2': '失眠夜个人空间', 'footer.awards': '荣誉奖项', 'footer.contactme': '联系我',
-      'footer.contact': '联系', 'footer.email': '邮箱', 'footer.rss': 'RSS 订阅'
+      'footer.contact': '联系', 'footer.email': '邮箱', 'footer.rss': 'RSS 订阅',
+      'hero.quoteTitle': '换一句',
+      'life.c1': '瑞幸咖啡', 'life.tag1': '续命中', 'life.un2': '杯',
+      'life.d1': '从第一杯咖啡开始，悄悄记录每一次续命时刻',
+      'life.d2': '美式、拿铁、生椰……每一杯都是生活的续命剂。',
+      'life.c2': '网易云音乐', 'life.tag2': '循环播放中', 'life.un1': '首',
+      'life.h1': '累计收听', 'life.h2': '+ 小时，旋律里藏着无数个夜晚',
+      'life.d3': '深夜的旋律，陪我度过每一个失眠夜。',
+      'life.song': '今日推荐：', 'life.songload': '正在挑选…',
+      'mc.sub1': '布吉岛', 'mc.sub2': '花雨亭',
+      'mc.l1': '游戏对局', 'mc.l2': '在线时长', 'mc.l3': '胜场', 'mc.l4': '放置方块',
+      'mc.l5': '挖掘方块', 'mc.l6': '成就解锁', 'mc.l7': '游玩天数', 'mc.l8': '累计上线',
+      'mc.u1': '局', 'mc.u2': 'h', 'mc.u3': '胜', 'mc.u4': '个', 'mc.u5': '天',
+      'mc.n1': '生存、建筑与联机日常，记录仍在继续。',
+      'mc.n2': '花雨亭已停服，数据定格在停服前一天（2025-06-14）。',
+      'works.t1': '兴华中学广播站系统', 'works.t1d': '广播排班管理、播放日程控制、站点信息维护，独立设计开发并投入校园实际使用。', 'works.t1p': '广播排班、播放日程、站点信息一站式维护，从零开发并投入校园日常使用。', 'works.tag1a': '广播', 'works.tag1b': '管理',
+      'works.t2': '自助记账系统', 'works.t2d': '收支记录、分类统计、数据可视化，轻量化单文件本地工具，开箱即用。', 'works.t2p': '收支流水、分类统计、报表导出，让每一笔账都清清楚楚。', 'works.tag2a': '记账', 'works.tag2b': '工具',
+      'works.t3': '代码编写系统', 'works.t3d': '可视化拖拽生成 C++ 代码，降低编程入门门槛，助力机器人编程学习。', 'works.t3p': '代码编写辅助工作台，模板化快速生成，让日常编码更顺手。', 'works.tag3a': '编码', 'works.tag3b': '效率',
+      'works.t4': '表情转图片转换器', 'works.t4d': '文字、表情符号一键转图片，支持自定义背景与文字颜色，导出高清 PNG。', 'works.t4p': '把文字图案一键转成 Emoji 图片，分享出来更有趣。', 'works.tag4a': '趣味', 'works.tag4b': '图像',
+      'works.t5': 'CS 灵敏度校准', 'works.t5d': '输入 DPI 与灵敏度参数，智能评估输出最佳游戏鼠标灵敏度。', 'works.t5p': 'FPS 游戏鼠标灵敏度科学校准，找到真正属于自己的手感。', 'works.tag5a': '游戏', 'works.tag5b': '外设',
+      'works.t6': '棋类合集', 'works.t6d': '五子棋与中国象棋，本地运行，无需联网。', 'works.t6p': '象棋与五子棋同页双开，约上好友面对面来一局。', 'works.tag6a': '游戏', 'works.tag6b': '对战',
+      'anniv.a1': '与这个世界相遇', 'anniv.a2': '与这座小站相遇',
+      'anniv.l1': '活着的第', 'anniv.l2': '天', 'anniv.l3': '本站上线第', 'anniv.l4': '天',
+      'anniv.meta1': '人生进度计算中…', 'anniv.meta2': '下一个里程碑计算中…',
+      'anniv.d1': '自 2012 年 1 月 17 日起', 'anniv.d2': '自 2026 年 9 月 18 日起',
+      'repos.loading': '正在读取仓库…', 'repos.connecting': '连接 GitHub API 中，稍等片刻。',
+      'skills.h3': '从校园工具到小游戏，什么都想试一试。',
+      'skills.p': '广播站系统、记账工具、代码生成器、棋类游戏……都是一个人从零写完的。爱折腾前端交互，也愿意沉下去做工具；会调音视频，也会为一个小游戏磨上几个晚上。',
+      'bucket.progress': '已点亮', 'bucket.progress2': '件',
+      'loading.hint': '稍等片刻，马上就好…', 'loading.skip1': '长按加速', 'loading.skip2': '按住不放，加载更快'
     },
     en: {
       'hero.intro': 'This is my little corner — coffee, music, games and works. Take it slow.',
@@ -2946,7 +3115,7 @@
       'anniv.h2': 'Anniversaries', 'anniv.desc': 'Some days are worth remembering; some time quietly passes.',
       'now.h2': 'Right Now', 'now.desc': 'Time and weather, quietly passing.', 'now.reco': "Today's Pick",
       'now.ring': 'days left in 2026', 'now.ringfoot': 'of 2026 used',
-      'now.w1': 'Feels', 'now.w2': 'Humidity', 'now.w3': 'Wind', 'now.w4': 'UV',
+      'now.w1': 'Feels', 'now.w2': 'Humidity', 'now.w3': 'Wind', 'now.w4': 'UV', 'now.uvi': '',
       'repos.h2': 'Open Source', 'repos.desc': 'Recently active repos, live from GitHub.',
       'skills.h2': "What I'm Good At", 'skills.desc': 'Self-assessment in six directions — drawn as a chart, built step by step.',
       'changelog.h2': 'Changelog', 'changelog.desc': 'How this page grew into what it is today.', 'changelog.more': 'Full Log',
@@ -2954,7 +3123,36 @@
       'footer.brand': 'Entry to my space: my works and projects, all open-sourced on GitHub.',
       'footer.nav': 'Navigate', 'footer.home': 'Home', 'footer.space': 'My Space', 'footer.projects': 'Projects', 'footer.lifedata': 'Life Data',
       'footer.works': 'Works', 'footer.space2': 'Insomnia Night Space', 'footer.awards': 'Awards', 'footer.contactme': 'Contact',
-      'footer.contact': 'Contact', 'footer.email': 'Email', 'footer.rss': 'RSS Feed'
+      'footer.contact': 'Contact', 'footer.email': 'Email', 'footer.rss': 'RSS Feed',
+      'hero.quoteTitle': 'Another quote',
+      'life.c1': 'Luckin Coffee', 'life.tag1': 'LIVE', 'life.un2': 'cups',
+      'life.d1': 'From the first cup, quietly counting every refuel',
+      'life.d2': 'Americano, latte, coconut milk… every cup keeps life going.',
+      'life.c2': 'NetEase Cloud Music', 'life.tag2': 'ON LOOP', 'life.un1': 'songs',
+      'life.h1': 'Total listened', 'life.h2': '+ hours of melodies that kept the nights company',
+      'life.d3': 'Late-night melodies, through every sleepless night.',
+      'life.song': "Today's pick: ", 'life.songload': 'Picking…',
+      'mc.sub1': 'Bujidao', 'mc.sub2': 'Huayuting',
+      'mc.l1': 'Matches', 'mc.l2': 'Online time', 'mc.l3': 'Wins', 'mc.l4': 'Blocks placed',
+      'mc.l5': 'Blocks mined', 'mc.l6': 'Achievements', 'mc.l7': 'Play days', 'mc.l8': 'Days online',
+      'mc.u1': 'games', 'mc.u2': 'h', 'mc.u3': 'wins', 'mc.u4': '', 'mc.u5': 'days',
+      'mc.n1': 'Survival, building and multiplayer — still recording.',
+      'mc.n2': 'Huayuting is offline; data frozen the day before shutdown (2025-06-14).',
+      'works.t1': 'Xinghua Broadcasting System', 'works.t1d': 'Broadcast scheduling, playlist control and station maintenance — built for real campus use.', 'works.t1p': 'One-stop broadcasting ops: scheduling, playlists, station info — built from scratch for daily campus use.', 'works.tag1a': 'Broadcast', 'works.tag1b': 'Manage',
+      'works.t2': 'Self-Service Accounting', 'works.t2d': 'Income & expense tracking, category stats and charts — a lightweight single-file tool.', 'works.t2p': 'Ledger, categories, export — every cent stays crystal clear.', 'works.tag2a': 'Finance', 'works.tag2b': 'Tool',
+      'works.t3': 'Code Writing System', 'works.t3d': 'Drag-and-drop C++ generation that lowers the barrier for robotics learners.', 'works.t3p': 'A coding workbench with template-based generation for smoother daily work.', 'works.tag3a': 'Code', 'works.tag3b': 'Efficiency',
+      'works.t4': 'Emoji to Image Converter', 'works.t4d': 'Turn text & emoji into images with custom colors and HD PNG export.', 'works.t4p': 'Convert text patterns into fun emoji images for sharing.', 'works.tag4a': 'Fun', 'works.tag4b': 'Image',
+      'works.t5': 'CS Sensitivity Calibrator', 'works.t5d': 'Input DPI & sens, get an AI-evaluated optimal mouse sensitivity.', 'works.t5p': 'Science-based mouse sensitivity calibration for your own feel.', 'works.tag5a': 'Game', 'works.tag5b': 'Gear',
+      'works.t6': 'Chess & Gomoku Collection', 'works.t6d': 'Gomoku and Chinese chess, fully offline.', 'works.t6p': 'Chess and gomoku on one page — challenge a friend face to face.', 'works.tag6a': 'Game', 'works.tag6b': 'Versus',
+      'anniv.a1': 'Met this world', 'anniv.a2': 'Met this little site',
+      'anniv.l1': 'Day', 'anniv.l2': 'of being alive', 'anniv.l3': 'Day', 'anniv.l4': 'of this site',
+      'anniv.meta1': 'Calculating…', 'anniv.meta2': 'Calculating…',
+      'anniv.d1': 'Since Jan 17, 2012', 'anniv.d2': 'Since Sep 18, 2026',
+      'repos.loading': 'Loading repos…', 'repos.connecting': 'Connecting to GitHub API…',
+      'skills.h3': 'From campus tools to mini games — I try a bit of everything.',
+      'skills.p': 'Broadcasting systems, accounting tools, code generators, board games… all written from scratch alone. I love tinkering with front-end interaction and going deep on tools — audio & video too, and grinding nights on a mini game.',
+      'bucket.progress': 'Done', 'bucket.progress2': 'of',
+      'loading.hint': 'Just a moment…', 'loading.skip1': 'Hold to speed up', 'loading.skip2': 'Press and hold to load faster'
     }
   };
   function getLang() {
@@ -2969,12 +3167,39 @@
     document.documentElement.lang = L === 'en' ? 'en' : 'zh-CN';
     document.querySelectorAll('[data-i18n]').forEach(function (el) {
       var k = el.getAttribute('data-i18n');
-      if (I18N[L] && I18N[L][k]) el.textContent = I18N[L][k];
+      if (I18N[L] && k in I18N[L]) el.textContent = I18N[L][k];
     });
     var lb = document.getElementById('langLabel');
     if (lb) lb.textContent = L === 'en' ? 'EN' : '中';
     var st = document.getElementById('stayTime');
     if (st) st.innerHTML = L === 'en' ? 'Stayed 0 min 0 sec' : '已停留 0 分 0 秒';
+    var qn = document.getElementById('quoteNext');
+    if (qn) { var qt = L === 'en' ? 'Another quote' : '换一句'; qn.setAttribute('aria-label', qt); qn.title = qt; }
+    var rs = document.getElementById('radarSvg');
+    if (rs) rs.setAttribute('aria-label', L === 'en' ? 'Skills radar chart' : '技能雷达图');
+    var tt = document.getElementById('themeToggle');
+    if (tt) tt.title = L === 'en' ? 'Toggle dark / light theme' : '切换深色 / 浅色主题';
+    var ltb = document.getElementById('langToggle');
+    if (ltb) ltb.title = L === 'en' ? 'Switch language' : '切换语言';
+    var tip = document.getElementById('langLoaderTip');
+    if (tip) tip.textContent = L === 'en' ? 'Switching language…' : '正在切换语言…';
+    if (window.__renderLife) window.__renderLife();
+    if (window.__renderAnniv) window.__renderAnniv();
+    if (window.__renderWeather) window.__renderWeather();
+    if (window.__renderDl) window.__renderDl();
+    if (window.__renderRepos) window.__renderRepos();
+    if (window.__renderSkills) window.__renderSkills();
+    if (window.__renderBucket) window.__renderBucket();
+    if (window.__reQuote) window.__reQuote();
+    if (window.__setFest) window.__setFest();
+    var bm = document.getElementById('btnMore');
+    if (bm) {
+      var hiddenN = document.querySelectorAll('.works-grid .card.hidden').length;
+      var isOpen = hiddenN === 0;
+      bm.textContent = L === 'en' ? (isOpen ? 'Collapse ↑' : 'View More ↓') : (isOpen ? '收起 ↑' : '查看更多 ↓');
+    }
+    if (window.__renderShares) window.__renderShares();
+    if (window.__renderChangelog) window.__renderChangelog();
     window.dispatchEvent(new CustomEvent('yaule-langchange'));
   }
   var langBusy = false;
@@ -2988,16 +3213,22 @@
     if (!loader || !fill) { langBusy = false; return; }
     loader.classList.add('active');
     fill.style.width = '0%';
-    if (tip) tip.textContent = next === 'en' ? '正在切换语言…' : 'Switching language…';
-    var p = 0;
-    var t = setInterval(function () {
-      p += Math.random() * 6.5;
-      if (p > 90) p = 90;
+    if (tip) tip.textContent = next === 'en' ? 'Switching language…' : '正在切换语言…';
+    var pctEl = document.getElementById('langBarPct');
+    var t0 = Date.now();
+    var raf = null;
+    function step() {
+      var el = (Date.now() - t0) / 3000;
+      var p = Math.min(90, el * 100);
       fill.style.width = p + '%';
-    }, 90);
+      if (pctEl) pctEl.textContent = Math.floor(p) + '%';
+      if (Date.now() - t0 < 3000) raf = requestAnimationFrame(step);
+    }
+    raf = requestAnimationFrame(step);
     setTimeout(function () {
-      clearInterval(t);
+      if (raf) cancelAnimationFrame(raf);
       fill.style.width = '100%';
+      if (pctEl) pctEl.textContent = '100%';
       setTimeout(function () {
         setLang(next);
         applyLang();
@@ -3081,7 +3312,10 @@
     };
     function pick() {
       var fest = window.__festNow;
-      if (fest && FEST.zh[fest]) return { zh: FEST.zh[fest], en: FEST.en[fest], tag: fest };
+      if (fest && FEST.zh[fest]) {
+        var tagEn = { '春节': 'Spring Festival', '除夕': "New Year's Eve", '元宵节': 'Lantern Festival', '清明节': 'Qingming', '劳动节': 'Labor Day', '端午节': 'Dragon Boat Festival', '中秋节': 'Mid-Autumn', '国庆节': 'National Day' }[fest] || fest;
+        return { zh: FEST.zh[fest], en: FEST.en[fest], tag: (window.YAULE_LANG === 'en') ? tagEn : fest };
+      }
       var w = window.__wCode;
       if (typeof w === 'number') {
         var wx = WX[wKey(w)];
