@@ -1071,18 +1071,7 @@
   .mc-ver-list li.cat-fix b { color: #c2410c; border-color: rgba(249,115,22,0.4); background: rgba(249,115,22,0.07); }
   .mc-ver-list li.cat-fix::before { background: #f97316; }
 
-  /* ===== v18 视觉统一：下方板块注入青色血脉（顶部渐变分线） ===== */
   .card, .repo-card, .mc-ver, .now-card, .bucket-item { position: relative; }
-  .card::before, .repo-card::before, .mc-ver::before, .now-card::before, .bucket-item::before {
-    content: "";
-    position: absolute; top: 0; left: 0; right: 0; height: 3px;
-    border-radius: 999px 999px 0 0;
-    background: linear-gradient(90deg, var(--accent), var(--accent-2));
-    opacity: 0.9;
-    pointer-events: none;
-    z-index: 1;
-  }
-  .bucket-item { transition: border-color 0.15s; }
 
   /* ===== 人生清单 ===== */
   .bucket-head { display: flex; align-items: baseline; gap: 14px; margin-bottom: 18px; flex-wrap: wrap; }
