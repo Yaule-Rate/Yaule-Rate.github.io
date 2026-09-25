@@ -148,5 +148,20 @@ footer a { color: var(--accent); text-decoration: none; }
     <p>© 2026 <a href="../index.html">Yaule</a> · 一个藏在失眠夜里的小作品</p>
   </footer>
 </div>
+<script>
+(function () {
+  var KEY = 'yaule_dl_count';
+  var store = {};
+  try { store = JSON.parse(localStorage.getItem(KEY) || '{}') || {}; } catch (e) {}
+  document.querySelectorAll('a[download]').forEach(function (a) {
+    a.addEventListener('click', function () {
+      var name = this.getAttribute('download') || 'unknown';
+      store[name] = (store[name] || 0) + 1;
+      try { localStorage.setItem(KEY, JSON.stringify(store)); } catch (e) {}
+    });
+  });
+})();
+</script>
 </body>
+
 </html>

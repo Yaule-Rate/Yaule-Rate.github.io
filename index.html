@@ -140,6 +140,20 @@
     color: var(--ink-2);
     opacity: 0.6;
   }
+  .load-skip {
+    margin-top: 20px;
+    display: inline-flex; align-items: center; gap: 7px;
+    font-size: 12.5px; color: var(--accent);
+    border: 1px solid rgba(2,132,199,0.35); background: rgba(2,132,199,0.06);
+    border-radius: 999px; padding: 9px 20px; cursor: pointer;
+    opacity: 0; transform: translateY(8px);
+    transition: opacity 0.35s ease, transform 0.35s ease;
+    font-family: inherit; user-select: none; -webkit-user-select: none;
+  }
+  .load-skip.show { opacity: 1; transform: translateY(0); }
+  .load-skip svg { width: 14px; height: 14px; }
+  .load-skip:active { background: rgba(2,132,199,0.16); }
+  .load-skip small { font-size: 11px; opacity: 0.75; }
 
   /* ===== 首屏（全世界语言的欢迎 · 居左） ===== */
   .hero {
@@ -354,6 +368,15 @@
     font-weight: 600;
     line-height: 1.3;
   }
+  .log-more {
+    display: inline-flex; align-items: center; gap: 6px;
+    font-size: 12.5px; color: var(--accent);
+    border: 1px solid rgba(2,132,199,0.35); background: rgba(2,132,199,0.06);
+    border-radius: 999px; padding: 6px 15px;
+    text-decoration: none; transition: all 0.18s ease;
+  }
+  .log-more:hover { background: rgba(2,132,199,0.14); color: var(--accent); transform: translateY(-1px); }
+  .log-more svg { width: 13px; height: 13px; }
   .section-head .desc {
     color: var(--ink-2);
     margin-top: 12px;
@@ -466,7 +489,7 @@
     font-family: inherit;
   }
   .life-tab.active { background: var(--card-bg); color: var(--ink); box-shadow: 0 1px 6px rgba(0,0,0,0.12); }
-  .life-panels { position: relative; }
+  .life-panels { position: relative; min-height: 440px; }
   .life-panel {
     position: absolute;
     inset: 0;
@@ -593,24 +616,50 @@
   .weather-temp { font-weight: 600; color: var(--ink); margin-left: 2px; }
   .anniv-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
     gap: 20px;
   }
   .anniv-card {
+    position: relative;
+    overflow: hidden;
     background: var(--card-bg);
     border: 1px solid var(--line);
     border-radius: 20px;
-    padding: 34px 32px;
+    padding: 30px 32px 26px;
+    transition: border-color 0.18s ease, transform 0.18s ease, box-shadow 0.18s ease;
   }
+  .anniv-card:hover { border-color: rgba(2,132,199,0.45); transform: translateY(-3px); box-shadow: 0 14px 32px rgba(0,0,0,0.08); }
+  .anniv-card::before {
+    content: ""; position: absolute; top: 0; left: 0; right: 0; height: 4px;
+    background: linear-gradient(90deg, var(--accent), var(--accent-2));
+  }
+  .anniv-top {
+    display: flex; align-items: center; gap: 8px;
+    font-size: 12.5px; color: var(--ink-2); letter-spacing: 0.08em;
+  }
+  .anniv-top svg { width: 15px; height: 15px; color: var(--accent); flex: none; }
   .anniv-num {
     font-family: "Noto Serif SC", Georgia, serif;
-    font-size: clamp(42px, 6vw, 64px);
+    font-size: clamp(44px, 6vw, 62px);
     font-weight: 700;
     color: var(--accent);
     line-height: 1.1;
+    margin-top: 14px;
+    font-variant-numeric: tabular-nums;
   }
   .anniv-label { font-size: 14px; color: var(--ink-2); margin-top: 8px; }
-  .anniv-date { font-size: 13px; color: var(--ink-2); opacity: 0.8; margin-top: 14px; }
+  .anniv-track {
+    margin-top: 18px; height: 6px; background: var(--line);
+    border-radius: 999px; overflow: hidden;
+  }
+  .anniv-fill {
+    height: 100%; width: 0;
+    background: linear-gradient(90deg, var(--accent), var(--accent-2));
+    border-radius: 999px;
+    transition: width 1.2s ease;
+  }
+  .anniv-meta { margin-top: 12px; font-size: 12.5px; color: var(--ink-2); opacity: 0.85; }
+  .anniv-date { font-size: 13px; color: var(--ink-2); opacity: 0.8; margin-top: 8px; }
 
   /* ===== 节日飘浮元素 ===== */
   .fest-layer {
@@ -659,8 +708,8 @@
   /* ===== 翻牌时钟 ===== */
   #clockTime { position: relative; perspective: 200px; }
   .flip-digit { display: inline-block; position: relative; }
-  .fl-old { position: absolute; inset: 0; animation: flipOut .4s ease; }
-  .fl-new { display: inline-block; animation: flipIn .4s ease; }
+  .fl-old { position: absolute; inset: 0; animation: flipOut .4s ease forwards; }
+  .fl-new { display: inline-block; animation: flipIn .4s ease forwards; }
   .fl-colon { display: inline-block; animation: blink 1s steps(1) infinite; }
   @keyframes flipOut { from { transform: rotateX(0); opacity: 1; } to { transform: rotateX(-90deg); opacity: 0; } }
   @keyframes flipIn { from { transform: rotateX(90deg); opacity: 0; } to { transform: rotateX(0); opacity: 1; } }
@@ -695,17 +744,22 @@
   }
   .now-weather { padding: 28px 32px; }
   .weather-detail {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px 22px;
-    margin-top: 18px;
-    padding-top: 16px;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+    margin-top: 20px;
+    padding-top: 18px;
     border-top: 1px dashed var(--line);
-    font-size: 13.5px;
-    color: var(--ink-2);
   }
-  .weather-detail span { display: inline-flex; align-items: baseline; gap: 4px; }
-  .weather-detail b { color: var(--accent); font-weight: 600; font-variant-numeric: tabular-nums; }
+  .wd-item {
+    background: var(--soft);
+    border-radius: 12px;
+    padding: 12px 10px;
+    text-align: center;
+  }
+  .wd-label { font-size: 11px; color: var(--ink-2); letter-spacing: 0.06em; }
+  .wd-val { font-size: 21px; font-weight: 700; color: var(--ink); font-variant-numeric: tabular-nums; margin-top: 2px; line-height: 1.2; }
+  .wd-unit { font-size: 12px; color: var(--ink-2); }
   .now-card .clock-row {
     font-size: 18px;
     margin-top: 0;
@@ -731,9 +785,10 @@
   .ring-wrap svg { width: 100%; height: 100%; }
   .ring-fg { transition: stroke-dashoffset 1.2s ease; }
   .ring-center { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; }
-  .ring-pct { font-size: 30px; font-weight: 800; color: var(--ink); font-family: "Noto Serif SC", Georgia, serif; line-height: 1; }
+  .ring-pct { font-size: 34px; font-weight: 800; color: var(--ink); font-family: "Noto Serif SC", Georgia, serif; line-height: 1; font-variant-numeric: tabular-nums; }
   .ring-label { font-size: 11px; color: var(--ink-2); letter-spacing: 0.14em; margin-top: 5px; }
   .ring-foot { margin-top: 14px; font-size: 13px; color: var(--ink-2); }
+  .ring-foot b { color: var(--accent); font-weight: 600; }
 
   /* ===== 一言过渡 ===== */
   #quoteText { transition: opacity 0.22s ease; }
@@ -905,7 +960,10 @@
   }
   .mc-ver.current .mc-ver-badge { animation: badgeGlow 2.4s ease infinite; }
   @keyframes badgeGlow { 0%,100% { box-shadow: 0 4px 12px rgba(2,132,199,0.28); } 50% { box-shadow: 0 4px 20px rgba(56,189,248,0.55); } }
-  .mc-ver-date { font-size: 12.5px; color: var(--ink-2); letter-spacing: 0.4px; }
+  .mc-ver-date {
+    font-family: ui-monospace, "Cascadia Code", Consolas, monospace;
+    font-size: 12px; color: var(--ink-2); letter-spacing: 0.3px;
+  }
   .mc-ver-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 7px; }
   .mc-ver-list li {
     position: relative;
@@ -925,20 +983,27 @@
     background: var(--line-strong);
   }
   .mc-ver-list li b {
-    font-weight: 600;
-    font-size: 12px;
-    color: var(--ink);
-    border: 1px solid var(--line);
-    border-radius: 6px;
-    padding: 0 7px;
-    margin-right: 8px;
+    font-family: ui-monospace, "Cascadia Code", Consolas, monospace;
+    font-weight: 700;
+    font-size: 11px;
+    letter-spacing: 0.05em;
+    border-radius: 5px;
+    padding: 1px 7px;
+    margin-right: 7px;
     background: var(--bg);
   }
-  .mc-ver-list li.cat-new b { color: #15803d; border-color: rgba(34,197,94,0.35); background: rgba(34,197,94,0.06); }
+  .mc-ver-list li .li-time {
+    font-family: ui-monospace, "Cascadia Code", Consolas, monospace;
+    font-size: 11px;
+    color: var(--ink-2); opacity: 0.7;
+    margin-right: 8px;
+    letter-spacing: 0.03em;
+  }
+  .mc-ver-list li.cat-new b { color: #15803d; border-color: rgba(34,197,94,0.4); background: rgba(34,197,94,0.07); }
   .mc-ver-list li.cat-new::before { background: #22c55e; }
-  .mc-ver-list li.cat-chg b { color: var(--accent); border-color: rgba(2,132,199,0.35); background: rgba(2,132,199,0.06); }
+  .mc-ver-list li.cat-chg b { color: var(--accent); border-color: rgba(2,132,199,0.4); background: rgba(2,132,199,0.07); }
   .mc-ver-list li.cat-chg::before { background: var(--accent); }
-  .mc-ver-list li.cat-fix b { color: #c2410c; border-color: rgba(249,115,22,0.35); background: rgba(249,115,22,0.06); }
+  .mc-ver-list li.cat-fix b { color: #c2410c; border-color: rgba(249,115,22,0.4); background: rgba(249,115,22,0.07); }
   .mc-ver-list li.cat-fix::before { background: #f97316; }
 
   /* ===== 人生清单 ===== */
@@ -1062,6 +1127,7 @@
     .grid { grid-template-columns: 1fr; }
     .footer-grid { grid-template-columns: 1fr 1fr; gap: 32px; }
     .life-panel { flex-direction: column; gap: 26px; padding: 32px 22px; text-align: center; align-items: center; }
+    .life-panels { min-height: 730px; }
     .life-visual { flex-basis: auto; }
     .life-visual svg { width: 116px; height: 116px; }
     .life-info h3 { justify-content: center; flex-wrap: wrap; }
@@ -1103,6 +1169,10 @@
   </div>
   <p class="loading-percent" id="loadPercent">0%</p>
   <p class="loading-hint">稍等片刻，马上就好…</p>
+  <button class="load-skip" id="loadSkip" type="button">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+    长按加速 <small>按住不放，加载更快</small>
+  </button>
 </div>
 <div class="toast" id="toast"></div>
 <button class="theme-toggle" id="themeToggle" aria-label="切换深色 / 浅色主题" title="切换主题">
@@ -1144,7 +1214,90 @@
   </div>
 </section>
 
-<!-- 板块 1：精选作品 -->
+<!-- 板块 1：生活瞬间（咖啡 · 音乐 · 游戏） -->
+<section class="section alt" id="life">
+  <div class="wrap">
+    <div class="section-head">
+      <p class="kicker">LIFE MOMENTS</p>
+      <h2>生活瞬间</h2>
+      <p class="desc">一些悄悄累积的数字，随时间慢慢长大。点击上方切换。</p>
+    </div>
+    <div class="life-tabs" role="tablist">
+      <button class="life-tab active" data-life="coffee" role="tab">咖啡</button>
+      <button class="life-tab" data-life="music" role="tab">音乐</button>
+      <button class="life-tab" data-life="game" role="tab">游戏</button>
+    </div>
+    <div class="life-panels">
+      <!-- 界面 1：瑞幸咖啡 -->
+      <div class="life-panel active" id="lifeCoffee">
+        <div class="life-visual">
+          <svg viewBox="0 0 48 48" fill="none" stroke="#17181C" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M8.59 7.185C16.616 26.679 36.858 17.289 37.163 5.5"/><path d="M5.36 11.748c14.195 11.548 29.842 6.712 37.28-3.931M26.07 27.054c-4.152.607-8.14 7.827-.56 11.304c4.427 2.03 11.45-.182 13.69 4.142M16.874 22.28c-4.253 4.097-6.784 9.884-6.178 18.745"/><path d="M23.45 18.408c.43 2.522 4.259 2.63 8.168 2.679a6.18 6.18 0 0 1-.983 3.861a6.54 6.54 0 0 1-4.564 2.107m-9.197-4.775a8.5 8.5 0 0 1-9.303-2.036c2.148-.837 4.314-1.66 9.478-.21c1.378-.36 1.532-1.208 2.139-1.875m11.979 5.809l-2.814.48"/></svg>
+        </div>
+        <div class="life-info">
+          <h3>瑞幸咖啡 <span class="tag">续命中</span></h3>
+          <div class="data-number" id="cups">176<small>杯</small></div>
+          <p class="data-desc">从第一杯咖啡开始，悄悄记录每一次续命时刻</p>
+          <p class="data-desc" style="margin-top:8px">美式、拿铁、生椰……每一杯都是生活的续命剂。</p>
+        </div>
+      </div>
+      <!-- 界面 2：网易云音乐 -->
+      <div class="life-panel" id="lifeMusic">
+        <div class="life-visual">
+          <svg viewBox="0 0 24 24" fill="#17181C" xmlns="http://www.w3.org/2000/svg"><path d="M13.046 9.388a3.919 3.919 0 0 0-.66.19c-.809.312-1.447.991-1.666 1.775a2.269 2.269 0 0 0-.074.81c.048.546.333 1.05.764 1.35a1.483 1.483 0 0 0 2.01-.286c.406-.531.355-1.183.24-1.636-.098-.387-.22-.816-.345-1.249a64.76 64.76 0 0 1-.269-.954zm-.82 10.07c-3.984 0-7.224-3.24-7.224-7.223 0-.98.226-3.02 1.884-4.822A7.188 7.188 0 0 1 9.502 5.6a.792.792 0 1 1 .587 1.472 5.619 5.619 0 0 0-2.795 2.462 5.538 5.538 0 0 0-.707 2.7 5.645 5.645 0 0 0 5.638 5.638c1.844 0 3.627-.953 4.542-2.428 1.042-1.68.772-3.931-.627-5.238a3.299 3.299 0 0 0-1.437-.777c.172.589.334 1.18.494 1.772.284 1.12.1 2.181-.519 2.989-.39.51-.956.888-1.592 1.064a3.038 3.038 0 0 1-2.58-.44 3.45 3.45 0 0 1-1.44-2.514c-.04-.467.002-.93.128-1.376.35-1.256 1.356-2.339 2.622-2.826a5.5 5.5 0 0 1 .823-.246l-.134-.505c-.37-1.371.25-2.579 1.547-3.007.329-.109.68-.145 1.025-.105.792.09 1.476.592 1.709 1.023.258.507-.096 1.153-.706 1.153a.788.788 0 0 1-.54-.213c-.088-.08-.163-.174-.259-.247a.825.825 0 0 0-.632-.166.807.807 0 0 0-.634.551c-.056.191-.031.406.02.595.07.256.159.597.217.82 1.11.098 2.162.54 2.97 1.296 1.974 1.844 2.35 4.886.892 7.233-1.197 1.93-3.509 3.177-5.889 3.177zM0 12c0 6.627 5.373 12 12 12s12-5.373 12-12S18.627 0 12 0 0 5.373 0 12Z"/></svg>
+        </div>
+        <div class="life-info">
+          <h3>网易云音乐 <span class="tag">循环播放中</span></h3>
+          <div class="data-number"><span id="songs">305</span><small>首</small></div>
+          <p class="data-desc">累计收听 <span id="hours">2000</span>+ 小时，旋律里藏着无数个夜晚</p>
+          <p class="data-desc" style="margin-top:8px">深夜的旋律，陪我度过每一个失眠夜。</p>
+          <p class="data-desc daily-song" style="margin-top:8px">今日推荐：<a id="dailySong" href="#" target="_blank" rel="noopener">正在挑选…</a></p>
+        </div>
+      </div>
+      <!-- 界面 3：我的世界 -->
+      <div class="life-panel" id="lifeGame">
+        <div class="life-visual">
+          <svg viewBox="0 0 24 24" fill="#17181C" xmlns="http://www.w3.org/2000/svg"><path d="M23.7397 10.0058l-2.4424.0023-.076.1198-.03-.1175h-2.4586l-.0599.136-.023-.136-2.4793.0023-.0438.1613-.0161-.1613-2.5023.0023-.023.265-.007-.265-2.5184.0046-.0092.242-.0254-.242-2.4954.0023-.016.1567-.0439-.1567H7.2673l-.0968.6705-.0553-.1382-.0254-.0024-.2096-.53-1.189.0024-.023.129-.0622-.129H4.431l-.03.1198-.0691-.1198-1.1659.0023-.136.523h-.3156l-.06.2282-.5506-.7512-1.1337.0023L0 13.0403l1.03.954h1.1244l.1774-.6706.0876.0968h.2995l.5.5737h1.1544l.023-.1082.0807.1082h1.1636l.0207-.1175.0737.1175h1.1751l.09-.629.3018.629h1.1889l.0138-.1451.0507.1451H11.03l.0093-.228.0276.228h2.4954l.023-.2511.0093.2511h1.2235l.0392-.175.0115.175h1.2097l.0506-.152.0139.152h1.1958l.0622-.1336.0185.1336h1.1843l.0714-.122.0208.122h1.175l.6798-.9677-.0323-.1544h.3756l.5346-.7396.4562 1.8594h1.152L24 13.0334l-.0184-.0737-.0738-.2535-.069-.2327s-.219-.712-.2466-.8065c-.0346-.1152-.0714-.2327-.1037-.3456l-.0046-.0184.4838-.583zm-2.325.1682h2.2005l.1567.493h-.6383l.0046.0162c.0254.1083.0554.2189.0853.3295.03.1129.0645.2258.0968.3433.0345.1152.069.235.106.3525.0368.1199.0737.2374.1083.3572.023.0737.0438.1451.0668.2189.023.0737.046.1497.0691.2235l.0692.228c.023.0761.0437.1522.0667.2282h-.9976l-.6268-2.2973h-.6405zm-.3548.0023l.1222.493h-1.295l.1175.56h1.3134l.136.553h-1.3342l.2466 1.182-.9954.0023-.5093-2.788zm-2.553.0023l.4816 2.788h-.9954l-.129-.8986h-.3733l.1221.8986h-.9954l-.3064-2.7857zm-2.5484.0023l.1037 1.0322h-.3272l.03.3111h.3272l.1451 1.4424h-.993l-.09-1.1751-.3686-.0092.076 1.1843h-.993l-.1037-2.7834zm-2.546.0023l.0138.493h-1.272l-.0299 1.719h1.3503l.016.5737h-2.364l.0945-2.7834zm-2.5438.0023l-.0208.493H9.56l-.0415.5692 1.3042.0023-.023.5369-1.3296.0023-.0437.6014 1.3456.0045-.0253.5738H8.387l.2926-2.7811zm-2.5392.0023l-.3226 2.781h-.9908l.1245-.8847-.3273-.0092.083-.5737-.3594-.007-.235 1.477H5.311l.5184-2.7811h.917l-.0806.5138.3157.0092-.076.5369.3548.0046L7.41 10.19zm-5.0346.0046h.9171l-.6475 2.7788h-.9884l.2972-1.1797H2.516l-.1543.5737h-.6406l.159-.5737h-.3595l-.3502 1.1797h-.97l.8917-2.7765h.8986l-.1475.5046.3134.0115L2 11.257h.6959l.1451-.5391h.318zm2.182.0046l-.546 2.7811h-.9885l.6175-2.7788zm12.1683.4217l.0391.3248-.341-.0023-.0437-.3202h-.4217l.0438.3525h.387l.0185.129h-.1936l.0715.5461h.2327l-.0184-.1843.3456-.0023.03.1866h.2373l-.083-.5414h-.1935l-.0162-.1314.3963-.0023-.0553-.3548zm-2.9286.0553l.0369.5737h.364l-.0438-.5737zm-1.1958 1.0046l.0184.5484-1.2166-.0023.0115-.4102h1.1774Z"/></svg>
+        </div>
+        <div class="life-info">
+          <div class="mc-subtabs" role="tablist">
+            <button class="mc-subtab active" data-server="bjd" role="tab">布吉岛</button>
+            <button class="mc-subtab" data-server="hyt" role="tab">花雨亭</button>
+          </div>
+          <div id="mcBody">
+            <div id="mcPanelBJD">
+              <div class="mc-metrics">
+                <div class="mc-metric"><div class="m-val" data-bjd="games">128<small>局</small></div><div class="m-label">游戏对局</div></div>
+                <div class="mc-metric"><div class="m-val" data-bjd="hours">864<small>h</small></div><div class="m-label">在线时长</div></div>
+                <div class="mc-metric"><div class="m-val" data-bjd="wins">76<small>胜</small></div><div class="m-label">胜场</div></div>
+                <div class="mc-metric"><div class="m-val" data-bjd="placed">15320<small>个</small></div><div class="m-label">放置方块</div></div>
+                <div class="mc-metric"><div class="m-val" data-bjd="mined">28460<small>个</small></div><div class="m-label">挖掘方块</div></div>
+                <div class="mc-metric"><div class="m-val" data-bjd="achv">42<small>个</small></div><div class="m-label">成就解锁</div></div>
+                <div class="mc-metric"><div class="m-val" data-bjd="days">356<small>天</small></div><div class="m-label">游玩天数</div></div>
+                <div class="mc-metric"><div class="m-val" data-bjd="days_online">128<small>天</small></div><div class="m-label">累计上线</div></div>
+              </div>
+              <p class="mc-note">生存、建筑与联机日常，记录仍在继续。</p>
+            </div>
+            <div id="mcPanelHYT" class="hidden">
+              <div class="mc-metrics">
+                <div class="mc-metric"><div class="m-val" data-hyt="games">205<small>局</small></div><div class="m-label">游戏对局</div></div>
+                <div class="mc-metric"><div class="m-val" data-hyt="hours">1216<small>h</small></div><div class="m-label">在线时长</div></div>
+                <div class="mc-metric"><div class="m-val" data-hyt="wins">118<small>胜</small></div><div class="m-label">胜场</div></div>
+                <div class="mc-metric"><div class="m-val" data-hyt="placed">24880<small>个</small></div><div class="m-label">放置方块</div></div>
+                <div class="mc-metric"><div class="m-val" data-hyt="mined">45120<small>个</small></div><div class="m-label">挖掘方块</div></div>
+                <div class="mc-metric"><div class="m-val" data-hyt="achv">58<small>个</small></div><div class="m-label">成就解锁</div></div>
+                <div class="mc-metric"><div class="m-val" data-hyt="days">612<small>天</small></div><div class="m-label">游玩天数</div></div>
+                <div class="mc-metric"><div class="m-val" data-hyt="days_online">240<small>天</small></div><div class="m-label">累计上线</div></div>
+              </div>
+              <p class="mc-note">花雨亭已停服，数据定格在停服前一天（2025-06-14）。</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 板块 2：精选作品 -->
 <section class="section alt" id="works">
   <div class="wrap">
     <div class="section-head">
@@ -1268,89 +1421,6 @@
   </div>
 </section>
 
-<!-- 板块 2：生活瞬间（咖啡 · 音乐 · 游戏） -->
-<section class="section alt" id="life">
-  <div class="wrap">
-    <div class="section-head">
-      <p class="kicker">LIFE MOMENTS</p>
-      <h2>生活瞬间</h2>
-      <p class="desc">一些悄悄累积的数字，随时间慢慢长大。点击上方切换。</p>
-    </div>
-    <div class="life-tabs" role="tablist">
-      <button class="life-tab active" data-life="coffee" role="tab">咖啡</button>
-      <button class="life-tab" data-life="music" role="tab">音乐</button>
-      <button class="life-tab" data-life="game" role="tab">游戏</button>
-    </div>
-    <div class="life-panels">
-      <!-- 界面 1：瑞幸咖啡 -->
-      <div class="life-panel active" id="lifeCoffee">
-        <div class="life-visual">
-          <svg viewBox="0 0 48 48" fill="none" stroke="#17181C" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M8.59 7.185C16.616 26.679 36.858 17.289 37.163 5.5"/><path d="M5.36 11.748c14.195 11.548 29.842 6.712 37.28-3.931M26.07 27.054c-4.152.607-8.14 7.827-.56 11.304c4.427 2.03 11.45-.182 13.69 4.142M16.874 22.28c-4.253 4.097-6.784 9.884-6.178 18.745"/><path d="M23.45 18.408c.43 2.522 4.259 2.63 8.168 2.679a6.18 6.18 0 0 1-.983 3.861a6.54 6.54 0 0 1-4.564 2.107m-9.197-4.775a8.5 8.5 0 0 1-9.303-2.036c2.148-.837 4.314-1.66 9.478-.21c1.378-.36 1.532-1.208 2.139-1.875m11.979 5.809l-2.814.48"/></svg>
-        </div>
-        <div class="life-info">
-          <h3>瑞幸咖啡 <span class="tag">续命中</span></h3>
-          <div class="data-number" id="cups">176<small>杯</small></div>
-          <p class="data-desc">从第一杯咖啡开始，悄悄记录每一次续命时刻</p>
-          <p class="data-desc" style="margin-top:8px">美式、拿铁、生椰……每一杯都是生活的续命剂。</p>
-        </div>
-      </div>
-      <!-- 界面 2：网易云音乐 -->
-      <div class="life-panel" id="lifeMusic">
-        <div class="life-visual">
-          <svg viewBox="0 0 24 24" fill="#17181C" xmlns="http://www.w3.org/2000/svg"><path d="M13.046 9.388a3.919 3.919 0 0 0-.66.19c-.809.312-1.447.991-1.666 1.775a2.269 2.269 0 0 0-.074.81c.048.546.333 1.05.764 1.35a1.483 1.483 0 0 0 2.01-.286c.406-.531.355-1.183.24-1.636-.098-.387-.22-.816-.345-1.249a64.76 64.76 0 0 1-.269-.954zm-.82 10.07c-3.984 0-7.224-3.24-7.224-7.223 0-.98.226-3.02 1.884-4.822A7.188 7.188 0 0 1 9.502 5.6a.792.792 0 1 1 .587 1.472 5.619 5.619 0 0 0-2.795 2.462 5.538 5.538 0 0 0-.707 2.7 5.645 5.645 0 0 0 5.638 5.638c1.844 0 3.627-.953 4.542-2.428 1.042-1.68.772-3.931-.627-5.238a3.299 3.299 0 0 0-1.437-.777c.172.589.334 1.18.494 1.772.284 1.12.1 2.181-.519 2.989-.39.51-.956.888-1.592 1.064a3.038 3.038 0 0 1-2.58-.44 3.45 3.45 0 0 1-1.44-2.514c-.04-.467.002-.93.128-1.376.35-1.256 1.356-2.339 2.622-2.826a5.5 5.5 0 0 1 .823-.246l-.134-.505c-.37-1.371.25-2.579 1.547-3.007.329-.109.68-.145 1.025-.105.792.09 1.476.592 1.709 1.023.258.507-.096 1.153-.706 1.153a.788.788 0 0 1-.54-.213c-.088-.08-.163-.174-.259-.247a.825.825 0 0 0-.632-.166.807.807 0 0 0-.634.551c-.056.191-.031.406.02.595.07.256.159.597.217.82 1.11.098 2.162.54 2.97 1.296 1.974 1.844 2.35 4.886.892 7.233-1.197 1.93-3.509 3.177-5.889 3.177zM0 12c0 6.627 5.373 12 12 12s12-5.373 12-12S18.627 0 12 0 0 5.373 0 12Z"/></svg>
-        </div>
-        <div class="life-info">
-          <h3>网易云音乐 <span class="tag">循环播放中</span></h3>
-          <div class="data-number"><span id="songs">305</span><small>首</small></div>
-          <p class="data-desc">累计收听 <span id="hours">2000</span>+ 小时，旋律里藏着无数个夜晚</p>
-          <p class="data-desc" style="margin-top:8px">深夜的旋律，陪我度过每一个失眠夜。</p>
-          <p class="data-desc daily-song" style="margin-top:8px">今日推荐：<a id="dailySong" href="#" target="_blank" rel="noopener">正在挑选…</a></p>
-        </div>
-      </div>
-      <!-- 界面 3：我的世界 -->
-      <div class="life-panel" id="lifeGame">
-        <div class="life-visual">
-          <svg viewBox="0 0 24 24" fill="#17181C" xmlns="http://www.w3.org/2000/svg"><path d="M23.7397 10.0058l-2.4424.0023-.076.1198-.03-.1175h-2.4586l-.0599.136-.023-.136-2.4793.0023-.0438.1613-.0161-.1613-2.5023.0023-.023.265-.007-.265-2.5184.0046-.0092.242-.0254-.242-2.4954.0023-.016.1567-.0439-.1567H7.2673l-.0968.6705-.0553-.1382-.0254-.0024-.2096-.53-1.189.0024-.023.129-.0622-.129H4.431l-.03.1198-.0691-.1198-1.1659.0023-.136.523h-.3156l-.06.2282-.5506-.7512-1.1337.0023L0 13.0403l1.03.954h1.1244l.1774-.6706.0876.0968h.2995l.5.5737h1.1544l.023-.1082.0807.1082h1.1636l.0207-.1175.0737.1175h1.1751l.09-.629.3018.629h1.1889l.0138-.1451.0507.1451H11.03l.0093-.228.0276.228h2.4954l.023-.2511.0093.2511h1.2235l.0392-.175.0115.175h1.2097l.0506-.152.0139.152h1.1958l.0622-.1336.0185.1336h1.1843l.0714-.122.0208.122h1.175l.6798-.9677-.0323-.1544h.3756l.5346-.7396.4562 1.8594h1.152L24 13.0334l-.0184-.0737-.0738-.2535-.069-.2327s-.219-.712-.2466-.8065c-.0346-.1152-.0714-.2327-.1037-.3456l-.0046-.0184.4838-.583zm-2.325.1682h2.2005l.1567.493h-.6383l.0046.0162c.0254.1083.0554.2189.0853.3295.03.1129.0645.2258.0968.3433.0345.1152.069.235.106.3525.0368.1199.0737.2374.1083.3572.023.0737.0438.1451.0668.2189.023.0737.046.1497.0691.2235l.0692.228c.023.0761.0437.1522.0667.2282h-.9976l-.6268-2.2973h-.6405zm-.3548.0023l.1222.493h-1.295l.1175.56h1.3134l.136.553h-1.3342l.2466 1.182-.9954.0023-.5093-2.788zm-2.553.0023l.4816 2.788h-.9954l-.129-.8986h-.3733l.1221.8986h-.9954l-.3064-2.7857zm-2.5484.0023l.1037 1.0322h-.3272l.03.3111h.3272l.1451 1.4424h-.993l-.09-1.1751-.3686-.0092.076 1.1843h-.993l-.1037-2.7834zm-2.546.0023l.0138.493h-1.272l-.0299 1.719h1.3503l.016.5737h-2.364l.0945-2.7834zm-2.5438.0023l-.0208.493H9.56l-.0415.5692 1.3042.0023-.023.5369-1.3296.0023-.0437.6014 1.3456.0045-.0253.5738H8.387l.2926-2.7811zm-2.5392.0023l-.3226 2.781h-.9908l.1245-.8847-.3273-.0092.083-.5737-.3594-.007-.235 1.477H5.311l.5184-2.7811h.917l-.0806.5138.3157.0092-.076.5369.3548.0046L7.41 10.19zm-5.0346.0046h.9171l-.6475 2.7788h-.9884l.2972-1.1797H2.516l-.1543.5737h-.6406l.159-.5737h-.3595l-.3502 1.1797h-.97l.8917-2.7765h.8986l-.1475.5046.3134.0115L2 11.257h.6959l.1451-.5391h.318zm2.182.0046l-.546 2.7811h-.9885l.6175-2.7788zm12.1683.4217l.0391.3248-.341-.0023-.0437-.3202h-.4217l.0438.3525h.387l.0185.129h-.1936l.0715.5461h.2327l-.0184-.1843.3456-.0023.03.1866h.2373l-.083-.5414h-.1935l-.0162-.1314.3963-.0023-.0553-.3548zm-2.9286.0553l.0369.5737h.364l-.0438-.5737zm-1.1958 1.0046l.0184.5484-1.2166-.0023.0115-.4102h1.1774Z"/></svg>
-        </div>
-        <div class="life-info">
-          <div class="mc-subtabs" role="tablist">
-            <button class="mc-subtab active" data-server="bjd" role="tab">布吉岛</button>
-            <button class="mc-subtab" data-server="hyt" role="tab">花雨亭</button>
-          </div>
-          <div id="mcBody">
-            <div id="mcPanelBJD">
-              <div class="mc-metrics">
-                <div class="mc-metric"><div class="m-val" data-bjd="games">128<small>局</small></div><div class="m-label">游戏对局</div></div>
-                <div class="mc-metric"><div class="m-val" data-bjd="hours">864<small>h</small></div><div class="m-label">在线时长</div></div>
-                <div class="mc-metric"><div class="m-val" data-bjd="wins">76<small>胜</small></div><div class="m-label">胜场</div></div>
-                <div class="mc-metric"><div class="m-val" data-bjd="placed">15320<small>个</small></div><div class="m-label">放置方块</div></div>
-                <div class="mc-metric"><div class="m-val" data-bjd="mined">28460<small>个</small></div><div class="m-label">挖掘方块</div></div>
-                <div class="mc-metric"><div class="m-val" data-bjd="achv">42<small>个</small></div><div class="m-label">成就解锁</div></div>
-                <div class="mc-metric"><div class="m-val" data-bjd="days">356<small>天</small></div><div class="m-label">游玩天数</div></div>
-                <div class="mc-metric"><div class="m-val" data-bjd="days_online">128<small>天</small></div><div class="m-label">累计上线</div></div>
-              </div>
-              <p class="mc-note">生存、建筑与联机日常，记录仍在继续。</p>
-            </div>
-            <div id="mcPanelHYT" class="hidden">
-              <div class="mc-metrics">
-                <div class="mc-metric"><div class="m-val" data-hyt="games">205<small>局</small></div><div class="m-label">游戏对局</div></div>
-                <div class="mc-metric"><div class="m-val" data-hyt="hours">1216<small>h</small></div><div class="m-label">在线时长</div></div>
-                <div class="mc-metric"><div class="m-val" data-hyt="wins">118<small>胜</small></div><div class="m-label">胜场</div></div>
-                <div class="mc-metric"><div class="m-val" data-hyt="placed">24880<small>个</small></div><div class="m-label">放置方块</div></div>
-                <div class="mc-metric"><div class="m-val" data-hyt="mined">45120<small>个</small></div><div class="m-label">挖掘方块</div></div>
-                <div class="mc-metric"><div class="m-val" data-hyt="achv">58<small>个</small></div><div class="m-label">成就解锁</div></div>
-                <div class="mc-metric"><div class="m-val" data-hyt="days">612<small>天</small></div><div class="m-label">游玩天数</div></div>
-                <div class="mc-metric"><div class="m-val" data-hyt="days_online">240<small>天</small></div><div class="m-label">累计上线</div></div>
-              </div>
-              <p class="mc-note">花雨亭已停服，数据定格在停服前一天（2025-06-14）。</p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
 <!-- 板块 3：纪念日 -->
 <section class="section alt" id="anniv">
   <div class="wrap">
@@ -1361,13 +1431,25 @@
     </div>
     <div class="anniv-grid">
       <div class="anniv-card">
+        <div class="anniv-top">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          <span>与这个世界相遇</span>
+        </div>
         <div class="anniv-num" id="annivDays">--</div>
         <div class="anniv-label">活着的第 <span id="annivDaysN">--</span> 天</div>
+        <div class="anniv-track"><div class="anniv-fill" id="lifeFill"></div></div>
+        <div class="anniv-meta" id="lifeMeta">人生进度计算中…</div>
         <div class="anniv-date">自 2012 年 1 月 17 日起</div>
       </div>
       <div class="anniv-card">
+        <div class="anniv-top">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19l7-7 3 3-7 7-3-3z"/><path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"/><path d="M2 2l7.586 7.586"/><circle cx="11" cy="11" r="2"/></svg>
+          <span>与这座小站相遇</span>
+        </div>
         <div class="anniv-num" id="siteDays">--</div>
         <div class="anniv-label">本站上线第 <span id="siteDaysN">--</span> 天</div>
+        <div class="anniv-track"><div class="anniv-fill" id="siteFill"></div></div>
+        <div class="anniv-meta" id="siteMeta">下一个里程碑计算中…</div>
         <div class="anniv-date">自 2026 年 9 月 18 日起</div>
       </div>
     </div>
@@ -1390,18 +1472,6 @@
           <span id="clockDate"></span>
         </p>
       </div>
-      <div class="now-card now-weather">
-        <p class="weather-row" id="weatherRow">
-          <svg id="weatherIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z"/></svg>
-          <span id="weatherText">衢州 · 正在读取天气…</span>
-        </p>
-        <div class="weather-detail" id="weatherDetail">
-          <span>体感 <b id="wFeels">--</b>°C</span>
-          <span>湿度 <b id="wHum">--</b>%</span>
-          <span>风速 <b id="wWind">--</b> km/h</span>
-          <span>紫外线 <b id="wUvi">--</b></span>
-        </div>
-      </div>
       <div class="now-card now-progress">
         <div class="ring-wrap">
           <svg viewBox="0 0 100 100" fill="none" stroke-linecap="round">
@@ -1409,11 +1479,24 @@
             <circle class="ring-fg" id="yearRing" cx="50" cy="50" r="42" stroke="var(--accent)" stroke-width="7" stroke-dasharray="263.9" stroke-dashoffset="263.9" transform="rotate(-90 50 50)"/>
           </svg>
           <div class="ring-center">
-            <span class="ring-pct" id="yearPct">--%</span>
-            <span class="ring-label">今年已过</span>
+            <span class="ring-pct" id="yearLeftNum">--</span>
+            <span class="ring-label">天 · 2026 还剩</span>
           </div>
         </div>
-        <p class="ring-foot" id="yearLeft">2026 年还剩 -- 天</p>
+        <p class="ring-foot"><b id="yearPctText">今年已过 --%</b></p>
+      </div>
+
+      <div class="now-card now-weather">
+        <p class="weather-row" id="weatherRow">
+          <svg id="weatherIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z"/></svg>
+          <span id="weatherText">衢州 · 正在读取天气…</span>
+        </p>
+        <div class="weather-detail" id="weatherDetail">
+          <div class="wd-item"><div class="wd-label">体感</div><div class="wd-val"><b id="wFeels">--</b><span class="wd-unit">°C</span></div></div>
+          <div class="wd-item"><div class="wd-label">湿度</div><div class="wd-val"><b id="wHum">--</b><span class="wd-unit">%</span></div></div>
+          <div class="wd-item"><div class="wd-label">风速</div><div class="wd-val"><b id="wWind">--</b><span class="wd-unit">km/h</span></div></div>
+          <div class="wd-item"><div class="wd-label">紫外线</div><div class="wd-val"><b id="wUvi">--</b><span class="wd-unit">级</span></div></div>
+        </div>
       </div>
     </div>
   </div>
@@ -1459,118 +1542,150 @@
 </section>
 
 <!-- 板块 8：版本更新日志 -->
+<!-- 板块 8：版本更新日志 -->
 <section class="section" id="changelog">
   <div class="wrap">
     <div class="section-head">
       <p class="kicker">CHANGELOG</p>
       <h2>更新日志</h2>
       <p class="desc">这个页面是怎么一点点长成现在这样的。</p>
+      <a class="log-more" href="changelog.html">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+        详细日志
+      </a>
     </div>
     <div class="mc-log">
       <div class="mc-ver current">
         <div class="mc-ver-head">
-          <span class="mc-ver-badge">v14</span>
-          <span class="mc-ver-date">2026-09-25 · 当前版本</span>
+          <span class="mc-ver-badge">v16</span>
+          <span class="mc-ver-date">2026-09-25 14:05:11 · 当前版本</span>
         </div>
         <ul class="mc-ver-list">
-          <li class="cat-new"><b>新增</b>RSS / Atom 订阅源，访客可订阅站点每一次更新。</li>
-          <li class="cat-new"><b>新增</b>busuanzi 访问计数，页脚实时显示访客与浏览量。</li>
-          <li class="cat-new"><b>新增</b>作品卡展开预览：扩展简介、技术标签，点卡片任意处即展开。</li>
-          <li class="cat-new"><b>新增</b>呼吸动效 favicon 与「幸运今日」每日签文。</li>
-          <li class="cat-chg"><b>优化</b>SEO：补全 keywords / og / twitter 标签，利于搜索引擎收录。</li>
-          <li class="cat-chg"><b>优化</b>卡片「查看详情」改为同页打开，不再被浏览器拦截。</li>
+          <li class="cat-new"><b>[ADD]</b><span class="li-time">14:05:11</span>生活瞬间三图标换用开源黑白 SVG：瑞幸 / 网易云 / 我的世界。</li>
+          <li class="cat-new"><b>[ADD]</b><span class="li-time">14:04:40</span>六个作品新增独立详情页，点「查看详情」进入详细介绍。</li>
+          <li class="cat-new"><b>[ADD]</b><span class="li-time">14:04:02</span>人生清单改为程序预设勾选，记录由代码维护。</li>
+          <li class="cat-chg"><b>[INFO]</b><span class="li-time">14:03:22</span>更新日志改版为我的世界启动器风格，新增详细日志页。</li>
+          <li class="cat-chg"><b>[INFO]</b><span class="li-time">14:02:15</span>「此刻」布局改双列：天气卡通栏，新增体感 / 湿度 / 风速 / 紫外线四项。</li>
+          <li class="cat-fix"><b>[FIX]</b><span class="li-time">14:01:07</span>技能进度条颜色不渲染问题：内联宽度 + 块级填充。</li>
+          <li class="cat-fix"><b>[FIX]</b><span class="li-time">13:59:52</span>一言长句中文与数字重叠，支持自动换行。</li>
+          <li class="cat-chg"><b>[INFO]</b><span class="li-time">13:58:26</span>生活瞬间切换增加平滑过渡，容器高度稳定不闪动。</li>
+        </ul>
+      </div>
+      <div class="mc-ver">
+        <div class="mc-ver-head">
+          <span class="mc-ver-badge">v15</span>
+          <span class="mc-ver-date">2026-09-25 13:52:40</span>
+        </div>
+        <ul class="mc-ver-list">
+          <li class="cat-new"><b>[ADD]</b><span class="li-time">13:52:40</span>开源仓库墙：实时读取 GitHub 公开仓库与星标。</li>
+          <li class="cat-new"><b>[ADD]</b><span class="li-time">13:51:12</span>技能雷达图与六项自评进度条。</li>
+          <li class="cat-new"><b>[ADD]</b><span class="li-time">13:49:36</span>人生清单：想做的 24 件小事。</li>
+          <li class="cat-chg"><b>[INFO]</b><span class="li-time">13:47:58</span>版本更新日志时间轴改版上线。</li>
+        </ul>
+      </div>
+      <div class="mc-ver">
+        <div class="mc-ver-head">
+          <span class="mc-ver-badge">v14</span>
+          <span class="mc-ver-date">2026-09-25 12:47:16</span>
+        </div>
+        <ul class="mc-ver-list">
+          <li class="cat-new"><b>[ADD]</b><span class="li-time">12:47:16</span>RSS / Atom 订阅源，访客可订阅站点每一次更新。</li>
+          <li class="cat-new"><b>[ADD]</b><span class="li-time">12:46:05</span>busuanzi 访问计数，页脚实时显示访客与浏览量。</li>
+          <li class="cat-new"><b>[ADD]</b><span class="li-time">12:44:31</span>作品卡展开预览：扩展简介、技术标签，点卡片任意处即展开。</li>
+          <li class="cat-new"><b>[ADD]</b><span class="li-time">12:42:58</span>呼吸动效 favicon 与「幸运今日」每日签文。</li>
+          <li class="cat-chg"><b>[INFO]</b><span class="li-time">12:41:20</span>SEO：补全 keywords / og / twitter 标签，利于搜索引擎收录。</li>
+          <li class="cat-chg"><b>[INFO]</b><span class="li-time">12:39:47</span>卡片「查看详情」改为同页打开，不再被浏览器拦截。</li>
         </ul>
       </div>
       <div class="mc-ver">
         <div class="mc-ver-head">
           <span class="mc-ver-badge">v13</span>
-          <span class="mc-ver-date">2026-09-25</span>
+          <span class="mc-ver-date">2026-09-25 11:20:04</span>
         </div>
         <ul class="mc-ver-list">
-          <li class="cat-new"><b>新增</b>「今年进度环」：2026 年已过百分比与剩余天数。</li>
-          <li class="cat-new"><b>新增</b>今日一言 3 秒自动轮播，点击可复制。</li>
-          <li class="cat-new"><b>新增</b>页面加载「Y」一笔画动画。</li>
+          <li class="cat-new"><b>[ADD]</b><span class="li-time">11:20:04</span>「今年进度环」：2026 年已过百分比与剩余天数。</li>
+          <li class="cat-new"><b>[ADD]</b><span class="li-time">11:18:37</span>今日一言 3 秒自动轮播，点击可复制。</li>
+          <li class="cat-new"><b>[ADD]</b><span class="li-time">11:16:52</span>页面加载「Y」一笔画动画。</li>
         </ul>
       </div>
       <div class="mc-ver">
         <div class="mc-ver-head">
           <span class="mc-ver-badge">v12</span>
-          <span class="mc-ver-date">2026-09-25</span>
+          <span class="mc-ver-date">2026-09-25 09:41:50</span>
         </div>
         <ul class="mc-ver-list">
-          <li class="cat-new"><b>新增</b>「此刻」板块独立：时钟与天气单独成卡。</li>
-          <li class="cat-new"><b>新增</b>翻牌时钟与页脚停留计时。</li>
-          <li class="cat-new"><b>新增</b>作品下载次数统计（本地记录）。</li>
-          <li class="cat-chg"><b>移除</b>语言标签小字，保持欢迎页纯粹。</li>
+          <li class="cat-new"><b>[ADD]</b><span class="li-time">09:41:50</span>「此刻」板块独立：时钟与天气单独成卡。</li>
+          <li class="cat-new"><b>[ADD]</b><span class="li-time">09:40:12</span>翻牌时钟与页脚停留计时。</li>
+          <li class="cat-new"><b>[ADD]</b><span class="li-time">09:38:29</span>作品下载次数统计（本地记录）。</li>
+          <li class="cat-chg"><b>[INFO]</b><span class="li-time">09:36:44</span>移除语言标签小字，保持欢迎页纯粹。</li>
         </ul>
       </div>
       <div class="mc-ver">
         <div class="mc-ver-head">
           <span class="mc-ver-badge">v10</span>
-          <span class="mc-ver-date">2026-09-25</span>
+          <span class="mc-ver-date">2026-09-25 08:15:06</span>
         </div>
         <ul class="mc-ver-list">
-          <li class="cat-new"><b>新增</b>节日飘浮：自动拉取中国法定节假日，中秋的月亮与灯笼飘 3 秒。</li>
-          <li class="cat-new"><b>新增</b>节日专属欢迎语（春节、端午、中秋等 8 个节日）。</li>
+          <li class="cat-new"><b>[ADD]</b><span class="li-time">08:15:06</span>节日飘浮：自动拉取中国法定节假日，中秋的月亮与灯笼飘 3 秒。</li>
+          <li class="cat-new"><b>[ADD]</b><span class="li-time">08:13:27</span>节日专属欢迎语（春节、端午、中秋等 8 个节日）。</li>
         </ul>
       </div>
       <div class="mc-ver">
         <div class="mc-ver-head">
           <span class="mc-ver-badge">v9</span>
-          <span class="mc-ver-date">2026-09-24</span>
+          <span class="mc-ver-date">2026-09-24 21:36:42</span>
         </div>
         <ul class="mc-ver-list">
-          <li class="cat-new"><b>新增</b>实时天气（Open-Meteo 免费接口，衢州定位）。</li>
-          <li class="cat-new"><b>新增</b>纪念日板块：「活着的第 N 天」与「本站上线第 N 天」。</li>
+          <li class="cat-new"><b>[ADD]</b><span class="li-time">21:36:42</span>实时天气（Open-Meteo 免费接口，衢州定位）。</li>
+          <li class="cat-new"><b>[ADD]</b><span class="li-time">21:35:08</span>纪念日板块：「活着的第 N 天」与「本站上线第 N 天」。</li>
         </ul>
       </div>
       <div class="mc-ver">
         <div class="mc-ver-head">
           <span class="mc-ver-badge">v7</span>
-          <span class="mc-ver-date">2026-09-23</span>
+          <span class="mc-ver-date">2026-09-23 20:15:09</span>
         </div>
         <ul class="mc-ver-list">
-          <li class="cat-new"><b>新增</b>「生活瞬间」板块：瑞幸咖啡、网易云音乐、我的世界三块数据。</li>
-          <li class="cat-new"><b>新增</b>ROG 幻 16 式错峰滚动：图标先下移进入，文字随后浮现。</li>
-          <li class="cat-fix"><b>修复</b>奇异类合集布局错误与键盘异常。</li>
+          <li class="cat-new"><b>[ADD]</b><span class="li-time">20:15:09</span>「生活瞬间」板块：瑞幸咖啡、网易云音乐、我的世界三块数据。</li>
+          <li class="cat-new"><b>[ADD]</b><span class="li-time">20:13:31</span>ROG 幻 16 式错峰滚动：图标先下移进入，文字随后浮现。</li>
+          <li class="cat-fix"><b>[FIX]</b><span class="li-time">20:11:44</span>奇异类合集布局错误与键盘异常。</li>
         </ul>
       </div>
       <div class="mc-ver">
         <div class="mc-ver-head">
           <span class="mc-ver-badge">v6</span>
-          <span class="mc-ver-date">2026-09-22</span>
+          <span class="mc-ver-date">2026-09-22 22:04:31</span>
         </div>
         <ul class="mc-ver-list">
-          <li class="cat-new"><b>新增</b>26 种语言打字机轮播：打出 → 停留 → 逐字消失。</li>
-          <li class="cat-new"><b>新增</b>今日一言（hitokoto 联网，失败本地降级）。</li>
-          <li class="cat-chg"><b>优化</b>彩蛋模式全部改青色，移除紫色残留。</li>
+          <li class="cat-new"><b>[ADD]</b><span class="li-time">22:04:31</span>26 种语言打字机轮播：打出 → 停留 → 逐字消失。</li>
+          <li class="cat-new"><b>[ADD]</b><span class="li-time">22:02:56</span>今日一言（hitokoto 联网，失败本地降级）。</li>
+          <li class="cat-chg"><b>[INFO]</b><span class="li-time">22:01:19</span>彩蛋模式全部改青色，移除紫色残留。</li>
         </ul>
       </div>
       <div class="mc-ver">
         <div class="mc-ver-head">
           <span class="mc-ver-badge">v4</span>
-          <span class="mc-ver-date">2026-09-21</span>
+          <span class="mc-ver-date">2026-09-21 19:28:53</span>
         </div>
         <ul class="mc-ver-list">
-          <li class="cat-new"><b>新增</b>精选作品卡片：六个作品上架，支持下载。</li>
-          <li class="cat-new"><b>新增</b>5 秒伪进度条，模拟进入作品。</li>
+          <li class="cat-new"><b>[ADD]</b><span class="li-time">19:28:53</span>精选作品卡片：六个作品上架，支持下载。</li>
+          <li class="cat-new"><b>[ADD]</b><span class="li-time">19:27:10</span>5 秒伪进度条，模拟进入作品。</li>
         </ul>
       </div>
       <div class="mc-ver">
         <div class="mc-ver-head">
           <span class="mc-ver-badge">v1</span>
-          <span class="mc-ver-date">2026-09-18</span>
+          <span class="mc-ver-date">2026-09-18 09:12:00</span>
         </div>
         <ul class="mc-ver-list">
-          <li class="cat-new"><b>新增</b>站点上线：全世界语言的「欢迎你的到来」欢迎页。</li>
-          <li class="cat-new"><b>新增</b>深色页脚 + 灰白大字 Yaule，WorkBuddy 风格。</li>
+          <li class="cat-new"><b>[ADD]</b><span class="li-time">09:12:00</span>站点上线：全世界语言的「欢迎你的到来」欢迎页。</li>
+          <li class="cat-new"><b>[ADD]</b><span class="li-time">09:10:36</span>深色页脚 + 灰白大字 Yaule，WorkBuddy 风格。</li>
         </ul>
       </div>
     </div>
   </div>
 </section>
 
-<!-- 板块 9：人生清单 -->
 <section class="section alt" id="bucket">
   <div class="wrap">
     <div class="section-head">
@@ -1660,29 +1775,43 @@
   var loadBar = document.getElementById('loadBar');
   var loadPercent = document.getElementById('loadPercent');
   var loadTitle = document.getElementById('loadTitle');
+  var loadSkip = document.getElementById('loadSkip');
   var loadTimer = null;
+  var skipTimer = null;
+  var endTimer = null;
+  var boostTimer = null;
+  var progress = 0;
 
   function hideLoading() {
     overlay.classList.remove('active');
     if (loadTimer) { clearInterval(loadTimer); loadTimer = null; }
+    if (skipTimer) { clearTimeout(skipTimer); skipTimer = null; }
+    if (endTimer) { clearTimeout(endTimer); endTimer = null; }
+    if (boostTimer) { clearInterval(boostTimer); boostTimer = null; }
     loadBar.style.width = '0%';
     loadPercent.textContent = '0%';
+    if (loadSkip) loadSkip.classList.remove('show');
   }
 
   function startLoading(targetUrl, title, openInNew) {
     loadTitle.textContent = title || '正在进入';
     overlay.classList.add('active');
-    var progress = 0;
+    progress = 0;
     loadBar.style.width = '0%';
     loadPercent.textContent = '0%';
+    if (loadSkip) loadSkip.classList.remove('show');
+    // 常速推进：8 秒全程
     loadTimer = setInterval(function () {
-      progress += Math.random() * 3;
+      progress += Math.random() * 2.2;
       if (progress > 95) progress = 95;
       loadBar.style.width = progress + '%';
       loadPercent.textContent = Math.floor(progress) + '%';
     }, 100);
-    setTimeout(function () {
+    // 第 3 秒弹出「长按加速」按钮
+    skipTimer = setTimeout(function () { if (loadSkip) loadSkip.classList.add('show'); }, 3000);
+    endTimer = setTimeout(function () {
       clearInterval(loadTimer); loadTimer = null;
+      clearTimeout(skipTimer); skipTimer = null;
       loadBar.style.width = '100%';
       loadPercent.textContent = '100%';
       setTimeout(function () {
@@ -1694,7 +1823,28 @@
           window.location.href = targetUrl;
         }
       }, 300);
-    }, 5000);
+    }, 8000);
+  }
+
+  // 长按加速：按住不放，每 70ms 前进 6%
+  if (loadSkip) {
+    function startBoost() {
+      if (boostTimer) return;
+      boostTimer = setInterval(function () {
+        progress += 6;
+        if (progress > 95) progress = 95;
+        loadBar.style.width = progress + '%';
+        loadPercent.textContent = Math.floor(progress) + '%';
+      }, 70);
+    }
+    function stopBoost() {
+      if (boostTimer) { clearInterval(boostTimer); boostTimer = null; }
+    }
+    loadSkip.addEventListener('mousedown', startBoost);
+    loadSkip.addEventListener('touchstart', startBoost, { passive: true });
+    ['mouseup', 'mouseleave', 'touchend', 'touchcancel'].forEach(function (ev) {
+      loadSkip.addEventListener(ev, stopBoost);
+    });
   }
 
   document.querySelectorAll('a[data-loading]').forEach(function (link) {
@@ -2157,6 +2307,27 @@
     if (e2) e2.textContent = a;
     if (e3) e3.textContent = s;
     if (e4) e4.textContent = s;
+    // 生命进度条：以 80 岁（29200 天）为参考
+    var lifeFill = document.getElementById('lifeFill');
+    var lifeMeta = document.getElementById('lifeMeta');
+    if (lifeFill && lifeMeta) {
+      var span = 29200;
+      var pct = Math.min(100, Math.round((a / span) * 1000) / 10);
+      setTimeout(function () { lifeFill.style.width = pct + '%'; }, 120);
+      lifeMeta.textContent = '人生进度约 ' + pct + '%（参考 80 岁）';
+    }
+    // 站点里程碑：下一个 30 / 100 / 365 / 1000 天
+    var siteFill = document.getElementById('siteFill');
+    var siteMeta = document.getElementById('siteMeta');
+    if (siteFill && siteMeta) {
+      var goals = [30, 100, 365, 1000, 3650];
+      var next = 3650;
+      for (var i = 0; i < goals.length; i++) {
+        if (s < goals[i]) { next = goals[i]; break; }
+      }
+      setTimeout(function () { siteFill.style.width = Math.min(100, (s / next) * 100) + '%'; }, 120);
+      siteMeta.textContent = '距离 ' + next + ' 天里程碑还有 ' + (next - s) + ' 天';
+    }
   })();
 
   /* ========== 节日飘浮：自动拉取中国法定节假日，节日当天飘 3 秒 ========== */
@@ -2270,9 +2441,9 @@
   /* ========== 今年进度环 ========== */
   (function () {
     var ring = document.getElementById('yearRing');
-    var pctEl = document.getElementById('yearPct');
-    var leftEl = document.getElementById('yearLeft');
-    if (!ring || !pctEl) return;
+    var leftNum = document.getElementById('yearLeftNum');
+    var pctText = document.getElementById('yearPctText');
+    if (!ring || !leftNum) return;
     function update() {
       var now = new Date();
       var y = now.getFullYear();
@@ -2285,11 +2456,42 @@
       var C = 2 * Math.PI * 42;
       ring.setAttribute('stroke-dasharray', C.toFixed(1));
       ring.setAttribute('stroke-dashoffset', (C * (1 - pct / 100)).toFixed(1));
-      pctEl.textContent = pct + '%';
-      leftEl.textContent = y + ' 年还剩 ' + left + ' 天';
+      leftNum.textContent = left;
+      if (pctText) pctText.textContent = '今年已过 ' + pct + '%';
     }
     update();
     setInterval(update, 60000);
+  })();
+
+  /* ========== 更新日志同步：写入 localStorage（供 changelog.html 读取） ========== */
+  (function () {
+    try {
+      var items = [];
+      document.querySelectorAll('.mc-ver').forEach(function (v) {
+        var badge = v.querySelector('.mc-ver-badge');
+        var date = v.querySelector('.mc-ver-date');
+        var list = [];
+        v.querySelectorAll('.mc-ver-list li').forEach(function (li) {
+          var b = li.querySelector('b');
+          var t = li.querySelector('.li-time');
+          var text = li.textContent || '';
+          if (b) text = text.replace(b.textContent, '');
+          if (t) text = text.replace(t.textContent, '');
+          list.push({
+            lv: b ? b.textContent : '',
+            time: t ? t.textContent : '',
+            text: text.trim()
+          });
+        });
+        items.push({
+          ver: badge ? badge.textContent : '',
+          date: date ? date.textContent : '',
+          current: v.classList.contains('current'),
+          list: list
+        });
+      });
+      localStorage.setItem('yaule_changelog', JSON.stringify(items));
+    } catch (e) {}
   })();
 
   /* ========== 页面加载动画移除 ========== */

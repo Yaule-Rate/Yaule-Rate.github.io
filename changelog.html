@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>详细日志 · Yaule 失眠夜空间</title>
+<meta name="description" content="Yaule 失眠夜空间的完整更新日志，包含全部版本记录与时间戳。">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%230284c7'/%3E%3Cpath d='M8.5 8.5 L16 16 L23.5 8.5 M16 16 L16 25' stroke='white' stroke-width='2.6' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+<style>
+  :root {
+    --bg: #f6fafc; --card: #ffffff; --ink: #0f172a; --ink-2: #5b6b7e;
+    --line: #e2e8f0; --line-strong: #cbd5e1; --accent: #0284c7; --accent-2: #38bdf8;
+    --soft: #f1f5f9; --overlay: rgba(15, 23, 42, 0.35);
+  }
+  :root[data-theme="dark"] {
+    --bg: #0b1120; --card: #111a2e; --ink: #e2e8f0; --ink-2: #94a3b8;
+    --line: #1e293b; --line-strong: #334155; --accent: #38bdf8; --accent-2: #7dd3fc;
+    --soft: #16203a; --overlay: rgba(2, 6, 23, 0.6);
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: var(--bg); color: var(--ink);
+    font-family: "Noto Sans SC", "PingFang SC", "Microsoft YaHei", sans-serif;
+    line-height: 1.75; -webkit-font-smoothing: antialiased;
+    transition: background 0.3s ease, color 0.3s ease;
+  }
+  .wrap { max-width: 860px; margin: 0 auto; padding: 40px 24px 90px; }
+  .topbar { display: flex; align-items: center; gap: 14px; margin-bottom: 34px; flex-wrap: wrap; }
+  .back-btn {
+    display: inline-flex; align-items: center; gap: 6px;
+    font-size: 13.5px; color: var(--ink-2); text-decoration: none;
+    border: 1px solid var(--line); background: var(--card);
+    padding: 7px 15px; border-radius: 999px; transition: all 0.18s ease;
+  }
+  .back-btn:hover { color: var(--accent); border-color: var(--accent); transform: translateX(-2px); }
+  .back-btn svg { width: 14px; height: 14px; }
+  .updated {
+    font-family: ui-monospace, "Cascadia Code", Consolas, monospace;
+    font-size: 12px; color: var(--ink-2); margin-left: auto;
+    border: 1px dashed var(--line); border-radius: 8px; padding: 5px 12px;
+  }
+  .updated b { color: var(--accent); font-weight: 600; }
+  .hero { margin-bottom: 26px; }
+  .kicker { font-size: 12px; letter-spacing: 2.5px; color: var(--accent); font-weight: 600; margin-bottom: 8px; }
+  h1 { font-size: 32px; font-weight: 700; line-height: 1.35; margin-bottom: 10px; }
+  .sub { font-size: 14.5px; color: var(--ink-2); }
+  .mc-log { display: flex; flex-direction: column; gap: 14px; }
+  .mc-ver {
+    background: var(--card); border: 1px solid var(--line); border-radius: 16px;
+    padding: 20px 26px 14px; position: relative;
+    transition: border-color 0.18s ease;
+  }
+  .mc-ver:hover { border-color: rgba(2,132,199,0.45); }
+  .mc-ver.current { border-color: rgba(2,132,199,0.55); box-shadow: 0 0 0 3px rgba(2,132,199,0.08); }
+  .mc-ver-head { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; flex-wrap: wrap; }
+  .mc-ver-badge {
+    font-family: "Noto Serif SC", Georgia, serif;
+    font-weight: 700; font-size: 16px; color: #fff;
+    background: linear-gradient(135deg, var(--accent), var(--accent-2));
+    padding: 4px 14px; border-radius: 9px; letter-spacing: 0.5px;
+    box-shadow: 0 4px 12px rgba(2,132,199,0.28);
+  }
+  .mc-ver.current .mc-ver-badge { animation: badgeGlow 2.4s ease infinite; }
+  @keyframes badgeGlow { 0%,100% { box-shadow: 0 4px 12px rgba(2,132,199,0.28); } 50% { box-shadow: 0 4px 20px rgba(56,189,248,0.55); } }
+  .mc-ver-date {
+    font-family: ui-monospace, "Cascadia Code", Consolas, monospace;
+    font-size: 12px; color: var(--ink-2); letter-spacing: 0.3px;
+  }
+  .mc-ver-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 7px; }
+  .mc-ver-list li {
+    position: relative; padding-left: 17px;
+    font-size: 13.5px; color: var(--ink-2); line-height: 1.75;
+  }
+  .mc-ver-list li::before {
+    content: ""; position: absolute; left: 0; top: 0.72em;
+    width: 6px; height: 6px; border-radius: 50%; background: var(--line-strong);
+  }
+  .mc-ver-list li b {
+    font-family: ui-monospace, "Cascadia Code", Consolas, monospace;
+    font-weight: 700; font-size: 11px; letter-spacing: 0.05em;
+    border-radius: 5px; padding: 1px 7px; margin-right: 7px; background: var(--bg);
+  }
+  .mc-ver-list li .li-time {
+    font-family: ui-monospace, "Cascadia Code", Consolas, monospace;
+    font-size: 11px; color: var(--ink-2); opacity: 0.7; margin-right: 8px; letter-spacing: 0.03em;
+  }
+  .mc-ver-list li.cat-new b { color: #15803d; border-color: rgba(34,197,94,0.4); background: rgba(34,197,94,0.07); }
+  .mc-ver-list li.cat-new::before { background: #22c55e; }
+  .mc-ver-list li.cat-chg b { color: var(--accent); border-color: rgba(2,132,199,0.4); background: rgba(2,132,199,0.07); }
+  .mc-ver-list li.cat-chg::before { background: var(--accent); }
+  .mc-ver-list li.cat-fix b { color: #c2410c; border-color: rgba(249,115,22,0.4); background: rgba(249,115,22,0.07); }
+  .mc-ver-list li.cat-fix::before { background: #f97316; }
+  .sync-note {
+    margin-top: 22px; font-size: 12.5px; color: var(--ink-2); opacity: 0.8;
+    border: 1px dashed var(--line); border-radius: 12px; padding: 12px 18px;
+  }
+  footer { margin-top: 44px; padding-top: 22px; border-top: 1px solid var(--line); text-align: center; font-size: 12.5px; color: var(--ink-2); }
+  footer a { color: var(--accent); text-decoration: none; }
+
+  /* 加载遮罩（8 秒伪进度条 + 长按加速） */
+  .page-loader {
+    position: fixed; inset: 0; z-index: 9999; background: var(--bg);
+    display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 18px;
+    opacity: 1; visibility: visible; transition: opacity 0.5s ease, visibility 0.5s ease;
+  }
+  .page-loader.done { opacity: 0; visibility: hidden; }
+  .loader-svg { width: 84px; height: 84px; color: var(--accent); }
+  .loader-path { stroke-dasharray: 100; stroke-dashoffset: 100; animation: loaderDraw 1.1s ease forwards; }
+  @keyframes loaderDraw { to { stroke-dashoffset: 0; } }
+  .loader-name {
+    font-family: "Noto Serif SC", Georgia, serif; font-size: 20px; font-weight: 700;
+    letter-spacing: 0.24em; color: var(--ink);
+    opacity: 0; transform: translateY(6px);
+    animation: loaderName 0.6s ease 0.55s forwards;
+  }
+  @keyframes loaderName { to { opacity: 1; transform: translateY(0); } }
+  .loading-bar { width: 300px; height: 4px; background: var(--line); border-radius: 999px; overflow: hidden; margin-top: 14px; }
+  .loading-bar-fill { height: 100%; width: 0%; background: linear-gradient(90deg, var(--accent), var(--accent-2)); border-radius: 999px; transition: width 0.2s ease; }
+  .loading-percent { font-size: 13px; color: var(--ink-2); font-variant-numeric: tabular-nums; }
+  .load-skip {
+    margin-top: 20px; display: inline-flex; align-items: center; gap: 7px;
+    font-size: 12.5px; color: var(--accent);
+    border: 1px solid rgba(2,132,199,0.35); background: rgba(2,132,199,0.06);
+    border-radius: 999px; padding: 9px 20px; cursor: pointer;
+    opacity: 0; transform: translateY(8px); transition: opacity 0.35s ease, transform 0.35s ease;
+    font-family: inherit; user-select: none; -webkit-user-select: none;
+  }
+  .load-skip.show { opacity: 1; transform: translateY(0); }
+  .load-skip svg { width: 14px; height: 14px; }
+  .load-skip:active { background: rgba(2,132,199,0.16); }
+  .load-skip small { font-size: 11px; opacity: 0.75; }
+  .theme-toggle {
+    position: fixed; right: 22px; bottom: 22px; z-index: 900;
+    width: 44px; height: 44px; border-radius: 50%;
+    border: 1px solid var(--line); background: var(--card); color: var(--ink-2);
+    display: flex; align-items: center; justify-content: center; cursor: pointer;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.12); transition: all 0.2s ease;
+  }
+  .theme-toggle:hover { color: var(--accent); transform: translateY(-2px); }
+  .theme-toggle svg { width: 19px; height: 19px; }
+  .theme-toggle .icon-moon { display: none; }
+  :root[data-theme="dark"] .theme-toggle .icon-sun { display: none; }
+  :root[data-theme="dark"] .theme-toggle .icon-moon { display: block; }
+  @media (max-width: 640px) {
+    .wrap { padding: 26px 16px 60px; }
+    h1 { font-size: 26px; }
+    .mc-ver { padding: 18px 18px 12px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- 加载遮罩 -->
+<div class="page-loader" id="pageLoader">
+  <svg class="loader-svg" viewBox="0 0 120 120" fill="none" stroke="currentColor" stroke-width="7" stroke-linecap="round" stroke-linejoin="round">
+    <path class="loader-path" pathLength="100" d="M22 18 L60 54 L98 18 M60 54 L60 102"/>
+  </svg>
+  <p class="loader-name">CHANGELOG</p>
+  <div class="loading-bar"><div class="loading-bar-fill" id="loadBar"></div></div>
+  <p class="loading-percent" id="loadPercent">0%</p>
+  <button class="load-skip" id="loadSkip" type="button">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+    长按加速 <small>按住不放，加载更快</small>
+  </button>
+</div>
+
+<button class="theme-toggle" id="themeToggle" aria-label="切换主题" title="切换主题">
+  <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+  <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+</button>
+
+<div class="wrap">
+  <div class="topbar">
+    <a class="back-btn" href="index.html#changelog">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+      返回标签页
+    </a>
+    <span class="updated">最后同步 <b id="updatedAt">--</b></span>
+  </div>
+
+  <div class="hero">
+    <p class="kicker">FULL CHANGELOG</p>
+    <h1>详细日志</h1>
+    <p class="sub">这个页面是怎么一点点长成现在这样的——所有版本、所有改动，都记在这里。</p>
+  </div>
+
+  <div class="mc-log" id="mcLog"></div>
+
+  <p class="sync-note" id="syncNote">日志与主页「更新日志」实时同步：打开主页后会写入最新记录，本页自动读取并展示。</p>
+
+  <footer>
+    <p>© 2026 <a href="index.html">Yaule</a> · 一个藏在失眠夜里的小作品</p>
+  </footer>
+</div>
+
+<script>
+/* ========== 内置日志（fallback：localStorage 无数据时使用） ========== */
+var FALLBACK_LOGS = [
+  { ver: "v16", date: "2026-09-25 14:05:11", current: true, list: [
+    { lv: "[ADD]", time: "14:05:11", text: "生活瞬间三图标换用开源黑白 SVG：瑞幸 / 网易云 / 我的世界。" },
+    { lv: "[ADD]", time: "14:04:40", text: "六个作品新增独立详情页，点「查看详情」进入详细介绍。" },
+    { lv: "[ADD]", time: "14:04:02", text: "人生清单改为程序预设勾选，记录由代码维护。" },
+    { lv: "[INFO]", time: "14:03:22", text: "更新日志改版为我的世界启动器风格，新增详细日志页。" },
+    { lv: "[INFO]", time: "14:02:15", text: "「此刻」布局改双列：天气卡通栏，新增体感 / 湿度 / 风速 / 紫外线四项。" },
+    { lv: "[FIX]", time: "14:01:07", text: "技能进度条颜色不渲染问题：内联宽度 + 块级填充。" },
+    { lv: "[FIX]", time: "13:59:52", text: "一言长句中文与数字重叠，支持自动换行。" },
+    { lv: "[INFO]", time: "13:58:26", text: "生活瞬间切换增加平滑过渡，容器高度稳定不闪动。" }
+  ]},
+  { ver: "v15", date: "2026-09-25 13:52:40", current: false, list: [
+    { lv: "[ADD]", time: "13:52:40", text: "开源仓库墙：实时读取 GitHub 公开仓库与星标。" },
+    { lv: "[ADD]", time: "13:51:12", text: "技能雷达图与六项自评进度条。" },
+    { lv: "[ADD]", time: "13:49:36", text: "人生清单：想做的 24 件小事。" },
+    { lv: "[INFO]", time: "13:47:58", text: "版本更新日志时间轴改版上线。" }
+  ]},
+  { ver: "v14", date: "2026-09-25 12:47:16", current: false, list: [
+    { lv: "[ADD]", time: "12:47:16", text: "RSS / Atom 订阅源，访客可订阅站点每一次更新。" },
+    { lv: "[ADD]", time: "12:46:05", text: "busuanzi 访问计数，页脚实时显示访客与浏览量。" },
+    { lv: "[ADD]", time: "12:44:31", text: "作品卡展开预览：扩展简介、技术标签，点卡片任意处即展开。" },
+    { lv: "[ADD]", time: "12:42:58", text: "呼吸动效 favicon 与「幸运今日」每日签文。" },
+    { lv: "[INFO]", time: "12:41:20", text: "SEO：补全 keywords / og / twitter 标签，利于搜索引擎收录。" },
+    { lv: "[INFO]", time: "12:39:47", text: "卡片「查看详情」改为同页打开，不再被浏览器拦截。" }
+  ]},
+  { ver: "v13", date: "2026-09-25 11:20:04", current: false, list: [
+    { lv: "[ADD]", time: "11:20:04", text: "「今年进度环」：2026 年已过百分比与剩余天数。" },
+    { lv: "[ADD]", time: "11:18:37", text: "今日一言 3 秒自动轮播，点击可复制。" },
+    { lv: "[ADD]", time: "11:16:52", text: "页面加载「Y」一笔画动画。" }
+  ]},
+  { ver: "v12", date: "2026-09-25 09:41:50", current: false, list: [
+    { lv: "[ADD]", time: "09:41:50", text: "「此刻」板块独立：时钟与天气单独成卡。" },
+    { lv: "[ADD]", time: "09:40:12", text: "翻牌时钟与页脚停留计时。" },
+    { lv: "[ADD]", time: "09:38:29", text: "作品下载次数统计（本地记录）。" },
+    { lv: "[INFO]", time: "09:36:44", text: "移除语言标签小字，保持欢迎页纯粹。" }
+  ]},
+  { ver: "v10", date: "2026-09-25 08:15:06", current: false, list: [
+    { lv: "[ADD]", time: "08:15:06", text: "节日飘浮：自动拉取中国法定节假日，中秋的月亮与灯笼飘 3 秒。" },
+    { lv: "[ADD]", time: "08:13:27", text: "节日专属欢迎语（春节、端午、中秋等 8 个节日）。" }
+  ]},
+  { ver: "v9", date: "2026-09-24 21:36:42", current: false, list: [
+    { lv: "[ADD]", time: "21:36:42", text: "实时天气（Open-Meteo 免费接口，衢州定位）。" },
+    { lv: "[ADD]", time: "21:35:08", text: "纪念日板块：「活着的第 N 天」与「本站上线第 N 天」。" }
+  ]},
+  { ver: "v7", date: "2026-09-23 20:15:09", current: false, list: [
+    { lv: "[ADD]", time: "20:15:09", text: "「生活瞬间」板块：瑞幸咖啡、网易云音乐、我的世界三块数据。" },
+    { lv: "[ADD]", time: "20:13:31", text: "ROG 幻 16 式错峰滚动：图标先下移进入，文字随后浮现。" },
+    { lv: "[FIX]", time: "20:11:44", text: "奇异类合集布局错误与键盘异常。" }
+  ]},
+  { ver: "v6", date: "2026-09-22 22:04:31", current: false, list: [
+    { lv: "[ADD]", time: "22:04:31", text: "26 种语言打字机轮播：打出 → 停留 → 逐字消失。" },
+    { lv: "[ADD]", time: "22:02:56", text: "今日一言（hitokoto 联网，失败本地降级）。" },
+    { lv: "[INFO]", time: "22:01:19", text: "彩蛋模式全部改青色，移除紫色残留。" }
+  ]},
+  { ver: "v4", date: "2026-09-21 19:28:53", current: false, list: [
+    { lv: "[ADD]", time: "19:28:53", text: "精选作品卡片：六个作品上架，支持下载。" },
+    { lv: "[ADD]", time: "19:27:10", text: "5 秒伪进度条，模拟进入作品。" }
+  ]},
+  { ver: "v1", date: "2026-09-18 09:12:00", current: false, list: [
+    { lv: "[ADD]", time: "09:12:00", text: "站点上线：全世界语言的「欢迎你的到来」欢迎页。" },
+    { lv: "[ADD]", time: "09:10:36", text: "深色页脚 + 灰白大字 Yaule，WorkBuddy 风格。" }
+  ]}
+];
+
+/* ========== 读取主页同步数据（localStorage） ========== */
+var logs = FALLBACK_LOGS;
+var synced = false;
+try {
+  var raw = localStorage.getItem('yaule_changelog');
+  if (raw) {
+    var parsed = JSON.parse(raw);
+    if (parsed && parsed.length) { logs = parsed; synced = true; }
+  }
+} catch (e) {}
+
+/* ========== 渲染日志 ========== */
+var lvClass = { "[ADD]": "cat-new", "[INFO]": "cat-chg", "[FIX]": "cat-fix" };
+function render() {
+  var box = document.getElementById('mcLog');
+  box.innerHTML = '';
+  logs.forEach(function (v) {
+    var card = document.createElement('div');
+    card.className = 'mc-ver' + (v.current ? ' current' : '');
+    var head = document.createElement('div');
+    head.className = 'mc-ver-head';
+    var badge = document.createElement('span');
+    badge.className = 'mc-ver-badge';
+    badge.textContent = v.ver;
+    var date = document.createElement('span');
+    date.className = 'mc-ver-date';
+    date.textContent = v.date + (v.current ? ' · 当前版本' : '');
+    head.appendChild(badge);
+    head.appendChild(date);
+    card.appendChild(head);
+    var ul = document.createElement('ul');
+    ul.className = 'mc-ver-list';
+    (v.list || []).forEach(function (item) {
+      var li = document.createElement('li');
+      var cls = lvClass[item.lv] || 'cat-chg';
+      li.className = cls;
+      var b = document.createElement('b');
+      b.textContent = item.lv || '';
+      li.appendChild(b);
+      if (item.time) {
+        var t = document.createElement('span');
+        t.className = 'li-time';
+        t.textContent = item.time;
+        li.appendChild(t);
+      }
+      li.appendChild(document.createTextNode(item.text || ''));
+      ul.appendChild(li);
+    });
+    card.appendChild(ul);
+    box.appendChild(card);
+  });
+  var note = document.getElementById('syncNote');
+  note.textContent = synced
+    ? '已读取主页同步的最新日志（' + logs.length + ' 个版本）。每次打开主页都会自动更新本页。'
+    : '尚未在本机打开过主页，当前展示内置日志。打开主页后会自动同步为最新记录。';
+}
+render();
+
+/* ========== 最后同步时间（实时） ========== */
+(function () {
+  var el = document.getElementById('updatedAt');
+  function pad(n) { return String(n).padStart(2, '0'); }
+  function tick() {
+    var d = new Date();
+    el.textContent = d.getFullYear() + '-' + pad(d.getMonth() + 1) + '-' + pad(d.getDate()) + ' ' + pad(d.getHours()) + ':' + pad(d.getMinutes()) + ':' + pad(d.getSeconds());
+  }
+  tick();
+  setInterval(tick, 1000);
+})();
+
+/* ========== 8 秒伪进度条 + 长按加速 + 第 3 秒弹出 ========== */
+(function () {
+  var loader = document.getElementById('pageLoader');
+  var bar = document.getElementById('loadBar');
+  var pct = document.getElementById('loadPercent');
+  var skip = document.getElementById('loadSkip');
+  var progress = 0;
+  var boost = null;
+  var timer = setInterval(function () {
+    progress += Math.random() * 2.2;
+    if (progress > 95) progress = 95;
+    bar.style.width = progress + '%';
+    pct.textContent = Math.floor(progress) + '%';
+  }, 100);
+  var skipTimer = setTimeout(function () { if (skip) skip.classList.add('show'); }, 3000);
+  if (skip) {
+    function startBoost() {
+      if (boost) return;
+      boost = setInterval(function () {
+        progress += 6;
+        if (progress > 95) progress = 95;
+        bar.style.width = progress + '%';
+        pct.textContent = Math.floor(progress) + '%';
+      }, 70);
+    }
+    function stopBoost() {
+      if (boost) { clearInterval(boost); boost = null; }
+    }
+    skip.addEventListener('mousedown', startBoost);
+    skip.addEventListener('touchstart', startBoost, { passive: true });
+    ['mouseup', 'mouseleave', 'touchend', 'touchcancel'].forEach(function (ev) {
+      skip.addEventListener(ev, stopBoost);
+    });
+  }
+  setTimeout(function () {
+    clearInterval(timer);
+    clearTimeout(skipTimer);
+    bar.style.width = '100%';
+    pct.textContent = '100%';
+    setTimeout(function () {
+      loader.classList.add('done');
+      setTimeout(function () { if (loader.parentNode) loader.parentNode.removeChild(loader); }, 500);
+    }, 300);
+  }, 8000);
+})();
+
+/* ========== 主题切换 ========== */
+(function () {
+  var toggle = document.getElementById('themeToggle');
+  var root = document.documentElement;
+  try {
+    if (localStorage.getItem('yaule-theme') === 'dark') root.setAttribute('data-theme', 'dark');
+  } catch (e) {}
+  toggle.addEventListener('click', function () {
+    if (root.getAttribute('data-theme') === 'dark') {
+      root.removeAttribute('data-theme');
+      try { localStorage.setItem('yaule-theme', 'light'); } catch (e) {}
+    } else {
+      root.setAttribute('data-theme', 'dark');
+      try { localStorage.setItem('yaule-theme', 'dark'); } catch (e) {}
+    }
+  });
+})();
+</script>
+</body>
+</html>
