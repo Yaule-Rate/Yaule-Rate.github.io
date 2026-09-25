@@ -1878,8 +1878,15 @@
         window.open(pendingUrl, '_blank');
         hideLoading();
         showToast('已在新标签页打开');
-      } else {
+      } else if (pendingUrl) {
         window.location.href = pendingUrl;
+      } else {
+        // 开屏模式：无跳转，淡出遮罩停留本页；带锚点（如 #changelog）则滚回该处
+        hideLoading();
+        if (location.hash) {
+          var el = document.getElementById(location.hash.slice(1));
+          if (el && el.scrollIntoView) el.scrollIntoView({ behavior: 'auto' });
+        }
       }
     }, 250);
   }
@@ -1960,9 +1967,10 @@
     });
   });
 
-  // 修复：浏览器后退（bfcache 恢复）时进度条残留
+  // 修复：浏览器后退（bfcache 恢复）时进度条残留 —— 同时重播 Y 一笔画开屏
   window.addEventListener('pageshow', function (e) {
-    if (e.persisted || overlay.classList.contains('active')) hideLoading();
+    if (e.persisted) { playSplash(true); return; }
+    if (overlay.classList.contains('active')) hideLoading();
   });
 
   /* ========== 作品卡分享按钮（微博 / QQ 带文案） ========== */
@@ -2650,17 +2658,31 @@
     } catch (e) {}
   })();
 
-  /* ========== 页面加载动画移除 ========== */
-  (function () {
+  /* ========== 开屏动画：青色 Y 一笔画（每次进入本站均播放，含作品页返回 / 浏览器后退） ========== */
+  var splashTimer = null;
+  function playSplash(restart) {
+    if (splashTimer) { clearTimeout(splashTimer); splashTimer = null; }
     var loader = document.getElementById('pageLoader');
-    if (!loader) return;
-    setTimeout(function () {
+    if (!loader) {
+      // bfcache 返回时原 loader 已从 DOM 移除：重建并播放
+      loader = document.createElement('div');
+      loader.className = 'page-loader';
+      loader.id = 'pageLoader';
+      loader.innerHTML = '<svg class="loader-svg" viewBox="0 0 120 120" fill="none" stroke="currentColor" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"><path class="loader-path" pathLength="100" d="M22 18 L60 54 L98 18 M60 54 L60 102"/></svg><p class="loader-name">Yaule</p>';
+      document.body.insertBefore(loader, document.body.firstChild);
+    } else if (restart) {
+      // 重播：克隆路径与名字节点以重新触发 CSS 动画
+      var path = loader.querySelector('.loader-path');
+      if (path) { var c1 = path.cloneNode(true); path.parentNode.replaceChild(c1, path); }
+      var name = loader.querySelector('.loader-name');
+      if (name) { var c2 = name.cloneNode(true); name.parentNode.replaceChild(c2, name); }
+      loader.classList.remove('done');
+    }
+    splashTimer = setTimeout(function () {
       loader.classList.add('done');
-      setTimeout(function () {
-        if (loader.parentNode) loader.parentNode.removeChild(loader);
-      }, 600);
     }, 1700);
-  })();
+  }
+  playSplash(false);
 
   /* ========== 视差滚动：首屏随滚动上移淡出 ========== */
   (function () {
