@@ -1360,9 +1360,37 @@
   }
   body.night .night-moon { opacity: 1; }
   .section, footer { position: relative; z-index: 2; }
+
+  /* ===== 板块滚动揭示（渐进增强：JS 启用 js-ready 后才隐藏待揭示） ===== */
+  html.js-ready .rv { opacity: 0; transform: translateY(28px); transition: opacity .7s ease, transform .7s ease; will-change: opacity, transform; }
+  html.js-ready .rv.in { opacity: 1; transform: none; }
+  html.js-ready .rv.in .grid .card { animation: cardIn .5s ease both; }
+  html.js-ready .rv.in .grid .card:nth-child(2) { animation-delay: .07s; }
+  html.js-ready .rv.in .grid .card:nth-child(3) { animation-delay: .14s; }
+  html.js-ready .rv.in .grid .card:nth-child(4) { animation-delay: .21s; }
+  html.js-ready .rv.in .grid .card:nth-child(5) { animation-delay: .28s; }
+  html.js-ready .rv.in .grid .card:nth-child(6) { animation-delay: .35s; }
+  @keyframes cardIn { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: none; } }
+  /* ===== 面板切换淡入 ===== */
+  .panel-fade { animation: panelIn .35s ease; }
+  @keyframes panelIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+  /* ===== 按钮按压与位移 ===== */
+  .btn-enter:active, .btn-more:active, .mc-subtab:active, .stars-btn:active { transform: scale(.97); }
+  .btn-more:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(2,132,199,.18); }
+  .footer-col a { transition: color .2s ease; }
+  /* ===== 星星数字弹跳 ===== */
+  .stars-num.pop { animation: numPop .45s ease; }
+  @keyframes numPop { 0% { transform: scale(1); } 35% { transform: scale(1.35); color: var(--accent-2); } 100% { transform: scale(1); } }
+  @media (prefers-reduced-motion: reduce) {
+    html.js-ready .rv { opacity: 1; transform: none; transition: none; }
+    html.js-ready .rv.in .grid .card, .panel-fade, .stars-num.pop { animation: none; }
+    .btn-enter:active, .btn-more:active, .mc-subtab:active, .stars-btn:active { transform: none; }
+    .btn-more:hover { transform: none; }
+  }
 </style>
 </head>
 <body>
+  <script>document.documentElement.classList.add('js-ready');</script>
 <!-- 深夜特调：月亮 + 星空（22:00-06:00 显示） -->
 <div class="night-sky" id="nightSky" aria-hidden="true"></div>
 <div class="night-moon" id="nightMoon" aria-hidden="true"><svg viewBox="0 0 64 64" fill="currentColor"><path d="M40.6 4a30 30 0 1 0 19.4 28.2A26.5 26.5 0 0 1 40.6 4z"/></svg></div>
@@ -1430,7 +1458,7 @@
 </section>
 
 <!-- 进入按钮板块 -->
-<section class="enter-section" id="enter">
+<section class="enter-section rv" id="enter">
   <div class="wrap">
     <p class="kicker" data-i18n="enter.kicker">PERSONAL SPACE</p>
     <h2 data-i18n="enter.h2">失眠夜 · 个人空间</h2>
@@ -1526,7 +1554,7 @@
 </section>
 
 <!-- 板块 2：精选作品 -->
-<section class="section alt" id="works">
+<section class="section alt rv" id="works">
   <div class="wrap">
     <div class="section-head">
       <p class="kicker">PROJECTS</p>
@@ -1656,7 +1684,7 @@
 </section>
 
 <!-- 板块 3：纪念日 -->
-<section class="section alt" id="anniv">
+<section class="section alt rv" id="anniv">
   <div class="wrap">
     <div class="section-head">
       <p class="kicker">ANNIVERSARY</p>
@@ -1691,7 +1719,7 @@
 </section>
 
 <!-- 板块 5：此刻（时钟与天气） -->
-<section class="section alt" id="now">
+<section class="section alt rv" id="now">
   <div class="wrap">
     <div class="section-head">
       <p class="kicker">RIGHT NOW</p>
@@ -1777,7 +1805,7 @@
 </section>
 
 <!-- 板块 5.5：世界失眠时钟 -->
-<section class="section alt" id="world">
+<section class="section alt rv" id="world">
   <div class="wrap">
     <div class="section-head">
       <p class="kicker">WORLD AWAKE</p>
@@ -1789,7 +1817,7 @@
 </section>
 
 <!-- 板块 6：开源仓库墙 -->
-<section class="section" id="repos">
+<section class="section rv" id="repos">
   <div class="wrap">
     <div class="section-head">
       <p class="kicker">OPEN SOURCE</p>
@@ -1807,7 +1835,7 @@
 </section>
 
 <!-- 板块 6.5：开源足迹 · GitHub 贡献热力图 -->
-<section class="section alt" id="heatmap">
+<section class="section alt rv" id="heatmap">
   <div class="wrap">
     <div class="section-head">
       <p class="kicker">CONTRIBUTIONS</p>
@@ -1822,7 +1850,7 @@
 </section>
 
 <!-- 板块 7：技能雷达图 -->
-<section class="section alt" id="skills">
+<section class="section alt rv" id="skills">
   <div class="wrap">
     <div class="section-head">
       <p class="kicker">SKILLS</p>
@@ -1844,7 +1872,7 @@
 
 <!-- 板块 8：版本更新日志 -->
 <!-- 板块 8：版本更新日志 -->
-<section class="section" id="changelog">
+<section class="section rv" id="changelog">
   <div class="wrap">
     <div class="section-head">
       <p class="kicker">CHANGELOG</p>
@@ -1859,7 +1887,7 @@
   </div>
 </section>
 
-<section class="section alt" id="bucket">
+<section class="section alt rv" id="bucket">
   <div class="wrap">
     <div class="section-head">
       <p class="kicker">BUCKET LIST</p>
@@ -1875,7 +1903,7 @@
 </section>
 
 
-<footer>
+<footer class="rv">
   <div class="wrap">
     <div class="footer-grid">
       <div class="footer-brand">
@@ -2366,8 +2394,13 @@
         tabs.forEach(function (t) { t.classList.remove('active'); });
         this.classList.add('active');
         var key = this.getAttribute('data-server');
-        if (key === 'bjd') { bjd.classList.remove('hidden'); hyt.classList.add('hidden'); }
-        else { hyt.classList.remove('hidden'); bjd.classList.add('hidden'); }
+        if (key === 'bjd') {
+          bjd.classList.remove('hidden'); hyt.classList.add('hidden');
+          bjd.classList.remove('panel-fade'); void bjd.offsetWidth; bjd.classList.add('panel-fade');
+        } else {
+          hyt.classList.remove('hidden'); bjd.classList.add('hidden');
+          hyt.classList.remove('panel-fade'); void hyt.offsetWidth; hyt.classList.add('panel-fade');
+        }
       });
     });
   })();
@@ -2531,7 +2564,10 @@
       claimBadges();
       if (!fromLight) toast((L('now.stars') || '我数过的星星') + ' +1');
     }
-    btn.addEventListener('click', function () { addStar(false); });
+    btn.addEventListener('click', function () {
+      addStar(false);
+      num.classList.remove('pop'); void num.offsetWidth; num.classList.add('pop');
+    });
     var histBtn2 = document.getElementById('starsHistBtn');
     if (histBtn2) histBtn2.addEventListener('click', function () { if (window.__openHist) window.__openHist(); });
     window.__addStar = addStar;
@@ -3133,7 +3169,13 @@
 
   /* ========== 更新日志（VSCode 风格）全量数据 + 主页简短渲染 + localStorage 同步 ========== */
   var YAULE_CHANGELOG = [
-    { ver: "v22.10", date: "2026-09-26 15:10:00", current: true, list: [
+    { ver: "v22.11", date: "2026-09-26 15:40:00", current: true, list: [
+      { lv: "[ADD]", time: "2026-09-26 15:40:00", text: "板块滚动揭示：11 个板块滚动进入时淡入上滑，精选作品六张卡片逐张错落出现；采用渐进增强（JS 启用才隐藏待揭示），IO / 滚动 / 定时三层触发保障。", en: "Scroll reveal: 11 sections fade and rise in as you scroll, with the six work cards staggered in one by one; progressive enhancement (only hidden once JS runs) with IO / scroll / timer triggers." },
+      { lv: "[ADD]", time: "2026-09-26 15:39:00", text: "面板切换淡入：我的世界布吉岛/花雨亭切换时新面板渐显。", en: "Panel fade: switching BJD/HYT Minecraft servers now fades the new panel in." },
+      { lv: "[ADD]", time: "2026-09-26 15:38:00", text: "按钮微交互：查看更多上浮带投影、主要按钮按压反馈、页脚链接平滑变色。", en: "Micro-interactions: 'View more' lifts with shadow, primary buttons get press feedback, footer links fade colors smoothly." },
+      { lv: "[ADD]", time: "2026-09-26 15:37:00", text: "星星计数反馈：点击「数一颗星」数字弹跳放大后回落。", en: "Star-count feedback: clicking 'count a star' pops the number up and back down." }
+    ]},
+    { ver: "v22.10", date: "2026-09-26 15:10:00", current: false, list: [
       { lv: "[ADD]", time: "2026-09-26 15:10:00", text: "主题过渡动画：深浅色切换时整页背景、文字、边框以 0.45s 渐变过渡，切换更顺滑；尊重系统「减少动效」设置。", en: "Theme transition: switching light/dark now fades background, text and borders over 0.45s for a smoother change; respects the system reduced-motion preference." },
       { lv: "[ADD]", time: "2026-09-26 15:09:00", text: "作品更新日期：六张作品卡新增版本号与最近更新日期（如 v1.2 · 2026-09-20）。", en: "Work release info: all six work cards now show a version tag and last-updated date (e.g. v1.2 · 2026-09-20)." }
     ]},
@@ -3995,6 +4037,49 @@
     setTimeout(render, 6000);
   })();
 
+
+  /* ========== 板块滚动揭示（淡入上滑） ========== */
+  (function () {
+    var els = document.querySelectorAll('.rv');
+    if (!els.length) return;
+    var io = null;
+    if ('IntersectionObserver' in window) {
+      io = new IntersectionObserver(function (entries) {
+        entries.forEach(function (e) {
+          if (e.isIntersecting) { e.target.classList.add('in'); if (io) io.unobserve(e.target); }
+        });
+      }, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
+      els.forEach(function (el) { io.observe(el); });
+    }
+    /* 滚动兜底：IO 不可用或未触发时仍能揭示（同步检查，不依赖 rAF） */
+    function check() {
+      els.forEach(function (el) {
+        if (!el.classList.contains('in')) {
+          var r = el.getBoundingClientRect();
+          if (r.top < window.innerHeight * 0.94 && r.bottom > 0) {
+            el.classList.add('in');
+            if (io) io.unobserve(el);
+          }
+        }
+      });
+    }
+    window.addEventListener('scroll', check, { passive: true });
+    check();
+    var iv = setInterval(function () {
+      var left = 0;
+      els.forEach(function (el) {
+        if (!el.classList.contains('in')) {
+          left++;
+          var r = el.getBoundingClientRect();
+          if (r.top < window.innerHeight * 0.94 && r.bottom > 0) {
+            el.classList.add('in');
+            if (io) io.unobserve(el);
+          }
+        }
+      });
+      if (left === 0) clearInterval(iv);
+    }, 600);
+  })();
 </script>
 </body>
 </html>
