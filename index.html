@@ -1304,22 +1304,6 @@
   .stars-btn:hover { background: rgba(2,132,199,.14); transform: translateY(-1px); }
   .stars-btn svg { width: 14px; height: 14px; }
 
-  /* ===== 睡眠曲线 ===== */
-  .sleep-grid { display: grid; grid-template-columns: 300px 1fr; gap: 20px; }
-  .sleep-ctrl, .sleep-chart { background: var(--card-bg); border: 1px solid var(--line); border-radius: 20px; padding: 26px; }
-  .sleep-btns { display: flex; gap: 10px; flex-wrap: wrap; }
-  .sleep-btn { border: 1px solid rgba(2,132,199,.35); background: rgba(2,132,199,.06); color: var(--accent); border-radius: 999px; padding: 9px 18px; font-size: 13.5px; font-weight: 600; cursor: pointer; font-family: inherit; transition: all .18s ease; }
-  .sleep-btn:hover { background: rgba(2,132,199,.14); transform: translateY(-1px); }
-  .sleep-btn.primary { background: linear-gradient(90deg, var(--accent), var(--accent-2)); color: #fff; border: 0; }
-  .sleep-today { margin-top: 16px; font-size: 13px; color: var(--ink-2); line-height: 1.8; }
-  .sleep-today b { color: var(--accent); font-weight: 600; }
-  .sleep-chart svg { width: 100%; height: auto; display: block; }
-  .sleep-chart text { font-size: 11px; fill: var(--ink-2); font-family: inherit; }
-  .sleep-chart .sc-val { font-size: 12px; font-weight: 700; fill: var(--accent); }
-  .sleep-avg { margin-top: 14px; font-size: 13px; color: var(--ink-2); }
-  .sleep-avg b { color: var(--accent); font-weight: 600; }
-  @media (max-width: 860px) { .sleep-grid { grid-template-columns: 1fr; } }
-
   /* ===== 世界失眠时钟 ===== */
   .world-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
   .world-city { background: var(--card-bg); border: 1px solid var(--line); border-radius: 16px; padding: 18px 14px; text-align: center; }
@@ -1743,31 +1727,7 @@
   </div>
 </section>
 
-<!-- 板块 5.5：睡眠曲线 -->
-<section class="section" id="sleep">
-  <div class="wrap">
-    <div class="section-head">
-      <p class="kicker">SLEEP CURVE</p>
-      <h2 data-i18n="sleep.h2">睡眠曲线</h2>
-      <p class="desc" data-i18n="sleep.desc">记下几点睡、几点醒，看看这个失眠夜有多长。</p>
-    </div>
-    <div class="sleep-grid">
-      <div class="sleep-ctrl">
-        <div class="sleep-btns">
-          <button class="sleep-btn primary" id="sleepBtn1" data-i18n="sleep.btn1">记录入睡</button>
-          <button class="sleep-btn" id="sleepBtn2" data-i18n="sleep.btn2">记录醒来</button>
-        </div>
-        <p class="sleep-today" id="sleepToday"></p>
-      </div>
-      <div class="sleep-chart">
-        <svg id="sleepChart" viewBox="0 0 560 190" role="img" aria-label="sleep curve"></svg>
-        <p class="sleep-avg" id="sleepAvg"></p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- 板块 5.6：世界失眠时钟 -->
+<!-- 板块 5.5：世界失眠时钟 -->
 <section class="section alt" id="world">
   <div class="wrap">
     <div class="section-head">
@@ -2411,91 +2371,6 @@
       if (t) { t.textContent = (L('now.stars') || '我数过的星星') + ' +1'; t.classList.add('show'); setTimeout(function () { t.classList.remove('show'); }, 1600); }
     });
     render();
-  })();
-
-  /* ========== 睡眠曲线 ========== */
-  (function () {
-    var b1 = document.getElementById('sleepBtn1');
-    var b2 = document.getElementById('sleepBtn2');
-    var todayEl = document.getElementById('sleepToday');
-    var chart = document.getElementById('sleepChart');
-    var avgEl = document.getElementById('sleepAvg');
-    if (!b1 || !chart) return;
-    var SK = 'yaule_sleep';
-    function load() { try { return JSON.parse(localStorage.getItem(SK) || '[]'); } catch (e) { return []; } }
-    function save(a) { try { localStorage.setItem(SK, JSON.stringify(a)); } catch (e) {} }
-    function key(d) { return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0'); }
-    function nowHM() { var d = new Date(); return String(d.getHours()).padStart(2, '0') + ':' + String(d.getMinutes()).padStart(2, '0'); }
-    function minOf(t) { var p = String(t).split(':'); return (+p[0]) * 60 + (+p[1]); }
-    function fmtHM(m) { return String(Math.floor(m / 60)).padStart(2, '0') + ':' + String(m % 60).padStart(2, '0'); }
-    function L(k) { var L2 = window.YAULE_LANG || 'zh', d = window.I18N || {}; return (d[L2] && d[L2][k]) || ''; }
-    function toast(t) { var el = document.getElementById('toast'); if (el) { el.textContent = t; el.classList.add('show'); setTimeout(function () { el.classList.remove('show'); }, 1800); } }
-    b1.addEventListener('click', function () {
-      var a = load(), k = key(new Date()), hm = nowHM();
-      var hit = null;
-      a.forEach(function (r) { if (r.d === k) hit = r; });
-      if (hit && hit.s) { toast(L('sleep.re') || '今晚已记录入睡，再点会覆盖'); hit.s = hm; }
-      else if (hit) { hit.s = hm; }
-      else { a.push({ d: k, s: hm, w: null }); }
-      save(a); render(); toast(L('sleep.done') || '睡眠记录已更新');
-    });
-    b2.addEventListener('click', function () {
-      var a = load(), k = key(new Date()), hm = nowHM();
-      var rec = null;
-      a.forEach(function (r) { if (r.d === k) rec = r; });
-      if (!rec) { rec = { d: k, s: null, w: hm }; a.push(rec); }
-      else if (rec.s) { rec.w = hm; }
-      else { rec.w = hm; }
-      save(a); render(); toast(L('sleep.done') || '睡眠记录已更新');
-    });
-    function render() {
-      var a = load(), k = key(new Date());
-      var cur = null;
-      a.forEach(function (r) { if (r.d === k) cur = r; });
-      var wk = ['sleep.w0', 'sleep.w1', 'sleep.w2', 'sleep.w3', 'sleep.w4', 'sleep.w5', 'sleep.w6'];
-      if (cur && cur.s && cur.w) {
-        var sm = minOf(cur.s), wm = minOf(cur.w);
-        var dh = ((wm - sm + 1440) % 1440) / 60;
-        todayEl.innerHTML = '<b>' + cur.s + '</b> - ' + cur.w + ' · ' + dh.toFixed(1) + ' ' + (L('sleep.hr') || '小时');
-      } else if (cur && cur.s) {
-        todayEl.innerHTML = (L('sleep.rec') || '已睡下 · 等待醒来…') + '（' + cur.s + '）';
-      } else {
-        todayEl.textContent = L('sleep.empty') || '还没有记录，点上面的按钮开始。';
-      }
-      var days = [], i;
-      for (i = 6; i >= 0; i--) { var d = new Date(); d.setDate(d.getDate() - i); days.push(key(d)); }
-      var W = 560, H = 190, base = 150, colW = 80, barW = 34;
-      var html = '<defs><linearGradient id="sg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="var(--accent-2)"/><stop offset="1" stop-color="var(--accent)"/></linearGradient></defs>';
-      var total = 0, cnt = 0;
-      days.forEach(function (dk, idx) {
-        var rec = null;
-        a.forEach(function (r) { if (r.d === dk) rec = r; });
-        var x = idx * colW + (colW - barW) / 2;
-        var wd = (new Date(dk + 'T12:00:00')).getDay();
-        var wkl = L(wk[wd]) || '';
-        if (rec && rec.s && rec.w) {
-          var sm2 = minOf(rec.s), wm2 = minOf(rec.w);
-          var dur = ((wm2 - sm2 + 1440) % 1440) / 60;
-          total += dur; cnt++;
-          var h = Math.max(8, Math.round(dur / 12 * 120));
-          html += '<rect x="' + x + '" y="' + (base - h) + '" width="' + barW + '" height="' + h + '" rx="6" fill="url(#sg)"/>';
-          html += '<text x="' + (x + barW / 2) + '" y="' + (base - h - 7) + '" text-anchor="middle" class="sc-val">' + dur.toFixed(1) + '</text>';
-          html += '<text x="' + (x + barW / 2) + '" y="' + (base - h + 16) + '" text-anchor="middle">' + rec.s + '</text>';
-          html += '<text x="' + (x + barW / 2) + '" y="' + (base - h + 32) + '" text-anchor="middle">' + rec.w + '</text>';
-        } else if (rec && rec.s) {
-          html += '<rect x="' + x + '" y="' + (base - 7) + '" width="' + barW + '" height="7" rx="3" fill="rgba(56,189,248,.45)"/>';
-          html += '<text x="' + (x + barW / 2) + '" y="' + (base - 15) + '" text-anchor="middle" class="sc-val">…</text>';
-          html += '<text x="' + (x + barW / 2) + '" y="' + (base + 20) + '" text-anchor="middle">' + rec.s + '</text>';
-        } else {
-          html += '<circle cx="' + (x + barW / 2) + '" cy="' + (base + 4) + '" r="3" fill="var(--line)"/>';
-        }
-        html += '<text x="' + (x + barW / 2) + '" y="' + (H - 6) + '" text-anchor="middle">' + wkl + '</text>';
-      });
-      chart.innerHTML = html;
-      avgEl.innerHTML = cnt ? ((L('sleep.avg') || '近 7 天平均睡眠') + ' <b>' + (total / cnt).toFixed(1) + ' ' + (L('sleep.hr') || '小时') + '</b>') : (L('sleep.empty') || '还没有记录，点上面的按钮开始。');
-    }
-    render();
-    window.__sleepRender = render;
   })();
 
   /* ========== 世界失眠时钟 ========== */
@@ -3537,10 +3412,6 @@
       'now.stars': '我数过的星星', 'stars.add': '数一颗星', 'stars.next': '距下一徽章还差', 'stars.got': '颗', 'stars.done': '已达成',
       'stars.b1': '观星者', 'stars.b2': '追月人', 'stars.b3': '失眠十级',
       'moon.n0': '新月', 'moon.n1': '娥眉月', 'moon.n2': '上弦月', 'moon.n3': '盈凸月', 'moon.n4': '满月', 'moon.n5': '亏凸月', 'moon.n6': '下弦月', 'moon.n7': '残月',
-      'sleep.h2': '睡眠曲线', 'sleep.desc': '记下几点睡、几点醒，看看这个失眠夜有多长。',
-      'sleep.btn1': '记录入睡', 'sleep.btn2': '记录醒来', 'sleep.rec': '已睡下 · 等待醒来…', 'sleep.done': '睡眠记录已更新', 'sleep.re': '今晚已记录入睡，再点会覆盖',
-      'sleep.empty': '还没有记录，点上面的按钮开始。', 'sleep.avg': '近 7 天平均睡眠', 'sleep.hr': '小时',
-      'sleep.w0': '日', 'sleep.w1': '一', 'sleep.w2': '二', 'sleep.w3': '三', 'sleep.w4': '四', 'sleep.w5': '五', 'sleep.w6': '六',
       'world.h2': '世界失眠时钟', 'world.desc': '看看地球另一边的夜，谁还醒着。', 'world.awake': '还没睡', 'world.asleep': '已入睡',
       'world.c0': '北京', 'world.c1': '东京', 'world.c2': '新加坡', 'world.c3': '悉尼', 'world.c4': '伦敦', 'world.c5': '巴黎', 'world.c6': '纽约', 'world.c7': '洛杉矶',
       'repos.h2': '开源仓库', 'repos.desc': '最近活跃的仓库，数据实时来自 GitHub。',
@@ -3600,10 +3471,6 @@
       'now.stars': 'Stars I Have Counted', 'stars.add': 'Count one', 'stars.next': 'Next badge in', 'stars.got': 'stars', 'stars.done': 'Reached',
       'stars.b1': 'Stargazer', 'stars.b2': 'Moonchaser', 'stars.b3': 'Insomniac Lv.10',
       'moon.n0': 'New Moon', 'moon.n1': 'Waxing Crescent', 'moon.n2': 'First Quarter', 'moon.n3': 'Waxing Gibbous', 'moon.n4': 'Full Moon', 'moon.n5': 'Waning Gibbous', 'moon.n6': 'Last Quarter', 'moon.n7': 'Waning Crescent',
-      'sleep.h2': 'Sleep Curve', 'sleep.desc': 'Log when you sleep and wake — see how long the insomnia nights are.',
-      'sleep.btn1': 'Log Sleep', 'sleep.btn2': 'Log Wake', 'sleep.rec': 'Asleep now · waiting to wake…', 'sleep.done': 'Sleep record updated', 'sleep.re': 'Already logged tonight; clicking again overwrites',
-      'sleep.empty': 'No records yet. Tap the buttons above to start.', 'sleep.avg': 'Avg sleep (last 7 days)', 'sleep.hr': 'h',
-      'sleep.w0': 'Sun', 'sleep.w1': 'Mon', 'sleep.w2': 'Tue', 'sleep.w3': 'Wed', 'sleep.w4': 'Thu', 'sleep.w5': 'Fri', 'sleep.w6': 'Sat',
       'world.h2': 'World Insomnia Clock', 'world.desc': 'See whose night is still awake across the globe.', 'world.awake': 'Awake', 'world.asleep': 'Asleep',
       'world.c0': 'Beijing', 'world.c1': 'Tokyo', 'world.c2': 'Singapore', 'world.c3': 'Sydney', 'world.c4': 'London', 'world.c5': 'Paris', 'world.c6': 'New York', 'world.c7': 'Los Angeles',
       'repos.h2': 'Open Source', 'repos.desc': 'Recently active repos, live from GitHub.',
