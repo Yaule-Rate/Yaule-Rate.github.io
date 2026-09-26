@@ -73,6 +73,14 @@
     --badge-stars: radial-gradient(circle, rgba(186,230,253,.5) 1px, transparent 1.3px), radial-gradient(circle, rgba(125,211,252,.3) 1px, transparent 1.5px);
   }
   * { margin: 0; padding: 0; box-sizing: border-box; }
+  @media (prefers-reduced-motion: no-preference) {
+    html.theme-anim *,
+    html.theme-anim *::before,
+    html.theme-anim *::after {
+      transition: background-color .45s ease, color .45s ease, border-color .45s ease,
+                  fill .45s ease, stroke .45s ease, box-shadow .45s ease, opacity .45s ease !important;
+    }
+  }
   html { scroll-behavior: smooth; }
   html {
     min-height: 100%;
@@ -481,6 +489,7 @@
   .card h3 { font-size: 18px; font-weight: 600; }
   .card p { font-size: 14.5px; color: var(--ink-2); flex: 1; line-height: 1.7; }
   .card .meta { font-size: 13px; color: var(--accent); font-weight: 500; }
+  .card-date { display: block; font-size: 12px; color: var(--ink-2); margin-top: 8px; font-variant-numeric: tabular-nums; opacity: 0.85; letter-spacing: 0.02em; }
   .btn-more-wrap { text-align: center; margin-top: 36px; }
   .btn-more {
     display: inline-flex;
@@ -1540,7 +1549,8 @@
             <p data-i18n="works.t1p">广播排班、播放日程、站点信息一站式维护，从零开发并投入校园日常使用。</p>
             <span class="card-tags"><span data-i18n="works.tag1a">广播</span><span data-i18n="works.tag1b">管理</span></span>
           </div>
-          <span class="meta"></span>
+                    <span class="card-date">v1.2 · 2026-09-20</span>
+<span class="meta"></span>
         </div>
       </div>
       <div class="card" data-detail="works/accounting.html">
@@ -1558,7 +1568,8 @@
             <p data-i18n="works.t2p">收支流水、分类统计、报表导出，让每一笔账都清清楚楚。</p>
             <span class="card-tags"><span data-i18n="works.tag2a">记账</span><span data-i18n="works.tag2b">工具</span></span>
           </div>
-          <span class="meta"></span>
+                    <span class="card-date">v1.0 · 2026-09-15</span>
+<span class="meta"></span>
         </div>
       </div>
       <div class="card" data-detail="works/code-system.html">
@@ -1576,7 +1587,8 @@
             <p data-i18n="works.t3p">代码编写辅助工作台，模板化快速生成，让日常编码更顺手。</p>
             <span class="card-tags"><span data-i18n="works.tag3a">编码</span><span data-i18n="works.tag3b">效率</span></span>
           </div>
-          <span class="meta"></span>
+                    <span class="card-date">v1.1 · 2026-09-18</span>
+<span class="meta"></span>
         </div>
       </div>
       <div class="card" data-detail="works/emoji-converter.html">
@@ -1594,7 +1606,8 @@
             <p data-i18n="works.t4p">把文字图案一键转成 Emoji 图片，分享出来更有趣。</p>
             <span class="card-tags"><span data-i18n="works.tag4a">趣味</span><span data-i18n="works.tag4b">图像</span></span>
           </div>
-          <span class="meta"></span>
+                    <span class="card-date">v2.0 · 2026-09-22</span>
+<span class="meta"></span>
         </div>
       </div>
       <div class="card hidden" data-detail="works/cs-sens.html">
@@ -1612,7 +1625,8 @@
             <p data-i18n="works.t5p">FPS 游戏鼠标灵敏度科学校准，找到真正属于自己的手感。</p>
             <span class="card-tags"><span data-i18n="works.tag5a">游戏</span><span data-i18n="works.tag5b">外设</span></span>
           </div>
-          <span class="meta"></span>
+                    <span class="card-date">v1.0 · 2026-08-30</span>
+<span class="meta"></span>
         </div>
       </div>
       <div class="card hidden" data-detail="works/chess.html">
@@ -1630,7 +1644,8 @@
             <p data-i18n="works.t6p">象棋与五子棋同页双开，约上好友面对面来一局。</p>
             <span class="card-tags"><span data-i18n="works.tag6a">游戏</span><span data-i18n="works.tag6b">对战</span></span>
           </div>
-          <span class="meta"></span>
+                    <span class="card-date">v1.3 · 2026-09-10</span>
+<span class="meta"></span>
         </div>
       </div>
     </div>
@@ -2758,25 +2773,28 @@
   (function () {
     var toggle = document.getElementById('themeToggle');
     var root = document.documentElement;
+    var animTimer = null;
+    function setTheme(dark) {
+      root.classList.add('theme-anim');
+      if (dark) root.setAttribute('data-theme', 'dark');
+      else root.removeAttribute('data-theme');
+      if (animTimer) clearTimeout(animTimer);
+      animTimer = setTimeout(function () { root.classList.remove('theme-anim'); }, 520);
+    }
     function applyTheme() {
       var saved = null;
       try { saved = localStorage.getItem('yaule-theme'); } catch (e) {}
-      if (saved === 'dark') { root.setAttribute('data-theme', 'dark'); return; }
-      if (saved === 'light') { root.removeAttribute('data-theme'); return; }
+      if (saved === 'dark') { setTheme(true); return; }
+      if (saved === 'light') { setTheme(false); return; }
       var h = new Date().getHours();
-      if (h >= 22 || h < 6) root.setAttribute('data-theme', 'dark');
-      else root.removeAttribute('data-theme');
+      setTheme(h >= 22 || h < 6);
     }
     applyTheme();
     setInterval(applyTheme, 1800000);
     toggle.addEventListener('click', function () {
-      if (root.getAttribute('data-theme') === 'dark') {
-        root.removeAttribute('data-theme');
-        try { localStorage.setItem('yaule-theme', 'light'); } catch (e) {}
-      } else {
-        root.setAttribute('data-theme', 'dark');
-        try { localStorage.setItem('yaule-theme', 'dark'); } catch (e) {}
-      }
+      var dark = !(root.getAttribute('data-theme') === 'dark');
+      setTheme(dark);
+      try { localStorage.setItem('yaule-theme', dark ? 'dark' : 'light'); } catch (e) {}
     });
   })();
 
@@ -3115,7 +3133,11 @@
 
   /* ========== 更新日志（VSCode 风格）全量数据 + 主页简短渲染 + localStorage 同步 ========== */
   var YAULE_CHANGELOG = [
-    { ver: "v22.9.1", date: "2026-09-26 14:50:00", current: true, list: [
+    { ver: "v22.10", date: "2026-09-26 15:10:00", current: true, list: [
+      { lv: "[ADD]", time: "2026-09-26 15:10:00", text: "主题过渡动画：深浅色切换时整页背景、文字、边框以 0.45s 渐变过渡，切换更顺滑；尊重系统「减少动效」设置。", en: "Theme transition: switching light/dark now fades background, text and borders over 0.45s for a smoother change; respects the system reduced-motion preference." },
+      { lv: "[ADD]", time: "2026-09-26 15:09:00", text: "作品更新日期：六张作品卡新增版本号与最近更新日期（如 v1.2 · 2026-09-20）。", en: "Work release info: all six work cards now show a version tag and last-updated date (e.g. v1.2 · 2026-09-20)." }
+    ]},
+    { ver: "v22.9.1", date: "2026-09-26 14:50:00", current: false, list: [
       { lv: "[FIX]", time: "2026-09-26 14:50:00", text: "修复技能雷达图顶点标签截断：右上'效率工具'与左下'界面设计'因锚点方向溢出被裁，修正后六维度标签完整显示。", en: "Fixed radar-chart vertex labels being clipped: 'Tools' (top-right) and 'UI Design' (bottom-left) overflowed the SVG edge due to wrong text-anchor; all six labels now render fully." },
       { lv: "[OPT]", time: "2026-09-26 14:48:00", text: "清理冗余 CSS：移除旧版时间轴日志样式残留 12 条规则（约 1.5KB），修正 reduced-motion 区 .mc-tab 为 .mc-subtab。", en: "Cleaned redundant CSS: removed 12 stale timeline-log rules (~1.5KB) and corrected .mc-tab to .mc-subtab in the reduced-motion block." }
     ]},
