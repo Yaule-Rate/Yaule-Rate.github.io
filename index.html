@@ -48,6 +48,9 @@
     --soft-2: #FAFAF9;
     --overlay: rgba(250, 250, 249, 0.96);
     --card-image: linear-gradient(135deg, #d7effc, #9fd9f3);
+    --badge-bg: linear-gradient(165deg, #ffffff, #eef6fc 70%, #e2eef8);
+    --badge-mask: rgba(15, 23, 42, 0.45);
+    --badge-stars: radial-gradient(circle, rgba(2,132,199,.16) 1px, transparent 1.3px), radial-gradient(circle, rgba(2,132,199,.10) 1px, transparent 1.5px);
   }
   :root[data-theme="dark"] {
     --bg: #131519;
@@ -65,6 +68,9 @@
     --soft-2: #1E2228;
     --overlay: rgba(19, 21, 25, 0.96);
     --card-image: linear-gradient(135deg, #173042, #1E4A5E);
+    --badge-bg: linear-gradient(165deg, #0d1b2e, #10283f 70%, #0a1626);
+    --badge-mask: rgba(4, 12, 22, 0.6);
+    --badge-stars: radial-gradient(circle, rgba(186,230,253,.5) 1px, transparent 1.3px), radial-gradient(circle, rgba(125,211,252,.3) 1px, transparent 1.5px);
   }
   * { margin: 0; padding: 0; box-sizing: border-box; }
   html { scroll-behavior: smooth; }
@@ -1321,9 +1327,9 @@
   .light-btn svg { width: 15px; height: 15px; }
 
   /* ===== 勋章弹窗 ===== */
-  .badge-modal { position: fixed; inset: 0; z-index: 10001; display: flex; align-items: center; justify-content: center; background: rgba(4,12,22,.6); backdrop-filter: blur(8px); opacity: 0; visibility: hidden; pointer-events: none; transition: opacity .28s ease, visibility .28s; }
+  .badge-modal { position: fixed; inset: 0; z-index: 10001; display: flex; align-items: center; justify-content: center; background: var(--badge-mask); backdrop-filter: blur(8px); opacity: 0; visibility: hidden; pointer-events: none; transition: opacity .28s ease, visibility .28s; }
   .badge-modal.show { opacity: 1; visibility: visible; pointer-events: auto; }
-  .badge-card { background: linear-gradient(165deg, #0d1b2e, #10283f 70%, #0a1626); border: 1px solid rgba(56,189,248,.35); border-radius: 24px; padding: 34px 42px; text-align: center; width: 330px; transform: translateY(18px) scale(.95); transition: transform .3s ease; box-shadow: 0 0 70px rgba(56,189,248,.22); position: relative; overflow: hidden; }
+  .badge-card { background: var(--badge-bg); border: 1px solid rgba(56,189,248,.35); border-radius: 24px; padding: 34px 42px; text-align: center; width: 330px; transform: translateY(18px) scale(.95); transition: transform .3s ease; box-shadow: 0 0 70px rgba(56,189,248,.22); position: relative; overflow: hidden; }
   .badge-card::before { content: ""; position: absolute; top: -70px; left: 50%; transform: translateX(-50%); width: 200px; height: 130px; background: radial-gradient(circle, rgba(56,189,248,.35), transparent 70%); pointer-events: none; }
   .badge-modal.show .badge-card { transform: none; }
   .badge-icon svg { width: 96px; height: 96px; display: block; margin: 0 auto; filter: drop-shadow(0 0 16px rgba(56,189,248,.45)); }
@@ -1333,7 +1339,7 @@
   .badge-time { font-size: 12px; color: var(--ink-2); margin-top: 10px; opacity: .75; font-variant-numeric: tabular-nums; }
   .badge-btn { margin-top: 20px; border: 0; background: linear-gradient(90deg, var(--accent), var(--accent-2)); color: #fff; border-radius: 999px; padding: 10px 30px; font-size: 14px; font-weight: 700; cursor: pointer; font-family: inherit; transition: all .18s ease; }
   .badge-btn:hover { transform: translateY(-1px); box-shadow: 0 8px 24px rgba(56,189,248,.3); }
-  .badge-card::after { content: ""; position: absolute; inset: 0; border-radius: inherit; background-image: radial-gradient(circle, rgba(186,230,253,.5) 1px, transparent 1.3px), radial-gradient(circle, rgba(125,211,252,.3) 1px, transparent 1.5px); background-size: 92px 92px, 136px 136px; background-position: 8px 18px, 62px 82px; opacity: .4; pointer-events: none; }
+  .badge-card::after { content: ""; position: absolute; inset: 0; border-radius: inherit; background-image: var(--badge-stars); background-size: 92px 92px, 136px 136px; background-position: 8px 18px, 62px 82px; opacity: .4; pointer-events: none; }
   .badge-hist-title { font-size: 16px; font-weight: 800; color: var(--ink); font-family: "Noto Serif SC", Georgia, serif; margin-top: 4px; }
   .badge-hist-item { display: flex; align-items: center; gap: 12px; background: rgba(56,189,248,.05); border: 1px solid rgba(56,189,248,.16); border-radius: 14px; padding: 10px 12px; margin-top: 10px; text-align: left; }
   .badge-hist-item svg { width: 38px; height: 38px; flex: none; filter: drop-shadow(0 0 8px rgba(56,189,248,.35)); }
@@ -3103,7 +3109,12 @@
 
   /* ========== 更新日志（VSCode 风格）全量数据 + 主页简短渲染 + localStorage 同步 ========== */
   var YAULE_CHANGELOG = [
-    { ver: "v22.2", date: "2026-09-25 22:02:00", current: true, list: [
+    { ver: "v22.7", date: "2026-09-26 10:32:00", current: true, list: [
+      { lv: "[FIX]", time: "2026-09-26 10:32:00", text: "勋章弹窗适配浅色主题：浅色模式下弹窗为浅色卡片，深色模式保持深蓝夜底，青色光晕与星空纹理随主题切换。", en: "Badge modal now follows the theme: a light card in light mode, the deep-blue night card in dark mode; the cyan glow and starfield adapt too." },
+      { lv: "[ADD]", time: "2026-09-26 09:52:00", text: "勋章墙与晚安灯牌：达成 100/1000/10000 颗星弹出勋章弹窗，星星卡右上角可查看全部历史记录；灯牌移入「此刻」板块并与星星联动。", en: "Badge wall & lights: reaching 100/1000/10000 stars pops a badge modal; view full history from the star card's top-right; the light bar now lives in Right Now and links to the star counter." },
+      { lv: "[ADD]", time: "2026-09-26 09:00:00", text: "今晚月色 / 星星计数器 / 世界失眠时钟：实时月相（API 校验 + 天文公式兜底）、数星星三级徽章、全球 8 城失眠时钟。", en: "Tonight's moon / star counter / world insomnia clock: live moon phase (API-verified with local fallback), 3-tier star badges, and an 8-city world clock." }
+    ]},
+    { ver: "v22.2", date: "2026-09-25 22:02:00", current: false, list: [
       { lv: "[ADD]", time: "2026-09-25 22:02:00", text: "深夜特调：22:00-06:00 自动点亮星空与月亮，一言切换深夜语料库。", en: "Night mode: stars & moon light up from 22:00 to 06:00, quotes switch to a late-night pool." },
       { lv: "[ADD]", time: "2026-09-25 22:01:00", text: "访客留言板：GitHub Issues 驱动，违禁词过滤 + 防脚本注入 + 30 秒冷却，提交跳转 GitHub 一键发布。", en: "Guestbook: powered by GitHub Issues, with banned-word filter, XSS protection and a 30s cooldown; submitting opens GitHub for one-click publish." },
       { lv: "[ADD]", time: "2026-09-25 22:00:00", text: "开源足迹：GitHub 官方 API 跨仓库聚合，过去一年贡献热力图（青色深浅）。", en: "Open-source footprint: contribution heatmap of the last year aggregated across repos via the official GitHub API." },
