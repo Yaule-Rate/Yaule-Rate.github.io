@@ -739,6 +739,16 @@
   }
   .fest-greeting.show { opacity: 1; transform: translateY(0); }
 
+  /* ===== 时辰问候 ===== */
+  .hour-greet {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--ink-2);
+    letter-spacing: 0.14em;
+    margin-bottom: 12px;
+    opacity: 0.9;
+  }
+
   /* ===== 翻牌时钟 ===== */
   #clockTime { position: relative; perspective: 200px; }
   .flip-digit { display: inline-block; position: relative; }
@@ -1428,6 +1438,7 @@
   <h1 class="sr-only">欢迎你的到来</h1>
   <div class="hero-inner">
     <p class="fest-greeting" id="festGreeting"></p>
+    <p class="hour-greet" id="hourGreet"></p>
     <p class="lang-roamer" id="langRoamer"></p>
     <p class="en-title" id="enTitle">Welcome to Yaule's Space</p>
     <p class="intro" id="intro" data-i18n="hero.intro">这里是我的个人小角落，记录着咖啡、音乐、游戏与作品。不紧不慢，慢慢翻就好。</p>
@@ -2463,7 +2474,8 @@
         if (!g) return;
         n++;
         var t = (typeof g === 'object' && g.t) ? g.t : '——';
-        var s = (typeof g === 'object' && g.s) ? (' · ' + g.s + ' ' + (L('stars.got') || '颗')) : '';
+        var suffix = b.watch ? ((L('badge.min') || '分钟')) : (L('stars.got') || '颗');
+        var s = (typeof g === 'object' && g.s) ? (' · ' + g.s + ' ' + suffix) : '';
         rows += '<div class="badge-hist-item">' + b.icon + '<div><b>' + (L(b.k) || b.fb) + '</b><span>' + (L('badge.time') || '达成于') + ' ' + t + s + '</span></div></div>';
       });
       list.innerHTML = rows;
@@ -2496,9 +2508,9 @@
     var BK = 'yaule_badges';
     var cur = parseInt(localStorage.getItem(KEY) || '0', 10) || 0;
     var badges = [
-      { k: 'stars.b1', fb: '观星者', n: 100, d: 'stars.b1d', fd: '第一百颗星落下时，你成了这片夜空的常客。', icon: '<svg viewBox="0 0 96 96" aria-hidden="true"><circle cx="48" cy="48" r="44" fill="none" stroke="rgba(56,189,248,.4)" stroke-width="2" stroke-dasharray="6 6"/><circle cx="48" cy="48" r="30" fill="rgba(56,189,248,.08)"/><path d="M48 20l6.4 13.8 15 1.4-11.2 9.8 3.4 14.8L48 51.6l-13.6 8.2 3.4-14.8-11.2-9.8 15-1.4z" fill="#38bdf8"/><circle cx="74" cy="22" r="2.6" fill="#7dd3fc"/><circle cx="24" cy="30" r="2" fill="#7dd3fc"/><circle cx="30" cy="68" r="2.2" fill="#7dd3fc"/></svg>' },
-      { k: 'stars.b2', fb: '追月人', n: 1000, d: 'stars.b2d', fd: '一千颗星，月亮记住了你的名字。', icon: '<svg viewBox="0 0 96 96" aria-hidden="true"><circle cx="48" cy="48" r="44" fill="none" stroke="rgba(56,189,248,.4)" stroke-width="2"/><path d="M58 22a26 26 0 1 0 16 42 32 32 0 0 1-16-42z" fill="#38bdf8"/><circle cx="24" cy="22" r="2.4" fill="#7dd3fc"/><circle cx="74" cy="38" r="2.2" fill="#7dd3fc"/><circle cx="20" cy="56" r="1.8" fill="#7dd3fc"/><circle cx="76" cy="70" r="2" fill="#7dd3fc"/></svg>' },
-      { k: 'stars.b3', fb: '失眠十级', n: 10000, d: 'stars.b3d', fd: '一万颗星，失眠十级，实至名归。', icon: '<svg viewBox="0 0 96 96" aria-hidden="true"><circle cx="48" cy="48" r="44" fill="none" stroke="rgba(56,189,248,.4)" stroke-width="2" stroke-dasharray="4 6"/><path d="M42 28a22 22 0 1 0 15 36 27 27 0 0 1-15-36z" fill="#38bdf8"/><text x="48" y="66" text-anchor="middle" font-size="26" font-weight="800" fill="#0b1526" font-family="Arial, sans-serif">10</text></svg>' }
+      { k: 'stars.b1', fb: '观星者', n: 100, d: 'badge.b1d', fd: '第一百颗星落下时，你成了这片夜空的常客。', icon: '<svg viewBox="0 0 96 96" aria-hidden="true"><circle cx="48" cy="48" r="44" fill="none" stroke="rgba(56,189,248,.4)" stroke-width="2" stroke-dasharray="6 6"/><circle cx="48" cy="48" r="30" fill="rgba(56,189,248,.08)"/><path d="M48 20l6.4 13.8 15 1.4-11.2 9.8 3.4 14.8L48 51.6l-13.6 8.2 3.4-14.8-11.2-9.8 15-1.4z" fill="#38bdf8"/><circle cx="74" cy="22" r="2.6" fill="#7dd3fc"/><circle cx="24" cy="30" r="2" fill="#7dd3fc"/><circle cx="30" cy="68" r="2.2" fill="#7dd3fc"/></svg>' },
+      { k: 'stars.b2', fb: '追月人', n: 1000, d: 'badge.b2d', fd: '一千颗星，月亮记住了你的名字。', icon: '<svg viewBox="0 0 96 96" aria-hidden="true"><circle cx="48" cy="48" r="44" fill="none" stroke="rgba(56,189,248,.4)" stroke-width="2"/><path d="M58 22a26 26 0 1 0 16 42 32 32 0 0 1-16-42z" fill="#38bdf8"/><circle cx="24" cy="22" r="2.4" fill="#7dd3fc"/><circle cx="74" cy="38" r="2.2" fill="#7dd3fc"/><circle cx="20" cy="56" r="1.8" fill="#7dd3fc"/><circle cx="76" cy="70" r="2" fill="#7dd3fc"/></svg>' },
+      { k: 'stars.b3', fb: '失眠十级', n: 10000, d: 'badge.b3d', fd: '一万颗星，失眠十级，实至名归。', icon: '<svg viewBox="0 0 96 96" aria-hidden="true"><circle cx="48" cy="48" r="44" fill="none" stroke="rgba(56,189,248,.4)" stroke-width="2" stroke-dasharray="4 6"/><path d="M42 28a22 22 0 1 0 15 36 27 27 0 0 1-15-36z" fill="#38bdf8"/><text x="48" y="66" text-anchor="middle" font-size="26" font-weight="800" fill="#0b1526" font-family="Arial, sans-serif">10</text></svg>' }
     ];
     function L(k) { var L2 = window.YAULE_LANG || 'zh', d = window.I18N || {}; return (d[L2] && d[L2][k]) || ''; }
     function toast(t) { var el = document.getElementById('toast'); if (el) { el.textContent = t; el.classList.add('show'); setTimeout(function () { el.classList.remove('show'); }, 1700); } }
@@ -2972,6 +2984,16 @@
       var v = (window.YAULE_LANG === 'en') ? GREETING_EN : GREETING;
       if (v[window.__festName]) { gEl.textContent = v[window.__festName]; gEl.classList.add('show'); }
     };
+    window.__setHour = function () {
+      var hEl = document.getElementById('hourGreet');
+      if (!hEl) return;
+      var h = new Date().getHours();
+      var k = h < 5 ? 'hero.hour1' : h < 9 ? 'hero.hour2' : h < 17 ? 'hero.hour3' : h < 21 ? 'hero.hour4' : 'hero.hour5';
+      var Lv = (window.YAULE_LANG === 'en') ? 'en' : 'zh';
+      var d = window.I18N || {};
+      hEl.textContent = (d[Lv] && d[Lv][k]) || '';
+    };
+    if (window.__setHour) window.__setHour();
     var FEST = {
       '春节': ['lantern', 'firework', 'lantern', 'couplet'],
       '除夕': ['lantern', 'firework'],
@@ -3021,11 +3043,36 @@
       .catch(function () {});
   })();
 
-  /* ========== 页面停留计时 ========== */
+  /* ========== 页面停留计时 + 守夜徽章 ========== */
   (function () {
     var el = document.getElementById('stayTime');
     if (!el) return;
     var start = Date.now();
+    var BK2 = 'yaule_badges';
+    function L2(k) { var Lv = window.YAULE_LANG || 'zh', d2 = window.I18N || {}; return (d2[Lv] && d2[Lv][k]) || ''; }
+    var watchBadges = [
+      { k: 'badge.w1', fb: '守夜人', min: 1, watch: true, icon: '<svg viewBox="0 0 96 96" aria-hidden="true"><circle cx="48" cy="48" r="44" fill="none" stroke="rgba(56,189,248,.4)" stroke-width="2" stroke-dasharray="6 6"/><path d="M58 22a26 26 0 1 0 14 44 32 32 0 0 1-14-44z" fill="#38bdf8"/><circle cx="22" cy="26" r="2.4" fill="#7dd3fc"/><circle cx="74" cy="46" r="2" fill="#7dd3fc"/><circle cx="40" cy="70" r="1.8" fill="#7dd3fc"/></svg>' },
+      { k: 'badge.w2', fb: '夜猫子', min: 5, watch: true, icon: '<svg viewBox="0 0 96 96" aria-hidden="true"><circle cx="48" cy="48" r="44" fill="none" stroke="rgba(56,189,248,.4)" stroke-width="2" stroke-dasharray="4 6"/><path d="M50 20a30 30 0 1 0 16 52 34 34 0 0 1-16-52z" fill="#38bdf8"/><circle cx="35" cy="46" r="9" fill="rgba(125,211,252,.55)"/><circle cx="35" cy="46" r="4" fill="#0b1526"/><circle cx="65" cy="46" r="9" fill="rgba(125,211,252,.55)"/><circle cx="65" cy="46" r="4" fill="#0b1526"/><path d="M38 66q10 8 20 0" stroke="#7dd3fc" stroke-width="3" fill="none" stroke-linecap="round"/></svg>' }
+    ];
+    if (window.__badges) window.__badges = window.__badges.concat(watchBadges);
+    function claimWatch(m) {
+      if (typeof m !== 'number' || m < 0) m = Math.floor((Date.now() - start) / 60000);
+      var got = {};
+      try { got = JSON.parse(localStorage.getItem(BK2) || '{}'); } catch (e) {}
+      var newest = null;
+      var now = new Date();
+      var ts = now.getFullYear() + '-' + String(now.getMonth() + 1).padStart(2, '0') + '-' + String(now.getDate()).padStart(2, '0') + ' ' + String(now.getHours()).padStart(2, '0') + ':' + String(now.getMinutes()).padStart(2, '0');
+      watchBadges.forEach(function (b) { if (m >= b.min && !got[b.k]) { got[b.k] = { t: ts, s: m }; newest = b; } });
+      if (newest) {
+        try { localStorage.setItem(BK2, JSON.stringify(got)); } catch (e) {}
+        if (window.__showBadge) window.__showBadge({
+          icon: newest.icon,
+          name: (L2(newest.k) || newest.fb) + ' · ' + m + ' ' + (L2('badge.min') || '分钟'),
+          desc: L2(newest.k + 'd') || newest.fb
+        });
+      }
+    }
+    window.__watchTest = claimWatch;
     function update() {
       var sec = Math.floor((Date.now() - start) / 1000);
       var m = Math.floor(sec / 60);
@@ -3033,6 +3080,7 @@
       el.innerHTML = (window.YAULE_LANG === 'en')
         ? 'Stayed <b>' + m + '</b> min <b>' + s + '</b> sec'
         : '已停留 <b>' + m + '</b> 分 <b>' + s + '</b> 秒';
+      claimWatch(m);
     }
     update();
     setInterval(update, 1000);
@@ -3623,6 +3671,11 @@
   /* ========== 整站 i18n：中英切换（3 秒伪进度条） ========== */
   var I18N = {
     zh: {
+      'hero.hour1': '凌晨好，失眠的人有星星作伴。',
+      'hero.hour2': '清晨好，晨光正爬上你的窗台。',
+      'hero.hour3': '午后好，泡杯咖啡再慢慢逛。',
+      'hero.hour4': '黄昏好，天边开始泛起青色。',
+      'hero.hour5': '深夜好，今晚的月色替你说话。',
       'hero.intro': '这里是我的个人小角落，记录着咖啡、音乐、游戏与作品。不紧不慢，慢慢翻就好。',
       'hero.scroll': '向下滑动',
       'enter.kicker': 'PERSONAL SPACE',
@@ -3641,7 +3694,8 @@
       'stars.b1': '观星者', 'stars.b2': '追月人', 'stars.b3': '失眠十级',
       'moon.n0': '新月', 'moon.n1': '娥眉月', 'moon.n2': '上弦月', 'moon.n3': '盈凸月', 'moon.n4': '满月', 'moon.n5': '亏凸月', 'moon.n6': '下弦月', 'moon.n7': '残月',
       'world.h2': '世界失眠时钟', 'world.desc': '看看地球另一边的夜，谁还醒着。', 'world.awake': '还没睡', 'world.asleep': '已入睡',
-      'badge.title': '获得勋章', 'badge.get': '收下星光', 'badge.time': '达成于', 'badge.hist': '勋章墙', 'badge.none': '还没有获得勋章，数到一百颗星再来看看。', 'badge.back': '返回',
+      'badge.title': '获得勋章', 'badge.get': '收下星光', 'badge.time': '达成于', 'badge.hist': '勋章墙', 'badge.none': '还没有获得勋章，数到一百颗星再来看看。', 'badge.back': '返回', 'badge.min': '分钟',
+      'badge.w1': '守夜人', 'badge.w1d': '陪着这页页面到凌晨，守夜人的灯交到你手上了。', 'badge.w2': '夜猫子', 'badge.w2d': '停留满五分钟，夜色已经认得你了。',
       'badge.b1d': '第一百颗星落下时，你成了这片夜空的常客。', 'badge.b2d': '一千颗星，月亮记住了你的名字。', 'badge.b3d': '一万颗星，失眠十级，实至名归。',
       'light.btn': '留一盏灯', 'light.night': '今夜已留', 'light.total': '累计', 'light.got': '盏', 'light.done': '灯已亮起',
       'world.c0': '北京', 'world.c1': '东京', 'world.c2': '新加坡', 'world.c3': '悉尼', 'world.c4': '伦敦', 'world.c5': '巴黎', 'world.c6': '纽约', 'world.c7': '洛杉矶',
@@ -3685,6 +3739,11 @@
       'loading.hint': '稍等片刻，马上就好…', 'loading.skip1': '长按加速', 'loading.skip2': '按住不放，加载更快'
     },
     en: {
+      'hero.hour1': 'Good early hours — the stars keep you company.',
+      'hero.hour2': 'Good morning — light is creeping up your windowsill.',
+      'hero.hour3': 'Good afternoon — grab a coffee and take it slow.',
+      'hero.hour4': 'Good dusk — the sky is turning teal.',
+      'hero.hour5': 'Late night — let the moon speak for you tonight.',
       'hero.intro': 'This is my little corner — coffee, music, games and works. Take it slow.',
       'hero.scroll': 'Scroll down',
       'enter.kicker': 'PERSONAL SPACE',
@@ -3703,7 +3762,8 @@
       'stars.b1': 'Stargazer', 'stars.b2': 'Moonchaser', 'stars.b3': 'Insomniac Lv.10',
       'moon.n0': 'New Moon', 'moon.n1': 'Waxing Crescent', 'moon.n2': 'First Quarter', 'moon.n3': 'Waxing Gibbous', 'moon.n4': 'Full Moon', 'moon.n5': 'Waning Gibbous', 'moon.n6': 'Last Quarter', 'moon.n7': 'Waning Crescent',
       'world.h2': 'World Insomnia Clock', 'world.desc': 'See whose night is still awake across the globe.', 'world.awake': 'Awake', 'world.asleep': 'Asleep',
-      'badge.title': 'Badge Unlocked', 'badge.get': 'Claim the light', 'badge.time': 'Unlocked', 'badge.hist': 'Badge Wall', 'badge.none': 'No badges yet. Count to 100 stars and come back.', 'badge.back': 'Back',
+      'badge.title': 'Badge Unlocked', 'badge.get': 'Claim the light', 'badge.time': 'Unlocked', 'badge.hist': 'Badge Wall', 'badge.none': 'No badges yet. Count to 100 stars and come back.', 'badge.back': 'Back', 'badge.min': 'min',
+      'badge.w1': 'Night Watcher', 'badge.w1d': "You kept this page company into the early hours — the watcher's lamp is yours.", 'badge.w2': 'Night Owl', 'badge.w2d': 'Five minutes in — the night knows you now.',
       'badge.b1d': 'When the 100th star fell, you became a regular of this night sky.', 'badge.b2d': 'A thousand stars — the moon now knows your name.', 'badge.b3d': 'Ten thousand stars. Insomnia Level 10 — earned, not given.',
       'light.btn': 'Leave a light', 'light.night': 'Lit tonight', 'light.total': 'Total', 'light.got': 'lights', 'light.done': 'A light lit',
       'world.c0': 'Beijing', 'world.c1': 'Tokyo', 'world.c2': 'Singapore', 'world.c3': 'Sydney', 'world.c4': 'London', 'world.c5': 'Paris', 'world.c6': 'New York', 'world.c7': 'Los Angeles',
@@ -3788,6 +3848,7 @@
     if (window.__renderBucket) window.__renderBucket();
     if (window.__reQuote) window.__reQuote();
     if (window.__setFest) window.__setFest();
+    if (window.__setHour) window.__setHour();
     var bm = document.getElementById('btnMore');
     if (bm) {
       var hiddenN = document.querySelectorAll('.works-grid .card.hidden').length;
