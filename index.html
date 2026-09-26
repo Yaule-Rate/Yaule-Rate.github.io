@@ -1317,9 +1317,8 @@
   .light-btn svg { width: 15px; height: 15px; }
 
   /* ===== 勋章弹窗 ===== */
-  .badge-modal[hidden] { display: none; }
-  .badge-modal { position: fixed; inset: 0; z-index: 10001; display: flex; align-items: center; justify-content: center; background: rgba(4,12,22,.6); backdrop-filter: blur(8px); opacity: 0; pointer-events: none; transition: opacity .28s ease; }
-  .badge-modal.show { opacity: 1; pointer-events: auto; }
+  .badge-modal { position: fixed; inset: 0; z-index: 10001; display: flex; align-items: center; justify-content: center; background: rgba(4,12,22,.6); backdrop-filter: blur(8px); opacity: 0; visibility: hidden; pointer-events: none; transition: opacity .28s ease, visibility .28s; }
+  .badge-modal.show { opacity: 1; visibility: visible; pointer-events: auto; }
   .badge-card { background: linear-gradient(165deg, #0d1b2e, #10283f 70%, #0a1626); border: 1px solid rgba(56,189,248,.35); border-radius: 24px; padding: 34px 42px; text-align: center; width: 330px; transform: translateY(18px) scale(.95); transition: transform .3s ease; box-shadow: 0 0 70px rgba(56,189,248,.22); position: relative; overflow: hidden; }
   .badge-card::before { content: ""; position: absolute; top: -70px; left: 50%; transform: translateX(-50%); width: 200px; height: 130px; background: radial-gradient(circle, rgba(56,189,248,.35), transparent 70%); pointer-events: none; }
   .badge-modal.show .badge-card { transform: none; }
@@ -1330,6 +1329,19 @@
   .badge-time { font-size: 12px; color: var(--ink-2); margin-top: 10px; opacity: .75; font-variant-numeric: tabular-nums; }
   .badge-btn { margin-top: 20px; border: 0; background: linear-gradient(90deg, var(--accent), var(--accent-2)); color: #fff; border-radius: 999px; padding: 10px 30px; font-size: 14px; font-weight: 700; cursor: pointer; font-family: inherit; transition: all .18s ease; }
   .badge-btn:hover { transform: translateY(-1px); box-shadow: 0 8px 24px rgba(56,189,248,.3); }
+  .badge-card::after { content: ""; position: absolute; inset: 0; border-radius: inherit; background-image: radial-gradient(circle, rgba(186,230,253,.5) 1px, transparent 1.3px), radial-gradient(circle, rgba(125,211,252,.3) 1px, transparent 1.5px); background-size: 92px 92px, 136px 136px; background-position: 8px 18px, 62px 82px; opacity: .4; pointer-events: none; }
+  .badge-history-btn { position: absolute; top: 14px; right: 14px; z-index: 3; width: 34px; height: 34px; border-radius: 11px; border: 1px solid rgba(56,189,248,.28); background: rgba(56,189,248,.08); color: #7dd3fc; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all .18s ease; }
+  .badge-history-btn:hover { background: rgba(56,189,248,.18); transform: translateY(-1px); box-shadow: 0 4px 14px rgba(56,189,248,.25); }
+  .badge-history-btn svg { width: 17px; height: 17px; }
+  .badge-hist-title { font-size: 16px; font-weight: 800; color: var(--ink); font-family: "Noto Serif SC", Georgia, serif; margin-top: 4px; }
+  .badge-hist-item { display: flex; align-items: center; gap: 12px; background: rgba(56,189,248,.05); border: 1px solid rgba(56,189,248,.16); border-radius: 14px; padding: 10px 12px; margin-top: 10px; text-align: left; }
+  .badge-hist-item svg { width: 38px; height: 38px; flex: none; filter: drop-shadow(0 0 8px rgba(56,189,248,.35)); }
+  .badge-hist-item b { display: block; font-size: 14px; color: var(--ink); }
+  .badge-hist-item span { display: block; font-size: 11.5px; color: var(--ink-2); margin-top: 2px; font-variant-numeric: tabular-nums; }
+  .badge-hist-empty { font-size: 13px; color: var(--ink-2); margin-top: 26px; line-height: 1.7; }
+  .badge-btn.ghost { background: transparent; border: 1px solid rgba(56,189,248,.38); color: var(--accent); }
+  .badge-btn.ghost:hover { background: rgba(56,189,248,.1); box-shadow: none; }
+
 
   /* ===== 世界失眠时钟 ===== */
   .world-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
@@ -1904,9 +1916,27 @@
   </div>
   <span class="footer-word" aria-hidden="true">Yaule</span>
 </footer>
-<div class="badge-modal" id="badgeModal" hidden>
+<div class="badge-modal" id="badgeModal">
   <div class="badge-card">
-    <div class="badge-icon" id="badgeIcon"></div>
+    <button class="badge-history-btn" id="badgeHistBtn" aria-label="Badge wall">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="8.5"/><path d="M12 7v5l3.2 2"/></svg>
+    </button>
+    <div id="badgeMain">
+      <div class="badge-icon" id="badgeIcon"></div>
+      <p class="badge-kicker" data-i18n="badge.title">获得勋章</p>
+      <h3 class="badge-name" id="badgeName"></h3>
+      <p class="badge-desc" id="badgeDesc"></p>
+      <p class="badge-time" id="badgeTime"></p>
+      <button class="badge-btn" id="badgeClose"><span data-i18n="badge.get">收下星光</span></button>
+    </div>
+    <div id="badgeHist" hidden>
+      <p class="badge-hist-title" data-i18n="badge.hist">勋章墙</p>
+      <div id="badgeHistList"></div>
+      <p class="badge-hist-empty" id="badgeHistEmpty" hidden data-i18n="badge.none">还没有获得勋章</p>
+      <button class="badge-btn ghost" id="badgeHistBack"><span data-i18n="badge.back">返回</span></button>
+    </div>
+  </div>
+</div>
     <p class="badge-kicker" data-i18n="badge.title">获得勋章</p>
     <h3 class="badge-name" id="badgeName"></h3>
     <p class="badge-desc" id="badgeDesc"></p>
@@ -2387,13 +2417,17 @@
   (function () {
     var m = document.getElementById('badgeModal');
     if (!m) return;
+    var main = document.getElementById('badgeMain');
+    var hist = document.getElementById('badgeHist');
+    var histBtn = document.getElementById('badgeHistBtn');
+    var back = document.getElementById('badgeHistBack');
     function show(b) {
       document.getElementById('badgeIcon').innerHTML = b.icon;
       document.getElementById('badgeName').textContent = b.name;
       document.getElementById('badgeDesc').textContent = b.desc;
       var d = new Date();
       document.getElementById('badgeTime').textContent = (window.YAULE_LANG === 'en' ? 'Unlocked ' : '达成于 ') + d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0') + ' ' + String(d.getHours()).padStart(2, '0') + ':' + String(d.getMinutes()).padStart(2, '0');
-      m.hidden = false;
+      hist.hidden = true; main.hidden = false; histBtn.style.display = 'flex';
       m.classList.remove('show');
       void m.offsetWidth;
       m.classList.add('show');
@@ -2401,12 +2435,35 @@
     }
     function hide() {
       m.classList.remove('show');
-      setTimeout(function () { m.hidden = true; }, 280);
       document.body.style.overflow = '';
     }
+    function renderHist(badges, L) {
+      var got = {};
+      try { got = JSON.parse(localStorage.getItem('yaule_badges') || '{}'); } catch (e) {}
+      var list = document.getElementById('badgeHistList');
+      var empty = document.getElementById('badgeHistEmpty');
+      var rows = '', n = 0;
+      badges.forEach(function (b) {
+        var g = got[b.k];
+        if (!g) return;
+        n++;
+        var t = (typeof g === 'object' && g.t) ? g.t : '——';
+        var s = (typeof g === 'object' && g.s) ? (' · ' + g.s + ' ' + (L('stars.got') || '颗')) : '';
+        rows += '<div class="badge-hist-item">' + b.icon + '<div><b>' + (L(b.k) || b.fb) + '</b><span>' + (L('badge.time') || '达成于') + ' ' + t + s + '</span></div></div>';
+      });
+      list.innerHTML = rows;
+      empty.hidden = n > 0;
+    }
+    histBtn.addEventListener('click', function () {
+      renderHist(window.__badges || [], function (k) { var L2 = window.YAULE_LANG || 'zh', d = window.I18N || {}; return (d[L2] && d[L2][k]) || ''; });
+      hist.hidden = false; main.hidden = true; histBtn.style.display = 'none';
+    });
+    back.addEventListener('click', function () {
+      hist.hidden = true; main.hidden = false; histBtn.style.display = 'flex';
+    });
     document.getElementById('badgeClose').addEventListener('click', hide);
     m.addEventListener('click', function (e) { if (e.target === m) hide(); });
-    document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && !m.hidden) hide(); });
+    document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && m.classList.contains('show')) hide(); });
     window.__showBadge = show;
   })();
 
@@ -2444,7 +2501,9 @@
       var got = {};
       try { got = JSON.parse(localStorage.getItem(BK) || '{}'); } catch (e) {}
       var newest = null;
-      badges.forEach(function (b) { if (cur >= b.n && !got[b.k]) { got[b.k] = 1; newest = b; } });
+      var now = new Date();
+      var ts = now.getFullYear() + '-' + String(now.getMonth() + 1).padStart(2, '0') + '-' + String(now.getDate()).padStart(2, '0') + ' ' + String(now.getHours()).padStart(2, '0') + ':' + String(now.getMinutes()).padStart(2, '0');
+      badges.forEach(function (b) { if (cur >= b.n && !got[b.k]) { got[b.k] = { t: ts, s: cur }; newest = b; } });
       if (newest) {
         try { localStorage.setItem(BK, JSON.stringify(got)); } catch (e) {}
         if (window.__showBadge) window.__showBadge({
@@ -2454,6 +2513,7 @@
         });
       }
     }
+    window.__badges = badges;
     function addStar(fromLight) {
       cur++;
       try { localStorage.setItem(KEY, String(cur)); } catch (e) {}
@@ -3537,7 +3597,7 @@
       'stars.b1': '观星者', 'stars.b2': '追月人', 'stars.b3': '失眠十级',
       'moon.n0': '新月', 'moon.n1': '娥眉月', 'moon.n2': '上弦月', 'moon.n3': '盈凸月', 'moon.n4': '满月', 'moon.n5': '亏凸月', 'moon.n6': '下弦月', 'moon.n7': '残月',
       'world.h2': '世界失眠时钟', 'world.desc': '看看地球另一边的夜，谁还醒着。', 'world.awake': '还没睡', 'world.asleep': '已入睡',
-      'badge.title': '获得勋章', 'badge.get': '收下星光', 'badge.time': '达成于',
+      'badge.title': '获得勋章', 'badge.get': '收下星光', 'badge.time': '达成于', 'badge.hist': '勋章墙', 'badge.none': '还没有获得勋章，数到一百颗星再来看看。', 'badge.back': '返回',
       'badge.b1d': '第一百颗星落下时，你成了这片夜空的常客。', 'badge.b2d': '一千颗星，月亮记住了你的名字。', 'badge.b3d': '一万颗星，失眠十级，实至名归。',
       'light.btn': '留一盏灯', 'light.night': '今夜已留', 'light.total': '累计', 'light.got': '盏', 'light.done': '灯已亮起',
       'world.c0': '北京', 'world.c1': '东京', 'world.c2': '新加坡', 'world.c3': '悉尼', 'world.c4': '伦敦', 'world.c5': '巴黎', 'world.c6': '纽约', 'world.c7': '洛杉矶',
@@ -3599,7 +3659,7 @@
       'stars.b1': 'Stargazer', 'stars.b2': 'Moonchaser', 'stars.b3': 'Insomniac Lv.10',
       'moon.n0': 'New Moon', 'moon.n1': 'Waxing Crescent', 'moon.n2': 'First Quarter', 'moon.n3': 'Waxing Gibbous', 'moon.n4': 'Full Moon', 'moon.n5': 'Waning Gibbous', 'moon.n6': 'Last Quarter', 'moon.n7': 'Waning Crescent',
       'world.h2': 'World Insomnia Clock', 'world.desc': 'See whose night is still awake across the globe.', 'world.awake': 'Awake', 'world.asleep': 'Asleep',
-      'badge.title': 'Badge Unlocked', 'badge.get': 'Claim the light', 'badge.time': 'Unlocked',
+      'badge.title': 'Badge Unlocked', 'badge.get': 'Claim the light', 'badge.time': 'Unlocked', 'badge.hist': 'Badge Wall', 'badge.none': 'No badges yet. Count to 100 stars and come back.', 'badge.back': 'Back',
       'badge.b1d': 'When the 100th star fell, you became a regular of this night sky.', 'badge.b2d': 'A thousand stars — the moon now knows your name.', 'badge.b3d': 'Ten thousand stars. Insomnia Level 10 — earned, not given.',
       'light.btn': 'Leave a light', 'light.night': 'Lit tonight', 'light.total': 'Total', 'light.got': 'lights', 'light.done': 'A light lit',
       'world.c0': 'Beijing', 'world.c1': 'Tokyo', 'world.c2': 'Singapore', 'world.c3': 'Sydney', 'world.c4': 'London', 'world.c5': 'Paris', 'world.c6': 'New York', 'world.c7': 'Los Angeles',
