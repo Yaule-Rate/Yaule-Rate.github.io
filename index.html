@@ -1288,29 +1288,6 @@
   :root[data-theme="dark"] .hm-cell.l0 { background: #23262b; }
   .hm-total { font-size: 13px; color: var(--ink-2); }
 
-  /* ===== 访客留言板 ===== */
-  .gb-wrap { max-width: 720px; }
-  .gb-form { display: flex; flex-direction: column; gap: 10px; margin-bottom: 10px; }
-  .gb-form input, .gb-form textarea {
-    width: 100%; padding: 11px 14px; border-radius: 10px; border: 1px solid var(--line);
-    background: var(--card-bg); color: var(--ink); font: inherit; box-sizing: border-box;
-  }
-  .gb-form input:focus, .gb-form textarea:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px rgba(2,132,199,.12); }
-  .gb-form button {
-    align-self: flex-start; padding: 9px 22px; border: 0; border-radius: 10px; cursor: pointer;
-    background: var(--accent); color: #fff; font: inherit; font-weight: 600; transition: transform .15s ease, opacity .15s ease;
-  }
-  .gb-form button:hover { transform: translateY(-1px); }
-  .gb-form button:disabled { opacity: .5; cursor: not-allowed; transform: none; }
-  .gb-hint { min-height: 18px; font-size: 12px; color: var(--accent); margin-bottom: 4px; }
-  .gb-hint.err { color: #dc2626; }
-  .gb-list { display: flex; flex-direction: column; gap: 10px; }
-  .gb-item { padding: 12px 16px; border: 1px solid var(--line); border-radius: 12px; background: var(--card-bg); }
-  .gb-item .gb-head { display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--ink-2); margin-bottom: 6px; }
-  .gb-item .gb-head b { color: var(--accent); }
-  .gb-item .gb-body { font-size: 14px; line-height: 1.7; color: var(--ink); word-break: break-word; white-space: pre-wrap; }
-  .gb-load, .gb-empty { font-size: 13px; color: var(--ink-2); }
-
   /* ===== 深夜特调 ===== */
   .night-sky { position: fixed; inset: 0; z-index: 1; pointer-events: none; overflow: hidden; }
   .night-star {
@@ -1772,28 +1749,6 @@
       </a>
     </div>
     <div class="vs-log" id="mcLog"></div>
-  </div>
-</section>
-
-<!-- 板块 8.5：访客留言板（GitHub Issues 驱动，防注入 + 违禁词过滤） -->
-<section class="section alt" id="guestbook">
-  <div class="wrap">
-    <div class="section-head">
-      <p class="kicker">GUESTBOOK</p>
-      <h2 data-i18n="guestbook.h2">访客留言板</h2>
-      <p class="desc" data-i18n="guestbook.desc">来过的人都可以留下一句话。提交后跳转 GitHub 确认，内容同步显示在这里。</p>
-    </div>
-    <div class="gb-wrap">
-      <form class="gb-form" id="gbForm">
-        <input type="text" id="gbName" maxlength="20" autocomplete="nickname" data-i18n="guestbook.name" data-i18n-ph="guestbook.name">
-        <textarea id="gbText" maxlength="300" rows="3" data-i18n="guestbook.text" data-i18n-ph="guestbook.text"></textarea>
-        <button type="submit" id="gbSubmit" data-i18n="guestbook.submit">写下留言</button>
-      </form>
-      <p class="gb-hint" id="gbHint"></p>
-      <div class="gb-list" id="gbList">
-        <p class="gb-load" data-i18n="guestbook.load">正在读取留言…</p>
-      </div>
-    </div>
   </div>
 </section>
 
@@ -3026,86 +2981,6 @@
     }
   })();
 
-  /* ========== 访客留言板（GitHub Issues 驱动，防注入 + 违禁词） ========== */
-  (function () {
-    var REPO = 'Yaule-Rate/Yaule-Rate.github.io';
-    var list = document.getElementById('gbList');
-    var form = document.getElementById('gbForm');
-    var hint = document.getElementById('gbHint');
-    var nameEl = document.getElementById('gbName');
-    var textEl = document.getElementById('gbText');
-    var badWords = ['色情', '赌博', '博彩', '诈骗', '传销', '刷单', '毒品', '冰毒', '海洛因', '大麻', '违禁品', '假币', '枪支', '裸聊', '约炮', '援交', '代购'];
-    function hasBad(t) {
-      var low = String(t || '').toLowerCase();
-      for (var i = 0; i < badWords.length; i++) { if (low.indexOf(badWords[i]) !== -1) return true; }
-      if (/<script|javascript:|onerror=|onclick=|<iframe|<svg/i.test(low)) return true;
-      return false;
-    }
-    function esc(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
-    function fmtTime(t) {
-      var d = new Date(t);
-      if (isNaN(d.getTime())) return '';
-      return d.toLocaleDateString() + ' ' + d.toTimeString().slice(0, 5);
-    }
-    function syncNewI18n() {
-      var L = window.YAULE_LANG;
-      if (!L || !window.I18N) return;
-      document.querySelectorAll('#gbList [data-i18n]').forEach(function (el) {
-        var k2 = el.getAttribute('data-i18n');
-        if (k2 in window.I18N[L]) el.textContent = window.I18N[L][k2];
-      });
-    }
-    function load() {
-      fetch('https://api.github.com/repos/' + REPO + '/issues?state=all&sort=created&direction=desc&per_page=20')
-        .then(function (r) { if (!r.ok) throw new Error('http'); return r.json(); })
-        .then(function (arr) {
-          var msgs = (arr || []).filter(function (it) { return it && it.title && it.title.indexOf('[留言]') === 0; });
-          if (!msgs.length) {
-            list.innerHTML = '<p class="gb-empty" data-i18n="guestbook.empty">还没有留言，来做第一个吧。</p>';
-            syncNewI18n();
-            return;
-          }
-          var html = '';
-          msgs.forEach(function (m) {
-            html += '<div class="gb-item"><div class="gb-head"><b>' + esc(m.user ? m.user.login : 'guest') + '</b><span>' + esc(fmtTime(m.created_at)) + '</span></div><div class="gb-body">' + esc(m.body || '') + '</div></div>';
-          });
-          list.innerHTML = html;
-        })
-        .catch(function () {
-          list.innerHTML = '<p class="gb-empty" data-i18n="guestbook.loadfail">暂时读不到留言（网络或接口限制），稍后再来看看。</p>';
-          syncNewI18n();
-        });
-    }
-    var CD_KEY = 'yaule_gb_cd';
-    form.addEventListener('submit', function (e) {
-      e.preventDefault();
-      var en = window.YAULE_LANG === 'en';
-      var name = String(nameEl.value || '').trim().slice(0, 20);
-      var body = String(textEl.value || '').trim().slice(0, 300);
-      if (!name) { hint.textContent = en ? 'Please enter a nickname.' : '请先填写昵称。'; hint.className = 'gb-hint err'; return; }
-      if (!body) { hint.textContent = en ? 'Please write something.' : '请写下想说的话。'; hint.className = 'gb-hint err'; return; }
-      if (hasBad(name) || hasBad(body)) { hint.textContent = en ? 'Contains banned words, please rewrite.' : '内容包含违禁词，请修改后重试。'; hint.className = 'gb-hint err'; return; }
-      var cd = 0;
-      try { cd = parseInt(localStorage.getItem(CD_KEY) || '0', 10) || 0; } catch (err) {}
-      if (Date.now() < cd) {
-        var left = Math.ceil((cd - Date.now()) / 1000);
-        hint.textContent = en ? 'Please wait ' + left + 's before the next message.' : '请 ' + left + ' 秒后再留言。';
-        hint.className = 'gb-hint err';
-        return;
-      }
-      try { localStorage.setItem(CD_KEY, String(Date.now() + 30000)); } catch (err) {}
-      var title = '[留言] ' + name;
-      var issueBody = body + '\n\n---\nvia guestbook on ' + new Date().toLocaleString();
-      var url = 'https://github.com/' + REPO + '/issues/new?title=' + encodeURIComponent(title) + '&body=' + encodeURIComponent(issueBody);
-      var w = window.open(url, '_blank');
-      if (w) w.opener = null;
-      hint.textContent = en ? 'Opened GitHub. Sign in and click \"Submit new issue\" to publish.' : '已跳转 GitHub，登录后点击「Submit new issue」即可发布。';
-      hint.className = 'gb-hint';
-      textEl.value = '';
-    });
-    load();
-  })();
-
   /* ========== 开源足迹 · GitHub 贡献热力图（官方 API 跨仓库聚合） ========== */
   (function () {
     var grid = document.getElementById('hmGrid');
@@ -3389,15 +3264,12 @@
       'footer.works': '作品', 'footer.space2': '失眠夜个人空间', 'footer.awards': '荣誉奖项', 'footer.contactme': '联系我',
       'footer.contact': '联系', 'footer.email': '邮箱', 'footer.rss': 'RSS 订阅', 'footer.visit1': '本站访问', 'footer.visit2': ' 次',
       'heatmap.h2': '开源足迹', 'heatmap.desc': '过去一年在 GitHub 上的每一天，青色越深代表越活跃。',
-      'guestbook.h2': '访客留言板', 'guestbook.desc': '来过的人都可以留下一句话。提交后跳转 GitHub 确认，内容同步显示在这里。',
-      'guestbook.name': '昵称', 'guestbook.text': '想说的话（300 字以内）', 'guestbook.submit': '写下留言',
-      'guestbook.load': '正在读取留言…', 'guestbook.empty': '还没有留言，来做第一个吧。', 'guestbook.loadfail': '暂时读不到留言（网络或接口限制），稍后再来看看。',
       'hero.quoteTitle': '换一句',
       'life.c1': '瑞幸咖啡', 'life.tag1': '续命中', 'life.un2': '杯',
       'life.d1': '从第一杯咖啡开始，悄悄记录每一次续命时刻',
       'life.d2': '美式、拿铁、生椰……每一杯都是生活的续命剂。',
       'life.c2': '网易云音乐', 'life.tag2': '循环播放中', 'life.un1': '首',
-      'life.h1': '累计收听', 'life.h2': '+ 小时，旋律里藏着无数个夜晚',
+      'life.h1': '累计收听', 'life.h2': '+ 小时 · 那些旋律陪我度过的夜晚',
       'life.d3': '深夜的旋律，陪我度过每一个失眠夜。',
       'life.song': '今日推荐：', 'life.songload': '正在挑选…',
       'mc.sub1': '布吉岛', 'mc.sub2': '花雨亭',
@@ -3445,9 +3317,6 @@
       'footer.works': 'Works', 'footer.space2': 'Insomnia Night Space', 'footer.awards': 'Awards', 'footer.contactme': 'Contact',
       'footer.contact': 'Contact', 'footer.email': 'Email', 'footer.rss': 'RSS Feed', 'footer.visit1': 'Visits', 'footer.visit2': '',
       'heatmap.h2': 'Open-Source Footprint', 'heatmap.desc': 'Every day on GitHub over the past year — the deeper the cyan, the more active.',
-      'guestbook.h2': 'Guestbook', 'guestbook.desc': 'Leave a word if you have been here. Submitting opens GitHub to confirm, then it shows up here.',
-      'guestbook.name': 'Nickname', 'guestbook.text': 'Your message (up to 300 chars)', 'guestbook.submit': 'Leave a message',
-      'guestbook.load': 'Loading messages…', 'guestbook.empty': 'No messages yet. Be the first!', 'guestbook.loadfail': 'Could not load messages right now (network or rate limit). Check back later.',
       'hero.quoteTitle': 'Another quote',
       'life.c1': 'Luckin Coffee', 'life.tag1': 'LIVE', 'life.un2': 'cups',
       'life.d1': 'From the first cup, quietly counting every refuel',
