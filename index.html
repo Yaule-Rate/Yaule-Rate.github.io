@@ -1305,12 +1305,16 @@
   .stars-btn svg { width: 14px; height: 14px; }
 
   /* ===== 晚安灯牌（页脚） ===== */
-  .light-bar { display: flex; align-items: center; gap: 18px; padding: 4px 0 24px; border-bottom: 1px solid rgba(255,255,255,.07); margin-bottom: 26px; flex-wrap: wrap; }
+  .now-lights { grid-column: 1 / -1; display: flex; align-items: center; gap: 18px; flex-wrap: wrap; }
+  .now-stars { position: relative; }
+  .stars-hist { position: absolute; top: 16px; right: 16px; width: 32px; height: 32px; border-radius: 10px; border: 1px solid rgba(56,189,248,.25); background: rgba(56,189,248,.06); color: #7dd3fc; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all .18s ease; z-index: 2; }
+  .stars-hist:hover { background: rgba(56,189,248,.16); transform: translateY(-1px); }
+  .stars-hist svg { width: 16px; height: 16px; }
   .lights { display: flex; gap: 8px; flex-wrap: wrap; }
   .light-dot { width: 17px; height: 17px; border-radius: 50%; background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.14); transition: all .35s ease; position: relative; }
   .light-dot.on { background: radial-gradient(circle at 50% 35%, #bae6fd, #38bdf8 60%, #0284c7); border-color: rgba(125,211,252,.65); box-shadow: 0 0 14px rgba(56,189,248,.55); }
   .light-dot.on::after { content: ""; position: absolute; inset: 3px; border-radius: 50%; background: rgba(255,255,255,.5); filter: blur(1px); }
-  .light-count { font-size: 13px; color: var(--footer-ink); }
+  .light-count { font-size: 13px; color: var(--ink-2); }
   .light-count b { color: #7dd3fc; font-weight: 600; }
   .light-btn { display: inline-flex; align-items: center; gap: 7px; border: 1px solid rgba(56,189,248,.4); background: rgba(56,189,248,.1); color: #7dd3fc; border-radius: 999px; padding: 8px 18px; font-size: 13.5px; font-weight: 600; cursor: pointer; font-family: inherit; transition: all .18s ease; }
   .light-btn:hover { background: rgba(56,189,248,.2); transform: translateY(-1px); }
@@ -1330,9 +1334,6 @@
   .badge-btn { margin-top: 20px; border: 0; background: linear-gradient(90deg, var(--accent), var(--accent-2)); color: #fff; border-radius: 999px; padding: 10px 30px; font-size: 14px; font-weight: 700; cursor: pointer; font-family: inherit; transition: all .18s ease; }
   .badge-btn:hover { transform: translateY(-1px); box-shadow: 0 8px 24px rgba(56,189,248,.3); }
   .badge-card::after { content: ""; position: absolute; inset: 0; border-radius: inherit; background-image: radial-gradient(circle, rgba(186,230,253,.5) 1px, transparent 1.3px), radial-gradient(circle, rgba(125,211,252,.3) 1px, transparent 1.5px); background-size: 92px 92px, 136px 136px; background-position: 8px 18px, 62px 82px; opacity: .4; pointer-events: none; }
-  .badge-history-btn { position: absolute; top: 14px; right: 14px; z-index: 3; width: 34px; height: 34px; border-radius: 11px; border: 1px solid rgba(56,189,248,.28); background: rgba(56,189,248,.08); color: #7dd3fc; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all .18s ease; }
-  .badge-history-btn:hover { background: rgba(56,189,248,.18); transform: translateY(-1px); box-shadow: 0 4px 14px rgba(56,189,248,.25); }
-  .badge-history-btn svg { width: 17px; height: 17px; }
   .badge-hist-title { font-size: 16px; font-weight: 800; color: var(--ink); font-family: "Noto Serif SC", Georgia, serif; margin-top: 4px; }
   .badge-hist-item { display: flex; align-items: center; gap: 12px; background: rgba(56,189,248,.05); border: 1px solid rgba(56,189,248,.16); border-radius: 14px; padding: 10px 12px; margin-top: 10px; text-align: left; }
   .badge-hist-item svg { width: 38px; height: 38px; flex: none; filter: drop-shadow(0 0 8px rgba(56,189,248,.35)); }
@@ -1740,6 +1741,9 @@
         </div>
       </div>
       <div class="now-card now-stars">
+        <button class="stars-hist" id="starsHistBtn" aria-label="Badge history">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="8.5"/><path d="M12 7v5l3.2 2"/></svg>
+        </button>
         <p class="stars-num" id="starsNum">0</p>
         <p class="stars-sub" data-i18n="now.stars">我数过的星星</p>
         <div class="stars-bar"><i id="starsBar" style="width:0%"></i></div>
@@ -1761,6 +1765,15 @@
           <div class="wd-item"><div class="wd-label" data-i18n="now.w3">风速</div><div class="wd-val"><b id="wWind">--</b><span class="wd-unit">km/h</span></div></div>
           <div class="wd-item"><div class="wd-label" data-i18n="now.w4">紫外线</div><div class="wd-val"><b id="wUvi">--</b><span class="wd-unit" data-i18n="now.uvi">级</span></div></div>
         </div>
+      </div>
+
+      <div class="now-card now-lights">
+        <div class="lights" id="lightsRow"></div>
+        <p class="light-count" id="lightCount"></p>
+        <button class="light-btn" id="lightBtn">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a6.5 6.5 0 0 0-4.6 11.1c.9.9 1.6 1.7 1.6 2.9h5.9c0-1.2.7-2 1.6-2.9A6.5 6.5 0 0 0 12 2zm-2 15.5h4v1.7h-4v-1.7zm0 3.5h4v1.7h-4V21z"/></svg>
+          <span data-i18n="light.btn">留一盏灯</span>
+        </button>
       </div>
     </div>
   </div>
@@ -1867,14 +1880,6 @@
 
 <footer>
   <div class="wrap">
-    <div class="light-bar">
-      <div class="lights" id="lightsRow"></div>
-      <p class="light-count" id="lightCount"></p>
-      <button class="light-btn" id="lightBtn">
-        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a6.5 6.5 0 0 0-4.6 11.1c.9.9 1.6 1.7 1.6 2.9h5.9c0-1.2.7-2 1.6-2.9A6.5 6.5 0 0 0 12 2zm-2 15.5h4v1.7h-4v-1.7zm0 3.5h4v1.7h-4V21z"/></svg>
-        <span data-i18n="light.btn">留一盏灯</span>
-      </button>
-    </div>
     <div class="footer-grid">
       <div class="footer-brand">
         <span class="logo">Yaule</span>
@@ -1918,9 +1923,6 @@
 </footer>
 <div class="badge-modal" id="badgeModal">
   <div class="badge-card">
-    <button class="badge-history-btn" id="badgeHistBtn" aria-label="Badge wall">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="8.5"/><path d="M12 7v5l3.2 2"/></svg>
-    </button>
     <div id="badgeMain">
       <div class="badge-icon" id="badgeIcon"></div>
       <p class="badge-kicker" data-i18n="badge.title">获得勋章</p>
@@ -2388,29 +2390,46 @@
     if (!elV) return;
     var phases = ['moon.n0', 'moon.n1', 'moon.n2', 'moon.n3', 'moon.n4', 'moon.n5', 'moon.n6', 'moon.n7'];
     var FALLBACK = ['新月', '娥眉月', '上弦月', '盈凸月', '满月', '亏凸月', '下弦月', '残月'];
+    var DISK = '<circle cx="50" cy="50" r="44" fill="#1e293b"/>';
+    var MARIA = '<ellipse cx="41" cy="37" rx="9" ry="7" fill="rgba(148,163,184,.4)"/><ellipse cx="57" cy="54" rx="12" ry="9" fill="rgba(148,163,184,.34)"/><ellipse cx="44" cy="71" rx="7" ry="5" fill="rgba(148,163,184,.28)"/><ellipse cx="63" cy="32" rx="5" ry="4" fill="rgba(148,163,184,.3)"/>';
     var SVGS = [
-      '<circle cx="50" cy="50" r="44" fill="rgba(100,116,139,.5)"/><path d="M50 8 A42 42 0 0 1 50 92 A42 42 0 0 0 50 8 Z" fill="#e2e8f0"/>',
-      '<circle cx="50" cy="50" r="44" fill="rgba(100,116,139,.5)"/><path d="M50 6 A44 44 0 0 1 50 94 A34 34 0 0 0 50 24 Z" fill="#e2e8f0"/>',
-      '<circle cx="50" cy="50" r="44" fill="rgba(100,116,139,.5)"/><path d="M50 6 A44 44 0 0 1 50 94 Z" fill="#e2e8f0"/>',
-      '<circle cx="50" cy="50" r="44" fill="rgba(100,116,139,.5)"/><path d="M50 6 A44 44 0 0 1 50 94 Z" fill="#e2e8f0"/><ellipse cx="50" cy="50" rx="20" ry="44" fill="#e2e8f0"/>',
-      '<circle cx="50" cy="50" r="44" fill="#e2e8f0"/>',
-      '<circle cx="50" cy="50" r="44" fill="rgba(100,116,139,.5)"/><path d="M50 6 A44 44 0 0 0 50 94 Z" fill="#e2e8f0"/><ellipse cx="50" cy="50" rx="20" ry="44" fill="#e2e8f0"/>',
-      '<circle cx="50" cy="50" r="44" fill="rgba(100,116,139,.5)"/><path d="M50 6 A44 44 0 0 0 50 94 Z" fill="#e2e8f0"/>',
-      '<circle cx="50" cy="50" r="44" fill="rgba(100,116,139,.5)"/><path d="M50 6 A44 44 0 0 0 50 94 A34 34 0 0 1 50 24 Z" fill="#e2e8f0"/>'
+      DISK + '<path d="M50 8 A42 42 0 0 1 50 92 A42 42 0 0 0 50 8 Z" fill="#94a3b8"/>',
+      DISK + '<path d="M50 6 A44 44 0 0 1 50 94 A34 34 0 0 0 50 24 Z" fill="#e2e8f0"/>',
+      DISK + '<path d="M50 6 A44 44 0 0 1 50 94 Z" fill="#f1f5f9"/>',
+      DISK + '<path d="M50 6 A44 44 0 0 1 50 94 Z" fill="#f1f5f9"/><ellipse cx="50" cy="50" rx="20" ry="44" fill="#1e293b"/>' + MARIA,
+      '<circle cx="50" cy="50" r="44" fill="#f1f5f9"/>' + MARIA,
+      DISK + '<path d="M50 6 A44 44 0 0 0 50 94 Z" fill="#f1f5f9"/><ellipse cx="50" cy="50" rx="20" ry="44" fill="#1e293b"/>' + MARIA,
+      DISK + '<path d="M50 6 A44 44 0 0 0 50 94 Z" fill="#f1f5f9"/>',
+      DISK + '<path d="M50 6 A44 44 0 0 0 50 94 A34 34 0 0 1 50 24 Z" fill="#e2e8f0"/>'
     ];
-    function render() {
-      var synodic = 29.53058867 * 86400000;
-      var known = Date.UTC(2000, 0, 6, 18, 14);
-      var p = ((Date.now() - known) % synodic + synodic) % synodic / synodic;
-      var idx = Math.round(p * 8) % 8;
-      var illum = Math.round((1 - Math.cos(2 * Math.PI * p)) / 2 * 100);
+    function paint(idx, illum) {
       elV.innerHTML = '<svg viewBox="0 0 100 100" aria-hidden="true">' + SVGS[idx] + '</svg>';
       var L = window.YAULE_LANG || 'zh', dict = window.I18N || {};
       elN.textContent = (dict[L] && dict[L][phases[idx]]) || FALLBACK[idx];
       elI.textContent = ((dict[L] && dict[L]['moon.illum']) || '照亮') + ' ' + illum + '%';
     }
-    render();
-    setInterval(render, 60000);
+    function calc() {
+      var synodic = 29.53058867 * 86400000;
+      var known = Date.UTC(2000, 0, 6, 18, 14);
+      var p = ((Date.now() - known) % synodic + synodic) % synodic / synodic;
+      return { idx: Math.round(p * 8) % 8, illum: Math.round((1 - Math.cos(2 * Math.PI * p)) / 2 * 100) };
+    }
+    var c = calc();
+    paint(c.idx, c.illum);
+    var MAP = { 'New Moon': 0, 'Waxing Crescent': 1, 'First Quarter': 2, 'Waxing Gibbous': 3, 'Full Moon': 4, 'Waning Gibbous': 5, 'Last Quarter': 6, 'Waning Crescent': 7 };
+    try {
+      fetch('https://api.farmsense.net/v1/moonphases/?d=' + Date.now(), { mode: 'cors' })
+        .then(function (r) { return r.json(); })
+        .then(function (j) {
+          if (!j || !j[0] || j[0].Error) return;
+          var idx2 = MAP[j[0].MoonPhase];
+          if (idx2 === undefined) return;
+          var ill2 = Math.round(parseFloat(j[0].PhaseIllumination) || 0);
+          paint(idx2, Math.min(100, Math.max(0, ill2)));
+        })
+        .catch(function () {});
+    } catch (e) {}
+    setInterval(function () { var c2 = calc(); paint(c2.idx, c2.illum); }, 60000);
   })();
 
   /* ========== 勋章弹窗 ========== */
@@ -2419,30 +2438,27 @@
     if (!m) return;
     var main = document.getElementById('badgeMain');
     var hist = document.getElementById('badgeHist');
-    var histBtn = document.getElementById('badgeHistBtn');
     var back = document.getElementById('badgeHistBack');
+    var histMode = 'unlock';
+    function L(k) { var L2 = window.YAULE_LANG || 'zh', d = window.I18N || {}; return (d[L2] && d[L2][k]) || ''; }
+    function open() { m.classList.remove('show'); void m.offsetWidth; m.classList.add('show'); document.body.style.overflow = 'hidden'; }
+    function hide() { m.classList.remove('show'); document.body.style.overflow = ''; }
     function show(b) {
       document.getElementById('badgeIcon').innerHTML = b.icon;
       document.getElementById('badgeName').textContent = b.name;
       document.getElementById('badgeDesc').textContent = b.desc;
       var d = new Date();
       document.getElementById('badgeTime').textContent = (window.YAULE_LANG === 'en' ? 'Unlocked ' : '达成于 ') + d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0') + ' ' + String(d.getHours()).padStart(2, '0') + ':' + String(d.getMinutes()).padStart(2, '0');
-      hist.hidden = true; main.hidden = false; histBtn.style.display = 'flex';
-      m.classList.remove('show');
-      void m.offsetWidth;
-      m.classList.add('show');
-      document.body.style.overflow = 'hidden';
+      hist.hidden = true; main.hidden = false;
+      histMode = 'unlock';
+      open();
     }
-    function hide() {
-      m.classList.remove('show');
-      document.body.style.overflow = '';
-    }
-    function renderHist(badges, L) {
+    function renderHist() {
       var got = {};
       try { got = JSON.parse(localStorage.getItem('yaule_badges') || '{}'); } catch (e) {}
       var list = document.getElementById('badgeHistList');
       var empty = document.getElementById('badgeHistEmpty');
-      var rows = '', n = 0;
+      var rows = '', n = 0, badges = window.__badges || [];
       badges.forEach(function (b) {
         var g = got[b.k];
         if (!g) return;
@@ -2454,17 +2470,20 @@
       list.innerHTML = rows;
       empty.hidden = n > 0;
     }
-    histBtn.addEventListener('click', function () {
-      renderHist(window.__badges || [], function (k) { var L2 = window.YAULE_LANG || 'zh', d = window.I18N || {}; return (d[L2] && d[L2][k]) || ''; });
-      hist.hidden = false; main.hidden = true; histBtn.style.display = 'none';
-    });
+    function openHist() {
+      renderHist();
+      hist.hidden = false; main.hidden = true;
+      histMode = 'histOnly';
+      open();
+    }
     back.addEventListener('click', function () {
-      hist.hidden = true; main.hidden = false; histBtn.style.display = 'flex';
+      if (histMode === 'histOnly') { hide(); } else { hist.hidden = true; main.hidden = false; }
     });
     document.getElementById('badgeClose').addEventListener('click', hide);
     m.addEventListener('click', function (e) { if (e.target === m) hide(); });
     document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && m.classList.contains('show')) hide(); });
     window.__showBadge = show;
+    window.__openHist = openHist;
   })();
 
   /* ========== 星星计数器 ========== */
@@ -2522,6 +2541,8 @@
       if (!fromLight) toast((L('now.stars') || '我数过的星星') + ' +1');
     }
     btn.addEventListener('click', function () { addStar(false); });
+    var histBtn2 = document.getElementById('starsHistBtn');
+    if (histBtn2) histBtn2.addEventListener('click', function () { if (window.__openHist) window.__openHist(); });
     window.__addStar = addStar;
     render();
   })();
