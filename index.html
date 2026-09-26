@@ -3115,7 +3115,16 @@
 
   /* ========== 更新日志（VSCode 风格）全量数据 + 主页简短渲染 + localStorage 同步 ========== */
   var YAULE_CHANGELOG = [
-    { ver: "v22.8.1", date: "2026-09-26 11:02:00", current: true, list: [
+    { ver: "v22.9.1", date: "2026-09-26 14:50:00", current: true, list: [
+      { lv: "[FIX]", time: "2026-09-26 14:50:00", text: "修复技能雷达图顶点标签截断：右上'效率工具'与左下'界面设计'因锚点方向溢出被裁，修正后六维度标签完整显示。", en: "Fixed radar-chart vertex labels being clipped: 'Tools' (top-right) and 'UI Design' (bottom-left) overflowed the SVG edge due to wrong text-anchor; all six labels now render fully." },
+      { lv: "[OPT]", time: "2026-09-26 14:48:00", text: "清理冗余 CSS：移除旧版时间轴日志样式残留 12 条规则（约 1.5KB），修正 reduced-motion 区 .mc-tab 为 .mc-subtab。", en: "Cleaned redundant CSS: removed 12 stale timeline-log rules (~1.5KB) and corrected .mc-tab to .mc-subtab in the reduced-motion block." }
+    ]},
+    { ver: "v22.9", date: "2026-09-26 14:35:00", current: false, list: [
+      { lv: "[ADD]", time: "2026-09-26 14:35:00", text: "守夜徽章：停留满 1 分钟弹「守夜人」、满 5 分钟弹「夜猫子」，沿用勋章弹窗与勋章墙体系。", en: "Watch badges: staying 1 minute unlocks 'Night Watcher', 5 minutes unlocks 'Night Owl' — part of the badge modal & badge wall system." },
+      { lv: "[ADD]", time: "2026-09-26 14:34:00", text: "时辰问候：凌晨/清晨/午后/黄昏/深夜五时段切换欢迎小语，中英双语随语言切换。", en: "Hourly greeting: five time-of-day welcome lines (early hours/morning/afternoon/dusk/late night), bilingual and live with language switch." },
+      { lv: "[FIX]", time: "2026-09-26 14:33:00", text: "修复星星徽章描述键 stars.bX 与字典 badge.bX 不一致，英文模式描述不再回退中文。", en: "Fixed star-badge description keys (stars.bX vs badge.bX) so English descriptions no longer fall back to Chinese." }
+    ]},
+    { ver: "v22.8.1", date: "2026-09-26 11:02:00", current: false, list: [
       { lv: "[FIX]", time: "2026-09-26 11:02:00", text: "修复页脚最下方渲染出的孤儿弹窗代码：删除编辑残留的半截勋章弹窗 HTML（含重复 id 与多余闭合标签），全站完整性审计通过。", en: "Fixed orphan badge-modal markup rendered below the footer: removed leftover half-built modal HTML (duplicate ids & stray closing tags); full integrity audit passed." }
     ]},
     { ver: "v22.8", date: "2026-09-26 10:34:00", current: false, list: [
