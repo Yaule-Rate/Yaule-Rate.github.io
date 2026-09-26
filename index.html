@@ -1288,6 +1288,49 @@
   :root[data-theme="dark"] .hm-cell.l0 { background: #23262b; }
   .hm-total { font-size: 13px; color: var(--ink-2); }
 
+  /* ===== 今晚月色 & 星星计数器（此刻小卡） ===== */
+  .now-sky { display: flex; align-items: center; gap: 18px; }
+  .moon-visual { width: 88px; height: 88px; flex: none; }
+  .moon-visual svg { width: 100%; height: 100%; display: block; }
+  .moon-kicker { font-size: 11px; color: var(--ink-2); letter-spacing: .12em; }
+  .moon-name { font-size: 20px; font-weight: 800; color: var(--ink); margin-top: 3px; font-family: "Noto Serif SC", Georgia, serif; }
+  .moon-illum { font-size: 12.5px; color: var(--ink-2); margin-top: 3px; }
+  .now-stars .stars-num { font-size: 38px; font-weight: 800; color: var(--accent); font-variant-numeric: tabular-nums; line-height: 1.05; }
+  .now-stars .stars-sub { font-size: 12px; color: var(--ink-2); margin-top: 2px; letter-spacing: .05em; }
+  .stars-bar { height: 6px; background: var(--soft); border-radius: 999px; margin-top: 12px; overflow: hidden; }
+  .stars-bar i { display: block; height: 100%; background: linear-gradient(90deg, var(--accent), var(--accent-2)); border-radius: 999px; transition: width .5s ease; }
+  .stars-next { font-size: 12px; color: var(--ink-2); margin-top: 8px; min-height: 16px; }
+  .stars-btn { margin-top: 10px; display: inline-flex; align-items: center; gap: 6px; border: 1px solid rgba(2,132,199,.35); background: rgba(2,132,199,.06); color: var(--accent); border-radius: 999px; padding: 8px 16px; font-size: 13px; font-weight: 600; cursor: pointer; font-family: inherit; transition: all .18s ease; }
+  .stars-btn:hover { background: rgba(2,132,199,.14); transform: translateY(-1px); }
+  .stars-btn svg { width: 14px; height: 14px; }
+
+  /* ===== 睡眠曲线 ===== */
+  .sleep-grid { display: grid; grid-template-columns: 300px 1fr; gap: 20px; }
+  .sleep-ctrl, .sleep-chart { background: var(--card-bg); border: 1px solid var(--line); border-radius: 20px; padding: 26px; }
+  .sleep-btns { display: flex; gap: 10px; flex-wrap: wrap; }
+  .sleep-btn { border: 1px solid rgba(2,132,199,.35); background: rgba(2,132,199,.06); color: var(--accent); border-radius: 999px; padding: 9px 18px; font-size: 13.5px; font-weight: 600; cursor: pointer; font-family: inherit; transition: all .18s ease; }
+  .sleep-btn:hover { background: rgba(2,132,199,.14); transform: translateY(-1px); }
+  .sleep-btn.primary { background: linear-gradient(90deg, var(--accent), var(--accent-2)); color: #fff; border: 0; }
+  .sleep-today { margin-top: 16px; font-size: 13px; color: var(--ink-2); line-height: 1.8; }
+  .sleep-today b { color: var(--accent); font-weight: 600; }
+  .sleep-chart svg { width: 100%; height: auto; display: block; }
+  .sleep-chart text { font-size: 11px; fill: var(--ink-2); font-family: inherit; }
+  .sleep-chart .sc-val { font-size: 12px; font-weight: 700; fill: var(--accent); }
+  .sleep-avg { margin-top: 14px; font-size: 13px; color: var(--ink-2); }
+  .sleep-avg b { color: var(--accent); font-weight: 600; }
+  @media (max-width: 860px) { .sleep-grid { grid-template-columns: 1fr; } }
+
+  /* ===== 世界失眠时钟 ===== */
+  .world-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
+  .world-city { background: var(--card-bg); border: 1px solid var(--line); border-radius: 16px; padding: 18px 14px; text-align: center; }
+  .world-city .wc-name { font-size: 13px; color: var(--ink-2); letter-spacing: .05em; }
+  .world-city .wc-time { font-size: 27px; font-weight: 800; color: var(--ink); font-variant-numeric: tabular-nums; margin-top: 5px; font-family: "Noto Serif SC", Georgia, serif; }
+  .world-city .wc-state { display: inline-flex; align-items: center; gap: 6px; margin-top: 9px; font-size: 12px; padding: 4px 12px; border-radius: 999px; }
+  .world-city .wc-state.awake { background: rgba(56,189,248,.14); color: var(--accent); font-weight: 600; }
+  .world-city .wc-state.asleep { background: var(--soft); color: var(--ink-2); }
+  .world-city .wc-state svg { width: 12px; height: 12px; }
+  @media (max-width: 860px) { .world-grid { grid-template-columns: repeat(2, 1fr); } }
+
   /* ===== 深夜特调 ===== */
   .night-sky { position: fixed; inset: 0; z-index: 1; pointer-events: none; overflow: hidden; }
   .night-star {
@@ -1665,6 +1708,25 @@
         <p class="reco-tag" id="recoTag"></p>
       </div>
 
+      <div class="now-card now-sky">
+        <div class="moon-visual" id="moonVisual"></div>
+        <div class="moon-info">
+          <p class="moon-kicker" data-i18n="now.moon">今晚月色</p>
+          <p class="moon-name" id="moonName">--</p>
+          <p class="moon-illum" id="moonIllum">--</p>
+        </div>
+      </div>
+      <div class="now-card now-stars">
+        <p class="stars-num" id="starsNum">0</p>
+        <p class="stars-sub" data-i18n="now.stars">我数过的星星</p>
+        <div class="stars-bar"><i id="starsBar" style="width:0%"></i></div>
+        <p class="stars-next" id="starsNext"></p>
+        <button class="stars-btn" id="starsBtn">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.9 6.26 6.86.6-5.2 4.52 1.56 6.72L12 16.9l-6.12 3.2 1.56-6.72-5.2-4.52 6.86-.6z"/></svg>
+          <span data-i18n="stars.add">数一颗星</span>
+        </button>
+      </div>
+
       <div class="now-card now-weather">
         <p class="weather-row" id="weatherRow">
           <svg id="weatherIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z"/></svg>
@@ -1678,6 +1740,42 @@
         </div>
       </div>
     </div>
+  </div>
+</section>
+
+<!-- 板块 5.5：睡眠曲线 -->
+<section class="section" id="sleep">
+  <div class="wrap">
+    <div class="section-head">
+      <p class="kicker">SLEEP CURVE</p>
+      <h2 data-i18n="sleep.h2">睡眠曲线</h2>
+      <p class="desc" data-i18n="sleep.desc">记下几点睡、几点醒，看看这个失眠夜有多长。</p>
+    </div>
+    <div class="sleep-grid">
+      <div class="sleep-ctrl">
+        <div class="sleep-btns">
+          <button class="sleep-btn primary" id="sleepBtn1" data-i18n="sleep.btn1">记录入睡</button>
+          <button class="sleep-btn" id="sleepBtn2" data-i18n="sleep.btn2">记录醒来</button>
+        </div>
+        <p class="sleep-today" id="sleepToday"></p>
+      </div>
+      <div class="sleep-chart">
+        <svg id="sleepChart" viewBox="0 0 560 190" role="img" aria-label="sleep curve"></svg>
+        <p class="sleep-avg" id="sleepAvg"></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 板块 5.6：世界失眠时钟 -->
+<section class="section alt" id="world">
+  <div class="wrap">
+    <div class="section-head">
+      <p class="kicker">WORLD AWAKE</p>
+      <h2 data-i18n="world.h2">世界失眠时钟</h2>
+      <p class="desc" data-i18n="world.desc">看看地球另一边的夜，谁还醒着。</p>
+    </div>
+    <div class="world-grid" id="worldGrid"></div>
   </div>
 </section>
 
@@ -2245,6 +2343,186 @@
         else { hyt.classList.remove('hidden'); bjd.classList.add('hidden'); }
       });
     });
+  })();
+
+  /* ========== 今晚月色（月相） ========== */
+  (function () {
+    var elV = document.getElementById('moonVisual');
+    var elN = document.getElementById('moonName');
+    var elI = document.getElementById('moonIllum');
+    if (!elV) return;
+    var phases = ['moon.n0', 'moon.n1', 'moon.n2', 'moon.n3', 'moon.n4', 'moon.n5', 'moon.n6', 'moon.n7'];
+    var FALLBACK = ['新月', '娥眉月', '上弦月', '盈凸月', '满月', '亏凸月', '下弦月', '残月'];
+    var SVGS = [
+      '<circle cx="50" cy="50" r="44" fill="rgba(100,116,139,.5)"/><path d="M50 8 A42 42 0 0 1 50 92 A42 42 0 0 0 50 8 Z" fill="#e2e8f0"/>',
+      '<circle cx="50" cy="50" r="44" fill="rgba(100,116,139,.5)"/><path d="M50 6 A44 44 0 0 1 50 94 A34 34 0 0 0 50 24 Z" fill="#e2e8f0"/>',
+      '<circle cx="50" cy="50" r="44" fill="rgba(100,116,139,.5)"/><path d="M50 6 A44 44 0 0 1 50 94 Z" fill="#e2e8f0"/>',
+      '<circle cx="50" cy="50" r="44" fill="rgba(100,116,139,.5)"/><path d="M50 6 A44 44 0 0 1 50 94 Z" fill="#e2e8f0"/><ellipse cx="50" cy="50" rx="20" ry="44" fill="#e2e8f0"/>',
+      '<circle cx="50" cy="50" r="44" fill="#e2e8f0"/>',
+      '<circle cx="50" cy="50" r="44" fill="rgba(100,116,139,.5)"/><path d="M50 6 A44 44 0 0 0 50 94 Z" fill="#e2e8f0"/><ellipse cx="50" cy="50" rx="20" ry="44" fill="#e2e8f0"/>',
+      '<circle cx="50" cy="50" r="44" fill="rgba(100,116,139,.5)"/><path d="M50 6 A44 44 0 0 0 50 94 Z" fill="#e2e8f0"/>',
+      '<circle cx="50" cy="50" r="44" fill="rgba(100,116,139,.5)"/><path d="M50 6 A44 44 0 0 0 50 94 A34 34 0 0 1 50 24 Z" fill="#e2e8f0"/>'
+    ];
+    function render() {
+      var synodic = 29.53058867 * 86400000;
+      var known = Date.UTC(2000, 0, 6, 18, 14);
+      var p = ((Date.now() - known) % synodic + synodic) % synodic / synodic;
+      var idx = Math.round(p * 8) % 8;
+      var illum = Math.round((1 - Math.cos(2 * Math.PI * p)) / 2 * 100);
+      elV.innerHTML = '<svg viewBox="0 0 100 100" aria-hidden="true">' + SVGS[idx] + '</svg>';
+      var L = window.YAULE_LANG || 'zh', dict = window.I18N || {};
+      elN.textContent = (dict[L] && dict[L][phases[idx]]) || FALLBACK[idx];
+      elI.textContent = ((dict[L] && dict[L]['moon.illum']) || '照亮') + ' ' + illum + '%';
+    }
+    render();
+    setInterval(render, 60000);
+  })();
+
+  /* ========== 星星计数器 ========== */
+  (function () {
+    var num = document.getElementById('starsNum');
+    var bar = document.getElementById('starsBar');
+    var next = document.getElementById('starsNext');
+    var btn = document.getElementById('starsBtn');
+    if (!num || !btn) return;
+    var KEY = 'yaule_stars';
+    var cur = parseInt(localStorage.getItem(KEY) || '0', 10) || 0;
+    var badges = [['stars.b1', 100], ['stars.b2', 1000], ['stars.b3', 10000]];
+    var FB = ['观星者', '追月人', '失眠十级'];
+    function L(k) { var L2 = window.YAULE_LANG || 'zh', d = window.I18N || {}; return (d[L2] && d[L2][k]) || ''; }
+    function render() {
+      num.textContent = cur;
+      var i, nextBadge = null;
+      for (i = 0; i < badges.length; i++) { if (cur < badges[i][1]) { nextBadge = badges[i]; break; } }
+      if (!nextBadge) {
+        bar.style.width = '100%';
+        next.textContent = (L('stars.done') || '已达成') + '「' + (L('stars.b3') || FB[2]) + '」';
+      } else {
+        var prev = i === 0 ? 0 : badges[i - 1][1];
+        bar.style.width = Math.min(100, Math.round((cur - prev) / (nextBadge[1] - prev) * 100)) + '%';
+        next.textContent = (L('stars.next') || '距下一徽章还差') + ' ' + (nextBadge[1] - cur) + ' ' + (L('stars.got') || '颗') + ' · 「' + (L(nextBadge[0]) || FB[i]) + '」';
+      }
+    }
+    btn.addEventListener('click', function () {
+      cur++;
+      try { localStorage.setItem(KEY, String(cur)); } catch (e) {}
+      render();
+      var t = document.getElementById('toast');
+      if (t) { t.textContent = (L('now.stars') || '我数过的星星') + ' +1'; t.classList.add('show'); setTimeout(function () { t.classList.remove('show'); }, 1600); }
+    });
+    render();
+  })();
+
+  /* ========== 睡眠曲线 ========== */
+  (function () {
+    var b1 = document.getElementById('sleepBtn1');
+    var b2 = document.getElementById('sleepBtn2');
+    var todayEl = document.getElementById('sleepToday');
+    var chart = document.getElementById('sleepChart');
+    var avgEl = document.getElementById('sleepAvg');
+    if (!b1 || !chart) return;
+    var SK = 'yaule_sleep';
+    function load() { try { return JSON.parse(localStorage.getItem(SK) || '[]'); } catch (e) { return []; } }
+    function save(a) { try { localStorage.setItem(SK, JSON.stringify(a)); } catch (e) {} }
+    function key(d) { return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0'); }
+    function nowHM() { var d = new Date(); return String(d.getHours()).padStart(2, '0') + ':' + String(d.getMinutes()).padStart(2, '0'); }
+    function minOf(t) { var p = String(t).split(':'); return (+p[0]) * 60 + (+p[1]); }
+    function fmtHM(m) { return String(Math.floor(m / 60)).padStart(2, '0') + ':' + String(m % 60).padStart(2, '0'); }
+    function L(k) { var L2 = window.YAULE_LANG || 'zh', d = window.I18N || {}; return (d[L2] && d[L2][k]) || ''; }
+    function toast(t) { var el = document.getElementById('toast'); if (el) { el.textContent = t; el.classList.add('show'); setTimeout(function () { el.classList.remove('show'); }, 1800); } }
+    b1.addEventListener('click', function () {
+      var a = load(), k = key(new Date()), hm = nowHM();
+      var hit = null;
+      a.forEach(function (r) { if (r.d === k) hit = r; });
+      if (hit && hit.s) { toast(L('sleep.re') || '今晚已记录入睡，再点会覆盖'); hit.s = hm; }
+      else if (hit) { hit.s = hm; }
+      else { a.push({ d: k, s: hm, w: null }); }
+      save(a); render(); toast(L('sleep.done') || '睡眠记录已更新');
+    });
+    b2.addEventListener('click', function () {
+      var a = load(), k = key(new Date()), hm = nowHM();
+      var rec = null;
+      a.forEach(function (r) { if (r.d === k) rec = r; });
+      if (!rec) { rec = { d: k, s: null, w: hm }; a.push(rec); }
+      else if (rec.s) { rec.w = hm; }
+      else { rec.w = hm; }
+      save(a); render(); toast(L('sleep.done') || '睡眠记录已更新');
+    });
+    function render() {
+      var a = load(), k = key(new Date());
+      var cur = null;
+      a.forEach(function (r) { if (r.d === k) cur = r; });
+      var wk = ['sleep.w0', 'sleep.w1', 'sleep.w2', 'sleep.w3', 'sleep.w4', 'sleep.w5', 'sleep.w6'];
+      if (cur && cur.s && cur.w) {
+        var sm = minOf(cur.s), wm = minOf(cur.w);
+        var dh = ((wm - sm + 1440) % 1440) / 60;
+        todayEl.innerHTML = '<b>' + cur.s + '</b> - ' + cur.w + ' · ' + dh.toFixed(1) + ' ' + (L('sleep.hr') || '小时');
+      } else if (cur && cur.s) {
+        todayEl.innerHTML = (L('sleep.rec') || '已睡下 · 等待醒来…') + '（' + cur.s + '）';
+      } else {
+        todayEl.textContent = L('sleep.empty') || '还没有记录，点上面的按钮开始。';
+      }
+      var days = [], i;
+      for (i = 6; i >= 0; i--) { var d = new Date(); d.setDate(d.getDate() - i); days.push(key(d)); }
+      var W = 560, H = 190, base = 150, colW = 80, barW = 34;
+      var html = '<defs><linearGradient id="sg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="var(--accent-2)"/><stop offset="1" stop-color="var(--accent)"/></linearGradient></defs>';
+      var total = 0, cnt = 0;
+      days.forEach(function (dk, idx) {
+        var rec = null;
+        a.forEach(function (r) { if (r.d === dk) rec = r; });
+        var x = idx * colW + (colW - barW) / 2;
+        var wd = (new Date(dk + 'T12:00:00')).getDay();
+        var wkl = L(wk[wd]) || '';
+        if (rec && rec.s && rec.w) {
+          var sm2 = minOf(rec.s), wm2 = minOf(rec.w);
+          var dur = ((wm2 - sm2 + 1440) % 1440) / 60;
+          total += dur; cnt++;
+          var h = Math.max(8, Math.round(dur / 12 * 120));
+          html += '<rect x="' + x + '" y="' + (base - h) + '" width="' + barW + '" height="' + h + '" rx="6" fill="url(#sg)"/>';
+          html += '<text x="' + (x + barW / 2) + '" y="' + (base - h - 7) + '" text-anchor="middle" class="sc-val">' + dur.toFixed(1) + '</text>';
+          html += '<text x="' + (x + barW / 2) + '" y="' + (base - h + 16) + '" text-anchor="middle">' + rec.s + '</text>';
+          html += '<text x="' + (x + barW / 2) + '" y="' + (base - h + 32) + '" text-anchor="middle">' + rec.w + '</text>';
+        } else if (rec && rec.s) {
+          html += '<rect x="' + x + '" y="' + (base - 7) + '" width="' + barW + '" height="7" rx="3" fill="rgba(56,189,248,.45)"/>';
+          html += '<text x="' + (x + barW / 2) + '" y="' + (base - 15) + '" text-anchor="middle" class="sc-val">…</text>';
+          html += '<text x="' + (x + barW / 2) + '" y="' + (base + 20) + '" text-anchor="middle">' + rec.s + '</text>';
+        } else {
+          html += '<circle cx="' + (x + barW / 2) + '" cy="' + (base + 4) + '" r="3" fill="var(--line)"/>';
+        }
+        html += '<text x="' + (x + barW / 2) + '" y="' + (H - 6) + '" text-anchor="middle">' + wkl + '</text>';
+      });
+      chart.innerHTML = html;
+      avgEl.innerHTML = cnt ? ((L('sleep.avg') || '近 7 天平均睡眠') + ' <b>' + (total / cnt).toFixed(1) + ' ' + (L('sleep.hr') || '小时') + '</b>') : (L('sleep.empty') || '还没有记录，点上面的按钮开始。');
+    }
+    render();
+    window.__sleepRender = render;
+  })();
+
+  /* ========== 世界失眠时钟 ========== */
+  (function () {
+    var grid = document.getElementById('worldGrid');
+    if (!grid) return;
+    var cities = [['world.c0', 'Asia/Shanghai'], ['world.c1', 'Asia/Tokyo'], ['world.c2', 'Asia/Singapore'], ['world.c3', 'Australia/Sydney'], ['world.c4', 'Europe/London'], ['world.c5', 'Europe/Paris'], ['world.c6', 'America/New_York'], ['world.c7', 'America/Los_Angeles']];
+    function tzTime(tz) {
+      var parts = new Date().toLocaleString('zh-CN', { timeZone: tz, hour: '2-digit', minute: '2-digit', hour12: false }).split(':');
+      return parts[0] + ':' + parts[1];
+    }
+    function render() {
+      var L = window.YAULE_LANG || 'zh', dict = window.I18N || {};
+      var html = '';
+      cities.forEach(function (c) {
+        var name = (dict[L] && dict[L][c[0]]) || c[0];
+        var t = tzTime(c[1]);
+        var hh = parseInt(t.split(':')[0], 10);
+        var awake = hh >= 22 || hh < 6;
+        var label = awake ? ((dict[L] && dict[L]['world.awake']) || '还没睡') : ((dict[L] && dict[L]['world.asleep']) || '已入睡');
+        var dot = awake ? '<svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="8"/></svg>' : '<svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="8" opacity=".45"/></svg>';
+        html += '<div class="world-city"><p class="wc-name">' + name + '</p><p class="wc-time">' + t + '</p><span class="wc-state ' + (awake ? 'awake' : 'asleep') + '">' + dot + label + '</span></div>';
+      });
+      grid.innerHTML = html;
+    }
+    render();
+    setInterval(render, 1000);
   })();
 
   /* ========== 实时时钟 ========== */
@@ -3255,6 +3533,16 @@
       'now.h2': '此刻', 'now.desc': '时间与天气，都在悄悄走。', 'now.reco': '今日推荐',
       'now.ring': '天 · 2026 还剩', 'now.ringfoot': '今年已过',
       'now.w1': '体感', 'now.w2': '湿度', 'now.w3': '风速', 'now.w4': '紫外线', 'now.uvi': '级',
+      'now.moon': '今晚月色', 'moon.illum': '照亮',
+      'now.stars': '我数过的星星', 'stars.add': '数一颗星', 'stars.next': '距下一徽章还差', 'stars.got': '颗', 'stars.done': '已达成',
+      'stars.b1': '观星者', 'stars.b2': '追月人', 'stars.b3': '失眠十级',
+      'moon.n0': '新月', 'moon.n1': '娥眉月', 'moon.n2': '上弦月', 'moon.n3': '盈凸月', 'moon.n4': '满月', 'moon.n5': '亏凸月', 'moon.n6': '下弦月', 'moon.n7': '残月',
+      'sleep.h2': '睡眠曲线', 'sleep.desc': '记下几点睡、几点醒，看看这个失眠夜有多长。',
+      'sleep.btn1': '记录入睡', 'sleep.btn2': '记录醒来', 'sleep.rec': '已睡下 · 等待醒来…', 'sleep.done': '睡眠记录已更新', 'sleep.re': '今晚已记录入睡，再点会覆盖',
+      'sleep.empty': '还没有记录，点上面的按钮开始。', 'sleep.avg': '近 7 天平均睡眠', 'sleep.hr': '小时',
+      'sleep.w0': '日', 'sleep.w1': '一', 'sleep.w2': '二', 'sleep.w3': '三', 'sleep.w4': '四', 'sleep.w5': '五', 'sleep.w6': '六',
+      'world.h2': '世界失眠时钟', 'world.desc': '看看地球另一边的夜，谁还醒着。', 'world.awake': '还没睡', 'world.asleep': '已入睡',
+      'world.c0': '北京', 'world.c1': '东京', 'world.c2': '新加坡', 'world.c3': '悉尼', 'world.c4': '伦敦', 'world.c5': '巴黎', 'world.c6': '纽约', 'world.c7': '洛杉矶',
       'repos.h2': '开源仓库', 'repos.desc': '最近活跃的仓库，数据实时来自 GitHub。',
       'skills.h2': '擅长的事', 'skills.desc': '六个方向的自我评估，图是画出来的，路是一点点走的。',
       'changelog.h2': '更新日志', 'changelog.desc': '这个页面是怎么一点点长成现在这样的。', 'changelog.more': '详细日志',
@@ -3308,6 +3596,16 @@
       'now.h2': 'Right Now', 'now.desc': 'Time and weather, quietly passing.', 'now.reco': "Today's Pick",
       'now.ring': 'days left in 2026', 'now.ringfoot': 'of 2026 used',
       'now.w1': 'Feels', 'now.w2': 'Humidity', 'now.w3': 'Wind', 'now.w4': 'UV', 'now.uvi': '',
+      'now.moon': "Tonight's Moon", 'moon.illum': 'Illuminated',
+      'now.stars': 'Stars I Have Counted', 'stars.add': 'Count one', 'stars.next': 'Next badge in', 'stars.got': 'stars', 'stars.done': 'Reached',
+      'stars.b1': 'Stargazer', 'stars.b2': 'Moonchaser', 'stars.b3': 'Insomniac Lv.10',
+      'moon.n0': 'New Moon', 'moon.n1': 'Waxing Crescent', 'moon.n2': 'First Quarter', 'moon.n3': 'Waxing Gibbous', 'moon.n4': 'Full Moon', 'moon.n5': 'Waning Gibbous', 'moon.n6': 'Last Quarter', 'moon.n7': 'Waning Crescent',
+      'sleep.h2': 'Sleep Curve', 'sleep.desc': 'Log when you sleep and wake — see how long the insomnia nights are.',
+      'sleep.btn1': 'Log Sleep', 'sleep.btn2': 'Log Wake', 'sleep.rec': 'Asleep now · waiting to wake…', 'sleep.done': 'Sleep record updated', 'sleep.re': 'Already logged tonight; clicking again overwrites',
+      'sleep.empty': 'No records yet. Tap the buttons above to start.', 'sleep.avg': 'Avg sleep (last 7 days)', 'sleep.hr': 'h',
+      'sleep.w0': 'Sun', 'sleep.w1': 'Mon', 'sleep.w2': 'Tue', 'sleep.w3': 'Wed', 'sleep.w4': 'Thu', 'sleep.w5': 'Fri', 'sleep.w6': 'Sat',
+      'world.h2': 'World Insomnia Clock', 'world.desc': 'See whose night is still awake across the globe.', 'world.awake': 'Awake', 'world.asleep': 'Asleep',
+      'world.c0': 'Beijing', 'world.c1': 'Tokyo', 'world.c2': 'Singapore', 'world.c3': 'Sydney', 'world.c4': 'London', 'world.c5': 'Paris', 'world.c6': 'New York', 'world.c7': 'Los Angeles',
       'repos.h2': 'Open Source', 'repos.desc': 'Recently active repos, live from GitHub.',
       'skills.h2': "What I'm Good At", 'skills.desc': 'Self-assessment in six directions — drawn as a chart, built step by step.',
       'changelog.h2': 'Changelog', 'changelog.desc': 'How this page grew into what it is today.', 'changelog.more': 'Full Log',
