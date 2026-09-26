@@ -3102,10 +3102,29 @@
 
   /* ========== 更新日志（VSCode 风格）全量数据 + 主页简短渲染 + localStorage 同步 ========== */
   var YAULE_CHANGELOG = [
-    { ver: "v22.7", date: "2026-09-26 10:32:00", current: true, list: [
+    { ver: "v22.8.1", date: "2026-09-26 11:02:00", current: true, list: [
+      { lv: "[FIX]", time: "2026-09-26 11:02:00", text: "修复页脚最下方渲染出的孤儿弹窗代码：删除编辑残留的半截勋章弹窗 HTML（含重复 id 与多余闭合标签），全站完整性审计通过。", en: "Fixed orphan badge-modal markup rendered below the footer: removed leftover half-built modal HTML (duplicate ids & stray closing tags); full integrity audit passed." }
+    ]},
+    { ver: "v22.8", date: "2026-09-26 10:34:00", current: false, list: [
+      { lv: "[FIX]", time: "2026-09-26 10:34:00", text: "勋章弹窗适配浅色主题：浅色模式下弹窗为浅色卡片 + 浅色遮罩 + 淡青星点，深色模式保持深蓝夜渐变 + 深遮罩 + 亮蓝星点，青色光晕不变。", en: "Badge modal now follows the theme: light card + light mask + teal starfield in light mode; deep-blue night card + dark mask + bright-blue stars in dark mode; cyan glow unchanged." }
+    ]},
+    { ver: "v22.7", date: "2026-09-26 10:00:00", current: false, list: [
       { lv: "[FIX]", time: "2026-09-26 10:32:00", text: "勋章弹窗适配浅色主题：浅色模式下弹窗为浅色卡片，深色模式保持深蓝夜底，青色光晕与星空纹理随主题切换。", en: "Badge modal now follows the theme: a light card in light mode, the deep-blue night card in dark mode; the cyan glow and starfield adapt too." },
       { lv: "[ADD]", time: "2026-09-26 09:52:00", text: "勋章墙与晚安灯牌：达成 100/1000/10000 颗星弹出勋章弹窗，星星卡右上角可查看全部历史记录；灯牌移入「此刻」板块并与星星联动。", en: "Badge wall & lights: reaching 100/1000/10000 stars pops a badge modal; view full history from the star card's top-right; the light bar now lives in Right Now and links to the star counter." },
       { lv: "[ADD]", time: "2026-09-26 09:00:00", text: "今晚月色 / 星星计数器 / 世界失眠时钟：实时月相（API 校验 + 天文公式兜底）、数星星三级徽章、全球 8 城失眠时钟。", en: "Tonight's moon / star counter / world insomnia clock: live moon phase (API-verified with local fallback), 3-tier star badges, and an 8-city world clock." }
+    ]},
+    { ver: "v22.6", date: "2026-09-26 09:40:00", current: false, list: [
+      { lv: "[ADD]", time: "2026-09-26 09:40:00", text: "勋章弹窗贴合失眠夜主题：深蓝夜渐变 + 青色辉光 + 星空纹理，解锁弹窗内可查看勋章墙历史记录。", en: "Badge modal restyled to the insomnia-night theme: deep-blue gradient, cyan glow and starfield; badge wall history viewable inside the unlock modal." },
+      { lv: "[ADD]", time: "2026-09-26 09:30:00", text: "晚安灯牌：页脚新增灯串板块，点击点亮一盏灯并同步累计到星星计数器，深夜语境更完整。", en: "Goodnight light bar: a new strand in the footer; tapping lights a lamp and adds to the star counter for a fuller late-night mood." }
+    ]},
+    { ver: "v22.5", date: "2026-09-26 09:00:00", current: false, list: [
+      { lv: "[ADD]", time: "2026-09-26 09:00:00", text: "勋章达成弹窗：数星星满 100 / 1000 / 10000 颗弹出勋章，星光粒子 + 主题弹窗。", en: "Badge unlock modal: hitting 100 / 1000 / 10000 stars pops a badge with a star-particle burst inside a themed modal." }
+    ]},
+    { ver: "v22.4", date: "2026-09-25 23:30:00", current: false, list: [
+      { lv: "[DEL]", time: "2026-09-25 23:30:00", text: "移除睡眠曲线板块，保留其余今晚月色 / 星星计数器 / 世界失眠时钟。", en: "Removed the sleep-curve section; kept Tonight's Moon, the star counter and the world insomnia clock." }
+    ]},
+    { ver: "v22.3", date: "2026-09-25 23:00:00", current: false, list: [
+      { lv: "[ADD]", time: "2026-09-25 23:00:00", text: "今晚月色 / 星星计数器 / 睡眠曲线 / 世界失眠时钟：新增失眠夜四大陪伴板块。", en: "Tonight's Moon / star counter / sleep curve / world insomnia clock: four new insomnia-night companion sections." }
     ]},
     { ver: "v22.2", date: "2026-09-25 22:02:00", current: false, list: [
       { lv: "[ADD]", time: "2026-09-25 22:02:00", text: "深夜特调：22:00-06:00 自动点亮星空与月亮，一言切换深夜语料库。", en: "Night mode: stars & moon light up from 22:00 to 06:00, quotes switch to a late-night pool." },
