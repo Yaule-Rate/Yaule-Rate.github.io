@@ -116,6 +116,8 @@ input[type=range]::-moz-range-thumb{width:14px;height:14px;border-radius:50%;bac
 .btn.primary{background:var(--primary);border-color:var(--primary);color:#fff}
 .btn.primary:hover{background:var(--primary-strong);color:#fff}
 .btn.primary:disabled{opacity:.55;cursor:not-allowed}
+.btn:disabled,.btn.disabled{opacity:.45;cursor:not-allowed;pointer-events:none;box-shadow:none}
+.tab.disabled{opacity:.45;cursor:not-allowed;pointer-events:none}
 .btn.ghost:hover{color:var(--primary);border-color:var(--primary)}
 .songlist{display:flex;flex-direction:column;gap:8px;max-height:430px;overflow:auto;padding-right:2px}
 .songlist::-webkit-scrollbar{width:6px}
@@ -456,7 +458,7 @@ textarea:focus,.input:focus,select:focus{outline:2px solid var(--primary);outlin
       <div class="tabs" role="tablist">
         <button class="tab active" data-panel="list" role="tab"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#i-music"/></svg>播放列表</button>
         <button class="tab" data-panel="ann" role="tab"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#i-bell"/></svg>公告播报</button>
-        <button class="tab" data-panel="dj" role="tab"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#i-qr"/></svg>远程点歌</button>
+        <button class="tab disabled" data-panel="dj" role="tab" disabled aria-disabled="true" title="预览版未开放远程点歌"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#i-qr"/></svg>远程点歌</button>
       </div>
 
       <!-- 播放列表 -->
@@ -500,7 +502,7 @@ textarea:focus,.input:focus,select:focus{outline:2px solid var(--primary);outlin
         <div class="status" id="rmStatus"><i class="dot"></i><span>未开启</span></div>
         <div class="hint" id="rmOnline" style="margin-top:8px">当前在线点歌：0 人</div>
         <div class="btn-row">
-          <button class="btn primary" id="rmStart"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#i-link"/></svg>开启远程点歌</button>
+          <button class="btn primary" id="rmStart" disabled aria-disabled="true" title="预览版未开放远程点歌"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#i-link"/></svg>开启远程点歌</button>
           <button class="btn ghost" id="rmDownloadQr" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#i-down"/></svg>下载二维码</button>
         </div>
         <div class="rm-tabs">
@@ -511,7 +513,7 @@ textarea:focus,.input:focus,select:focus{outline:2px solid var(--primary);outlin
         <div id="rmTabQr">
           <div class="qr-wrap"><div id="rmQr"></div></div>
           <div class="hint" style="text-align:center" id="rmUrlText"></div>
-          <button class="btn ghost" id="rmCopyLink" style="margin:6px auto;display:block">复制完整链接</button>
+          <button class="btn ghost disabled" id="rmCopyLink" style="margin:6px auto;display:block" disabled aria-disabled="true" title="预览版未开放">复制完整链接</button>
           <div class="hint" style="text-align:center">把二维码图片或复制后的链接发给朋友：朋友打开后会自动连接，无需输入配对码，也可以直接打字提交想听的歌。若朋友在微信内显示连接失败，请点微信右上角「…」→「在浏览器打开」再试。保持本页面打开即可接收。</div>
         </div>
         <div id="rmTabReq" hidden>
