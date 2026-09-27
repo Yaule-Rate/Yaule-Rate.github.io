@@ -3169,7 +3169,10 @@
 
   /* ========== 更新日志（VSCode 风格）全量数据 + 主页简短渲染 + localStorage 同步 ========== */
   var YAULE_CHANGELOG = [
-    { ver: "v22.11", date: "2026-09-26 15:40:00", current: true, list: [
+    { ver: "v22.12", date: "2026-09-27 11:20:00", current: true, list: [
+      { lv: "[UPD]", time: "2026-09-27 11:20:00", text: "兴华中学广播站系统替换为《校园广播站 · MVP》：曲库管理、播报模板、二维码远程点歌、定时与模糊播放、大屏展示与站长通知；详情页简介与更新的旅程（v1.0→v2.0 MVP）同步重写，标签页中英简介更新。", en: "Replaced the Xinghua broadcasting system with the 'Campus Radio · MVP': library manager, broadcast templates, QR remote requests, timed & fuzzy playback, big-screen display and station notices; detail-page intro and the journey log (v1.0→v2.0 MVP) rewritten, card copy updated in both languages." }
+    ]},
+    { ver: "v22.11", date: "2026-09-26 15:40:00", current: false, list: [
       { lv: "[ADD]", time: "2026-09-26 15:40:00", text: "板块滚动揭示：11 个板块滚动进入时淡入上滑，精选作品六张卡片逐张错落出现；采用渐进增强（JS 启用才隐藏待揭示），IO / 滚动 / 定时三层触发保障。", en: "Scroll reveal: 11 sections fade and rise in as you scroll, with the six work cards staggered in one by one; progressive enhancement (only hidden once JS runs) with IO / scroll / timer triggers." },
       { lv: "[ADD]", time: "2026-09-26 15:39:00", text: "面板切换淡入：我的世界布吉岛/花雨亭切换时新面板渐显。", en: "Panel fade: switching BJD/HYT Minecraft servers now fades the new panel in." },
       { lv: "[ADD]", time: "2026-09-26 15:38:00", text: "按钮微交互：查看更多上浮带投影、主要按钮按压反馈、页脚链接平滑变色。", en: "Micro-interactions: 'View more' lifts with shadow, primary buttons get press feedback, footer links fade colors smoothly." },
@@ -3760,7 +3763,7 @@
       'mc.u1': '局', 'mc.u2': 'h', 'mc.u3': '胜', 'mc.u4': '个', 'mc.u5': '天',
       'mc.n1': '生存、建筑与联机日常，记录仍在继续。',
       'mc.n2': '花雨亭已停服，数据定格在停服前一天（2025-06-14）。',
-      'works.t1': '兴华中学广播站系统', 'works.t1d': '广播排班管理、播放日程控制、站点信息维护，独立设计开发并投入校园实际使用。', 'works.t1p': '广播排班、播放日程、站点信息一站式维护，从零开发并投入校园日常使用。', 'works.tag1a': '广播', 'works.tag1b': '管理',
+      'works.t1': '兴华中学广播站系统', 'works.t1d': '内置曲库管理与播报模板，支持二维码远程点歌、定时与模糊播放，一站搞定校园广播播控。', 'works.t1p': '曲库管理、播报模板、远程点歌、定时与模糊播放、大屏展示与站长通知，全部装进一个单文件页面。', 'works.tag1a': '广播', 'works.tag1b': '点歌',
       'works.t2': '自助记账系统', 'works.t2d': '收支记录、分类统计、数据可视化，轻量化单文件本地工具，开箱即用。', 'works.t2p': '收支流水、分类统计、报表导出，让每一笔账都清清楚楚。', 'works.tag2a': '记账', 'works.tag2b': '工具',
       'works.t3': '代码编写系统', 'works.t3d': '可视化拖拽生成 C++ 代码，降低编程入门门槛，助力机器人编程学习。', 'works.t3p': '代码编写辅助工作台，模板化快速生成，让日常编码更顺手。', 'works.tag3a': '编码', 'works.tag3b': '效率',
       'works.t4': '表情转图片转换器', 'works.t4d': '文字、表情符号一键转图片，支持自定义背景与文字颜色，导出高清 PNG。', 'works.t4p': '把文字图案一键转成 Emoji 图片，分享出来更有趣。', 'works.tag4a': '趣味', 'works.tag4b': '图像',
@@ -3828,7 +3831,7 @@
       'mc.u1': 'games', 'mc.u2': 'h', 'mc.u3': 'wins', 'mc.u4': '', 'mc.u5': 'days',
       'mc.n1': 'Survival, building and multiplayer — still recording.',
       'mc.n2': 'Huayuting is offline; data frozen the day before shutdown (2025-06-14).',
-      'works.t1': 'Xinghua Broadcasting System', 'works.t1d': 'Broadcast scheduling, playlist control and station maintenance — built for real campus use.', 'works.t1p': 'One-stop broadcasting ops: scheduling, playlists, station info — built from scratch for daily campus use.', 'works.tag1a': 'Broadcast', 'works.tag1b': 'Manage',
+      'works.t1': 'Xinghua Broadcasting System', 'works.t1d': 'Built-in library manager and broadcast templates, QR remote song requests, timed & fuzzy playback — campus broadcasting, one page.', 'works.t1p': 'Library management, broadcast templates, remote song requests, timed & fuzzy playback, big-screen display and station notices — all in one single-file page.', 'works.tag1a': 'Broadcast', 'works.tag1b': 'Requests',
       'works.t2': 'Self-Service Accounting', 'works.t2d': 'Income & expense tracking, category stats and charts — a lightweight single-file tool.', 'works.t2p': 'Ledger, categories, export — every cent stays crystal clear.', 'works.tag2a': 'Finance', 'works.tag2b': 'Tool',
       'works.t3': 'Code Writing System', 'works.t3d': 'Drag-and-drop C++ generation that lowers the barrier for robotics learners.', 'works.t3p': 'A coding workbench with template-based generation for smoother daily work.', 'works.tag3a': 'Code', 'works.tag3b': 'Efficiency',
       'works.t4': 'Emoji to Image Converter', 'works.t4d': 'Turn text & emoji into images with custom colors and HD PNG export.', 'works.t4p': 'Convert text patterns into fun emoji images for sharing.', 'works.tag4a': 'Fun', 'works.tag4b': 'Image',
