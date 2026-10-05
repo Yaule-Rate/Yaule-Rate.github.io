@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Yaule · 全部作品</title>
+<meta name="description" content="Yaule 的全部作品：校园广播站系统、自助记账、代码编写系统、表情转换、CS 灵敏度校准、棋类合集。">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230284c7'/%3E%3Cpath d='M16 20 L32 38 L48 20 M32 38 L32 52' stroke='white' stroke-width='6' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+<style>
+  :root {
+    --bg: #FAFAF9;
+    --ink: #17181C;
+    --ink-2: #5B5F66;
+    --accent: #0284c7;
+    --accent-2: #38bdf8;
+    --line: #E5E5E1;
+    --card-bg: #fff;
+    --soft: #F1F2F4;
+    --footer-bg: #16181D;
+    --footer-ink: #C9CDD4;
+  }
+  :root[data-theme="dark"] {
+    --bg: #131519;
+    --ink: #E8EAED;
+    --ink-2: #9BA1A9;
+    --accent: #38bdf8;
+    --accent-2: #7dd3fc;
+    --line: #2A2E35;
+    --card-bg: #1A1D23;
+    --soft: #1E2229;
+    --footer-bg: #0D0F12;
+    --footer-ink: #C9CDD4;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: "Noto Sans SC", "PingFang SC", "Microsoft YaHei", system-ui, sans-serif;
+    background: var(--bg);
+    color: var(--ink);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    transition: background .35s, color .35s;
+  }
+  a { color: inherit; text-decoration: none; }
+
+  /* 顶部导航 */
+  .topbar {
+    position: sticky; top: 0; z-index: 100;
+    display: flex; align-items: center; gap: 14px;
+    padding: 14px 28px;
+    background: color-mix(in srgb, var(--bg) 82%, transparent);
+    backdrop-filter: blur(14px);
+    border-bottom: 1px solid var(--line);
+  }
+  .topbar .back {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 9px 16px; border-radius: 999px;
+    border: 1px solid var(--line); background: var(--card-bg);
+    font-size: 14px; font-weight: 600; color: var(--ink);
+    transition: border-color .2s, color .2s, transform .2s;
+  }
+  .topbar .back:hover { border-color: var(--accent); color: var(--accent); transform: translateX(-2px); }
+  .topbar .back svg { width: 15px; height: 15px; }
+  .topbar .brand { font-size: 17px; font-weight: 700; letter-spacing: .02em; }
+  .topbar .brand em { font-style: normal; color: var(--accent); }
+  .topbar .spacer { flex: 1; }
+  .searchbox {
+    display: flex; align-items: center; gap: 8px;
+    padding: 9px 16px; width: min(340px, 42vw);
+    border-radius: 999px; border: 1px solid var(--line);
+    background: var(--card-bg); color: var(--ink-2);
+    transition: border-color .2s, box-shadow .2s;
+  }
+  .searchbox:focus-within { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(2,132,199,.12); }
+  .searchbox svg { width: 16px; height: 16px; flex: none; }
+  .searchbox input {
+    border: 0; outline: 0; background: transparent; width: 100%;
+    font-size: 14px; color: var(--ink); font-family: inherit;
+  }
+  .lang-btn {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 9px 14px; border-radius: 999px;
+    border: 1px solid var(--line); background: var(--card-bg);
+    font-size: 13px; font-weight: 600; color: var(--ink); cursor: pointer;
+    transition: border-color .2s, color .2s;
+  }
+  .lang-btn:hover { border-color: var(--accent); color: var(--accent); }
+  .lang-btn svg { width: 15px; height: 15px; }
+
+  main { flex: 1; width: min(1180px, 92vw); margin: 0 auto; padding: 42px 0 70px; }
+  .page-head { margin-bottom: 30px; }
+  .page-head .kicker {
+    font-size: 12px; font-weight: 700; letter-spacing: .18em; color: var(--accent);
+    margin-bottom: 10px;
+  }
+  .page-head h1 { font-size: clamp(28px, 4vw, 40px); font-weight: 800; letter-spacing: .01em; }
+  .page-head p { margin-top: 10px; color: var(--ink-2); font-size: 15px; }
+  .result-count { margin: 0 0 18px; font-size: 13px; color: var(--ink-2); }
+
+  .wgrid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 22px;
+  }
+  .card {
+    position: relative;
+    display: flex; flex-direction: column;
+    border: 1px solid var(--line);
+    border-radius: 18px;
+    background: linear-gradient(180deg, var(--card-bg), var(--soft));
+    padding: 22px 22px 18px;
+    transition: border-color .18s, transform .18s, box-shadow .18s;
+    cursor: pointer;
+  }
+  .card:hover { transform: translateY(-4px); border-color: var(--accent); box-shadow: 0 14px 34px rgba(2,132,199,.13); }
+  .card .card-dl {
+    position: absolute; top: 14px; right: 14px;
+    width: 32px; height: 32px; border-radius: 10px;
+    display: grid; place-items: center;
+    border: 1px solid var(--line); background: var(--card-bg);
+    color: var(--ink-2); cursor: pointer;
+    transition: color .2s, border-color .2s, transform .2s;
+  }
+  .card .card-dl:hover { color: var(--accent); border-color: var(--accent); transform: translateY(-2px); }
+  .card .card-dl svg { width: 16px; height: 16px; }
+  .card h3 { font-size: 18px; font-weight: 700; margin: 4px 44px 8px 0; }
+  .card .desc { font-size: 14px; color: var(--ink-2); line-height: 1.65; }
+  .card .card-tags { display: flex; flex-wrap: wrap; gap: 8px; margin: 14px 0 4px; }
+  .card .card-tags span {
+    font-size: 12px; padding: 4px 12px; border-radius: 999px;
+    background: color-mix(in srgb, var(--accent) 10%, var(--card-bg));
+    color: var(--accent); border: 1px solid color-mix(in srgb, var(--accent) 28%, transparent);
+    font-weight: 600;
+  }
+  .card .card-foot {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-top: auto; padding-top: 14px;
+  }
+  .card .card-date { font-size: 12px; color: var(--ink-2); font-variant-numeric: tabular-nums; }
+  .card .meta { font-size: 13px; font-weight: 700; color: var(--accent); }
+  .card .card-preview {
+    max-height: 0; overflow: hidden; opacity: 0;
+    transition: max-height .3s ease, opacity .3s ease, margin .3s ease;
+    margin-top: 0;
+  }
+  .card.expanded .card-preview {
+    max-height: 260px; opacity: 1; margin-top: 12px;
+  }
+  .card .card-preview p { font-size: 13px; color: var(--ink-2); line-height: 1.7; }
+  .card .go-row { display: none; gap: 10px; margin-top: 14px; }
+  .card.expanded .go-row { display: flex; }
+  .go-row .go-btn {
+    flex: 1; text-align: center; padding: 10px 0;
+    border-radius: 12px; font-size: 14px; font-weight: 700;
+    background: linear-gradient(120deg, var(--accent), var(--accent-2));
+    color: #fff; cursor: pointer; border: 0;
+    transition: transform .2s, box-shadow .2s;
+  }
+  .go-row .go-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(2,132,199,.3); }
+
+  footer {
+    background: var(--footer-bg); color: var(--footer-ink);
+    text-align: center; padding: 34px 20px;
+  }
+  footer .big { font-size: clamp(30px, 6vw, 52px); font-weight: 900; letter-spacing: .12em; color: #6B7079; line-height: 1; }
+  footer .sub { margin-top: 12px; font-size: 12px; color: var(--footer-ink); opacity: .55; }
+
+  /* 3 秒进度条遮罩 */
+  .loader {
+    position: fixed; inset: 0; z-index: 10050;
+    background: var(--bg);
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    gap: 18px; opacity: 0; visibility: hidden;
+    transition: opacity .3s, visibility .3s;
+  }
+  .loader.active { opacity: 1; visibility: visible; }
+  .loader .bar {
+    width: min(300px, 70vw); height: 5px; border-radius: 999px;
+    background: var(--line); overflow: hidden; position: relative;
+  }
+  .loader .bar i {
+    position: absolute; inset: 0; width: 0;
+    background: linear-gradient(90deg, var(--accent), var(--accent-2));
+    border-radius: 999px;
+    transition: width .1s linear;
+  }
+  .loader .pct { font-size: 13px; color: var(--ink-2); font-variant-numeric: tabular-nums; }
+  .loader .tip { font-size: 13px; color: var(--ink-2); }
+
+  @media (max-width: 980px) {
+    .wgrid { grid-template-columns: repeat(2, 1fr); }
+  }
+  @media (max-width: 640px) {
+    .topbar { padding: 12px 16px; gap: 10px; flex-wrap: wrap; }
+    .searchbox { width: 100%; order: 10; }
+    .wgrid { grid-template-columns: 1fr; }
+    main { padding-top: 30px; }
+  }
+  @media (max-width: 520px) {
+    .wgrid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <a class="back" href="index.html">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+    <span data-i18n="back">返回主页</span>
+  </a>
+  <div class="brand">Yaule<em> · </em><span data-i18n="brand">全部作品</span></div>
+  <div class="spacer"></div>
+  <div class="searchbox">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+    <input id="search" type="search" placeholder="搜索作品名称 / 标签…" data-i18n-ph="search.ph">
+  </div>
+  <button class="lang-btn" id="langBtn">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+    <span id="langLabel">EN</span>
+  </button>
+</div>
+
+<main>
+  <div class="page-head">
+    <p class="kicker" data-i18n="kicker">ALL PROJECTS</p>
+    <h1 data-i18n="h1">全部作品</h1>
+    <p data-i18n="intro">从校园工具到游戏辅助，都是一点点写出来的小玩意。点卡片展开详情，点右上角下载。</p>
+  </div>
+  <p class="result-count" id="resultCount"></p>
+  <div class="wgrid" id="wgrid"></div>
+</main>
+
+<footer>
+  <div class="big">Yaule</div>
+  <div class="sub">© 2026 Yaule · <span data-i18n="foot">失眠夜里的所有小作品</span></div>
+</footer>
+
+<!-- 3 秒进度条 -->
+<div class="loader" id="loader">
+  <div class="bar"><i id="barFill"></i></div>
+  <div class="pct" id="barPct">0%</div>
+  <div class="tip" data-i18n="tip">正在进入作品…</div>
+</div>
+
+<script>
+var I18N = {
+  zh: {
+    'back': '返回主页', 'brand': '全部作品', 'search.ph': '搜索作品名称 / 标签…',
+    'kicker': 'ALL PROJECTS', 'h1': '全部作品',
+    'intro': '从校园工具到游戏辅助，都是一点点写出来的小玩意。点卡片展开详情，点右上角下载。',
+    'foot': '失眠夜里的所有小作品', 'tip': '正在进入作品…',
+    'search.none': '没有找到匹配的作品', 'all': '共 {n} 个作品',
+    'meta.open': '打开作品 →', 'meta.view': '查看详情 →', 'go': '立即体验',
+    'dl': '下载作品',
+    'w1': '兴华中学广播站系统', 'w1d': '广播排班管理、播放日程控制、站点信息维护，独立设计开发并投入校园实际使用。',
+    'w1p': '广播排班、播放日程、站点信息一站式维护，从零开发并投入校园日常使用。', 'w1a': '广播', 'w1b': '管理',
+    'w2': '自助记账系统', 'w2d': '收支记录、分类统计、数据可视化，轻量化单文件本地工具，开箱即用。',
+    'w2p': '收支流水、分类统计、报表导出，让每一笔账都清清楚楚。', 'w2a': '记账', 'w2b': '工具',
+    'w3': '代码编写系统', 'w3d': '可视化拖拽生成 C++ 代码，降低编程入门门槛，助力机器人编程学习。',
+    'w3p': '代码编写辅助工作台，模板化快速生成，让日常编码更顺手。', 'w3a': '编码', 'w3b': '效率',
+    'w4': '表情转图片转换器', 'w4d': '文字、表情符号一键转图片，支持自定义背景与文字颜色，导出高清 PNG。',
+    'w4p': '把文字图案一键转成 Emoji 图片，分享出来更有趣。', 'w4a': '趣味', 'w4b': '图像',
+    'w5': 'CS 灵敏度校准', 'w5d': '输入 DPI 与灵敏度参数，智能评估输出最佳游戏鼠标灵敏度。',
+    'w5p': 'FPS 游戏鼠标灵敏度科学校准，找到真正属于自己的手感。', 'w5a': '游戏', 'w5b': '外设',
+    'w6': '棋类合集', 'w6d': '五子棋与中国象棋，本地运行，无需联网。',
+    'w6p': '象棋与五子棋同页双开，约上好友面对面来一局。', 'w6a': '游戏', 'w6b': '对战'
+  },
+  en: {
+    'back': 'Back to Home', 'brand': 'All Works', 'search.ph': 'Search works / tags…',
+    'kicker': 'ALL PROJECTS', 'h1': 'All Works',
+    'intro': 'From campus tools to game helpers, all hand-written little things. Click a card to expand, download top-right.',
+    'foot': 'All the little works from sleepless nights', 'tip': 'Opening work…',
+    'search.none': 'No matching works', 'all': '{n} works in total',
+    'meta.open': 'Open Work →', 'meta.view': 'View Details →', 'go': 'Try It Now',
+    'dl': 'Download work',
+    'w1': 'Xinghua Broadcasting System', 'w1d': 'Broadcast scheduling, playlist control, station info — built and used on campus.',
+    'w1p': 'One-stop broadcast scheduling and station management, built from scratch for daily campus use.', 'w1a': 'Broadcast', 'w1b': 'Manage',
+    'w2': 'Self-service Accounting', 'w2d': 'Income & expenses, category stats, data visuals — a lightweight single-file local tool.',
+    'w2p': 'Track every penny clearly with flows, category stats and exports.', 'w2a': 'Finance', 'w2b': 'Tool',
+    'w3': 'Code Writing System', 'w3d': 'Drag-and-drop C++ code generation that lowers the bar for robot-programming learners.',
+    'w3p': 'A coding workbench with templates to make daily coding smoother.', 'w3a': 'Coding', 'w3b': 'Efficiency',
+    'w4': 'Emoji Image Converter', 'w4d': 'Turn text & emoji into images with custom background and text color, export HD PNG.',
+    'w4p': 'Convert text patterns into emoji images for fun sharing.', 'w4a': 'Fun', 'w4b': 'Image',
+    'w5': 'CS Sens Calibrator', 'w5d': 'Input DPI and sensitivity to get a smart evaluation of your best mouse setting.',
+    'w5p': 'Scientific FPS sensitivity calibration — find the feel that is truly yours.', 'w5a': 'Game', 'w5b': 'Gear',
+    'w6': 'Chess Collection', 'w6d': 'Gomoku and Chinese chess, offline and local.',
+    'w6p': 'Chess & Gomoku side by side — challenge a friend face to face.', 'w6a': 'Game', 'w6b': 'Duel'
+  }
+};
+
+var WORKS = [
+  { id: 1, detail: 'works/xinghua.html', dl: 'Xinghua%20Middle%20School%20Broadcasting%20Station%20System.html', dlName: 'Xinghua Middle School Broadcasting Station System.html', date: 'v1.2 · 2026-09-20' },
+  { id: 2, detail: 'works/accounting.html', dl: 'Self-service%20accounting%20system%20Pro%20Enhanced%20V6.html', dlName: 'Self-service accounting system Pro Enhanced V6.html', date: 'v1.0 · 2026-09-15' },
+  { id: 3, detail: 'works/code-system.html', dl: 'Nayingte%20M4e%20Code%20Writing%20System%20V2.9Pro.html', dlName: 'Nayingte M4e Code Writing System V2.9Pro.html', date: 'v1.1 · 2026-09-18' },
+  { id: 4, detail: 'works/emoji-converter.html', dl: 'Fancy-Pattern-Emoji-to-Image-Converter.html', dlName: 'Fancy-Pattern-Emoji-to-Image-Converter.html', date: 'v2.0 · 2026-09-22' },
+  { id: 5, detail: 'works/cs-sens.html', dl: 'CS-Sens-Calibrator.html', dlName: 'CS-Sens-Calibrator.html', date: 'v1.0 · 2026-08-30' },
+  { id: 6, detail: 'works/chess.html', dl: 'Chess-Gomoku-Collection.html', dlName: 'Chess-Gomoku-Collection.html', date: 'v1.3 · 2026-09-10' }
+];
+
+function getLang() { return localStorage.getItem('yaule_works_lang') || 'zh'; }
+function setLang(l) { localStorage.setItem('yaule_works_lang', l); }
+function L(k) { var d = I18N[getLang()]; return (d && d[k]) || ''; }
+
+function esc(s) {
+  return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+}
+
+function render() {
+  var lang = getLang();
+  document.documentElement.lang = lang === 'en' ? 'en' : 'zh-CN';
+  document.getElementById('langLabel').textContent = lang === 'en' ? '中' : 'EN';
+  document.querySelectorAll('[data-i18n]').forEach(function (el) {
+    var k = el.getAttribute('data-i18n');
+    if (I18N[lang][k]) el.textContent = I18N[lang][k];
+  });
+  document.querySelectorAll('[data-i18n-ph]').forEach(function (el) {
+    var k = el.getAttribute('data-i18n-ph');
+    if (I18N[lang][k]) el.setAttribute('placeholder', I18N[lang][k]);
+  });
+  draw();
+}
+
+function draw() {
+  var q = (document.getElementById('search').value || '').trim().toLowerCase();
+  var lang = getLang();
+  var grid = document.getElementById('wgrid');
+  var hit = WORKS.filter(function (w) {
+    if (!q) return true;
+    var hay = (L('w' + w.id) + ' ' + L('w' + w.id + 'd') + ' ' + L('w' + w.id + 'a') + ' ' + L('w' + w.id + 'b')).toLowerCase();
+    return hay.indexOf(q) >= 0;
+  });
+  document.getElementById('resultCount').textContent = L('all').replace('{n}', hit.length);
+  grid.innerHTML = '';
+  if (!hit.length) {
+    var none = document.createElement('p');
+    none.textContent = L('search.none');
+    none.style.cssText = 'color:var(--ink-2);padding:60px 0;text-align:center;';
+    grid.appendChild(none);
+    return;
+  }
+  hit.forEach(function (w) {
+    var card = document.createElement('div');
+    card.className = 'card';
+    card.setAttribute('data-detail', w.detail);
+    card.innerHTML =
+      '<a class="card-dl" href="' + esc(w.dl) + '" download="' + esc(w.dlName) + '" title="' + esc(L('dl')) + '" data-stop>' +
+      '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></a>' +
+      '<h3>' + esc(L('w' + w.id)) + '</h3>' +
+      '<p class="desc">' + esc(L('w' + w.id + 'd')) + '</p>' +
+      '<div class="card-tags"><span>' + esc(L('w' + w.id + 'a')) + '</span><span>' + esc(L('w' + w.id + 'b')) + '</span></div>' +
+      '<div class="card-preview"><p>' + esc(L('w' + w.id + 'p')) + '</p>' +
+      '<div class="go-row"><button class="go-btn" data-go>' + esc(L('go')) + '</button></div></div>' +
+      '<div class="card-foot"><span class="card-date">' + esc(w.date) + '</span><span class="meta">' + esc(L('meta.view')) + '</span></div>';
+    grid.appendChild(card);
+  });
+}
+
+function startLoading(url) {
+  var loader = document.getElementById('loader');
+  var fill = document.getElementById('barFill');
+  var pct = document.getElementById('barPct');
+  loader.classList.add('active');
+  var start = Date.now();
+  var iv = setInterval(function () {
+    var t = Math.min(1, (Date.now() - start) / 3000);
+    var p = Math.round(t * 100);
+    fill.style.width = p + '%';
+    pct.textContent = p + '%';
+    if (p >= 100) {
+      clearInterval(iv);
+      setTimeout(function () { window.location.href = url; }, 150);
+    }
+  }, 90);
+}
+
+document.getElementById('wgrid').addEventListener('click', function (e) {
+  var go = e.target.closest('[data-go]');
+  if (go) {
+    var card = go.closest('.card');
+    if (card) startLoading(card.getAttribute('data-detail'));
+    return;
+  }
+  var dl = e.target.closest('[data-stop]');
+  if (dl) return;
+  var card = e.target.closest('.card');
+  if (!card) return;
+  var expanded = card.classList.toggle('expanded');
+  var meta = card.querySelector('.meta');
+  if (meta) meta.textContent = expanded ? L('meta.open') : L('meta.view');
+});
+
+document.getElementById('search').addEventListener('input', draw);
+
+document.getElementById('langBtn').addEventListener('click', function () {
+  setLang(getLang() === 'zh' ? 'en' : 'zh');
+  render();
+});
+
+// 主题跟随主页偏好
+(function () {
+  try {
+    var t = localStorage.getItem('yaule_theme') || 'light';
+    document.documentElement.setAttribute('data-theme', t);
+  } catch (e) {}
+})();
+
+render();
+</script>
+</body>
+</html>

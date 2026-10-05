@@ -225,7 +225,8 @@
     text-align: left;
     max-width: 760px;
   }
-  .lang-roamer.show { opacity: 1; }
+   .lang-roamer.show { opacity: 1; }
+  .lang-roamer { min-height: 1.32em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100%; }
   .hero .en-title {
     margin-top: 32px;
     font-size: 14px;
@@ -282,15 +283,6 @@
   }
   .clock-row.show, .quote-row.show { opacity: 1; transform: translateY(0); }
   .clock-row svg, .quote-row svg { width: 16px; height: 16px; flex: none; color: var(--accent); }
-  #clockTime {
-    font-family: "Noto Serif SC", Georgia, serif;
-    font-size: 22px;
-    font-weight: 700;
-    color: var(--ink);
-    font-variant-numeric: tabular-nums;
-    letter-spacing: 0.04em;
-  }
-  #clockDate { font-size: 13px; }
   .quote-btn {
     border: 0;
     background: transparent;
@@ -358,25 +350,13 @@
     font-size: 16px;
     line-height: 1.9;
   }
-  .btn-enter {
-    display: inline-flex;
-    align-items: center;
-    gap: 10px;
-    padding: 18px 48px;
-    background: var(--ink);
-    color: var(--bg);
-    border-radius: 999px;
-    font-size: 17px;
-    font-weight: 600;
-    transition: background .2s, transform .15s, box-shadow .2s;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.12);
-  }
-  .btn-enter:hover {
-    background: var(--accent);
-    text-decoration: none;
-    transform: translateY(-2px);
-    box-shadow: 0 6px 24px rgba(2, 132, 199, 0.25);
-  }
+  .btn-enter {     position: relative;     display: inline-flex;     align-items: center;     gap: 12px;     padding: 20px 54px;     background: linear-gradient(120deg, var(--accent), var(--accent-2));     color: #fff;     border-radius: 999px;     font-size: 17px;     font-weight: 600;     letter-spacing: 0.03em;     transition: transform .2s, box-shadow .25s, filter .2s;     box-shadow: 0 6px 28px rgba(2, 132, 199, 0.3), inset 0 1px 0 rgba(255,255,255,.22);     overflow: hidden;     text-decoration: none;   }
+  .btn-enter::before {     content: "";     position: absolute;     inset: 0;     background: linear-gradient(105deg, transparent 32%, rgba(255,255,255,.26) 50%, transparent 68%);     transform: translateX(-130%);     transition: transform .6s ease;     pointer-events: none;   }
+  .btn-enter:hover {     transform: translateY(-3px);     box-shadow: 0 12px 38px rgba(2, 132, 199, 0.42), inset 0 1px 0 rgba(255,255,255,.22);     filter: brightness(1.06);     text-decoration: none;   }
+  .btn-enter:hover::before { transform: translateX(130%); }
+  .btn-enter .enter-icon { width: 20px; height: 20px; }
+  .btn-enter .enter-arrow { transition: transform .2s ease; }
+  .btn-enter:hover .enter-arrow { transform: translateX(4px); }
 
   /* ===== 通用板块 ===== */
   .section {
@@ -427,21 +407,19 @@
   }
 
   /* ===== 作品区 ===== */
-  .grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 20px;
-  }
-  .card {
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    border: 1px solid var(--line);
-    border-radius: 16px;
-    background: var(--card-bg);
-    overflow: hidden;
-    transition: border-color .15s, transform .15s, box-shadow .15s;
-  }
+  .grid {     display: flex;     gap: 18px;     overflow-x: auto;     padding: 8px 4px 22px;     scroll-snap-type: x proximity;     -webkit-overflow-scrolling: touch;     scrollbar-width: thin;   }
+  .grid::-webkit-scrollbar { height: 6px; }
+  .grid::-webkit-scrollbar-thumb { background: var(--line); border-radius: 999px; }
+  .grid::-webkit-scrollbar-track { background: transparent; }
+  .grid .card { flex: 0 0 280px; scroll-snap-align: start; }
+  .grid .card-body { flex: 1; }
+  .grid .card .card-dl { position: absolute; top: 10px; right: 10px; }
+  .btn-more-wrap { display: none; margin-top: 18px; }
+  .btn-more-wrap.show { display: flex; justify-content: flex-end; }
+  .btn-more { display: inline-flex; align-items: center; gap: 8px; padding: 11px 22px; border-radius: 999px; border: 1px solid var(--line); background: var(--card-bg); color: var(--ink); font-size: 14px; font-weight: 600; cursor: pointer; transition: border-color .2s, transform .2s, box-shadow .2s, color .2s; }
+  .btn-more:hover { border-color: var(--accent); color: var(--accent); transform: translateY(-2px); box-shadow: 0 8px 20px rgba(2,132,199,.16); }
+  .btn-more svg { width: 16px; height: 16px; }
+  .card {     position: relative;     display: flex;     flex-direction: column;     border: 1px solid var(--line);     border-radius: 18px;     background: linear-gradient(180deg, var(--card-bg), var(--soft));     overflow: hidden;     transition: border-color .18s, transform .18s, box-shadow .18s;     box-shadow: 0 2px 10px rgba(0,0,0,.04);   }
   .card:hover {
     border-color: var(--accent);
     transform: translateY(-4px);
@@ -758,20 +736,6 @@
     opacity: 0.9;
   }
 
-  /* ===== 翻牌时钟 ===== */
-  #clockTime { position: relative; perspective: 200px; }
-  .flip-digit { display: inline-block; position: relative; }
-  .fl-old { position: absolute; inset: 0; animation: flipOut .4s ease forwards; }
-  .fl-new { display: inline-block; animation: flipIn .4s ease forwards; }
-  .fl-colon { display: inline-block; animation: blink 1s steps(1) infinite; }
-  @keyframes flipOut { from { transform: rotateX(0); opacity: 1; } to { transform: rotateX(-90deg); opacity: 0; } }
-  @keyframes flipIn { from { transform: rotateX(90deg); opacity: 0; } to { transform: rotateX(0); opacity: 1; } }
-  @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.25; } }
-
-  /* ===== 页面停留计时 ===== */
-  .stay-time { font-size: 13px; color: var(--accent); }
-  .stay-time b { font-weight: 600; }
-
   /* ===== 作品下载次数 ===== */
   .card-dl-count {
     display: block;
@@ -820,29 +784,12 @@
     row-gap: 6px;
     column-gap: 10px;
   }
-  .now-card .clock-row svg { margin-top: 3px; }
-  .now-card #clockTime {
-    font-size: clamp(34px, 5vw, 48px);
-    line-height: 1.15;
-  }
-  .now-card #clockDate { width: 100%; font-size: 15px; margin-top: 2px; }
   .now-card .weather-row {
     font-size: 17px;
     margin-top: 8px;
   }
   .now-card .weather-row svg { width: 30px; height: 30px; }
   .now-card .weather-temp { font-size: 34px; font-weight: 700; }
-  /* ===== 今年进度环 ===== */
-  .now-progress { display: flex; flex-direction: column; align-items: center; justify-content: center; }
-  .ring-wrap { position: relative; width: 126px; height: 126px; }
-  .ring-wrap svg { width: 100%; height: 100%; }
-  .ring-fg { transition: stroke-dashoffset 1.2s ease; }
-  .ring-center { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; }
-  .ring-pct { font-size: 34px; font-weight: 800; color: var(--ink); font-family: "Noto Serif SC", Georgia, serif; line-height: 1; font-variant-numeric: tabular-nums; }
-  .ring-label { font-size: 11px; color: var(--ink-2); letter-spacing: 0.14em; margin-top: 5px; }
-  .ring-foot { margin-top: 14px; font-size: 13px; color: var(--ink-2); }
-  .ring-foot b { color: var(--accent); font-weight: 600; }
-
   /* ===== 一言过渡 ===== */
   #quoteText { transition: opacity 0.22s ease; }
 
@@ -961,8 +908,7 @@
   .card { cursor: pointer; }
   .card .meta { transition: color 0.2s ease; }
   .card.expanded .meta { color: var(--accent); }
-  .card .meta::after { content: "查看详情 →"; }
-  .card.expanded .meta::after { content: "打开作品 →"; }
+  
 
   /* ===== 页脚新增项 ===== */
   .footer-bottom .visit b { color: var(--accent-2); font-weight: 600; }
@@ -991,26 +937,6 @@
   .lang-dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; }
   .repo-meta .repo-updated { margin-left: auto; }
   @media (max-width: 640px) { .repo-grid { grid-template-columns: 1fr; } }
-
-  /* ===== 技能雷达图 ===== */
-  .skill-wrap { display: grid; grid-template-columns: 1.1fr 1fr; gap: 36px; align-items: center; }
-  .radar-box { width: min(380px, 100%); margin: 0 auto; }
-  .radar-box svg { width: 100% !important; height: auto; display: block; }
-  .radar-grid-line { fill: none; stroke: var(--line); stroke-width: 1; }
-  .radar-axis { stroke: var(--line); stroke-width: 1; }
-  .radar-area { fill: rgba(2, 132, 199, 0.22); stroke: var(--accent); stroke-width: 2; transition: all 0.6s ease; }
-  .radar-dot { fill: var(--accent); }
-  .radar-label { font-size: 2.9px; fill: var(--ink-2); }
-  .radar-label strong { font-size: 13px; fill: var(--ink); font-weight: 600; }
-  .skill-text h3 { font-size: 18px; font-weight: 600; margin-bottom: 12px; }
-  .skill-text p { font-size: 14.5px; color: var(--ink-2); line-height: 1.85; }
-  .skill-bars { margin-top: 18px; display: flex; flex-direction: column; gap: 10px; }
-  .skill-bar-row { display: flex; align-items: center; gap: 12px; font-size: 13px; }
-  .skill-bar-row .sb-name { width: 74px; flex: none; color: var(--ink-2); }
-  .skill-bar-row .sb-track { flex: 1; height: 6px; background: var(--line); border-radius: 999px; overflow: hidden; }
-  .skill-bar-row .sb-fill { display: block; height: 100%; background: linear-gradient(90deg, var(--accent), var(--accent-2)); border-radius: 999px; }
-  .skill-bar-row .sb-num { width: 30px; text-align: right; color: var(--accent); font-weight: 600; }
-  @media (max-width: 640px) { .skill-wrap { grid-template-columns: 1fr; gap: 24px; } .radar-box { max-width: 100%; } }
 
   /* ===== 更新日志（VSCode 风格：深色面板 + 彩色圆点 + 完整时间戳） ===== */
   .vs-log { display: flex; flex-direction: column; gap: 16px; max-width: 860px; margin: 0 auto; }
@@ -1076,49 +1002,6 @@
   .vs-row.cat-warn .vs-tag { color: #e3b341; }
 
   .card, .repo-card, .now-card, .bucket-item { position: relative; }
-
-  /* ===== 人生清单 ===== */
-  .bucket-head { display: flex; align-items: baseline; gap: 14px; margin-bottom: 18px; flex-wrap: wrap; }
-  .bucket-progress { font-size: 13.5px; color: var(--ink-2); }
-  .bucket-progress b { color: var(--accent); font-size: 16px; }
-  .bucket-track { flex: 1; min-width: 140px; height: 6px; background: var(--line); border-radius: 999px; overflow: hidden; }
-  .bucket-fill { height: 100%; background: linear-gradient(90deg, var(--accent), var(--accent-2)); border-radius: 999px; width: 0; transition: width 0.4s ease; }
-  .bucket-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
-  .bucket-item {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    border: 1px solid var(--line);
-    border-radius: 12px;
-    background: var(--card-bg);
-    padding: 11px 13px;
-    font-size: 13px;
-    color: var(--ink-2);
-    transition: border-color 0.18s ease;
-    user-select: none;
-  }
-  .bucket-item .bk-check {
-    width: 18px; height: 18px; flex: none;
-    border: 1.5px solid var(--line);
-    border-radius: 6px;
-    display: flex; align-items: center; justify-content: center;
-    color: transparent;
-    transition: all 0.18s ease;
-  }
-  .bucket-item .bk-check svg { width: 11px; height: 11px; }
-  .bucket-item.done { color: var(--ink); border-color: rgba(2,132,199,0.45); background: rgba(2,132,199,0.05); }
-  .bucket-item.done .bk-check { background: var(--accent); border-color: var(--accent); color: #fff; }
-  .bucket-item.done .bk-text { text-decoration: line-through; text-decoration-color: rgba(2,132,199,0.5); }
-  @media (max-width: 900px) { .bucket-grid { grid-template-columns: repeat(2, 1fr); } }
-  @media (max-width: 480px) { .bucket-grid { grid-template-columns: 1fr; } }
-
-  @media (prefers-reduced-motion: reduce) {
-    .loading-overlay { transition: opacity 0.15s ease; }
-  }
-
-  @media (max-width: 640px) {
-    .now-grid { grid-template-columns: 1fr; }
-  }
 
   /* ===== Footer ===== */
   footer {
@@ -1294,46 +1177,6 @@
   .stars-btn:hover { background: rgba(2,132,199,.14); transform: translateY(-1px); }
   .stars-btn svg { width: 14px; height: 14px; }
 
-  /* ===== 晚安灯牌（页脚） ===== */
-  .now-lights { grid-column: 1 / -1; display: flex; align-items: center; gap: 18px; flex-wrap: wrap; }
-  .now-stars { position: relative; }
-  .stars-hist { position: absolute; top: 16px; right: 16px; width: 32px; height: 32px; border-radius: 10px; border: 1px solid rgba(56,189,248,.25); background: rgba(56,189,248,.06); color: #7dd3fc; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all .18s ease; z-index: 2; }
-  .stars-hist:hover { background: rgba(56,189,248,.16); transform: translateY(-1px); }
-  .stars-hist svg { width: 16px; height: 16px; }
-  .lights { display: flex; gap: 8px; flex-wrap: wrap; }
-  .light-dot { width: 17px; height: 17px; border-radius: 50%; background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.14); transition: all .35s ease; position: relative; }
-  .light-dot.on { background: radial-gradient(circle at 50% 35%, #bae6fd, #38bdf8 60%, #0284c7); border-color: rgba(125,211,252,.65); box-shadow: 0 0 14px rgba(56,189,248,.55); }
-  .light-dot.on::after { content: ""; position: absolute; inset: 3px; border-radius: 50%; background: rgba(255,255,255,.5); filter: blur(1px); }
-  .light-count { font-size: 13px; color: var(--ink-2); }
-  .light-count b { color: #7dd3fc; font-weight: 600; }
-  .light-btn { display: inline-flex; align-items: center; gap: 7px; border: 1px solid rgba(56,189,248,.4); background: rgba(56,189,248,.1); color: #7dd3fc; border-radius: 999px; padding: 8px 18px; font-size: 13.5px; font-weight: 600; cursor: pointer; font-family: inherit; transition: all .18s ease; }
-  .light-btn:hover { background: rgba(56,189,248,.2); transform: translateY(-1px); }
-  .light-btn svg { width: 15px; height: 15px; }
-
-  /* ===== 勋章弹窗 ===== */
-  .badge-modal { position: fixed; inset: 0; z-index: 10001; display: flex; align-items: center; justify-content: center; background: var(--badge-mask); backdrop-filter: blur(8px); opacity: 0; visibility: hidden; pointer-events: none; transition: opacity .28s ease, visibility .28s; }
-  .badge-modal.show { opacity: 1; visibility: visible; pointer-events: auto; }
-  .badge-card { background: var(--badge-bg); border: 1px solid rgba(56,189,248,.35); border-radius: 24px; padding: 34px 42px; text-align: center; width: 330px; transform: translateY(18px) scale(.95); transition: transform .3s ease; box-shadow: 0 0 70px rgba(56,189,248,.22); position: relative; overflow: hidden; }
-  .badge-card::before { content: ""; position: absolute; top: -70px; left: 50%; transform: translateX(-50%); width: 200px; height: 130px; background: radial-gradient(circle, rgba(56,189,248,.35), transparent 70%); pointer-events: none; }
-  .badge-modal.show .badge-card { transform: none; }
-  .badge-icon svg { width: 96px; height: 96px; display: block; margin: 0 auto; filter: drop-shadow(0 0 16px rgba(56,189,248,.45)); }
-  .badge-kicker { font-size: 11px; letter-spacing: .2em; color: var(--accent-2); margin-top: 10px; }
-  .badge-name { font-size: 24px; font-weight: 800; color: var(--ink); margin-top: 8px; font-family: "Noto Serif SC", Georgia, serif; line-height: 1.3; }
-  .badge-desc { font-size: 13px; color: var(--ink-2); margin-top: 12px; line-height: 1.8; }
-  .badge-time { font-size: 12px; color: var(--ink-2); margin-top: 10px; opacity: .75; font-variant-numeric: tabular-nums; }
-  .badge-btn { margin-top: 20px; border: 0; background: linear-gradient(90deg, var(--accent), var(--accent-2)); color: #fff; border-radius: 999px; padding: 10px 30px; font-size: 14px; font-weight: 700; cursor: pointer; font-family: inherit; transition: all .18s ease; }
-  .badge-btn:hover { transform: translateY(-1px); box-shadow: 0 8px 24px rgba(56,189,248,.3); }
-  .badge-card::after { content: ""; position: absolute; inset: 0; border-radius: inherit; background-image: var(--badge-stars); background-size: 92px 92px, 136px 136px; background-position: 8px 18px, 62px 82px; opacity: .4; pointer-events: none; }
-  .badge-hist-title { font-size: 16px; font-weight: 800; color: var(--ink); font-family: "Noto Serif SC", Georgia, serif; margin-top: 4px; }
-  .badge-hist-item { display: flex; align-items: center; gap: 12px; background: rgba(56,189,248,.05); border: 1px solid rgba(56,189,248,.16); border-radius: 14px; padding: 10px 12px; margin-top: 10px; text-align: left; }
-  .badge-hist-item svg { width: 38px; height: 38px; flex: none; filter: drop-shadow(0 0 8px rgba(56,189,248,.35)); }
-  .badge-hist-item b { display: block; font-size: 14px; color: var(--ink); }
-  .badge-hist-item span { display: block; font-size: 11.5px; color: var(--ink-2); margin-top: 2px; font-variant-numeric: tabular-nums; }
-  .badge-hist-empty { font-size: 13px; color: var(--ink-2); margin-top: 26px; line-height: 1.7; }
-  .badge-btn.ghost { background: transparent; border: 1px solid rgba(56,189,248,.38); color: var(--accent); }
-  .badge-btn.ghost:hover { background: rgba(56,189,248,.1); box-shadow: none; }
-
-
   /* ===== 世界失眠时钟 ===== */
   .world-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
   .world-city { background: var(--card-bg); border: 1px solid var(--line); border-radius: 16px; padding: 18px 14px; text-align: center; }
@@ -1401,22 +1244,7 @@
   </svg>
   <p class="loader-name">Yaule</p>
 </div>
-<!-- 跳转进度条（统一为「进入日志」样式：Y 一笔画 + 名字 + 8 秒进度条） -->
-<div class="loading-overlay" id="loadingOverlay">
-  <svg class="loader-svg" viewBox="0 0 120 120" fill="none" stroke="currentColor" stroke-width="7" stroke-linecap="round" stroke-linejoin="round">
-    <path class="loader-path" pathLength="100" d="M22 18 L60 54 L98 18 M60 54 L60 102"/>
-  </svg>
-  <p class="loader-name">Yaule</p>
-  <div class="loading-bar">
-    <div class="loading-bar-fill" id="loadBar"></div>
-  </div>
-  <p class="loading-percent" id="loadPercent">0%</p>
-  <p class="loading-hint" data-i18n="loading.hint">稍等片刻，马上就好…</p>
-  <button class="load-skip" id="loadSkip" type="button">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
-    <span data-i18n="loading.skip1">长按加速</span> <small data-i18n="loading.skip2">按住不放，加载更快</small>
-  </button>
-</div>
+
 <div class="lang-loader" id="langLoader" aria-hidden="true">
   <svg class="splash-y" viewBox="0 0 100 100" fill="none" stroke-linecap="round" stroke-linejoin="round">
     <path class="y-path" pathLength="100" d="M22 30 L50 52 L78 30 L50 52 L50 78" stroke="var(--accent)" stroke-width="6"/>
@@ -1439,20 +1267,20 @@
 <section class="hero" id="hero">
   <h1 class="sr-only">欢迎你的到来</h1>
   <div class="hero-inner">
-    <p class="fest-greeting" id="festGreeting"></p>
-    <p class="hour-greet" id="hourGreet"></p>
-    <p class="lang-roamer" id="langRoamer"></p>
-    <p class="en-title" id="enTitle">Welcome to Yaule's Space</p>
-    <p class="intro" id="intro" data-i18n="hero.intro">这里是我的个人小角落，记录着咖啡、音乐、游戏与作品。不紧不慢，慢慢翻就好。</p>
-    <div class="hero-meta">
-      <p class="quote-row" id="quoteRow">
+    <p class="quote-row" id="quoteRow">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21c3 0 7-1 7-8V5c0-1.25-.756-2.017-2-2H4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2 1 0 1 0 1 1v1c0 1-1 2-2 2s-1 .008-1 1.031V20c0 1 0 1 1 1z"/><path d="M15 21c3 0 7-1 7-8V5c0-1.25-.757-2.017-2-2h-4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2h.75c0 2.25.25 4-2.75 4v3c0 1 0 1 1 1z"/></svg>
         <span id="quoteText"></span>
         <button class="quote-btn" id="quoteNext" aria-label="换一句" title="换一句">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
         </button>
       </p>
-    </div>
+    
+    <p class="fest-greeting" id="festGreeting"></p>
+    <p class="hour-greet" id="hourGreet"></p>
+    <p class="lang-roamer" id="langRoamer"></p>
+    <p class="en-title" id="enTitle">Welcome to Yaule's Space</p>
+    <p class="intro" id="intro" data-i18n="hero.intro">这里是我的个人小角落，记录着咖啡、音乐、游戏与作品。不紧不慢，慢慢翻就好。</p>
+    
     <p class="scroll-hint" id="scrollHint"><span data-i18n="hero.scroll">向下滑动</span> <span class="arrow">↓</span></p>
   </div>
 </section>
@@ -1463,9 +1291,10 @@
     <p class="kicker" data-i18n="enter.kicker">PERSONAL SPACE</p>
     <h2 data-i18n="enter.h2">失眠夜 · 个人空间</h2>
     <p class="desc" data-i18n="enter.desc">这里收纳着关于我的一切——爱好的碎片、写过的项目、走过的路，还有一些零零散散的日常。</p>
-    <a class="btn-enter" href="space.html" data-loading="正在进入个人空间">
+    <a class="btn-enter" href="space.html">
+      <svg class="enter-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v10"/><path d="M7 12l5 5 5-5"/><path d="M3 19h18"/></svg>
       <span data-i18n="enter.btn">进入个人空间</span>
-      <span>→</span>
+      <span class="enter-arrow">→</span>
     </a>
   </div>
 </section>
@@ -1563,11 +1392,7 @@
     </div>
     <div class="grid">
       <div class="card" data-detail="works/xinghua.html">
-        <a class="card-image" href="Xinghua%20Middle%20School%20Broadcasting%20Station%20System.html" rel="noopener">
-          <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 18v-6a9 9 0 0 1 18 0v6"/><path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z"/></svg>
-          
-        </a>
-          <a class="card-dl" href="Xinghua%20Middle%20School%20Broadcasting%20Station%20System.html" download="Xinghua Middle School Broadcasting Station System.html" title="下载作品">
+        <a class="card-dl" href="Xinghua%20Middle%20School%20Broadcasting%20Station%20System.html" download="Xinghua Middle School Broadcasting Station System.html" title="下载作品">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
           </a>
         <div class="card-body">
@@ -1582,11 +1407,7 @@
         </div>
       </div>
       <div class="card" data-detail="works/accounting.html">
-        <a class="card-image" href="Self-service%20accounting%20system%20Pro%20Enhanced%20V6.html" rel="noopener">
-          <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="2" width="16" height="20" rx="2"/><path d="M8 6h8M8 10h8M8 14h5"/></svg>
-          
-        </a>
-          <a class="card-dl" href="Self-service%20accounting%20system%20Pro%20Enhanced%20V6.html" download="Self-service accounting system Pro Enhanced V6.html" title="下载作品">
+        <a class="card-dl" href="Self-service%20accounting%20system%20Pro%20Enhanced%20V6.html" download="Self-service accounting system Pro Enhanced V6.html" title="下载作品">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
           </a>
         <div class="card-body">
@@ -1601,11 +1422,7 @@
         </div>
       </div>
       <div class="card" data-detail="works/code-system.html">
-        <a class="card-image" href="Nayingte%20M4e%20Code%20Writing%20System%20V2.9Pro.html" rel="noopener">
-          <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
-          
-        </a>
-          <a class="card-dl" href="Nayingte%20M4e%20Code%20Writing%20System%20V2.9Pro.html" download="Nayingte M4e Code Writing System V2.9Pro.html" title="下载作品">
+        <a class="card-dl" href="Nayingte%20M4e%20Code%20Writing%20System%20V2.9Pro.html" download="Nayingte M4e Code Writing System V2.9Pro.html" title="下载作品">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
           </a>
         <div class="card-body">
@@ -1620,11 +1437,7 @@
         </div>
       </div>
       <div class="card" data-detail="works/emoji-converter.html">
-        <a class="card-image" href="Fancy-Pattern-Emoji-to-Image-Converter.html" rel="noopener">
-          <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="9" cy="9" r="2"/><path d="M21 15l-5-5L5 21"/></svg>
-          
-        </a>
-          <a class="card-dl" href="Fancy-Pattern-Emoji-to-Image-Converter.html" download="Fancy-Pattern-Emoji-to-Image-Converter.html" title="下载作品">
+        <a class="card-dl" href="Fancy-Pattern-Emoji-to-Image-Converter.html" download="Fancy-Pattern-Emoji-to-Image-Converter.html" title="下载作品">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
           </a>
         <div class="card-body">
@@ -1638,12 +1451,8 @@
 <span class="meta"></span>
         </div>
       </div>
-      <div class="card hidden" data-detail="works/cs-sens.html">
-        <a class="card-image" href="CS-Sens-Calibrator.html" rel="noopener">
-          <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>
-          
-        </a>
-          <a class="card-dl" href="CS-Sens-Calibrator.html" download="CS-Sens-Calibrator.html" title="下载作品">
+      <div class="card" data-detail="works/cs-sens.html">
+        <a class="card-dl" href="CS-Sens-Calibrator.html" download="CS-Sens-Calibrator.html" title="下载作品">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
           </a>
         <div class="card-body">
@@ -1657,12 +1466,8 @@
 <span class="meta"></span>
         </div>
       </div>
-      <div class="card hidden" data-detail="works/chess.html">
-        <a class="card-image" href="Chess-Gomoku-Collection.html" rel="noopener">
-          <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8" cy="8" r="1.5"/><circle cx="16" cy="16" r="1.5"/><circle cx="16" cy="8" r="1.5"/><circle cx="8" cy="16" r="1.5"/></svg>
-          
-        </a>
-          <a class="card-dl" href="Chess-Gomoku-Collection.html" download="Chess-Gomoku-Collection.html" title="下载作品">
+      <div class="card" data-detail="works/chess.html">
+        <a class="card-dl" href="Chess-Gomoku-Collection.html" download="Chess-Gomoku-Collection.html" title="下载作品">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
           </a>
         <div class="card-body">
@@ -1678,77 +1483,21 @@
       </div>
     </div>
     <div class="btn-more-wrap">
-      <button class="btn-more" id="btnMore">查看更多 ↓</button>
+      <button class="btn-more" id="btnMore" type="button"></button>
     </div>
   </div>
 </section>
 
-<!-- 板块 3：纪念日 -->
-<section class="section alt rv" id="anniv">
-  <div class="wrap">
-    <div class="section-head">
-      <p class="kicker">ANNIVERSARY</p>
-      <h2 data-i18n="anniv.h2">纪念日</h2>
-      <p class="desc" data-i18n="anniv.desc">有些日子值得被记住，有些时间悄悄在走。</p>
-    </div>
-    <div class="anniv-grid">
-      <div class="anniv-card">
-        <div class="anniv-top">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-          <span data-i18n="anniv.a1">与这个世界相遇</span>
-        </div>
-        <div class="anniv-num" id="annivDays">--</div>
-        <div class="anniv-label"><span data-i18n="anniv.l1">活着的第</span> <span id="annivDaysN">--</span> <span data-i18n="anniv.l2">天</span></div>
-        <div class="anniv-track"><div class="anniv-fill" id="lifeFill"></div></div>
-        <div class="anniv-meta" id="lifeMeta" data-i18n="anniv.meta1">人生进度计算中…</div>
-        <div class="anniv-date" data-i18n="anniv.d1">自 2012 年 1 月 17 日起</div>
-      </div>
-      <div class="anniv-card">
-        <div class="anniv-top">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19l7-7 3 3-7 7-3-3z"/><path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"/><path d="M2 2l7.586 7.586"/><circle cx="11" cy="11" r="2"/></svg>
-          <span data-i18n="anniv.a2">与这座小站相遇</span>
-        </div>
-        <div class="anniv-num" id="siteDays">--</div>
-        <div class="anniv-label"><span data-i18n="anniv.l3">本站上线第</span> <span id="siteDaysN">--</span> <span data-i18n="anniv.l4">天</span></div>
-        <div class="anniv-track"><div class="anniv-fill" id="siteFill"></div></div>
-        <div class="anniv-meta" id="siteMeta" data-i18n="anniv.meta2">下一个里程碑计算中…</div>
-        <div class="anniv-date" data-i18n="anniv.d2">自 2026 年 9 月 18 日起</div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- 板块 5：此刻（时钟与天气） -->
+<!-- 板块 4：今夜（月色 · 今日推荐 · 天气） -->
 <section class="section alt rv" id="now">
   <div class="wrap">
     <div class="section-head">
-      <p class="kicker">RIGHT NOW</p>
-      <h2 data-i18n="now.h2">此刻</h2>
-      <p class="desc" data-i18n="now.desc">时间与天气，都在悄悄走。</p>
+      <p class="kicker">TONIGHT</p>
+      <h2 data-i18n="now.h2">今夜</h2>
+      <p class="desc" data-i18n="now.desc">月色、今日推荐与天气，都在悄悄陪你。</p>
     </div>
     <div class="now-grid">
-      <div class="now-card">
-        <p class="clock-row show" id="clockRow">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-          <span id="clockTime">--:--:--</span>
-          <span id="clockDate"></span>
-        </p>
-      </div>
-      <div class="now-card now-progress">
-        <div class="ring-wrap">
-          <svg viewBox="0 0 100 100" fill="none" stroke-linecap="round">
-            <circle cx="50" cy="50" r="42" stroke="var(--line)" stroke-width="7"/>
-            <circle class="ring-fg" id="yearRing" cx="50" cy="50" r="42" stroke="var(--accent)" stroke-width="7" stroke-dasharray="263.9" stroke-dashoffset="263.9" transform="rotate(-90 50 50)"/>
-          </svg>
-          <div class="ring-center">
-            <span class="ring-pct" id="yearLeftNum">--</span>
-            <span class="ring-label" data-i18n="now.ring">天 · 2026 还剩</span>
-          </div>
-        </div>
-        <p class="ring-foot"><b><span data-i18n="now.ringfoot">今年已过</span> <span id="yearPctText">--%</span></b></p>
-      </div>
-
-      <div class="now-card now-reco">
+<div class="now-card now-reco">
         <p class="reco-head">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.83z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
           <span data-i18n="now.reco">今日推荐</span>
@@ -1756,8 +1505,7 @@
         <p class="reco-text" id="recoText">正在挑选今日推荐…</p>
         <p class="reco-tag" id="recoTag"></p>
       </div>
-
-      <div class="now-card now-sky">
+<div class="now-card now-sky">
         <div class="moon-visual" id="moonVisual"></div>
         <div class="moon-info">
           <p class="moon-kicker" data-i18n="now.moon">今晚月色</p>
@@ -1765,21 +1513,7 @@
           <p class="moon-illum" id="moonIllum">--</p>
         </div>
       </div>
-      <div class="now-card now-stars">
-        <button class="stars-hist" id="starsHistBtn" aria-label="Badge history">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="8.5"/><path d="M12 7v5l3.2 2"/></svg>
-        </button>
-        <p class="stars-num" id="starsNum">0</p>
-        <p class="stars-sub" data-i18n="now.stars">我数过的星星</p>
-        <div class="stars-bar"><i id="starsBar" style="width:0%"></i></div>
-        <p class="stars-next" id="starsNext"></p>
-        <button class="stars-btn" id="starsBtn">
-          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.9 6.26 6.86.6-5.2 4.52 1.56 6.72L12 16.9l-6.12 3.2 1.56-6.72-5.2-4.52 6.86-.6z"/></svg>
-          <span data-i18n="stars.add">数一颗星</span>
-        </button>
-      </div>
-
-      <div class="now-card now-weather">
+<div class="now-card now-weather">
         <p class="weather-row" id="weatherRow">
           <svg id="weatherIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z"/></svg>
           <span id="weatherText">衢州 · 正在读取天气…</span>
@@ -1791,28 +1525,7 @@
           <div class="wd-item"><div class="wd-label" data-i18n="now.w4">紫外线</div><div class="wd-val"><b id="wUvi">--</b><span class="wd-unit" data-i18n="now.uvi">级</span></div></div>
         </div>
       </div>
-
-      <div class="now-card now-lights">
-        <div class="lights" id="lightsRow"></div>
-        <p class="light-count" id="lightCount"></p>
-        <button class="light-btn" id="lightBtn">
-          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a6.5 6.5 0 0 0-4.6 11.1c.9.9 1.6 1.7 1.6 2.9h5.9c0-1.2.7-2 1.6-2.9A6.5 6.5 0 0 0 12 2zm-2 15.5h4v1.7h-4v-1.7zm0 3.5h4v1.7h-4V21z"/></svg>
-          <span data-i18n="light.btn">留一盏灯</span>
-        </button>
-      </div>
     </div>
-  </div>
-</section>
-
-<!-- 板块 5.5：世界失眠时钟 -->
-<section class="section alt rv" id="world">
-  <div class="wrap">
-    <div class="section-head">
-      <p class="kicker">WORLD AWAKE</p>
-      <h2 data-i18n="world.h2">世界失眠时钟</h2>
-      <p class="desc" data-i18n="world.desc">看看地球另一边的夜，谁还醒着。</p>
-    </div>
-    <div class="world-grid" id="worldGrid"></div>
   </div>
 </section>
 
@@ -1850,26 +1563,6 @@
 </section>
 
 <!-- 板块 7：技能雷达图 -->
-<section class="section alt rv" id="skills">
-  <div class="wrap">
-    <div class="section-head">
-      <p class="kicker">SKILLS</p>
-      <h2 data-i18n="skills.h2">擅长的事</h2>
-      <p class="desc" data-i18n="skills.desc">六个方向的自我评估，图是画出来的，路是一点点走的。</p>
-    </div>
-    <div class="skill-wrap">
-      <div class="radar-box">
-        <svg id="radarSvg" viewBox="0 0 100 100" width="100%" role="img" aria-label="技能雷达图"></svg>
-      </div>
-      <div class="skill-text">
-        <h3 data-i18n="skills.h3">从校园工具到小游戏，什么都想试一试。</h3>
-        <p data-i18n="skills.p">广播站系统、记账工具、代码生成器、棋类游戏……都是一个人从零写完的。爱折腾前端交互，也愿意沉下去做工具；会调音视频，也会为一个小游戏磨上几个晚上。</p>
-        <div class="skill-bars" id="skillBars"></div>
-      </div>
-    </div>
-  </div>
-</section>
-
 <!-- 板块 8：版本更新日志 -->
 <!-- 板块 8：版本更新日志 -->
 <section class="section rv" id="changelog">
@@ -1886,22 +1579,6 @@
     <div class="vs-log" id="mcLog"></div>
   </div>
 </section>
-
-<section class="section alt rv" id="bucket">
-  <div class="wrap">
-    <div class="section-head">
-      <p class="kicker">BUCKET LIST</p>
-      <h2 data-i18n="bucket.h2">人生清单</h2>
-      <p class="desc" data-i18n="bucket.desc">想做的 100 件小事，完成一件，点亮一件。</p>
-    </div>
-    <div class="bucket-head">
-      <span class="bucket-progress"><span data-i18n="bucket.progress">已点亮</span> <b id="bkDone">0</b> / <b id="bkTotal">24</b> <span data-i18n="bucket.progress2">件</span></span>
-      <div class="bucket-track"><div class="bucket-fill" id="bkFill"></div></div>
-    </div>
-    <div class="bucket-grid" id="bucketGrid"></div>
-  </div>
-</section>
-
 
 <footer class="rv">
   <div class="wrap">
@@ -1938,7 +1615,7 @@
     </div>
     <div class="footer-bottom">
       <span>© <span id="year">2026</span> Yaule. All rights reserved.</span>
-      <span class="stay-time" id="stayTime">已停留 0 分 0 秒</span>
+      
       <span class="visit"><span data-i18n="footer.visit1">本站访问</span> <b id="pvCount" class="busuanzi_value_site_pv">--</b><span data-i18n="footer.visit2"> 次</span></span>
       <span class="lucky" id="luckyToday">今日幸运 · --</span>
       <span>Powered by GitHub Pages</span>
@@ -1946,24 +1623,6 @@
   </div>
   <span class="footer-word" aria-hidden="true">Yaule</span>
 </footer>
-<div class="badge-modal" id="badgeModal">
-  <div class="badge-card">
-    <div id="badgeMain">
-      <div class="badge-icon" id="badgeIcon"></div>
-      <p class="badge-kicker" data-i18n="badge.title">获得勋章</p>
-      <h3 class="badge-name" id="badgeName"></h3>
-      <p class="badge-desc" id="badgeDesc"></p>
-      <p class="badge-time" id="badgeTime"></p>
-      <button class="badge-btn" id="badgeClose"><span data-i18n="badge.get">收下星光</span></button>
-    </div>
-    <div id="badgeHist" hidden>
-      <p class="badge-hist-title" data-i18n="badge.hist">勋章墙</p>
-      <div id="badgeHistList"></div>
-      <p class="badge-hist-empty" id="badgeHistEmpty" hidden data-i18n="badge.none">还没有获得勋章</p>
-      <button class="badge-btn ghost" id="badgeHistBack"><span data-i18n="badge.back">返回</span></button>
-    </div>
-  </div>
-</div>
 <div class="fest-layer" id="festLayer"></div>
 <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
 <script>
@@ -1979,160 +1638,19 @@
     toastTimer = setTimeout(function () { toastEl.classList.remove('show'); }, 2600);
   }
 
-  /* ========== 查看更多按钮 ========== */
-  var btn = document.getElementById('btnMore');
-  var hiddenCards = document.querySelectorAll('.card.hidden');
-  var expanded = false;
-  btn.addEventListener('click', function () {
-    expanded = !expanded;
-    hiddenCards.forEach(function (c) { c.classList.toggle('hidden', !expanded); });
-    btn.textContent = (window.YAULE_LANG === 'en')
-      ? (expanded ? 'Collapse ↑' : 'View More ↓')
-      : (expanded ? '收起 ↑' : '查看更多 ↓');
-  });
-
-  /* ========== 伪进度条加载（修复：新标签页打开后自动隐藏 + bfcache 返回残留） ========== */
-  var overlay = document.getElementById('loadingOverlay');
-  var loadBar = document.getElementById('loadBar');
-  var loadPercent = document.getElementById('loadPercent');
-  var loadSkip = document.getElementById('loadSkip');
-  var loadHint = document.querySelector('.loading-hint');
-  var loadTimer = null;
-  var skipTimer = null;
-  var endTimer = null;
-  var boostTimer = null;
-  var progress = 0;
-  var finished = false;
-  var pendingUrl = '';
-  var pendingNew = false;
-
-  function hideLoading() {
-    overlay.classList.remove('active');
-    if (loadTimer) { clearInterval(loadTimer); loadTimer = null; }
-    if (skipTimer) { clearTimeout(skipTimer); skipTimer = null; }
-    if (endTimer) { clearTimeout(endTimer); endTimer = null; }
-    if (boostTimer) { clearInterval(boostTimer); boostTimer = null; }
-    loadBar.style.width = '0%';
-    loadPercent.textContent = '0%';
-    if (loadSkip) loadSkip.classList.remove('show');
-  }
-
-  // 收尾：进度冲到 100% 并执行跳转（常速 8 秒到点 / 长按提前冲满 都会走到这里）
-  function completeLoading() {
-    if (finished) return;
-    finished = true;
-    if (loadTimer) { clearInterval(loadTimer); loadTimer = null; }
-    if (skipTimer) { clearTimeout(skipTimer); skipTimer = null; }
-    if (boostTimer) { clearInterval(boostTimer); boostTimer = null; }
-    if (endTimer) { clearTimeout(endTimer); endTimer = null; }
-    loadBar.style.width = '100%';
-    loadPercent.textContent = '100%';
-    setTimeout(function () {
-      if (pendingNew) {
-        window.open(pendingUrl, '_blank');
-        hideLoading();
-        showToast(window.YAULE_LANG === 'en' ? 'Opened in a new tab' : '已在新标签页打开');
-      } else if (pendingUrl) {
-        window.location.href = pendingUrl;
-      } else {
-        // 开屏模式：无跳转，淡出遮罩停留本页；带锚点（如 #changelog）则滚回该处
-        hideLoading();
-        if (location.hash) {
-          var el = document.getElementById(location.hash.slice(1));
-          if (el && el.scrollIntoView) el.scrollIntoView({ behavior: 'auto' });
-        }
+  /* ========== 查看更多作品（超过 6 个时显示，跳转全作品页） ========== */
+  (function () {
+    var wrap = document.querySelector('.btn-more-wrap');
+    var btn = document.getElementById('btnMore');
+    var cards = document.querySelectorAll('.grid .card');
+    if (cards.length > 6 && wrap) {
+      wrap.classList.add('show');
+      if (btn) {
+        btn.textContent = (window.YAULE_LANG === 'en') ? 'View All Works' : '查看更多作品';
+        btn.addEventListener('click', function () { window.location.href = 'works.html'; });
       }
-    }, 250);
-  }
-
-  function startLoading(targetUrl, title, openInNew) {
-    // 每次激活遮罩都重播 Y 一笔画与名字动画（与进入日志一致）
-    var lp = overlay.querySelector('.loader-path');
-    if (lp) { var lc = lp.cloneNode(true); lp.parentNode.replaceChild(lc, lp); }
-    var ln = overlay.querySelector('.loader-name');
-    if (ln) { var lc2 = ln.cloneNode(true); ln.parentNode.replaceChild(lc2, ln); }
-    overlay.classList.add('active');
-    var LOAD_LINES = [
-      '正在泡咖啡…', '正在数星星…', '正在整理作品…', '正在点亮灯笼…',
-      '正在问候全世界…', '正在翻今天的日记…', '正在检查进度条…', '正在等你…'
-    ];
-    var LOAD_LINES_EN = [
-      'Brewing coffee…', 'Counting stars…', 'Polishing works…', 'Lighting lanterns…',
-      'Greeting the world…', "Flipping today's diary…", 'Checking the progress bar…', 'Waiting for you…'
-    ];
-    if (loadHint) {
-      var LPOOL = (window.YAULE_LANG === 'en') ? LOAD_LINES_EN : LOAD_LINES;
-      loadHint.textContent = LPOOL[Math.floor(Math.random() * LPOOL.length)];
     }
-    progress = 0;
-    finished = false;
-    pendingUrl = targetUrl;
-    pendingNew = openInNew;
-    loadBar.style.width = '0%';
-    loadPercent.textContent = '0%';
-    if (loadSkip) loadSkip.classList.remove('show');
-    // 常速推进：8 秒全程
-    loadTimer = setInterval(function () {
-      progress += Math.random() * 2.2;
-      if (progress > 95) progress = 95;
-      loadBar.style.width = progress + '%';
-      loadPercent.textContent = Math.floor(progress) + '%';
-    }, 100);
-    // 第 3 秒弹出「长按加速」按钮
-    skipTimer = setTimeout(function () { if (loadSkip) loadSkip.classList.add('show'); }, 3000);
-    endTimer = setTimeout(function () { completeLoading(); }, 8000);
-  }
-
-  // 长按加速：按得越久加载越快（0 秒约 57%/s，每秒递增约 12%/70ms）；到 95% 直接冲满并立即进入
-  var boostStart = 0;
-  function startBoost() {
-    if (boostTimer) return;
-    boostStart = Date.now();
-    boostTimer = setInterval(function () {
-      var hold = (Date.now() - boostStart) / 1000;
-      var inc = 2 + hold * 4;
-      progress += inc;
-      if (progress >= 95) {
-        progress = 95;
-        loadBar.style.width = '95%';
-        loadPercent.textContent = '95%';
-        completeLoading();
-        return;
-      }
-      loadBar.style.width = progress + '%';
-      loadPercent.textContent = Math.floor(progress) + '%';
-    }, 70);
-  }
-  function stopBoost() {
-    if (boostTimer) { clearInterval(boostTimer); boostTimer = null; }
-  }
-  // 热区 = 加速按钮 + 提示文字：按钮第 3 秒才出现，但它的位置和提示文字从第 0 秒就可按住加速
-  if (loadSkip) {
-    loadSkip.addEventListener('mousedown', startBoost);
-    loadSkip.addEventListener('touchstart', startBoost, { passive: true });
-    ['mouseup', 'mouseleave', 'touchend', 'touchcancel'].forEach(function (ev) {
-      loadSkip.addEventListener(ev, stopBoost);
-    });
-  }
-  if (loadHint) {
-    loadHint.addEventListener('mousedown', startBoost);
-    loadHint.addEventListener('touchstart', startBoost, { passive: true });
-    ['mouseup', 'mouseleave', 'touchend', 'touchcancel'].forEach(function (ev) {
-      loadHint.addEventListener(ev, stopBoost);
-    });
-  }
-
-  document.querySelectorAll('a[data-loading]').forEach(function (link) {
-    link.addEventListener('click', function (e) {
-      e.preventDefault();
-      var title = this.getAttribute('data-loading');
-      var url = this.getAttribute('href');
-      var openInNew = this.getAttribute('target') === '_blank';
-      startLoading(url, title, openInNew);
-    });
-  });
-
-  // 修复：浏览器后退（bfcache 恢复）时进度条残留 —— 同时重播 Y 一笔画开屏
+  });  // 修复：浏览器后退（bfcache 恢复）时进度条残留 —— 同时重播 Y 一笔画开屏
   window.addEventListener('pageshow', function (e) {
     // 仅 bfcache 恢复（浏览器后退）时重播开屏；正常进入由 playSplash 启动，不做干预
     if (e.persisted) playSplash();
@@ -2455,219 +1973,14 @@
     setInterval(function () { var c2 = calc(); paint(c2.idx, c2.illum); }, 60000);
   })();
 
-  /* ========== 勋章弹窗 ========== */
-  (function () {
-    var m = document.getElementById('badgeModal');
-    if (!m) return;
-    var main = document.getElementById('badgeMain');
-    var hist = document.getElementById('badgeHist');
-    var back = document.getElementById('badgeHistBack');
-    var histMode = 'unlock';
-    function L(k) { var L2 = window.YAULE_LANG || 'zh', d = window.I18N || {}; return (d[L2] && d[L2][k]) || ''; }
-    function open() { m.classList.remove('show'); void m.offsetWidth; m.classList.add('show'); document.body.style.overflow = 'hidden'; }
-    function hide() { m.classList.remove('show'); document.body.style.overflow = ''; }
-    function show(b) {
-      document.getElementById('badgeIcon').innerHTML = b.icon;
-      document.getElementById('badgeName').textContent = b.name;
-      document.getElementById('badgeDesc').textContent = b.desc;
-      var d = new Date();
-      document.getElementById('badgeTime').textContent = (window.YAULE_LANG === 'en' ? 'Unlocked ' : '达成于 ') + d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0') + ' ' + String(d.getHours()).padStart(2, '0') + ':' + String(d.getMinutes()).padStart(2, '0');
-      hist.hidden = true; main.hidden = false;
-      histMode = 'unlock';
-      open();
-    }
-    function renderHist() {
-      var got = {};
-      try { got = JSON.parse(localStorage.getItem('yaule_badges') || '{}'); } catch (e) {}
-      var list = document.getElementById('badgeHistList');
-      var empty = document.getElementById('badgeHistEmpty');
-      var rows = '', n = 0, badges = window.__badges || [];
-      badges.forEach(function (b) {
-        var g = got[b.k];
-        if (!g) return;
-        n++;
-        var t = (typeof g === 'object' && g.t) ? g.t : '——';
-        var suffix = b.watch ? ((L('badge.min') || '分钟')) : (L('stars.got') || '颗');
-        var s = (typeof g === 'object' && g.s) ? (' · ' + g.s + ' ' + suffix) : '';
-        rows += '<div class="badge-hist-item">' + b.icon + '<div><b>' + (L(b.k) || b.fb) + '</b><span>' + (L('badge.time') || '达成于') + ' ' + t + s + '</span></div></div>';
-      });
-      list.innerHTML = rows;
-      empty.hidden = n > 0;
-    }
-    function openHist() {
-      renderHist();
-      hist.hidden = false; main.hidden = true;
-      histMode = 'histOnly';
-      open();
-    }
-    back.addEventListener('click', function () {
-      if (histMode === 'histOnly') { hide(); } else { hist.hidden = true; main.hidden = false; }
-    });
-    document.getElementById('badgeClose').addEventListener('click', hide);
-    m.addEventListener('click', function (e) { if (e.target === m) hide(); });
-    document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && m.classList.contains('show')) hide(); });
-    window.__showBadge = show;
-    window.__openHist = openHist;
-  })();
+  
 
-  /* ========== 星星计数器 ========== */
-  (function () {
-    var num = document.getElementById('starsNum');
-    var bar = document.getElementById('starsBar');
-    var next = document.getElementById('starsNext');
-    var btn = document.getElementById('starsBtn');
-    if (!num || !btn) return;
-    var KEY = 'yaule_stars';
-    var BK = 'yaule_badges';
-    var cur = parseInt(localStorage.getItem(KEY) || '0', 10) || 0;
-    var badges = [
-      { k: 'stars.b1', fb: '观星者', n: 100, d: 'badge.b1d', fd: '第一百颗星落下时，你成了这片夜空的常客。', icon: '<svg viewBox="0 0 96 96" aria-hidden="true"><circle cx="48" cy="48" r="44" fill="none" stroke="rgba(56,189,248,.4)" stroke-width="2" stroke-dasharray="6 6"/><circle cx="48" cy="48" r="30" fill="rgba(56,189,248,.08)"/><path d="M48 20l6.4 13.8 15 1.4-11.2 9.8 3.4 14.8L48 51.6l-13.6 8.2 3.4-14.8-11.2-9.8 15-1.4z" fill="#38bdf8"/><circle cx="74" cy="22" r="2.6" fill="#7dd3fc"/><circle cx="24" cy="30" r="2" fill="#7dd3fc"/><circle cx="30" cy="68" r="2.2" fill="#7dd3fc"/></svg>' },
-      { k: 'stars.b2', fb: '追月人', n: 1000, d: 'badge.b2d', fd: '一千颗星，月亮记住了你的名字。', icon: '<svg viewBox="0 0 96 96" aria-hidden="true"><circle cx="48" cy="48" r="44" fill="none" stroke="rgba(56,189,248,.4)" stroke-width="2"/><path d="M58 22a26 26 0 1 0 16 42 32 32 0 0 1-16-42z" fill="#38bdf8"/><circle cx="24" cy="22" r="2.4" fill="#7dd3fc"/><circle cx="74" cy="38" r="2.2" fill="#7dd3fc"/><circle cx="20" cy="56" r="1.8" fill="#7dd3fc"/><circle cx="76" cy="70" r="2" fill="#7dd3fc"/></svg>' },
-      { k: 'stars.b3', fb: '失眠十级', n: 10000, d: 'badge.b3d', fd: '一万颗星，失眠十级，实至名归。', icon: '<svg viewBox="0 0 96 96" aria-hidden="true"><circle cx="48" cy="48" r="44" fill="none" stroke="rgba(56,189,248,.4)" stroke-width="2" stroke-dasharray="4 6"/><path d="M42 28a22 22 0 1 0 15 36 27 27 0 0 1-15-36z" fill="#38bdf8"/><text x="48" y="66" text-anchor="middle" font-size="26" font-weight="800" fill="#0b1526" font-family="Arial, sans-serif">10</text></svg>' }
-    ];
-    function L(k) { var L2 = window.YAULE_LANG || 'zh', d = window.I18N || {}; return (d[L2] && d[L2][k]) || ''; }
-    function toast(t) { var el = document.getElementById('toast'); if (el) { el.textContent = t; el.classList.add('show'); setTimeout(function () { el.classList.remove('show'); }, 1700); } }
-    function render() {
-      num.textContent = cur;
-      var i, nextBadge = null;
-      for (i = 0; i < badges.length; i++) { if (cur < badges[i].n) { nextBadge = badges[i]; break; } }
-      if (!nextBadge) {
-        bar.style.width = '100%';
-        next.textContent = (L('stars.done') || '已达成') + '「' + (L('stars.b3') || badges[2].fb) + '」';
-      } else {
-        var prev = i === 0 ? 0 : badges[i - 1].n;
-        bar.style.width = Math.min(100, Math.round((cur - prev) / (nextBadge.n - prev) * 100)) + '%';
-        next.textContent = (L('stars.next') || '距下一徽章还差') + ' ' + (nextBadge.n - cur) + ' ' + (L('stars.got') || '颗') + ' · 「' + (L(nextBadge.k) || nextBadge.fb) + '」';
-      }
-    }
-    function claimBadges() {
-      var got = {};
-      try { got = JSON.parse(localStorage.getItem(BK) || '{}'); } catch (e) {}
-      var newest = null;
-      var now = new Date();
-      var ts = now.getFullYear() + '-' + String(now.getMonth() + 1).padStart(2, '0') + '-' + String(now.getDate()).padStart(2, '0') + ' ' + String(now.getHours()).padStart(2, '0') + ':' + String(now.getMinutes()).padStart(2, '0');
-      badges.forEach(function (b) { if (cur >= b.n && !got[b.k]) { got[b.k] = { t: ts, s: cur }; newest = b; } });
-      if (newest) {
-        try { localStorage.setItem(BK, JSON.stringify(got)); } catch (e) {}
-        if (window.__showBadge) window.__showBadge({
-          icon: newest.icon,
-          name: (L(newest.k) || newest.fb) + ' · ' + cur + ' ' + (L('stars.got') || '颗'),
-          desc: L(newest.d) || newest.fd
-        });
-      }
-    }
-    window.__badges = badges;
-    function addStar(fromLight) {
-      cur++;
-      try { localStorage.setItem(KEY, String(cur)); } catch (e) {}
-      render();
-      claimBadges();
-      if (!fromLight) toast((L('now.stars') || '我数过的星星') + ' +1');
-    }
-    btn.addEventListener('click', function () {
-      addStar(false);
-      num.classList.remove('pop'); void num.offsetWidth; num.classList.add('pop');
-    });
-    var histBtn2 = document.getElementById('starsHistBtn');
-    if (histBtn2) histBtn2.addEventListener('click', function () { if (window.__openHist) window.__openHist(); });
-    window.__addStar = addStar;
-    render();
-  })();
-  /* ========== 晚安灯牌 ========== */
-  (function () {
-    var row = document.getElementById('lightsRow');
-    var cnt = document.getElementById('lightCount');
-    var btn = document.getElementById('lightBtn');
-    if (!row || !btn) return;
-    var KEY = 'yaule_lights';
-    var SLOTS = 12;
-    var dots = [];
-    var i;
-    for (i = 0; i < SLOTS; i++) { var d = document.createElement('span'); d.className = 'light-dot'; row.appendChild(d); dots.push(d); }
-    function L(k) { var L2 = window.YAULE_LANG || 'zh', d = window.I18N || {}; return (d[L2] && d[L2][k]) || ''; }
-    function toast(t) { var el = document.getElementById('toast'); if (el) { el.textContent = t; el.classList.add('show'); setTimeout(function () { el.classList.remove('show'); }, 1700); } }
-    function today() { var d = new Date(); return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0'); }
-    var data = null;
-    try { data = JSON.parse(localStorage.getItem(KEY) || 'null'); } catch (e) {}
-    if (!data || data.date !== today()) { data = { date: today(), n: 0, total: (data && data.total) || 0 }; try { localStorage.setItem(KEY, JSON.stringify(data)); } catch (e) {} }
-    function render() {
-      var lit = data.n % (SLOTS + 1);
-      for (var i = 0; i < SLOTS; i++) { dots[i].className = 'light-dot' + (i < lit ? ' on' : ''); }
-      cnt.innerHTML = (L('light.night') || '今夜已留') + ' <b>' + data.n + '</b> ' + (L('light.got') || '盏') + ' · ' + (L('light.total') || '累计') + ' ' + data.total;
-    }
-    btn.addEventListener('click', function () {
-      data.n++; data.total++;
-      try { localStorage.setItem(KEY, JSON.stringify(data)); } catch (e) {}
-      render();
-      if (window.__addStar) window.__addStar(true);
-      toast((L('light.done') || '灯已亮起') + ' · ' + (L('light.night') || '今夜已留') + ' ' + data.n + ' ' + (L('light.got') || '盏'));
-    });
-    render();
-  })();
+  
+  
 
-  /* ========== 世界失眠时钟 ========== */
-  (function () {
-    var grid = document.getElementById('worldGrid');
-    if (!grid) return;
-    var cities = [['world.c0', 'Asia/Shanghai'], ['world.c1', 'Asia/Tokyo'], ['world.c2', 'Asia/Singapore'], ['world.c3', 'Australia/Sydney'], ['world.c4', 'Europe/London'], ['world.c5', 'Europe/Paris'], ['world.c6', 'America/New_York'], ['world.c7', 'America/Los_Angeles']];
-    function tzTime(tz) {
-      var parts = new Date().toLocaleString('zh-CN', { timeZone: tz, hour: '2-digit', minute: '2-digit', hour12: false }).split(':');
-      return parts[0] + ':' + parts[1];
-    }
-    function render() {
-      var L = window.YAULE_LANG || 'zh', dict = window.I18N || {};
-      var html = '';
-      cities.forEach(function (c) {
-        var name = (dict[L] && dict[L][c[0]]) || c[0];
-        var t = tzTime(c[1]);
-        var hh = parseInt(t.split(':')[0], 10);
-        var awake = hh >= 22 || hh < 6;
-        var label = awake ? ((dict[L] && dict[L]['world.awake']) || '还没睡') : ((dict[L] && dict[L]['world.asleep']) || '已入睡');
-        var dot = awake ? '<svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="8"/></svg>' : '<svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="8" opacity=".45"/></svg>';
-        html += '<div class="world-city"><p class="wc-name">' + name + '</p><p class="wc-time">' + t + '</p><span class="wc-state ' + (awake ? 'awake' : 'asleep') + '">' + dot + label + '</span></div>';
-      });
-      grid.innerHTML = html;
-    }
-    render();
-    setInterval(render, 1000);
-  })();
+  
 
-  /* ========== 实时时钟 ========== */
-  (function () {
-    var timeEl = document.getElementById('clockTime');
-    var dateEl = document.getElementById('clockDate');
-    var week = ['日', '一', '二', '三', '四', '五', '六'];
-    var prev = '';
-    function tick() {
-      var d = new Date();
-      var hh = String(d.getHours()).padStart(2, '0');
-      var mm = String(d.getMinutes()).padStart(2, '0');
-      var ss = String(d.getSeconds()).padStart(2, '0');
-      var s = hh + ':' + mm + ':' + ss;
-      var html = '';
-      for (var i = 0; i < s.length; i++) {
-        var ch = s[i];
-        if (ch === ':') {
-          html += '<span class="fl-colon">:</span>';
-          continue;
-        }
-        var pch = i < prev.length ? prev[i] : '';
-        if (pch && pch !== ch) {
-          html += '<span class="flip-digit"><span class="fl-old">' + pch + '</span><span class="fl-new">' + ch + '</span></span>';
-        } else {
-          html += '<span class="flip-digit">' + ch + '</span>';
-        }
-      }
-      timeEl.innerHTML = html;
-      prev = s;
-      var en = window.YAULE_LANG === 'en';
-      dateEl.textContent = en
-        ? ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'][d.getDay()] + ', ' + ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][d.getMonth()] + ' ' + d.getDate() + ', ' + d.getFullYear()
-        : d.getFullYear() + ' 年 ' + (d.getMonth() + 1) + ' 月 ' + d.getDate() + ' 日 · 星期' + week[d.getDay()];
-    }
-    tick();
-    setInterval(tick, 1000);
-  })();
+  
 
   /* ========== 今日一言（每日一句，点击换一句） ========== */
   (function () {
@@ -2932,46 +2245,7 @@
       .catch(function () { txt.textContent = (window.YAULE_LANG === 'en') ? 'Quzhou · weather unavailable right now' : '衢州 · 天气暂时不可用'; });
   })();
 
-  /* ========== 纪念日：活着第几天 / 网站上线天数 ========== */
-  (function () {
-    function daysSince(y, m, d) {
-      var start = new Date(y, m - 1, d);
-      var now = new Date();
-      now.setHours(0, 0, 0, 0);
-      return Math.floor((now - start) / 86400000) + 1;
-    }
-    var a = daysSince(2012, 1, 17);
-    var s = daysSince(2026, 9, 18);
-    var e1 = document.getElementById('annivDays');
-    var e2 = document.getElementById('annivDaysN');
-    var e3 = document.getElementById('siteDays');
-    var e4 = document.getElementById('siteDaysN');
-    if (e1) e1.textContent = a;
-    if (e2) e2.textContent = a;
-    if (e3) e3.textContent = s;
-    if (e4) e4.textContent = s;
-    // 生命进度条：以 80 岁（29200 天）为参考；站点里程碑：下一个 30 / 100 / 365 / 1000 天
-    var lifeFill = document.getElementById('lifeFill');
-    var lifeMeta = document.getElementById('lifeMeta');
-    var siteFill = document.getElementById('siteFill');
-    var siteMeta = document.getElementById('siteMeta');
-    var span = 29200;
-    var pct = Math.min(100, Math.round((a / span) * 1000) / 10);
-    var goals = [30, 100, 365, 1000, 3650];
-    var next = 3650;
-    for (var i = 0; i < goals.length; i++) {
-      if (s < goals[i]) { next = goals[i]; break; }
-    }
-    function renderAnniv() {
-      var en = window.YAULE_LANG === 'en';
-      if (lifeFill) setTimeout(function () { lifeFill.style.width = pct + '%'; }, 120);
-      if (lifeMeta) lifeMeta.textContent = en ? 'About ' + pct + '% of a life lived (based on 80 years)' : '人生进度约 ' + pct + '%（参考 80 岁）';
-      if (siteFill) setTimeout(function () { siteFill.style.width = Math.min(100, (s / next) * 100) + '%'; }, 120);
-      if (siteMeta) siteMeta.textContent = en ? (next - s) + ' days to the ' + next + '-day milestone' : '距离 ' + next + ' 天里程碑还有 ' + (next - s) + ' 天';
-    }
-    window.__renderAnniv = renderAnniv;
-    renderAnniv();
-  })();
+  
 
   /* ========== 节日飘浮：自动拉取中国法定节假日，节日当天飘 3 秒 ========== */
   (function () {
@@ -3062,48 +2336,7 @@
       .catch(function () {});
   })();
 
-  /* ========== 页面停留计时 + 守夜徽章 ========== */
-  (function () {
-    var el = document.getElementById('stayTime');
-    if (!el) return;
-    var start = Date.now();
-    var BK2 = 'yaule_badges';
-    function L2(k) { var Lv = window.YAULE_LANG || 'zh', d2 = window.I18N || {}; return (d2[Lv] && d2[Lv][k]) || ''; }
-    var watchBadges = [
-      { k: 'badge.w1', fb: '守夜人', min: 1, watch: true, icon: '<svg viewBox="0 0 96 96" aria-hidden="true"><circle cx="48" cy="48" r="44" fill="none" stroke="rgba(56,189,248,.4)" stroke-width="2" stroke-dasharray="6 6"/><path d="M58 22a26 26 0 1 0 14 44 32 32 0 0 1-14-44z" fill="#38bdf8"/><circle cx="22" cy="26" r="2.4" fill="#7dd3fc"/><circle cx="74" cy="46" r="2" fill="#7dd3fc"/><circle cx="40" cy="70" r="1.8" fill="#7dd3fc"/></svg>' },
-      { k: 'badge.w2', fb: '夜猫子', min: 5, watch: true, icon: '<svg viewBox="0 0 96 96" aria-hidden="true"><circle cx="48" cy="48" r="44" fill="none" stroke="rgba(56,189,248,.4)" stroke-width="2" stroke-dasharray="4 6"/><path d="M50 20a30 30 0 1 0 16 52 34 34 0 0 1-16-52z" fill="#38bdf8"/><circle cx="35" cy="46" r="9" fill="rgba(125,211,252,.55)"/><circle cx="35" cy="46" r="4" fill="#0b1526"/><circle cx="65" cy="46" r="9" fill="rgba(125,211,252,.55)"/><circle cx="65" cy="46" r="4" fill="#0b1526"/><path d="M38 66q10 8 20 0" stroke="#7dd3fc" stroke-width="3" fill="none" stroke-linecap="round"/></svg>' }
-    ];
-    if (window.__badges) window.__badges = window.__badges.concat(watchBadges);
-    function claimWatch(m) {
-      if (typeof m !== 'number' || m < 0) m = Math.floor((Date.now() - start) / 60000);
-      var got = {};
-      try { got = JSON.parse(localStorage.getItem(BK2) || '{}'); } catch (e) {}
-      var newest = null;
-      var now = new Date();
-      var ts = now.getFullYear() + '-' + String(now.getMonth() + 1).padStart(2, '0') + '-' + String(now.getDate()).padStart(2, '0') + ' ' + String(now.getHours()).padStart(2, '0') + ':' + String(now.getMinutes()).padStart(2, '0');
-      watchBadges.forEach(function (b) { if (m >= b.min && !got[b.k]) { got[b.k] = { t: ts, s: m }; newest = b; } });
-      if (newest) {
-        try { localStorage.setItem(BK2, JSON.stringify(got)); } catch (e) {}
-        if (window.__showBadge) window.__showBadge({
-          icon: newest.icon,
-          name: (L2(newest.k) || newest.fb) + ' · ' + m + ' ' + (L2('badge.min') || '分钟'),
-          desc: L2(newest.k + 'd') || newest.fb
-        });
-      }
-    }
-    window.__watchTest = claimWatch;
-    function update() {
-      var sec = Math.floor((Date.now() - start) / 1000);
-      var m = Math.floor(sec / 60);
-      var s = sec % 60;
-      el.innerHTML = (window.YAULE_LANG === 'en')
-        ? 'Stayed <b>' + m + '</b> min <b>' + s + '</b> sec'
-        : '已停留 <b>' + m + '</b> 分 <b>' + s + '</b> 秒';
-      claimWatch(m);
-    }
-    update();
-    setInterval(update, 1000);
-  })();
+  
 
   /* ========== 作品下载计数（localStorage） ========== */
   (function () {
@@ -3142,34 +2375,18 @@
     });
   })();
 
-  /* ========== 今年进度环 ========== */
-  (function () {
-    var ring = document.getElementById('yearRing');
-    var leftNum = document.getElementById('yearLeftNum');
-    var pctText = document.getElementById('yearPctText');
-    if (!ring || !leftNum) return;
-    function update() {
-      var now = new Date();
-      var y = now.getFullYear();
-      var start = new Date(y, 0, 1);
-      var end = new Date(y + 1, 0, 1);
-      var total = Math.round((end - start) / 86400000);
-      var elapsed = Math.floor((now - start) / 86400000) + 1;
-      var pct = Math.min(100, Math.round((elapsed / total) * 100));
-      var left = Math.max(0, total - elapsed);
-      var C = 2 * Math.PI * 42;
-      ring.setAttribute('stroke-dasharray', C.toFixed(1));
-      ring.setAttribute('stroke-dashoffset', (C * (1 - pct / 100)).toFixed(1));
-      leftNum.textContent = left;
-      if (pctText) pctText.textContent = pct + '%';
-    }
-    update();
-    setInterval(update, 60000);
-  })();
+  
 
   /* ========== 更新日志（VSCode 风格）全量数据 + 主页简短渲染 + localStorage 同步 ========== */
   var YAULE_CHANGELOG = [
-    { ver: "v22.13", date: "2026-09-27 11:35:00", current: true, list: [
+    { ver: "v23", date: "2026-10-05 21:00:00", current: true, list: [
+      { lv: "[ADD]", time: "2026-10-05 20:58:00", text: "精选作品横向化重构：卡片横向滚动、超 6 个时右侧出现「查看更多作品」按钮，跳转全新 works.html 全作品页（顶部搜索、全部作品、中英双语）。", en: "Works re-layout: cards scroll horizontally, a 'View All Works' button appears once there are over 6 works, leading to a brand-new works.html page with top search, all works and EN/CN." },
+      { lv: "[DEL]", time: "2026-10-05 20:50:00", text: "删除板块：纪念日、此刻（原实时时钟）、世界失眠时钟、擅长的事、人生清单；今晚月色 / 今日推荐 / 天气重组为「今夜」板块。", en: "Removed sections: anniversaries, the old 'right now' clock, world insomnia clock, skills, bucket list; moon / daily pick / weather merged into one 'Tonight' section." },
+      { lv: "[UPD]", time: "2026-10-05 20:45:00", text: "进入个人空间卡片大幅美化：青色渐变、光扫动效、图标与箭头微交互。", en: "The 'Enter My Space' card got a premium restyle: cyan gradient, light sweep, icon & arrow micro-interactions." },
+      { lv: "[UPD]", time: "2026-10-05 20:40:00", text: "进度条统一：仅精选作品进入保留 3 秒进度条（移除长按加速），其余入口全部直跳；保留 Y 一笔画开屏动画。", en: "Progress bars unified: only work entries keep a 3-second bar (boost removed); all other entries jump directly; the Y one-stroke splash stays." },
+      { lv: "[UPD]", time: "2026-10-05 20:35:00", text: "欢迎语动画占位稳定（不换行、不留两行），一言移至首屏顶部，语言 / 主题按钮切换带遮罩；切换英文时全站可见文案彻底英译（含作品简介与卡片「查看详情」）。", en: "Greeting roamer keeps stable layout (no wrap, no double lines); quote moved to hero top; EN switch now translates every visible string including work intros and card 'View Details'." }
+    ]},
+    { ver: "v22.13", date: "2026-09-27 11:35:00", current: false, list: [
       { lv: "[FIX]", time: "2026-09-27 11:35:00", text: "校园广播站 MVP：远程点歌入口、开启远程点歌与复制完整链接改为无效按钮（灰化、不可点击），与顶部预览版横幅口径一致。", en: "Campus Radio MVP: the remote-request tab, 'start remote requests' and 'copy full link' buttons are now inert (greyed out, unclickable), matching the preview banner." }
     ]},
     { ver: "v22.12", date: "2026-09-27 11:20:00", current: false, list: [
@@ -3344,27 +2561,14 @@
   function playSplash() {
     if (splashTimer) { clearTimeout(splashTimer); splashTimer = null; }
     window.scrollTo(0, 0);
-    // 修复：bfcache 返回时若此前经「进入个人空间」等跳转离开，进度条遮罩可能残留激活态——先复位隐藏
-    var ov = document.getElementById('loadingOverlay');
-    if (ov) {
-      ov.classList.remove('active');
-      var lb = document.getElementById('loadBar');
-      if (lb) lb.style.width = '0%';
-      var lp = document.getElementById('loadPercent');
-      if (lp) lp.textContent = '0%';
-      var ls = document.getElementById('loadSkip');
-      if (ls) ls.classList.remove('show');
-    }
     var loader = document.getElementById('pageLoader');
     if (!loader) {
-      // bfcache 返回时原 loader 已从 DOM 移除：重建并播放
       loader = document.createElement('div');
       loader.className = 'page-loader';
       loader.id = 'pageLoader';
       loader.innerHTML = '<svg class="loader-svg" viewBox="0 0 120 120" fill="none" stroke="currentColor" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"><path class="loader-path" pathLength="100" d="M22 18 L60 54 L98 18 M60 54 L60 102"/></svg><p class="loader-name">Yaule</p>';
       document.body.insertBefore(loader, document.body.firstChild);
     } else {
-      // 重播：克隆路径与名字节点以重新触发 CSS 动画
       var path = loader.querySelector('.loader-path');
       if (path) { var c1 = path.cloneNode(true); path.parentNode.replaceChild(c1, path); }
       var name = loader.querySelector('.loader-name');
@@ -3398,7 +2602,7 @@
     update();
   })();
 
-  /* ========== favicon 呼吸 ========== */
+/* ========== favicon 呼吸 ========== */
   (function () {
     var link = document.querySelector('link[rel="icon"]');
     if (!link) return;
@@ -3608,107 +2812,9 @@
       .catch(function () { clearTimeout(timer); render(fallback); });
   })();
 
-  /* ========== 技能雷达图 ========== */
-  (function () {
-    function renderSkills() {
-    var svg = document.getElementById('radarSvg');
-    var bars = document.getElementById('skillBars');
-    if (!svg) return;
-    var skills = [
-      { name: '前端开发', en: 'Front-end', val: 8 },
-      { name: '效率工具', en: 'Tools', val: 9 },
-      { name: '音视频', en: 'AV Media', val: 7 },
-      { name: '游戏开发', en: 'Game Dev', val: 8 },
-      { name: '界面设计', en: 'UI Design', val: 6 },
-      { name: '后端开发', en: 'Back-end', val: 6 }
-    ];
-    function sname(i) { return (window.YAULE_LANG === 'en') ? skills[i].en : skills[i].name; }
-    var C = 50, R = 36;
-    function pt(i, r) {
-      var a = (i * 60 - 90) * Math.PI / 180;
-      return (C + r * Math.cos(a)).toFixed(1) + ',' + (C + r * Math.sin(a)).toFixed(1);
-    }
-    var defs = '<defs><radialGradient id="radarGrad" cx="50%" cy="50%" r="70%"><stop offset="0%" stop-color="rgba(56,189,248,0.35)"/><stop offset="100%" stop-color="rgba(2,132,199,0.12)"/></radialGradient></defs>';
-    var grid = '';
-    for (var k = 1; k <= 4; k++) {
-      var pts = [];
-      for (var i = 0; i < 6; i++) pts.push(pt(i, R * k / 4));
-      grid += '<polygon class="radar-grid-line" points="' + pts.join(' ') + '"/>';
-    }
-    var axes = '';
-    for (var i2 = 0; i2 < 6; i2++) {
-      axes += '<line class="radar-axis" x1="' + C + '" y1="' + C + '" x2="' + pt(i2, R).split(',')[0] + '" y2="' + pt(i2, R).split(',')[1] + '"/>';
-    }
-    var areaPts = [];
-    for (var i3 = 0; i3 < 6; i3++) areaPts.push(pt(i3, R * skills[i3].val / 10));
-    var area = '<polygon class="radar-area" points="' + areaPts.join(' ') + '" fill="url(#radarGrad)"/>';
-    var dots = '';
-    for (var i4 = 0; i4 < 6; i4++) {
-      var dp = pt(i4, R * skills[i4].val / 10).split(',');
-      dots += '<circle class="radar-dot" cx="' + dp[0] + '" cy="' + dp[1] + '" r="1.6"/>';
-    }
-    var labels = '';
-    var anchors = ['middle', 'end', 'end', 'middle', 'start', 'start'];
-    for (var i5 = 0; i5 < 6; i5++) {
-      var a5 = (i5 * 60 - 90) * Math.PI / 180;
-      var lx = C + (R + 10) * Math.cos(a5);
-      var ly = C + (R + 10) * Math.sin(a5);
-      var dx = 0, dy = 0;
-      if (i5 === 0) dy = -1.2;
-      if (i5 === 3) dy = 1.6;
-      if (i5 === 1 || i5 === 5) dx = 1.5;
-      if (i5 === 2 || i5 === 4) dx = -1.5;
-      labels += '<text class="radar-label" x="' + (lx + dx).toFixed(1) + '" y="' + (ly + dy).toFixed(1) + '" text-anchor="' + anchors[i5] + '" dominant-baseline="middle">' + sname(i5) + '</text>';
-    }
-    svg.innerHTML = defs + grid + axes + area + dots + labels;
-    if (bars) {
-      bars.innerHTML = skills.map(function (s, si) {
-        return '<div class="skill-bar-row"><span class="sb-name">' + sname(si) + '</span><span class="sb-track"><span class="sb-fill" style="width:' + (s.val * 10) + '%"></span></span><span class="sb-num">' + s.val + '</span></div>';
-      }).join('');
-    }
-    }
-    window.__renderSkills = renderSkills;
-    renderSkills();
-  })();
+  
 
-  /* ========== 人生清单 ========== */
-  (function () {
-    var grid = document.getElementById('bucketGrid');
-    if (!grid) return;
-    // 预设完成状态：默认写死在程序里（第1行2、3；第2行1、2、3；第3行1、2、3、4；第4行1、2、3、4；第5行2、3、4）
-    var itemsZh = ['去看一次现场演唱会', '看一场完整的日出', '学会弹一首完整的曲子', '写一本属于自己的小说', '跑一次五公里', '去一次西藏', '给爸妈买一份大礼物', '养一盆活过一年的绿植', '亲手做一顿年夜饭', '学会一门新的外语', '看一次极光', '独自去一座陌生城市旅行', '学会做咖啡拉花', '给十年后的自己写一封信', '种一棵属于自己的树', '养一只猫', '跳一次伞', '读完《三国演义》', '做一次公益志愿者', '发一张自己的专辑', '开一家小店', '通宵看一次流星雨', '把房间布置成喜欢的样子', '拍一支 Vlog 记录一天'];
-    var itemsEn = ['Watch a live concert', 'See a full sunrise', 'Learn to play a song on an instrument', 'Write a novel of my own', 'Run 5 kilometers', 'Travel to Tibet', 'Buy a big gift for my parents', 'Keep a plant alive for a year', 'Cook the New Year dinner myself', 'Learn a new language', 'See the aurora', 'Travel alone to a strange city', 'Learn latte art', 'Write a letter to my future self in 10 years', 'Plant a tree of my own', 'Adopt a cat', 'Go skydiving', 'Finish reading Romance of the Three Kingdoms', 'Volunteer for charity once', 'Release my own album', 'Open a little shop', 'Stay up all night for a meteor shower', 'Decorate my room the way I like', 'Make a day-in-my-life Vlog'];
-    var doneMap = {};
-    [1, 2, 4, 5, 6, 8, 9, 10, 11, 12, 13, 14, 15, 17, 18, 19].forEach(function (i) { doneMap[i] = 1; });
-    var doneN = document.getElementById('bkDone');
-    var totalN = document.getElementById('bkTotal');
-    var fill = document.getElementById('bkFill');
-    function refresh() {
-      var n = 0;
-      grid.querySelectorAll('.bucket-item').forEach(function (el) {
-        if (el.classList.contains('done')) n++;
-      });
-      if (doneN) doneN.textContent = n;
-      if (totalN) totalN.textContent = (window.YAULE_LANG === 'en' ? itemsEn : itemsZh).length;
-      if (fill) fill.style.width = (n / (window.YAULE_LANG === 'en' ? itemsEn : itemsZh).length * 100) + '%';
-    }
-    function render() {
-      var arr = (window.YAULE_LANG === 'en') ? itemsEn : itemsZh;
-      grid.innerHTML = arr.map(function (t, idx) {
-        var on = doneMap[idx];
-        return '<div class="bucket-item' + (on ? ' done' : '') + '"><span class="bk-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span><span class="bk-text">' + t + '</span></div>';
-      }).join('');
-      var n = 0;
-      grid.querySelectorAll('.bucket-item').forEach(function (el) {
-        if (el.classList.contains('done')) n++;
-      });
-      if (doneN) doneN.textContent = n;
-      if (totalN) totalN.textContent = arr.length;
-      if (fill) fill.style.width = (n / arr.length * 100) + '%';
-    }
-    window.__renderBucket = render;
-    render();
-  })();
+  
 </script>
 
 <script>
@@ -3728,25 +2834,14 @@
       'enter.btn': '进入个人空间',
       'life.h2': '生活瞬间', 'life.desc': '一些悄悄累积的数字，随时间慢慢长大。点击上方切换。',
       'life.tab1': '咖啡', 'life.tab2': '音乐', 'life.tab3': '游戏',
-      'works.h2': '精选作品', 'works.desc': '从校园工具到游戏辅助，都是一点点写出来的小玩意。点卡片打开，点右上角下载。', 'works.more': '查看更多 ↓',
-      'anniv.h2': '纪念日', 'anniv.desc': '有些日子值得被记住，有些时间悄悄在走。',
-      'now.h2': '此刻', 'now.desc': '时间与天气，都在悄悄走。', 'now.reco': '今日推荐',
-      'now.ring': '天 · 2026 还剩', 'now.ringfoot': '今年已过',
+      'works.h2': '精选作品', 'works.desc': '从校园工具到游戏辅助，都是一点点写出来的小玩意。点卡片打开，点右上角下载。', 'works.more': '查看更多作品',
+      'works.open': '查看详情', 'works.open2': '打开作品',
+      'now.h2': '今夜', 'now.desc': '月色、今日推荐与天气，都在悄悄陪你。', 'now.reco': '今日推荐',
       'now.w1': '体感', 'now.w2': '湿度', 'now.w3': '风速', 'now.w4': '紫外线', 'now.uvi': '级',
       'now.moon': '今晚月色', 'moon.illum': '照亮',
-      'now.stars': '我数过的星星', 'stars.add': '数一颗星', 'stars.next': '距下一徽章还差', 'stars.got': '颗', 'stars.done': '已达成',
-      'stars.b1': '观星者', 'stars.b2': '追月人', 'stars.b3': '失眠十级',
       'moon.n0': '新月', 'moon.n1': '娥眉月', 'moon.n2': '上弦月', 'moon.n3': '盈凸月', 'moon.n4': '满月', 'moon.n5': '亏凸月', 'moon.n6': '下弦月', 'moon.n7': '残月',
-      'world.h2': '世界失眠时钟', 'world.desc': '看看地球另一边的夜，谁还醒着。', 'world.awake': '还没睡', 'world.asleep': '已入睡',
-      'badge.title': '获得勋章', 'badge.get': '收下星光', 'badge.time': '达成于', 'badge.hist': '勋章墙', 'badge.none': '还没有获得勋章，数到一百颗星再来看看。', 'badge.back': '返回', 'badge.min': '分钟',
-      'badge.w1': '守夜人', 'badge.w1d': '陪着这页页面到凌晨，守夜人的灯交到你手上了。', 'badge.w2': '夜猫子', 'badge.w2d': '停留满五分钟，夜色已经认得你了。',
-      'badge.b1d': '第一百颗星落下时，你成了这片夜空的常客。', 'badge.b2d': '一千颗星，月亮记住了你的名字。', 'badge.b3d': '一万颗星，失眠十级，实至名归。',
-      'light.btn': '留一盏灯', 'light.night': '今夜已留', 'light.total': '累计', 'light.got': '盏', 'light.done': '灯已亮起',
-      'world.c0': '北京', 'world.c1': '东京', 'world.c2': '新加坡', 'world.c3': '悉尼', 'world.c4': '伦敦', 'world.c5': '巴黎', 'world.c6': '纽约', 'world.c7': '洛杉矶',
       'repos.h2': '开源仓库', 'repos.desc': '最近活跃的仓库，数据实时来自 GitHub。',
-      'skills.h2': '擅长的事', 'skills.desc': '六个方向的自我评估，图是画出来的，路是一点点走的。',
       'changelog.h2': '更新日志', 'changelog.desc': '这个页面是怎么一点点长成现在这样的。', 'changelog.more': '详细日志',
-      'bucket.h2': '人生清单', 'bucket.desc': '想做的 100 件小事，完成一件，点亮一件。',
       'footer.brand': '个人空间入口：这里收录我的作品与项目，全部开源托管在 GitHub 上。',
       'footer.nav': '导航', 'footer.home': '首页', 'footer.space': '个人空间', 'footer.projects': '项目', 'footer.lifedata': '生活数据',
       'footer.works': '作品', 'footer.space2': '失眠夜个人空间', 'footer.awards': '荣誉奖项', 'footer.contactme': '联系我',
@@ -3772,14 +2867,7 @@
       'works.t4': '表情转图片转换器', 'works.t4d': '文字、表情符号一键转图片，支持自定义背景与文字颜色，导出高清 PNG。', 'works.t4p': '把文字图案一键转成 Emoji 图片，分享出来更有趣。', 'works.tag4a': '趣味', 'works.tag4b': '图像',
       'works.t5': 'CS 灵敏度校准', 'works.t5d': '输入 DPI 与灵敏度参数，智能评估输出最佳游戏鼠标灵敏度。', 'works.t5p': 'FPS 游戏鼠标灵敏度科学校准，找到真正属于自己的手感。', 'works.tag5a': '游戏', 'works.tag5b': '外设',
       'works.t6': '棋类合集', 'works.t6d': '五子棋与中国象棋，本地运行，无需联网。', 'works.t6p': '象棋与五子棋同页双开，约上好友面对面来一局。', 'works.tag6a': '游戏', 'works.tag6b': '对战',
-      'anniv.a1': '与这个世界相遇', 'anniv.a2': '与这座小站相遇',
-      'anniv.l1': '活着的第', 'anniv.l2': '天', 'anniv.l3': '本站上线第', 'anniv.l4': '天',
-      'anniv.meta1': '人生进度计算中…', 'anniv.meta2': '下一个里程碑计算中…',
-      'anniv.d1': '自 2012 年 1 月 17 日起', 'anniv.d2': '自 2026 年 9 月 18 日起',
       'repos.loading': '正在读取仓库…', 'repos.connecting': '连接 GitHub API 中，稍等片刻。',
-      'skills.h3': '从校园工具到小游戏，什么都想试一试。',
-      'skills.p': '广播站系统、记账工具、代码生成器、棋类游戏……都是一个人从零写完的。爱折腾前端交互，也愿意沉下去做工具；会调音视频，也会为一个小游戏磨上几个晚上。',
-      'bucket.progress': '已点亮', 'bucket.progress2': '件',
       'loading.hint': '稍等片刻，马上就好…', 'loading.skip1': '长按加速', 'loading.skip2': '按住不放，加载更快'
     },
     en: {
@@ -3796,25 +2884,14 @@
       'enter.btn': 'Enter My Space',
       'life.h2': 'Life Moments', 'life.desc': 'Numbers that quietly grow with time. Click to switch.',
       'life.tab1': 'Coffee', 'life.tab2': 'Music', 'life.tab3': 'Games',
-      'works.h2': 'Featured Works', 'works.desc': 'From campus tools to game aids — little things written one by one. Click a card to open, click download top-right.', 'works.more': 'View More ↓',
-      'anniv.h2': 'Anniversaries', 'anniv.desc': 'Some days are worth remembering; some time quietly passes.',
-      'now.h2': 'Right Now', 'now.desc': 'Time and weather, quietly passing.', 'now.reco': "Today's Pick",
-      'now.ring': 'days left in 2026', 'now.ringfoot': 'of 2026 used',
+      'works.h2': 'Featured Works', 'works.desc': 'From campus tools to game aids — little things written one by one. Click a card to open, click download top-right.', 'works.more': 'View All Works',
+      'works.open': 'View Details', 'works.open2': 'Open Work',
+      'now.h2': 'Tonight', 'now.desc': "Moon, today's pick and weather, quietly keeping you company.", 'now.reco': "Today's Pick",
       'now.w1': 'Feels', 'now.w2': 'Humidity', 'now.w3': 'Wind', 'now.w4': 'UV', 'now.uvi': '',
       'now.moon': "Tonight's Moon", 'moon.illum': 'Illuminated',
-      'now.stars': 'Stars I Have Counted', 'stars.add': 'Count one', 'stars.next': 'Next badge in', 'stars.got': 'stars', 'stars.done': 'Reached',
-      'stars.b1': 'Stargazer', 'stars.b2': 'Moonchaser', 'stars.b3': 'Insomniac Lv.10',
       'moon.n0': 'New Moon', 'moon.n1': 'Waxing Crescent', 'moon.n2': 'First Quarter', 'moon.n3': 'Waxing Gibbous', 'moon.n4': 'Full Moon', 'moon.n5': 'Waning Gibbous', 'moon.n6': 'Last Quarter', 'moon.n7': 'Waning Crescent',
-      'world.h2': 'World Insomnia Clock', 'world.desc': 'See whose night is still awake across the globe.', 'world.awake': 'Awake', 'world.asleep': 'Asleep',
-      'badge.title': 'Badge Unlocked', 'badge.get': 'Claim the light', 'badge.time': 'Unlocked', 'badge.hist': 'Badge Wall', 'badge.none': 'No badges yet. Count to 100 stars and come back.', 'badge.back': 'Back', 'badge.min': 'min',
-      'badge.w1': 'Night Watcher', 'badge.w1d': "You kept this page company into the early hours — the watcher's lamp is yours.", 'badge.w2': 'Night Owl', 'badge.w2d': 'Five minutes in — the night knows you now.',
-      'badge.b1d': 'When the 100th star fell, you became a regular of this night sky.', 'badge.b2d': 'A thousand stars — the moon now knows your name.', 'badge.b3d': 'Ten thousand stars. Insomnia Level 10 — earned, not given.',
-      'light.btn': 'Leave a light', 'light.night': 'Lit tonight', 'light.total': 'Total', 'light.got': 'lights', 'light.done': 'A light lit',
-      'world.c0': 'Beijing', 'world.c1': 'Tokyo', 'world.c2': 'Singapore', 'world.c3': 'Sydney', 'world.c4': 'London', 'world.c5': 'Paris', 'world.c6': 'New York', 'world.c7': 'Los Angeles',
       'repos.h2': 'Open Source', 'repos.desc': 'Recently active repos, live from GitHub.',
-      'skills.h2': "What I'm Good At", 'skills.desc': 'Self-assessment in six directions — drawn as a chart, built step by step.',
       'changelog.h2': 'Changelog', 'changelog.desc': 'How this page grew into what it is today.', 'changelog.more': 'Full Log',
-      'bucket.h2': 'Bucket List', 'bucket.desc': '100 little things I want to do — done one, lit one.',
       'footer.brand': 'Entry to my space: my works and projects, all open-sourced on GitHub.',
       'footer.nav': 'Navigate', 'footer.home': 'Home', 'footer.space': 'My Space', 'footer.projects': 'Projects', 'footer.lifedata': 'Life Data',
       'footer.works': 'Works', 'footer.space2': 'Insomnia Night Space', 'footer.awards': 'Awards', 'footer.contactme': 'Contact',
@@ -3840,14 +2917,7 @@
       'works.t4': 'Emoji to Image Converter', 'works.t4d': 'Turn text & emoji into images with custom colors and HD PNG export.', 'works.t4p': 'Convert text patterns into fun emoji images for sharing.', 'works.tag4a': 'Fun', 'works.tag4b': 'Image',
       'works.t5': 'CS Sensitivity Calibrator', 'works.t5d': 'Input DPI & sens, get an AI-evaluated optimal mouse sensitivity.', 'works.t5p': 'Science-based mouse sensitivity calibration for your own feel.', 'works.tag5a': 'Game', 'works.tag5b': 'Gear',
       'works.t6': 'Chess & Gomoku Collection', 'works.t6d': 'Gomoku and Chinese chess, fully offline.', 'works.t6p': 'Chess and gomoku on one page — challenge a friend face to face.', 'works.tag6a': 'Game', 'works.tag6b': 'Versus',
-      'anniv.a1': 'Met this world', 'anniv.a2': 'Met this little site',
-      'anniv.l1': 'Day', 'anniv.l2': 'of being alive', 'anniv.l3': 'Day', 'anniv.l4': 'of this site',
-      'anniv.meta1': 'Calculating…', 'anniv.meta2': 'Calculating…',
-      'anniv.d1': 'Since Jan 17, 2012', 'anniv.d2': 'Since Sep 18, 2026',
       'repos.loading': 'Loading repos…', 'repos.connecting': 'Connecting to GitHub API…',
-      'skills.h3': 'From campus tools to mini games — I try a bit of everything.',
-      'skills.p': 'Broadcasting systems, accounting tools, code generators, board games… all written from scratch alone. I love tinkering with front-end interaction and going deep on tools — audio & video too, and grinding nights on a mini game.',
-      'bucket.progress': 'Done', 'bucket.progress2': 'of',
       'loading.hint': 'Just a moment…', 'loading.skip1': 'Hold to speed up', 'loading.skip2': 'Press and hold to load faster'
     }
   };
@@ -3857,6 +2927,16 @@
   function setLang(l) {
     try { localStorage.setItem('yaule_lang', l); } catch (e) {}
   }
+  function updateMetas() {
+    var en = window.YAULE_LANG === 'en';
+    document.querySelectorAll('.card .meta').forEach(function (meta) {
+      var card = meta.closest('.card');
+      meta.textContent = (card && card.classList.contains('expanded'))
+        ? (en ? 'Open Work →' : '打开作品 →')
+        : (en ? 'View Details →' : '查看详情 →');
+    });
+  }
+
   function applyLang() {
     var L = getLang();
     window.YAULE_LANG = L;
@@ -3871,34 +2951,26 @@
     });
     var lb = document.getElementById('langLabel');
     if (lb) lb.textContent = L === 'en' ? 'EN' : '中';
-    var st = document.getElementById('stayTime');
-    if (st) st.innerHTML = L === 'en' ? 'Stayed 0 min 0 sec' : '已停留 0 分 0 秒';
+
     var qn = document.getElementById('quoteNext');
     if (qn) { var qt = L === 'en' ? 'Another quote' : '换一句'; qn.setAttribute('aria-label', qt); qn.title = qt; }
-    var rs = document.getElementById('radarSvg');
-    if (rs) rs.setAttribute('aria-label', L === 'en' ? 'Skills radar chart' : '技能雷达图');
+
     var tt = document.getElementById('themeToggle');
     if (tt) tt.title = L === 'en' ? 'Toggle dark / light theme' : '切换深色 / 浅色主题';
     var ltb = document.getElementById('langToggle');
     if (ltb) ltb.title = L === 'en' ? 'Switch language' : '切换语言';
     var tip = document.getElementById('langLoaderTip');
     if (tip) tip.textContent = L === 'en' ? 'Switching language…' : '正在切换语言…';
-    if (window.__renderLife) window.__renderLife();
-    if (window.__renderAnniv) window.__renderAnniv();
-    if (window.__renderWeather) window.__renderWeather();
+
     if (window.__renderDl) window.__renderDl();
-    if (window.__renderRepos) window.__renderRepos();
-    if (window.__renderSkills) window.__renderSkills();
-    if (window.__renderBucket) window.__renderBucket();
+
     if (window.__reQuote) window.__reQuote();
     if (window.__setFest) window.__setFest();
     if (window.__setHour) window.__setHour();
     var bm = document.getElementById('btnMore');
-    if (bm) {
-      var hiddenN = document.querySelectorAll('.works-grid .card.hidden').length;
-      var isOpen = hiddenN === 0;
-      bm.textContent = L === 'en' ? (isOpen ? 'Collapse ↑' : 'View More ↓') : (isOpen ? '收起 ↑' : '查看更多 ↓');
-    }
+    if (bm) bm.textContent = L === 'en' ? 'View All Works' : '查看更多作品';
+    updateMetas();
+    document.querySelectorAll('.card-dl').forEach(function (dl) { dl.title = L === 'en' ? 'Download work' : '下载作品'; });
     if (window.__renderShares) window.__renderShares();
     if (window.__renderChangelog) window.__renderChangelog();
     if (window.__renderLucky) window.__renderLucky();
