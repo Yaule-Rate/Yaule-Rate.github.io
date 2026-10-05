@@ -419,11 +419,11 @@
   .btn-more { display: inline-flex; align-items: center; gap: 8px; padding: 11px 22px; border-radius: 999px; border: 1px solid var(--line); background: var(--card-bg); color: var(--ink); font-size: 14px; font-weight: 600; cursor: pointer; transition: border-color .2s, transform .2s, box-shadow .2s, color .2s; }
   .btn-more:hover { border-color: var(--accent); color: var(--accent); transform: translateY(-2px); box-shadow: 0 8px 20px rgba(2,132,199,.16); }
   .btn-more svg { width: 16px; height: 16px; }
-  .card {     position: relative;     display: flex;     flex-direction: column;     border: 1px solid var(--line);     border-radius: 18px;     background: linear-gradient(180deg, var(--card-bg), var(--soft));     overflow: hidden;     transition: border-color .18s, transform .18s, box-shadow .18s;     box-shadow: 0 2px 10px rgba(0,0,0,.04);   }
+  .card {     position: relative;     display: flex;     flex-direction: column;     border: 1px solid var(--line);     border-radius: 18px;     background: linear-gradient(180deg, var(--card-bg), var(--soft));     overflow: hidden;     transition: border-color .18s, transform .18s, box-shadow .18s;     box-shadow: 0 2px 12px rgba(2,132,199,.07);   }
   .card:hover {
     border-color: var(--accent);
     transform: translateY(-4px);
-    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.08);
+    box-shadow: 0 12px 32px rgba(2, 132, 199, 0.15);
     text-decoration: none;
   }
   .card .card-image {
@@ -520,7 +520,7 @@
     padding: 40px 44px;
     background: var(--card-bg);
     border: 1px solid var(--line);
-    border-radius: 20px;
+    border-radius: 18px;
     opacity: 0;
     transform: translateY(12px) scale(0.99);
     pointer-events: none;
@@ -710,8 +710,8 @@
   .now-card {
     background: var(--card-bg);
     border: 1px solid var(--line);
-    border-radius: 20px;
-    padding: 34px 32px;
+    border-radius: 18px;
+    padding: 30px 28px;
     min-height: 150px;
   }
   .now-weather { padding: 28px 32px; }
@@ -871,12 +871,12 @@
     flex-direction: column;
     gap: 8px;
     border: 1px solid var(--line);
-    border-radius: 14px;
+    border-radius: 18px;
     background: var(--card-bg);
     padding: 20px 22px;
     transition: border-color 0.15s, transform 0.15s, box-shadow 0.15s;
   }
-  .repo-card:hover { border-color: var(--accent); transform: translateY(-3px); box-shadow: 0 10px 28px rgba(0,0,0,0.07); }
+  .repo-card:hover { border-color: var(--accent); transform: translateY(-3px); box-shadow: 0 12px 30px rgba(2,132,199,0.15); }
   .repo-card .repo-name { display: flex; align-items: center; gap: 8px; font-size: 15.5px; font-weight: 600; color: var(--accent); }
   .repo-card .repo-name svg { width: 15px; height: 15px; flex: none; }
   .repo-card .repo-desc { font-size: 13.5px; color: var(--ink-2); line-height: 1.65; flex: 1; }
@@ -1195,20 +1195,23 @@
 <section class="hero" id="hero">
   <h1 class="sr-only">欢迎你的到来</h1>
   <div class="hero-inner">
-    <p class="quote-row" id="quoteRow">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21c3 0 7-1 7-8V5c0-1.25-.756-2.017-2-2H4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2 1 0 1 0 1 1v1c0 1-1 2-2 2s-1 .008-1 1.031V20c0 1 0 1 1 1z"/><path d="M15 21c3 0 7-1 7-8V5c0-1.25-.757-2.017-2-2h-4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2h.75c0 2.25.25 4-2.75 4v3c0 1 0 1 1 1z"/></svg>
-        <span id="quoteText"></span>
-        <button class="quote-btn" id="quoteNext" aria-label="换一句" title="换一句">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
-        </button>
-      </p>
+    
     
     <p class="fest-greeting" id="festGreeting"></p>
     <p class="hour-greet" id="hourGreet"></p>
     <p class="lang-roamer" id="langRoamer"></p>
     <p class="en-title" id="enTitle">Welcome to Yaule's Space</p>
     <p class="intro" id="intro" data-i18n="hero.intro">这里是我的个人小角落，记录着咖啡、音乐、游戏与作品。不紧不慢，慢慢翻就好。</p>
-    
+        <div class="hero-meta">
+      <p class="quote-row" id="quoteRow">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21c3 0 7-1 7-8V5c0-1.25-.756-2.017-2-2H4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2 1 0 1 0 1 1v1c0 1-1 2-2 2s-1 .008-1 1.031V20c0 1 0 1 1 1z"/><path d="M15 21c3 0 7-1 7-8V5c0-1.25-.757-2.017-2-2h-4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2h.75c0 2.25.25 4-2.75 4v3c0 1 0 1 1 1z"/></svg>
+        <span id="quoteText"></span>
+        <button class="quote-btn" id="quoteNext" aria-label="换一句" title="换一句">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
+        </button>
+      </p>
+    </div>
+
     <p class="scroll-hint" id="scrollHint"><span data-i18n="hero.scroll">向下滑动</span> <span class="arrow">↓</span></p>
   </div>
 </section>
@@ -2305,7 +2308,11 @@
 
   /* ========== 更新日志（VSCode 风格）全量数据 + 主页简短渲染 + localStorage 同步 ========== */
   var YAULE_CHANGELOG = [
-    { ver: "v23.1", date: "2026-10-05 19:22:00", current: true, list: [
+    { ver: "v23.2", date: "2026-10-05 19:47:08", current: true, list: [
+      { lv: "[UPD]", time: "2026-10-05 19:47:08", text: "一言回归首屏原位置（中文简介下方、向下滚动上方），恢复 hero-meta 布局结构。", en: "Daily quote moved back to its original hero spot (below the intro, above the scroll hint)." },
+      { lv: "[UPD]", time: "2026-10-05 19:47:08", text: "样式统一：作品卡 / 开源卡 / 今夜卡 / 生活瞬间面板统一圆角（18px）与青蓝系阴影，整体更贴合青蓝渐变主题。", en: "Style unification: work / repo / tonight / life cards now share consistent radius (18px) and cyan-tinted shadows, matching the cyan theme." },
+    ]},
+    { ver: "v23.1", date: "2026-10-05 19:22:00", current: false, list: [
       { lv: "[UPD]", time: "2026-10-05 19:22:00", text: "代码清理与冗余优化：移除已删板块（纪念日 / 世界失眠时钟 / 星星计数器 / 技能雷达 / 人生清单）遗留的 CSS 死规则与过时注释，更新站点描述文案。", en: "Code cleanup: removed dead CSS rules and stale comments left by removed sections (anniversaries, insomnia clock, star counter, skills radar, bucket list); refreshed site meta description." },
     ]},
     { ver: "v23", date: "2026-10-05 21:00:00", current: false, list: [
