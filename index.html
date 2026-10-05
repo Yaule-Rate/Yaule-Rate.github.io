@@ -186,7 +186,7 @@
     margin-top: 20px;
     display: inline-flex; align-items: center; gap: 7px;
     font-size: 12.5px; color: var(--accent);
-    border: 1px solid rgba(2,132,199,0.35); background: rgba(2,132,199,0.06);
+    border: 1px solid rgba(13,148,136,0.35); background: rgba(13,148,136,0.06);
     border-radius: 999px; padding: 9px 20px; cursor: pointer;
     opacity: 0;
     transition: opacity 0.35s ease;
@@ -194,7 +194,7 @@
   }
   .load-skip.show { opacity: 1; }
   .load-skip svg { width: 14px; height: 14px; }
-  .load-skip:active { background: rgba(2,132,199,0.16); }
+  .load-skip:active { background: rgba(13,148,136,0.16); }
   .load-skip small { font-size: 11px; opacity: 0.75; }
 
   /* ===== 首屏（全世界语言的欢迎 · 居左） ===== */
@@ -352,7 +352,7 @@
   }
   .btn-enter {     position: relative;     display: inline-flex;     align-items: center;     gap: 12px;     padding: 20px 54px;     background: var(--ink);     color: var(--bg);     border-radius: 999px;     font-size: 17px;     font-weight: 600;     letter-spacing: 0.03em;     transition: transform .2s, box-shadow .25s, filter .2s;     box-shadow: 0 10px 30px rgba(23, 24, 28, .18);     overflow: hidden;     text-decoration: none;   }
   .btn-enter::before {     content: "";     position: absolute;     inset: 0;     background: linear-gradient(105deg, transparent 32%, rgba(255,255,255,.26) 50%, transparent 68%);     transform: translateX(-130%);     transition: transform .6s ease;     pointer-events: none;   }
-  .btn-enter:hover {     transform: translateY(-3px);     box-shadow: 0 12px 38px rgba(2, 132, 199, 0.42), inset 0 1px 0 rgba(255,255,255,.22);     filter: brightness(1.06);     text-decoration: none;   }
+  .btn-enter:hover {     transform: translateY(-3px);     box-shadow: 0 12px 38px rgba(13, 148, 136, 0.42), inset 0 1px 0 rgba(255,255,255,.22);     filter: brightness(1.06);     text-decoration: none;   }
   .btn-enter:hover::before { transform: translateX(130%); }
   .btn-enter .enter-icon { width: 20px; height: 20px; }
   .btn-enter .enter-arrow { transition: transform .2s ease; }
@@ -393,11 +393,11 @@
   .log-more {
     display: inline-flex; align-items: center; gap: 6px;
     font-size: 12.5px; color: var(--accent);
-    border: 1px solid rgba(2,132,199,0.35); background: rgba(2,132,199,0.06);
+    border: 1px solid rgba(13,148,136,0.35); background: rgba(13,148,136,0.06);
     border-radius: 999px; padding: 6px 15px;
     text-decoration: none; transition: all 0.18s ease;
   }
-  .log-more:hover { background: rgba(2,132,199,0.14); color: var(--accent); transform: translateY(-1px); }
+  .log-more:hover { background: rgba(13,148,136,0.14); color: var(--accent); transform: translateY(-1px); }
   .log-more svg { width: 13px; height: 13px; }
   .section-head .desc {
     color: var(--ink-2);
@@ -426,11 +426,11 @@
   .btn-more { display: inline-flex; align-items: center; gap: 8px; padding: 11px 22px; border-radius: 999px; border: 1px solid var(--line); background: var(--card-bg); color: var(--ink); font-size: 14px; font-weight: 600; cursor: pointer; transition: border-color .2s, transform .2s, box-shadow .2s, color .2s; }
   .btn-more:hover { border-color: var(--accent); color: var(--accent); transform: translateY(-2px); box-shadow: 0 8px 20px rgba(13,148,136,.16); }
   .btn-more svg { width: 16px; height: 16px; }
-  .card {     position: relative;     display: flex;     flex-direction: column;     border: 1px solid var(--line);     border-radius: 18px;     background: linear-gradient(180deg, var(--card-bg), var(--soft));     overflow: hidden;     transition: border-color .18s, transform .18s, box-shadow .18s;     box-shadow: 0 2px 12px rgba(2,132,199,.07);   }
+  .card {     position: relative;     display: flex;     flex-direction: column;     border: 1px solid var(--line);     border-radius: 18px;     background: var(--card-bg);     overflow: hidden;     transition: border-color .18s, transform .18s, box-shadow .18s;     box-shadow: 0 2px 12px rgba(13,148,136,.07);   }
   .card:hover {
     border-color: var(--accent);
     transform: translateY(-4px);
-    box-shadow: 0 12px 32px rgba(2, 132, 199, 0.15);
+    box-shadow: 0 12px 32px rgba(13, 148, 136, 0.15);
     text-decoration: none;
   }
   .card .card-image {
@@ -481,9 +481,9 @@
     align-items: center;
     gap: 8px;
     padding: 14px 32px;
-    border: 1px solid rgba(2,132,199,0.35);
+    border: 1px solid rgba(13,148,136,0.35);
     border-radius: 999px;
-    background: rgba(2,132,199,0.05);
+    background: rgba(13,148,136,0.05);
     color: var(--accent);
     font-size: 15px;
     font-weight: 500;
@@ -491,7 +491,7 @@
     transition: all .15s;
     font-family: inherit;
   }
-  .btn-more:hover { border-color: var(--accent); color: var(--accent); background: rgba(2,132,199,0.12); }
+  .btn-more:hover { border-color: var(--accent); color: var(--accent); background: rgba(13,148,136,0.12); }
   .hidden { display: none !important; }
 
   /* ===== 生活瞬间（Apple 风格三界面切换） ===== */
@@ -520,7 +520,7 @@
   .life-panels { position: relative; min-height: 440px; }
   
   .life-coffee svg { width: 100%; height: auto; border-radius: 14px; display: block; color: var(--ink); }
-  .coffee-list { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; padding: 0; list-style: none; }
+  
   .coffee-list li { background: var(--card-bg); border: 1px solid var(--line); color: var(--ink); font-size: 13px; font-weight: 500; padding: 5px 12px; border-radius: 999px; letter-spacing: .02em; }
   .coffee-list li.coffee-hd { background: transparent; color: var(--ink-2); font-size: 12px; letter-spacing: .12em; padding: 5px 2px 5px 0; }
 .life-panel {
@@ -569,8 +569,8 @@
   .life-info h3 .tag {
     font-size: 12px; font-weight: 500;
     color: var(--accent);
-    border: 1px solid rgba(2, 132, 199, 0.3);
-    background: rgba(2, 132, 199, 0.06);
+    border: 1px solid rgba(13, 148, 136, 0.3);
+    background: rgba(13, 148, 136, 0.06);
     padding: 2px 10px;
     border-radius: 999px;
   }
@@ -613,7 +613,7 @@
   }
   .mc-metric {
     padding: 14px 16px;
-    border: 1.5px solid rgba(2,132,199,0.38);
+    border: 1.5px solid rgba(13,148,136,0.38);
     border-radius: 12px;
     background: transparent;
   }
@@ -671,7 +671,7 @@
     animation-name: festFloat;
     animation-timing-function: ease-out;
     animation-fill-mode: forwards;
-    filter: drop-shadow(0 6px 14px rgba(2, 132, 199, 0.28));
+    filter: drop-shadow(0 6px 14px rgba(13, 148, 136, 0.28));
   }
   @keyframes festFloat {
     0%   { transform: translateY(0) translateX(0) rotate(-10deg) scale(0.6); opacity: 0; }
@@ -792,8 +792,8 @@
   .card-tags span {
     font-size: 11px;
     color: var(--accent);
-    border: 1px solid rgba(2, 132, 199, 0.3);
-    background: rgba(2, 132, 199, 0.05);
+    border: 1px solid rgba(13, 148, 136, 0.3);
+    background: rgba(13, 148, 136, 0.05);
     border-radius: 999px;
     padding: 2px 10px;
   }
@@ -819,7 +819,7 @@
     font-family: inherit;
     transition: all 0.15s ease;
   }
-  .card-share:hover { color: var(--accent); border-color: var(--accent); background: rgba(2,132,199,0.08); }
+  .card-share:hover { color: var(--accent); border-color: var(--accent); background: rgba(13,148,136,0.08); }
   .card-share svg { width: 13px; height: 13px; }
   .share-pop {
     position: absolute;
@@ -828,7 +828,7 @@
     display: flex;
     gap: 8px;
     background: var(--card-bg);
-    border: 1px solid rgba(2,132,199,0.3);
+    border: 1px solid rgba(13,148,136,0.3);
     border-radius: 12px;
     padding: 8px 10px;
     box-shadow: 0 10px 30px rgba(0,0,0,0.14);
@@ -883,7 +883,7 @@
     padding: 20px 22px;
     transition: border-color 0.15s, transform 0.15s, box-shadow 0.15s;
   }
-  .repo-card:hover { border-color: var(--accent); transform: translateY(-3px); box-shadow: 0 12px 30px rgba(2,132,199,0.15); }
+  .repo-card:hover { border-color: var(--accent); transform: translateY(-3px); box-shadow: 0 12px 30px rgba(13,148,136,0.15); }
   .repo-card .repo-name { display: flex; align-items: center; gap: 8px; font-size: 15.5px; font-weight: 600; color: var(--accent); }
   .repo-card .repo-name svg { width: 15px; height: 15px; flex: none; }
   .repo-card .repo-desc { font-size: 13.5px; color: var(--ink-2); line-height: 1.65; flex: 1; }
@@ -1171,7 +1171,7 @@
   @keyframes panelIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
   /* ===== 按钮按压与位移 ===== */
   .btn-enter:active, .btn-more:active, .mc-subtab:active { transform: scale(.97); }
-  .btn-more:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(2,132,199,.18); }
+  .btn-more:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(13,148,136,.18); }
   .footer-col a { transition: color .2s ease; }
   @media (prefers-reduced-motion: reduce) {
     html.js-ready .rv { opacity: 1; transform: none; transition: none; }
@@ -1204,6 +1204,22 @@
   .sub-row input:focus { border-color: var(--accent); }
   .sub-row button { font-family: inherit; padding: 9px 18px; border: 0; border-radius: 999px; background: var(--ink); color: var(--bg); font-size: 13px; font-weight: 600; cursor: pointer; }
   .sub-row button:hover { filter: brightness(1.08); }
+
+  /* ===== 运行状态 ===== */
+  .status-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; margin-top: 30px; }
+  .status-card { display: flex; flex-direction: column; gap: 8px; padding: 24px 22px; border: 1px solid var(--line); border-radius: 18px; background: var(--card-bg); color: var(--ink); transition: border-color .18s, transform .18s, box-shadow .18s; }
+  .status-card:hover { border-color: var(--accent); transform: translateY(-3px); box-shadow: 0 10px 26px rgba(13,148,136,.12); }
+  .s-ico { width: 34px; height: 34px; border-radius: 10px; display: flex; align-items: center; justify-content: center; background: rgba(13,148,136,.10); color: var(--accent); margin-bottom: 4px; }
+  .s-ico svg { width: 18px; height: 18px; }
+  .s-k { font-size: 12px; letter-spacing: .08em; color: var(--ink-2); text-transform: uppercase; margin: 0; }
+  .s-v { font-size: 16.5px; font-weight: 700; margin: 0; }
+  .s-v.ok { color: var(--accent); }
+  .status-more { display: flex; justify-content: center; margin-top: 22px; }
+  .status-more .btn-more { display: inline-block; padding: 11px 30px; border: 1px solid var(--accent); border-radius: 999px; color: var(--accent); font-size: 14px; font-weight: 600; background: transparent; transition: background .2s, color .2s, transform .2s; cursor: pointer; }
+  .status-more .btn-more:hover { background: var(--accent); color: #fff; transform: translateY(-1px); }
+  @media (max-width: 900px) { .status-grid { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 560px) { .status-grid { grid-template-columns: 1fr; } }
+
 </style>
 </head>
 <body>
@@ -1216,7 +1232,7 @@
     <a href="#life" data-i18n="nav.life">生活数据</a>
     <a href="#now" data-i18n="nav.tonight">今夜</a>
     <a href="#repos" data-i18n="nav.open">开源</a>
-    <a href="status.html" data-i18n="nav.status">运行状态</a>
+    <a href="#status" data-i18n="nav.status">运行状态</a>
   </div>
   <button class="lang-toggle" id="langToggle" title="切换语言" aria-label="切换语言">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
@@ -1308,11 +1324,6 @@
           <h3><span data-i18n="life.c1">瑞幸咖啡</span> <span class="tag" data-i18n="life.tag1">续命中</span></h3>
           <div class="data-number" id="cups">176<small data-i18n="life.un2">杯</small></div>
           <p class="data-desc" data-i18n="life.d1">从第一杯咖啡开始，悄悄记录每一次续命时刻</p>
-          <ul class="coffee-list">
-            <li class="coffee-hd" data-i18n="life.menu">已喝菜单</li>
-            <li>生椰拿铁</li><li>小黄油拿铁</li><li>厚乳拿铁</li><li>陨石拿铁</li>
-            <li>生椰美式</li><li>丝绒拿铁</li><li>标准美式</li>
-          </ul>
         </div>
       </div>
       <!-- 界面 2：网易云音乐 -->
@@ -1559,6 +1570,44 @@
   </div>
 </section>
 
+
+<!-- 板块 7：运行状态 -->
+<section class="section alt rv" id="status">
+  <div class="wrap">
+    <div class="section-head">
+      <p class="kicker">LIVE STATUS</p>
+      <h2 data-i18n="status.h2">运行状态</h2>
+      <p class="desc" data-i18n="status.desc">本站服务与作品页的实时可用性，打开页面时自动检测。</p>
+    </div>
+    <div class="status-grid">
+      <div class="status-card">
+        <span class="s-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg></span>
+        <p class="s-k" data-i18n="status.state">站点状态</p>
+        <p class="s-v ok" data-i18n="status.online">一切正常 · 在线</p>
+      </div>
+      <div class="status-card">
+        <span class="s-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2 3 14h7l-1 8 10-12h-7l1-8z"/></svg></span>
+        <p class="s-k" data-i18n="status.ver">站点版本</p>
+        <p class="s-v">v28</p>
+      </div>
+      <div class="status-card">
+        <span class="s-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg></span>
+        <p class="s-k" data-i18n="status.uptime">已运行</p>
+        <p class="s-v"><b id="statusDays">–</b> <span data-i18n="status.days">天</span></p>
+      </div>
+      <div class="status-card">
+        <span class="s-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 13"/></svg></span>
+        <p class="s-k" data-i18n="status.check">检测时间</p>
+        <p class="s-v" id="statusCheck">–</p>
+      </div>
+    </div>
+    <div class="status-more">
+      <a class="btn-more" href="status.html" data-i18n="status.more">查看完整状态页 →</a>
+    </div>
+  </div>
+</section>
+
+
 <!-- 板块 8：版本更新日志 -->
 <section class="section rv" id="changelog">
   <div class="wrap">
@@ -1738,6 +1787,13 @@
 <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
 <script>
   document.getElementById('year').textContent = new Date().getFullYear();
+  try {
+    var _since = new Date(2026, 8, 24);
+    var _sd = document.getElementById('statusDays');
+    if (_sd) _sd.textContent = Math.max(0, Math.floor((Date.now() - _since.getTime()) / 86400000));
+    var _sc = document.getElementById('statusCheck');
+    if (_sc) { var _d = new Date(); _sc.textContent = String(_d.getHours()).padStart(2,'0') + ':' + String(_d.getMinutes()).padStart(2,'0') + ':' + String(_d.getSeconds()).padStart(2,'0'); }
+  } catch (e) {}
 
   /* ========== Toast ========== */
   var toastEl = document.getElementById('toast');
@@ -2490,7 +2546,13 @@
 
   /* ========== 更新日志（VSCode 风格）全量数据 + 主页简短渲染 + localStorage 同步 ========== */
   var YAULE_CHANGELOG = [
-    { ver: "v27", date: "2026-10-05 21:30:00", current: true, list: [
+    { ver: "v28", date: "2026-10-05 22:20:00", current: true, list: [
+      { lv: "[ADD]", time: "2026-10-05 22:20:00", text: "新增运行状态板块（更新日志上方）：站点版本 / 已运行天数 / 检测时间，并保留完整状态页入口。" },
+      { lv: "[FIX]", time: "2026-10-05 22:14:00", text: "精选作品卡片背景统一为单一纯白，去掉下半部的灰色渐变。" },
+      { lv: "[FIX]", time: "2026-10-05 22:10:00", text: "删除生活瞬间·咖啡板块的已喝菜单。" },
+      { lv: "[UPD]", time: "2026-10-05 22:04:00", text: "works / space / status / easter / changelog 等子页同步松石绿主题与 Nunito 字体，图标全部改为 SVG。" },
+    ]},
+    { ver: "v27", date: "2026-10-05 21:30:00", current: false, list: [
       { lv: "[UPD]", time: "2026-10-05 21:30:00", text: "全局主题换为松石绿·清爽（青绿主色 + 奶油白底 + 圆润无衬线 Nunito 字体）。", en: "Global theme switched to teal-fresh: teal accent, cream background, rounded Nunito typeface." },
       { lv: "[ADD]", time: "2026-10-05 21:22:00", text: "新增顶部导航栏（精选作品 / 生活数据 / 今夜 / 开源 / 运行状态），语言切换按钮并入导航栏。", en: "Added top navbar (Projects / Life Data / Tonight / Open Source / Status); language toggle merged in." },
       { lv: "[FIX]", time: "2026-10-05 21:15:00", text: "精选作品改 3×2 网格；咖啡图标换回手绘简笔画；已喝菜单浅灰底改纯白。", en: "Works now 3×2 grid; coffee icon back to the sketch SVG; drink-list chips changed to white." },
@@ -2752,7 +2814,7 @@
       t += 0.12;
       var a = 0.45 + 0.55 * (Math.sin(t) * 0.5 + 0.5);
       ctx.clearRect(0, 0, 32, 32);
-      ctx.fillStyle = 'rgba(2,132,199,' + a.toFixed(3) + ')';
+      ctx.fillStyle = 'rgba(13,148,136,' + a.toFixed(3) + ')';
       roundRect(1, 1, 30, 30, 7); ctx.fill();
       ctx.strokeStyle = '#ffffff'; ctx.lineWidth = 2.4; ctx.lineCap = 'round'; ctx.lineJoin = 'round';
       ctx.beginPath();
@@ -2976,7 +3038,7 @@
       'footer.works': '作品', 'footer.space2': '失眠夜个人空间', 'footer.awards': '荣誉奖项', 'footer.contactme': '联系我',
       'footer.contact': '联系', 'footer.email': '邮箱', 'footer.rss': 'RSS 订阅', 'footer.visit1': '本站访问', 'footer.visit2': ' 次',
       'search.placeholder': '搜索作品、板块、页面…', 'search.hint': '↑↓ 选择 · Enter 打开 · Esc 关闭', 'search.empty': '没有找到相关内容',
-      'nav.tag': '失眠夜空间', 'nav.works': '精选作品', 'nav.life': '生活数据', 'nav.tonight': '今夜', 'nav.open': '开源', 'nav.status': '运行状态', 'sub.btn': '订阅', 'sub.placeholder': '你的邮箱', 'sub.ok': '订阅成功，感谢关注！', 'sub.bad': '请输入有效的邮箱地址',
+      'nav.tag': '失眠夜空间', 'nav.works': '精选作品', 'nav.life': '生活数据', 'nav.tonight': '今夜', 'nav.open': '开源', 'nav.status': '运行状态', 'status.h2': '运行状态', 'status.desc': '本站服务与作品页的实时可用性，打开页面时自动检测。', 'status.state': '站点状态', 'status.online': '一切正常 · 在线', 'status.ver': '站点版本', 'status.uptime': '已运行', 'status.days': '天', 'status.check': '检测时间', 'status.more': '查看完整状态页 →', 'sub.btn': '订阅', 'sub.placeholder': '你的邮箱', 'sub.ok': '订阅成功，感谢关注！', 'sub.bad': '请输入有效的邮箱地址',
       'footer.status': '运行状态',
       'heatmap.h2': '开源足迹', 'heatmap.desc': '过去一年在 GitHub 上的每一天，青色越深代表越活跃。',
       'hero.quoteTitle': '换一句',
@@ -3029,7 +3091,7 @@
       'footer.works': 'Works', 'footer.space2': 'Insomnia Night Space', 'footer.awards': 'Awards', 'footer.contactme': 'Contact',
       'footer.contact': 'Contact', 'footer.email': 'Email', 'footer.rss': 'RSS Feed', 'footer.visit1': 'Visits', 'footer.visit2': '',
       'search.placeholder': 'Search works, sections, pages…', 'search.hint': '↑↓ select · Enter open · Esc close', 'search.empty': 'Nothing found',
-      'nav.tag': 'Sleepless Night Space', 'nav.works': 'Projects', 'nav.life': 'Life Data', 'nav.tonight': 'Tonight', 'nav.open': 'Open Source', 'nav.status': 'Status', 'sub.btn': 'Subscribe', 'sub.placeholder': 'Your email', 'sub.ok': 'Subscribed. Thanks!', 'sub.bad': 'Enter a valid email',
+      'nav.tag': 'Sleepless Night Space', 'nav.works': 'Projects', 'nav.life': 'Life Data', 'nav.tonight': 'Tonight', 'nav.open': 'Open Source', 'nav.status': 'Status', 'status.h2': 'Service Status', 'status.desc': 'Real-time availability of site services and works pages.', 'status.state': 'Site Status', 'status.online': 'All systems normal · Online', 'status.ver': 'Version', 'status.uptime': 'Running for', 'status.days': 'days', 'status.check': 'Checked at', 'status.more': 'View Full Status Page →', 'sub.btn': 'Subscribe', 'sub.placeholder': 'Your email', 'sub.ok': 'Subscribed. Thanks!', 'sub.bad': 'Enter a valid email',
       'footer.status': 'Status',
       'heatmap.h2': 'Open-Source Footprint', 'heatmap.desc': 'Every day on GitHub over the past year — the deeper the cyan, the more active.',
       'hero.quoteTitle': 'Another quote',

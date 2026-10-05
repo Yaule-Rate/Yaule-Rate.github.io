@@ -6,10 +6,11 @@
 <title>今日彩蛋 · Yaule</title>
 <meta name="description" content="Yaule's easter egg — roll your daily luck.">
 <meta name="robots" content="noindex">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%A5%9A%3C/text%3E%3C/svg%3E">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230d9488'/%3E%3Ctext x='32' y='44' font-family='Arial' font-size='30' font-weight='bold' fill='%23fff' text-anchor='middle'%3E%E2%9C%A8%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="https://miaoda.feishu.cn/fonts/css2?family=Nunito:wght@400;500;600;700;800&family=Noto+Sans+SC:wght@300;400;500;700&display=swap">
 <style>
-  :root { --bg:#FAFAF9; --bg2:#F3F4F6; --card-bg:#FFFFFF; --ink:#17181C; --ink-2:#5B5F66; --line:#E5E7EB; --accent:#0284C7; --accent-2:#38BDF8; --soft:#EFF6FA; }
-  :root[data-theme="dark"] { --bg:#131519; --bg2:#181B1F; --card-bg:#1D2026; --ink:#E8EAED; --ink-2:#9BA1A9; --line:#2A2E36; --accent:#38BDF8; --accent-2:#7DD3FC; --soft:#16242E; }
+  :root { --bg:#FAFAF9; --bg2:#F3F4F6; --card-bg:#FFFFFF; --ink:#17181C; --ink-2:#5B5F66; --line:#E5E7EB; --accent:#0d9488; --accent-2:#2dd4bf; --soft:#ccfbf1; }
+  :root[data-theme="dark"] { --bg:#131519; --bg2:#181B1F; --card-bg:#1D2026; --ink:#E8EAED; --ink-2:#9BA1A9; --line:#2A2E36; --accent:#2dd4bf; --accent-2:#5eead4; --soft:#1E2A25; }
   * { box-sizing:border-box; }
   body { margin:0; min-height:100vh; background: radial-gradient(1200px 600px at 50% -10%, color-mix(in srgb, var(--accent) 14%, transparent), transparent 60%), var(--bg); color:var(--ink); font-family:"Noto Sans SC","Microsoft YaHei",system-ui,-apple-system,sans-serif; -webkit-font-smoothing:antialiased; display:flex; flex-direction:column; }
   a { color:var(--accent); text-decoration:none; }
@@ -92,7 +93,7 @@
     zh: ['给桌面删掉 3 个不用的文件','喝一杯温水','给窗台那盆绿植浇点水','整理一下浏览器标签页','写下明天要做的三件事','离开屏幕 10 分钟','给一位老朋友发条消息','做 5 个深呼吸','把手机相册翻到去年今天','读 3 页任意一本书','伸个懒腰，活动肩颈','给今天的天空拍张照'],
     en: ['Delete 3 unused files on your desktop','Drink a glass of water','Water that plant on your windowsill','Tidy up your browser tabs','Write down 3 things for tomorrow','Step away from the screen for 10 min','Message an old friend','Take 5 deep breaths','Flip your photos to this day last year','Read 3 pages of any book','Stretch your shoulders and neck','Take a photo of today\'s sky']
   };
-  var COLORS = ['#0284C7','#38BDF8','#0EA5E9','#2563EB','#14B8A6','#3B82F6','#06B6D4','#6366F1'];
+  var COLORS = ['#0d9488','#2dd4bf','#14b8a6','#2563EB','#14B8A6','#3B82F6','#14b8a6','#6366F1'];
   function roll(){
     var L = getLang();
     var num = Math.floor(Math.random()*365)+1;
