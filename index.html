@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Yaule · 欢迎你的到来 | 个人主页 · 失眠夜空间 · 作品与日常</title>
-<meta name="description" content="欢迎来到 Yaule 的个人主页（失眠夜空间）：记录着咖啡、音乐、游戏与作品，精选校园工具到游戏辅助的自研项目，还有全世界的「欢迎你的到来」。在这里可以看到开源仓库、技能雷达、人生清单与详细更新日志。">
+<meta name="description" content="欢迎来到 Yaule 的个人主页（失眠夜空间）：记录着咖啡、音乐、游戏与作品，精选校园工具到游戏辅助的自研项目，还有全世界的「欢迎你的到来」。在这里可以看到精选作品、开源仓库、今夜月色与详细更新日志。">
 <meta name="keywords" content="Yaule,个人主页,个人空间,欢迎你的到来,博客,作品集,GitHub Pages,失眠夜">
 <meta name="author" content="Yaule">
 <link rel="canonical" href="https://Yaule-Rate.github.io/">
@@ -624,7 +624,7 @@
   /* ===== 城市足迹 & 访客地图 ===== */
   .daily-song a { color: var(--accent); }
 
-  /* ===== 天气 & 纪念日 ===== */
+  /* ===== 今夜 · 天气卡 ===== */
   .weather-row {
     display: flex;
     align-items: center;
@@ -635,52 +635,7 @@
   }
   .weather-row svg { width: 18px; height: 18px; color: var(--accent); flex: none; }
   .weather-temp { font-weight: 600; color: var(--ink); margin-left: 2px; }
-  .anniv-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
-    gap: 20px;
-  }
-  .anniv-card {
-    position: relative;
-    overflow: hidden;
-    background: var(--card-bg);
-    border: 1px solid var(--line);
-    border-radius: 20px;
-    padding: 30px 32px 26px;
-    transition: border-color 0.18s ease, transform 0.18s ease, box-shadow 0.18s ease;
-  }
-  .anniv-card:hover { border-color: rgba(2,132,199,0.45); transform: translateY(-3px); box-shadow: 0 14px 32px rgba(0,0,0,0.08); }
-  .anniv-card::before {
-    content: ""; position: absolute; top: 0; left: 0; right: 0; height: 4px;
-    background: linear-gradient(90deg, var(--accent), var(--accent-2));
-  }
-  .anniv-top {
-    display: flex; align-items: center; gap: 8px;
-    font-size: 12.5px; color: var(--ink-2); letter-spacing: 0.08em;
-  }
-  .anniv-top svg { width: 15px; height: 15px; color: var(--accent); flex: none; }
-  .anniv-num {
-    font-family: "Noto Serif SC", Georgia, serif;
-    font-size: clamp(44px, 6vw, 62px);
-    font-weight: 700;
-    color: var(--accent);
-    line-height: 1.1;
-    margin-top: 14px;
-    font-variant-numeric: tabular-nums;
-  }
-  .anniv-label { font-size: 14px; color: var(--ink-2); margin-top: 8px; }
-  .anniv-track {
-    margin-top: 18px; height: 6px; background: var(--line);
-    border-radius: 999px; overflow: hidden;
-  }
-  .anniv-fill {
-    height: 100%; width: 0;
-    background: linear-gradient(90deg, var(--accent), var(--accent-2));
-    border-radius: 999px;
-    transition: width 1.2s ease;
-  }
-  .anniv-meta { margin-top: 12px; font-size: 12.5px; color: var(--ink-2); opacity: 0.85; }
-  .anniv-date { font-size: 13px; color: var(--ink-2); opacity: 0.8; margin-top: 8px; }
+
 
   /* ===== 节日飘浮元素 ===== */
   .fest-layer {
@@ -745,7 +700,7 @@
     opacity: 0.85;
   }
 
-  /* ===== 此刻（时钟与天气）板块 ===== */
+  /* ===== 今夜板块（月色·推荐·天气） ===== */
   .now-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -777,13 +732,7 @@
   .wd-label { font-size: 11px; color: var(--ink-2); letter-spacing: 0.06em; }
   .wd-val { font-size: 21px; font-weight: 700; color: var(--ink); font-variant-numeric: tabular-nums; margin-top: 2px; line-height: 1.2; }
   .wd-unit { font-size: 12px; color: var(--ink-2); }
-  .now-card .clock-row {
-    font-size: 18px;
-    margin-top: 0;
-    flex-wrap: wrap;
-    row-gap: 6px;
-    column-gap: 10px;
-  }
+
   .now-card .weather-row {
     font-size: 17px;
     margin-top: 8px;
@@ -1001,7 +950,7 @@
   .vs-row.cat-warn .vs-dot { background: #e3b341; }
   .vs-row.cat-warn .vs-tag { color: #e3b341; }
 
-  .card, .repo-card, .now-card, .bucket-item { position: relative; }
+  .card, .repo-card, .now-card { position: relative; }
 
   /* ===== Footer ===== */
   footer {
@@ -1142,7 +1091,7 @@
   .lang-bar-fill { height: 100%; width: 0%; border-radius: 999px; background: linear-gradient(90deg, var(--accent), var(--accent-2)); }
   .lang-pct { font-size: 13px; color: var(--ink-2); font-variant-numeric: tabular-nums; letter-spacing: .06em; margin-top: -6px; }
 
-  /* ===== 此刻 · 每日推荐卡 ===== */
+  /* ===== 今夜 · 每日推荐卡 ===== */
   .now-reco { grid-column: 1 / -1; min-height: 130px; }
   .now-reco .reco-head { display: flex; align-items: center; gap: 8px; font-size: 12px; letter-spacing: .14em; color: var(--ink-2); text-transform: uppercase; }
   .now-reco .reco-head svg { width: 15px; height: 15px; color: var(--accent); }
@@ -1161,32 +1110,14 @@
   :root[data-theme="dark"] .hm-cell.l0 { background: #23262b; }
   .hm-total { font-size: 13px; color: var(--ink-2); }
 
-  /* ===== 今晚月色 & 星星计数器（此刻小卡） ===== */
+  /* ===== 今夜 · 月色卡 ===== */
   .now-sky { display: flex; align-items: center; gap: 18px; }
   .moon-visual { width: 88px; height: 88px; flex: none; }
   .moon-visual svg { width: 100%; height: 100%; display: block; }
   .moon-kicker { font-size: 11px; color: var(--ink-2); letter-spacing: .12em; }
   .moon-name { font-size: 20px; font-weight: 800; color: var(--ink); margin-top: 3px; font-family: "Noto Serif SC", Georgia, serif; }
   .moon-illum { font-size: 12.5px; color: var(--ink-2); margin-top: 3px; }
-  .now-stars .stars-num { font-size: 38px; font-weight: 800; color: var(--accent); font-variant-numeric: tabular-nums; line-height: 1.05; }
-  .now-stars .stars-sub { font-size: 12px; color: var(--ink-2); margin-top: 2px; letter-spacing: .05em; }
-  .stars-bar { height: 6px; background: var(--soft); border-radius: 999px; margin-top: 12px; overflow: hidden; }
-  .stars-bar i { display: block; height: 100%; background: linear-gradient(90deg, var(--accent), var(--accent-2)); border-radius: 999px; transition: width .5s ease; }
-  .stars-next { font-size: 12px; color: var(--ink-2); margin-top: 8px; min-height: 16px; }
-  .stars-btn { margin-top: 10px; display: inline-flex; align-items: center; gap: 6px; border: 1px solid rgba(2,132,199,.35); background: rgba(2,132,199,.06); color: var(--accent); border-radius: 999px; padding: 8px 16px; font-size: 13px; font-weight: 600; cursor: pointer; font-family: inherit; transition: all .18s ease; }
-  .stars-btn:hover { background: rgba(2,132,199,.14); transform: translateY(-1px); }
-  .stars-btn svg { width: 14px; height: 14px; }
 
-  /* ===== 世界失眠时钟 ===== */
-  .world-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
-  .world-city { background: var(--card-bg); border: 1px solid var(--line); border-radius: 16px; padding: 18px 14px; text-align: center; }
-  .world-city .wc-name { font-size: 13px; color: var(--ink-2); letter-spacing: .05em; }
-  .world-city .wc-time { font-size: 27px; font-weight: 800; color: var(--ink); font-variant-numeric: tabular-nums; margin-top: 5px; font-family: "Noto Serif SC", Georgia, serif; }
-  .world-city .wc-state { display: inline-flex; align-items: center; gap: 6px; margin-top: 9px; font-size: 12px; padding: 4px 12px; border-radius: 999px; }
-  .world-city .wc-state.awake { background: rgba(56,189,248,.14); color: var(--accent); font-weight: 600; }
-  .world-city .wc-state.asleep { background: var(--soft); color: var(--ink-2); }
-  .world-city .wc-state svg { width: 12px; height: 12px; }
-  @media (max-width: 860px) { .world-grid { grid-template-columns: repeat(2, 1fr); } }
 
   /* ===== 深夜特调 ===== */
   .night-sky { position: fixed; inset: 0; z-index: 1; pointer-events: none; overflow: hidden; }
@@ -1218,16 +1149,13 @@
   .panel-fade { animation: panelIn .35s ease; }
   @keyframes panelIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
   /* ===== 按钮按压与位移 ===== */
-  .btn-enter:active, .btn-more:active, .mc-subtab:active, .stars-btn:active { transform: scale(.97); }
+  .btn-enter:active, .btn-more:active, .mc-subtab:active { transform: scale(.97); }
   .btn-more:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(2,132,199,.18); }
   .footer-col a { transition: color .2s ease; }
-  /* ===== 星星数字弹跳 ===== */
-  .stars-num.pop { animation: numPop .45s ease; }
-  @keyframes numPop { 0% { transform: scale(1); } 35% { transform: scale(1.35); color: var(--accent-2); } 100% { transform: scale(1); } }
   @media (prefers-reduced-motion: reduce) {
     html.js-ready .rv { opacity: 1; transform: none; transition: none; }
-    html.js-ready .rv.in .grid .card, .panel-fade, .stars-num.pop { animation: none; }
-    .btn-enter:active, .btn-more:active, .mc-subtab:active, .stars-btn:active { transform: none; }
+    html.js-ready .rv.in .grid .card, .panel-fade { animation: none; }
+    .btn-enter:active, .btn-more:active, .mc-subtab:active { transform: none; }
     .btn-more:hover { transform: none; }
   }
 </style>
@@ -1562,8 +1490,6 @@
   </div>
 </section>
 
-<!-- 板块 7：技能雷达图 -->
-<!-- 板块 8：版本更新日志 -->
 <!-- 板块 8：版本更新日志 -->
 <section class="section rv" id="changelog">
   <div class="wrap">
@@ -2379,7 +2305,10 @@
 
   /* ========== 更新日志（VSCode 风格）全量数据 + 主页简短渲染 + localStorage 同步 ========== */
   var YAULE_CHANGELOG = [
-    { ver: "v23", date: "2026-10-05 21:00:00", current: true, list: [
+    { ver: "v23.1", date: "2026-10-05 19:22:00", current: true, list: [
+      { lv: "[UPD]", time: "2026-10-05 19:22:00", text: "代码清理与冗余优化：移除已删板块（纪念日 / 世界失眠时钟 / 星星计数器 / 技能雷达 / 人生清单）遗留的 CSS 死规则与过时注释，更新站点描述文案。", en: "Code cleanup: removed dead CSS rules and stale comments left by removed sections (anniversaries, insomnia clock, star counter, skills radar, bucket list); refreshed site meta description." },
+    ]},
+    { ver: "v23", date: "2026-10-05 21:00:00", current: false, list: [
       { lv: "[ADD]", time: "2026-10-05 20:58:00", text: "精选作品横向化重构：卡片横向滚动、超 6 个时右侧出现「查看更多作品」按钮，跳转全新 works.html 全作品页（顶部搜索、全部作品、中英双语）。", en: "Works re-layout: cards scroll horizontally, a 'View All Works' button appears once there are over 6 works, leading to a brand-new works.html page with top search, all works and EN/CN." },
       { lv: "[DEL]", time: "2026-10-05 20:50:00", text: "删除板块：纪念日、此刻（原实时时钟）、世界失眠时钟、擅长的事、人生清单；今晚月色 / 今日推荐 / 天气重组为「今夜」板块。", en: "Removed sections: anniversaries, the old 'right now' clock, world insomnia clock, skills, bucket list; moon / daily pick / weather merged into one 'Tonight' section." },
       { lv: "[UPD]", time: "2026-10-05 20:45:00", text: "进入个人空间卡片大幅美化：青色渐变、光扫动效、图标与箭头微交互。", en: "The 'Enter My Space' card got a premium restyle: cyan gradient, light sweep, icon & arrow micro-interactions." },
