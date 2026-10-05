@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>今日彩蛋 · Yaule</title>
+<meta name="description" content="Yaule's easter egg — roll your daily luck.">
+<meta name="robots" content="noindex">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%A5%9A%3C/text%3E%3C/svg%3E">
+<style>
+  :root { --bg:#FAFAF9; --bg2:#F3F4F6; --card-bg:#FFFFFF; --ink:#17181C; --ink-2:#5B5F66; --line:#E5E7EB; --accent:#0284C7; --accent-2:#38BDF8; --soft:#EFF6FA; }
+  :root[data-theme="dark"] { --bg:#131519; --bg2:#181B1F; --card-bg:#1D2026; --ink:#E8EAED; --ink-2:#9BA1A9; --line:#2A2E36; --accent:#38BDF8; --accent-2:#7DD3FC; --soft:#16242E; }
+  * { box-sizing:border-box; }
+  body { margin:0; min-height:100vh; background: radial-gradient(1200px 600px at 50% -10%, color-mix(in srgb, var(--accent) 14%, transparent), transparent 60%), var(--bg); color:var(--ink); font-family:"Noto Sans SC","Microsoft YaHei",system-ui,-apple-system,sans-serif; -webkit-font-smoothing:antialiased; display:flex; flex-direction:column; }
+  a { color:var(--accent); text-decoration:none; }
+  .topbar { display:flex; align-items:center; justify-content:space-between; padding:16px 26px; }
+  .topbar .brand { font-weight:700; font-size:16px; letter-spacing:.05em; display:flex; align-items:center; gap:10px; }
+  .topbar .brand svg { width:22px; height:22px; color:var(--accent); }
+  .lang { font-family: inherit; border:1px solid var(--line); background:var(--card-bg); color:var(--ink); border-radius:999px; padding:6px 16px; font-size:13px; cursor:pointer; }
+  .wrap { flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; padding:20px 18px 30px; text-align:center; }
+  .kicker { font-size:12px; letter-spacing:.34em; color:var(--accent); font-weight:600; margin:0 0 12px; }
+  h1 { font-size:38px; margin:0 0 8px; font-weight:800; }
+  .sub { color:var(--ink-2); font-size:14.5px; margin:0 0 34px; }
+  .ball { position:relative; width:120px; height:120px; margin:0 auto 34px; cursor:pointer; }
+  .ball .shell { position:absolute; inset:0; border-radius:50%; background: radial-gradient(circle at 32% 26%, color-mix(in srgb, var(--accent-2) 90%, white), var(--accent) 70%); box-shadow: 0 18px 44px color-mix(in srgb, var(--accent) 40%, transparent), inset 0 -8px 18px rgba(0,0,0,.18); display:grid; place-items:center; transition:transform .3s; }
+  .ball:hover .shell { transform:scale(1.06); }
+  .ball .shine { position:absolute; width:34px; height:22px; left:22px; top:22px; border-radius:50%; background:rgba(255,255,255,.5); filter:blur(1px); transform:rotate(-24deg); }
+  .ball svg { width:44px; height:44px; color:#fff; }
+  .ball.shake .shell { animation:shk .55s ease; }
+  @keyframes shk { 0%,100%{transform:rotate(0)} 20%{transform:rotate(-9deg)} 45%{transform:rotate(8deg)} 70%{transform:rotate(-5deg)} 90%{transform:rotate(3deg)} }
+  .btn { border:0; cursor:pointer; background:var(--ink); color:var(--bg); font-size:15px; font-weight:600; padding:13px 34px; border-radius:999px; transition:filter .2s, transform .15s; }
+  .btn:hover { filter:brightness(1.1); transform:translateY(-1px); }
+  .btn:active { transform:translateY(0); }
+  .card { margin-top:34px; width:min(460px,100%); background:var(--card-bg); border:1px solid var(--line); border-radius:20px; padding:26px 24px; text-align:left; opacity:0; transform:translateY(14px); transition:opacity .4s ease, transform .4s ease; }
+  .card.show { opacity:1; transform:translateY(0); }
+  .card .c-tag { font-size:12px; letter-spacing:.2em; color:var(--accent); font-weight:600; margin:0 0 12px; }
+  .card .row { display:flex; align-items:center; gap:14px; padding:9px 0; border-bottom:1px dashed var(--line); }
+  .card .row:last-child { border-bottom:0; }
+  .card .row .lab { width:88px; font-size:13.5px; color:var(--ink-2); flex:none; }
+  .card .row .val { font-size:15.5px; font-weight:600; line-height:1.6; }
+  .card .row .color-chip { display:inline-block; width:18px; height:18px; border-radius:6px; margin-right:8px; vertical-align:-3px; border:1px solid var(--line); }
+  .hist { margin-top:22px; width:min(460px,100%); font-size:12.5px; color:var(--ink-2); text-align:left; }
+  .hist h4 { margin:0 0 8px; font-size:12.5px; letter-spacing:.12em; color:var(--ink-2); font-weight:600; }
+  .hist ul { margin:0; padding:0; list-style:none; }
+  .hist li { padding:3px 0; border-bottom:1px dashed var(--line); }
+  .hist li:last-child { border-bottom:0; }
+  .hist li b { color:var(--ink); }
+  .back { margin:26px 0 40px; display:inline-block; padding:10px 26px; border:1px solid var(--accent); color:var(--accent); border-radius:999px; font-size:14px; font-weight:600; transition:background .2s,color .2s; }
+  .back:hover { background:var(--accent); color:#fff; }
+  .foot { text-align:center; font-size:12.5px; color:var(--ink-2); padding:14px 0 26px; }
+  .foot .big { display:block; font-size:52px; font-weight:900; letter-spacing:.14em; color:var(--accent); opacity:.15; line-height:1; margin-bottom:8px; }
+  @media (prefers-reduced-motion: reduce) { .ball.shake .shell { animation:none; } }
+</style>
+</head>
+<body>
+<div class="topbar">
+  <a class="brand" href="index.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 3a9 9 0 0 0 0 18c1.5 0 2.5-2 1-4.5S11 13 12.5 12s3-.5 4-3-3-6-4.5-6z"/></svg><span>Yaule</span></a>
+  <button class="lang" id="langBtn" type="button">EN</button>
+</div>
+<div class="wrap">
+  <p class="kicker" data-i18n="e.kick">EASTER EGG</p>
+  <h1 data-i18n="e.h1">今日彩蛋</h1>
+  <p class="sub" data-i18n="e.sub">点击彩蛋，摇出今日份的小幸运。</p>
+  <div class="ball" id="ball" role="button" tabindex="0" aria-label="Open egg">
+    <span class="shell"><span class="shine"></span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a8 8 0 0 0-8 8c0 5 3 12 8 12s8-7 8-12a8 8 0 0 0-8-8z"/><path d="M12 2v20"/></svg></span>
+  </div>
+  <button class="btn" id="btn" type="button" data-i18n="e.btn">开启彩蛋</button>
+  <div class="card" id="card"></div>
+  <div class="hist" id="hist"></div>
+  <a class="back" href="index.html" data-i18n="e.back">返回首页</a>
+</div>
+<div class="foot"><span class="big">Yaule</span><span data-i18n="e.pw">一只隐藏的小彩蛋 · 连点页脚 Yaule 5 次可再次进入</span></div>
+
+<script>
+  var I18N = {
+    zh: { 'e.kick':'EASTER EGG','e.h1':'今日彩蛋','e.sub':'点击彩蛋，摇出今日份的小幸运。','e.btn':'开启彩蛋','e.back':'返回首页','e.pw':'一只隐藏的小彩蛋 · 连点页脚 Yaule 5 次可再次进入','e.num':'幸运数字','e.color':'幸运色','e.quote':'今日一言','e.task':'今日小任务','e.hist':'最近开启','e.empty':'还没有记录，先开一个吧','e.fmt':'{n} · {d}' },
+    en: { 'e.kick':'EASTER EGG','e.h1':'Daily Egg','e.sub':'Tap the egg and roll out a little luck for today.','e.btn':'Open the Egg','e.back':'Back to Home','e.pw':'A hidden easter egg · tap footer Yaule 5 times to re-enter','e.num':'Lucky Number','e.color':'Lucky Color','e.quote':'Quote of the Day','e.task':'Mission of the Day','e.hist':'Recent Rolls','e.empty':'Nothing yet — roll one now','e.fmt':'{n} · {d}' }
+  };
+  function getLang(){ try{ return localStorage.getItem('yaule_lang')==='en'?'en':'zh'; }catch(e){ return 'zh'; } }
+  function t(k){ var L=getLang(); return (I18N[L]&&I18N[L][k])||I18N.zh[k]; }
+  document.querySelectorAll('[data-i18n]').forEach(function(el){ el.textContent = t(el.getAttribute('data-i18n')); });
+  document.documentElement.lang = getLang()==='en'?'en':'zh-CN';
+  try { if (localStorage.getItem('yaule_theme')==='dark' || (!localStorage.getItem('yaule_theme') && matchMedia('(prefers-color-scheme: dark)').matches)) document.documentElement.setAttribute('data-theme','dark'); } catch(e){}
+  document.getElementById('langBtn').textContent = getLang()==='en'?'中':'EN';
+  document.getElementById('langBtn').addEventListener('click', function(){ var L=getLang()==='en'?'zh':'en'; try{ localStorage.setItem('yaule_lang',L); }catch(e){} location.reload(); });
+
+  var QUOTES = {
+    zh: ['慢慢来，比较快。','今天也值得被认真对待。','把眼前的事做好，路自然会出现。','休息不是偷懒，是给明天充电。','你比自己想象中更接近答案。','小事坚持，就是了不起。','风会记得每一朵花的香。','先完成，再完美。','此刻即是最好时刻。','给自己一朵小红花。','专注当下，其余的交给时间。','好奇心是最好的导航。'],
+    en: ['Slow down to speed up.','Today deserves your full attention.','Do the next small thing — the road will appear.','Rest is not laziness; it charges tomorrow.','You are closer to the answer than you think.','Small habits, big wins.','The wind remembers every flower.','Done is better than perfect.','Right now is the right time.','Give yourself a little gold star.','Focus on now; time handles the rest.','Curiosity is the best compass.']
+  };
+  var TASKS = {
+    zh: ['给桌面删掉 3 个不用的文件','喝一杯温水','给窗台那盆绿植浇点水','整理一下浏览器标签页','写下明天要做的三件事','离开屏幕 10 分钟','给一位老朋友发条消息','做 5 个深呼吸','把手机相册翻到去年今天','读 3 页任意一本书','伸个懒腰，活动肩颈','给今天的天空拍张照'],
+    en: ['Delete 3 unused files on your desktop','Drink a glass of water','Water that plant on your windowsill','Tidy up your browser tabs','Write down 3 things for tomorrow','Step away from the screen for 10 min','Message an old friend','Take 5 deep breaths','Flip your photos to this day last year','Read 3 pages of any book','Stretch your shoulders and neck','Take a photo of today\'s sky']
+  };
+  var COLORS = ['#0284C7','#38BDF8','#0EA5E9','#2563EB','#14B8A6','#3B82F6','#06B6D4','#6366F1'];
+  function roll(){
+    var L = getLang();
+    var num = Math.floor(Math.random()*365)+1;
+    var color = COLORS[Math.floor(Math.random()*COLORS.length)];
+    var q = QUOTES[L][Math.floor(Math.random()*QUOTES[L].length)];
+    var ts = TASKS[L][Math.floor(Math.random()*TASKS[L].length)];
+    var d = new Date();
+    var dateStr = (d.getMonth()+1)+'-'+d.getDate();
+    var card = document.getElementById('card');
+    card.innerHTML = '<p class="c-tag">TODAY\'S LUCK</p>' +
+      '<div class="row"><span class="lab">'+t('e.num')+'</span><span class="val">'+num+'</span></div>' +
+      '<div class="row"><span class="lab">'+t('e.color')+'</span><span class="val"><span class="color-chip" style="background:'+color+'"></span>'+color+'</span></div>' +
+      '<div class="row"><span class="lab">'+t('e.quote')+'</span><span class="val">“'+q+'”</span></div>' +
+      '<div class="row"><span class="lab">'+t('e.task')+'</span><span class="val">'+ts+'</span></div>';
+    card.classList.add('show');
+    try {
+      var hist = JSON.parse(localStorage.getItem('yaule_eggs')||'[]');
+      hist.unshift({ d: dateStr, n: num, c: color, q: q, t: ts });
+      hist = hist.slice(0, 5);
+      localStorage.setItem('yaule_eggs', JSON.stringify(hist));
+      renderHist(hist, L);
+    } catch(e){}
+  }
+  function renderHist(hist, L){
+    var box = document.getElementById('hist');
+    if (!hist || !hist.length) { box.innerHTML = '<h4>'+t('e.hist')+'</h4><ul><li>'+t('e.empty')+'</li></ul>'; return; }
+    var html = '<h4>'+t('e.hist')+'</h4><ul>';
+    hist.forEach(function(h){
+      html += '<li>'+h.d+' · <b>'+h.n+'</b> · <span style="color:'+h.c+'">●</span> '+(L==='en'?h.t:h.t)+'</li>';
+    });
+    html += '</ul>';
+    box.innerHTML = html;
+  }
+  var ball = document.getElementById('ball');
+  function shakeAndRoll(){
+    ball.classList.remove('shake'); void ball.offsetWidth; ball.classList.add('shake');
+    setTimeout(roll, 320);
+  }
+  document.getElementById('btn').addEventListener('click', shakeAndRoll);
+  ball.addEventListener('click', shakeAndRoll);
+  ball.addEventListener('keydown', function(e){ if (e.key==='Enter'||e.key===' ') { e.preventDefault(); shakeAndRoll(); } });
+  try { renderHist(JSON.parse(localStorage.getItem('yaule_eggs')||'[]'), getLang()); } catch(e){}
+</script>
+</body>
+</html>

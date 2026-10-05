@@ -350,7 +350,7 @@
     font-size: 16px;
     line-height: 1.9;
   }
-  .btn-enter {     position: relative;     display: inline-flex;     align-items: center;     gap: 12px;     padding: 20px 54px;     background: linear-gradient(120deg, var(--accent), var(--accent-2));     color: #fff;     border-radius: 999px;     font-size: 17px;     font-weight: 600;     letter-spacing: 0.03em;     transition: transform .2s, box-shadow .25s, filter .2s;     box-shadow: 0 6px 28px rgba(2, 132, 199, 0.3), inset 0 1px 0 rgba(255,255,255,.22);     overflow: hidden;     text-decoration: none;   }
+  .btn-enter {     position: relative;     display: inline-flex;     align-items: center;     gap: 12px;     padding: 20px 54px;     background: var(--ink);     color: var(--bg);     border-radius: 999px;     font-size: 17px;     font-weight: 600;     letter-spacing: 0.03em;     transition: transform .2s, box-shadow .25s, filter .2s;     box-shadow: 0 10px 30px rgba(23, 24, 28, .18);     overflow: hidden;     text-decoration: none;   }
   .btn-enter::before {     content: "";     position: absolute;     inset: 0;     background: linear-gradient(105deg, transparent 32%, rgba(255,255,255,.26) 50%, transparent 68%);     transform: translateX(-130%);     transition: transform .6s ease;     pointer-events: none;   }
   .btn-enter:hover {     transform: translateY(-3px);     box-shadow: 0 12px 38px rgba(2, 132, 199, 0.42), inset 0 1px 0 rgba(255,255,255,.22);     filter: brightness(1.06);     text-decoration: none;   }
   .btn-enter:hover::before { transform: translateX(130%); }
@@ -411,9 +411,11 @@
   .grid::-webkit-scrollbar { height: 6px; }
   .grid::-webkit-scrollbar-thumb { background: var(--line); border-radius: 999px; }
   .grid::-webkit-scrollbar-track { background: transparent; }
-  .grid .card { flex: 0 0 280px; scroll-snap-align: start; }
+  .grid .card { flex: 0 0 400px; scroll-snap-align: start; }
   .grid .card-body { flex: 1; }
-  .grid .card .card-dl { position: absolute; top: 10px; right: 10px; }
+  .grid .card .card-dl { position: absolute; top: 12px; right: 12px; z-index: 2; }
+  .card-dl .dl-ico { font-size: 17px; line-height: 1; opacity: .65; transition: opacity .2s; }
+  .card-dl:hover .dl-ico { opacity: 1; }
   .btn-more-wrap { display: none; margin-top: 18px; }
   .btn-more-wrap.show { display: flex; justify-content: flex-end; }
   .btn-more { display: inline-flex; align-items: center; gap: 8px; padding: 11px 22px; border-radius: 999px; border: 1px solid var(--line); background: var(--card-bg); color: var(--ink); font-size: 14px; font-weight: 600; cursor: pointer; transition: border-color .2s, transform .2s, box-shadow .2s, color .2s; }
@@ -511,7 +513,12 @@
   }
   .life-tab.active { background: var(--card-bg); color: var(--ink); box-shadow: 0 1px 6px rgba(0,0,0,0.12); }
   .life-panels { position: relative; min-height: 440px; }
-  .life-panel {
+  
+  .life-coffee img { width: 100%; height: auto; border-radius: 14px; display: block; }
+  .coffee-list { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; padding: 0; list-style: none; }
+  .coffee-list li { background: var(--soft); color: var(--ink); font-size: 13px; font-weight: 500; padding: 5px 12px; border-radius: 999px; letter-spacing: .02em; }
+  .coffee-list li.coffee-hd { background: transparent; color: var(--ink-2); font-size: 12px; letter-spacing: .12em; padding: 5px 2px 5px 0; }
+.life-panel {
     position: absolute;
     inset: 0;
     display: flex;
@@ -605,7 +612,7 @@
     border-radius: 12px;
     background: transparent;
   }
-  .mc-metric .m-val { color: var(--accent); }
+  .mc-metric .m-val { color: var(--ink); }
   .mc-metric .m-label { color: #17181C; opacity: 0.62; }
   :root[data-theme="dark"] .mc-metric { border-color: rgba(56,189,248,0.42); }
   :root[data-theme="dark"] .mc-metric .m-val { color: #7dd3fc; }
@@ -679,18 +686,9 @@
     transform: translateY(-6px);
     transition: opacity 0.6s ease, transform 0.6s ease;
   }
-  .fest-greeting.show { opacity: 1; transform: translateY(0); }
-
+  
   /* ===== 时辰问候 ===== */
-  .hour-greet {
-    font-size: 13px;
-    font-weight: 500;
-    color: var(--ink-2);
-    letter-spacing: 0.14em;
-    margin-bottom: 12px;
-    opacity: 0.9;
-  }
-
+  
   /* ===== 作品下载次数 ===== */
   .card-dl-count {
     display: block;
@@ -1158,6 +1156,49 @@
     .btn-enter:active, .btn-more:active, .mc-subtab:active { transform: none; }
     .btn-more:hover { transform: none; }
   }
+
+  /* ===== 音乐歌单墙 ===== */
+  .mw-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; margin-top: 30px; }
+  .mw-card { position: relative; display: flex; flex-direction: column; gap: 10px; padding: 26px 22px; border: 1px solid var(--line); border-radius: 18px; background: var(--card-bg); color: var(--ink); text-decoration: none; overflow: hidden; transition: transform .18s, border-color .18s, box-shadow .18s; }
+  .mw-card::before { content: ''; position: absolute; inset: 0; background: linear-gradient(150deg, rgba(2,132,199,.06), transparent 55%); opacity: 0; transition: opacity .25s; }
+  .mw-card:hover { transform: translateY(-4px); border-color: var(--accent); box-shadow: 0 14px 34px rgba(2,132,199,.12); }
+  .mw-card:hover::before { opacity: 1; }
+  .mw-ico { width: 44px; height: 44px; display: grid; place-items: center; border-radius: 13px; background: var(--soft); color: var(--accent); }
+  .mw-ico svg { width: 24px; height: 24px; }
+  .mw-card b { font-size: 17px; font-weight: 600; }
+  .mw-tag { font-size: 12.5px; color: var(--ink-2); letter-spacing: .04em; }
+  .mw-play { position: absolute; right: 20px; bottom: 24px; font-size: 13px; font-weight: 600; color: var(--accent); opacity: 0; transform: translateX(8px); transition: opacity .2s, transform .2s; }
+  .mw-card:hover .mw-play { opacity: 1; transform: translateX(0); }
+  .mw-more-wrap { text-align: center; margin-top: 26px; }
+  .mw-more { display: inline-block; padding: 11px 26px; border: 1px solid var(--accent); color: var(--accent); border-radius: 999px; font-size: 14px; font-weight: 600; text-decoration: none; transition: background .2s, color .2s; }
+  .mw-more:hover { background: var(--accent); color: #fff; }
+  @media (max-width: 960px) { .mw-grid { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 560px) { .mw-grid { grid-template-columns: 1fr; } }
+
+  /* ===== 站内搜索（Ctrl+K） ===== */
+  .search-mask { position: fixed; inset: 0; z-index: 300; display: flex; align-items: flex-start; justify-content: center; padding: 16vh 18px 40px; background: rgba(10, 14, 18, .42); backdrop-filter: blur(6px); opacity: 0; pointer-events: none; transition: opacity .2s ease; }
+  .search-mask.open { opacity: 1; pointer-events: auto; }
+  .search-box { width: min(640px, 100%); background: var(--bg); border: 1px solid var(--line); border-radius: 18px; box-shadow: 0 26px 70px rgba(0, 0, 0, .28); overflow: hidden; transform: translateY(-10px) scale(.985); transition: transform .2s ease; }
+  .search-mask.open .search-box { transform: translateY(0) scale(1); }
+  .search-input-row { display: flex; align-items: center; gap: 12px; padding: 16px 20px; border-bottom: 1px solid var(--line); }
+  .search-input-row svg { width: 20px; height: 20px; color: var(--ink-2); flex: none; }
+  .search-input-row input { flex: 1; border: 0; outline: 0; background: transparent; color: var(--ink); font-size: 17px; }
+  .search-input-row kbd { font-family: inherit; font-size: 12px; color: var(--ink-2); border: 1px solid var(--line); border-radius: 6px; padding: 2px 8px; }
+  .search-results { max-height: 46vh; overflow-y: auto; padding: 8px; margin: 0; list-style: none; }
+  .search-results li { border-radius: 12px; }
+  .search-results a { display: flex; align-items: center; gap: 12px; padding: 11px 14px; color: var(--ink); text-decoration: none; border-radius: 12px; }
+  .search-results a:hover, .search-results li.sel a { background: var(--soft); }
+  .search-results .sk { font-size: 12px; color: var(--ink-2); letter-spacing: .06em; margin-right: auto; }
+  .search-results .s-goto { font-size: 13px; color: var(--accent); }
+  .search-empty { padding: 22px 16px; text-align: center; color: var(--ink-2); font-size: 14px; }
+  .search-hint { padding: 10px 20px; border-top: 1px solid var(--line); font-size: 12px; color: var(--ink-2); text-align: center; letter-spacing: .04em; }
+
+  /* ===== 订阅 ===== */
+  .sub-row { display: flex; gap: 8px; margin-top: 12px; }
+  .sub-row input { flex: 1; min-width: 0; padding: 9px 13px; border: 1px solid var(--line); border-radius: 999px; background: transparent; color: var(--ink); font-size: 13px; outline: 0; }
+  .sub-row input:focus { border-color: var(--accent); }
+  .sub-row button { font-family: inherit; padding: 9px 18px; border: 0; border-radius: 999px; background: var(--ink); color: var(--bg); font-size: 13px; font-weight: 600; cursor: pointer; }
+  .sub-row button:hover { filter: brightness(1.08); }
 </style>
 </head>
 <body>
@@ -1197,8 +1238,6 @@
   <div class="hero-inner">
     
     
-    <p class="fest-greeting" id="festGreeting"></p>
-    <p class="hour-greet" id="hourGreet"></p>
     <p class="lang-roamer" id="langRoamer"></p>
     <p class="en-title" id="enTitle">Welcome to Yaule's Space</p>
     <p class="intro" id="intro" data-i18n="hero.intro">这里是我的个人小角落，记录着咖啡、音乐、游戏与作品。不紧不慢，慢慢翻就好。</p>
@@ -1246,14 +1285,18 @@
     <div class="life-panels">
       <!-- 界面 1：瑞幸咖啡 -->
       <div class="life-panel active" id="lifeCoffee">
-        <div class="life-visual">
-          <svg viewBox="0 0 48 48" fill="none" stroke="#17181C" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M8.59 7.185C16.616 26.679 36.858 17.289 37.163 5.5"/><path d="M5.36 11.748c14.195 11.548 29.842 6.712 37.28-3.931M26.07 27.054c-4.152.607-8.14 7.827-.56 11.304c4.427 2.03 11.45-.182 13.69 4.142M16.874 22.28c-4.253 4.097-6.784 9.884-6.178 18.745"/><path d="M23.45 18.408c.43 2.522 4.259 2.63 8.168 2.679a6.18 6.18 0 0 1-.983 3.861a6.54 6.54 0 0 1-4.564 2.107m-9.197-4.775a8.5 8.5 0 0 1-9.303-2.036c2.148-.837 4.314-1.66 9.478-.21c1.378-.36 1.532-1.208 2.139-1.875m11.979 5.809l-2.814.48"/></svg>
+        <div class="life-visual life-coffee">
+          <img src="assets/luckin-cup.png" alt="Luckin Coffee" loading="lazy">
         </div>
         <div class="life-info">
           <h3><span data-i18n="life.c1">瑞幸咖啡</span> <span class="tag" data-i18n="life.tag1">续命中</span></h3>
           <div class="data-number" id="cups">176<small data-i18n="life.un2">杯</small></div>
           <p class="data-desc" data-i18n="life.d1">从第一杯咖啡开始，悄悄记录每一次续命时刻</p>
-          <p class="data-desc" style="margin-top:8px" data-i18n="life.d2">美式、拿铁、生椰……每一杯都是生活的续命剂。</p>
+          <ul class="coffee-list">
+            <li class="coffee-hd" data-i18n="life.menu">已喝菜单</li>
+            <li>生椰拿铁</li><li>小黄油拿铁</li><li>厚乳拿铁</li><li>陨石拿铁</li>
+            <li>生椰美式</li><li>丝绒拿铁</li><li>标准美式</li>
+          </ul>
         </div>
       </div>
       <!-- 界面 2：网易云音乐 -->
@@ -1324,7 +1367,7 @@
     <div class="grid">
       <div class="card" data-detail="works/xinghua.html">
         <a class="card-dl" href="Xinghua%20Middle%20School%20Broadcasting%20Station%20System.html" download="Xinghua Middle School Broadcasting Station System.html" title="下载作品">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            <span class="dl-ico">&#11015;</span>
           </a>
         <div class="card-body">
           <h3 data-i18n="works.t1">兴华中学广播站系统</h3>
@@ -1339,7 +1382,7 @@
       </div>
       <div class="card" data-detail="works/accounting.html">
         <a class="card-dl" href="Self-service%20accounting%20system%20Pro%20Enhanced%20V6.html" download="Self-service accounting system Pro Enhanced V6.html" title="下载作品">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            <span class="dl-ico">&#11015;</span>
           </a>
         <div class="card-body">
           <h3 data-i18n="works.t2">自助记账系统</h3>
@@ -1354,7 +1397,7 @@
       </div>
       <div class="card" data-detail="works/code-system.html">
         <a class="card-dl" href="Nayingte%20M4e%20Code%20Writing%20System%20V2.9Pro.html" download="Nayingte M4e Code Writing System V2.9Pro.html" title="下载作品">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            <span class="dl-ico">&#11015;</span>
           </a>
         <div class="card-body">
           <h3 data-i18n="works.t3">代码编写系统</h3>
@@ -1369,7 +1412,7 @@
       </div>
       <div class="card" data-detail="works/emoji-converter.html">
         <a class="card-dl" href="Fancy-Pattern-Emoji-to-Image-Converter.html" download="Fancy-Pattern-Emoji-to-Image-Converter.html" title="下载作品">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            <span class="dl-ico">&#11015;</span>
           </a>
         <div class="card-body">
           <h3 data-i18n="works.t4">表情转图片转换器</h3>
@@ -1384,7 +1427,7 @@
       </div>
       <div class="card" data-detail="works/cs-sens.html">
         <a class="card-dl" href="CS-Sens-Calibrator.html" download="CS-Sens-Calibrator.html" title="下载作品">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            <span class="dl-ico">&#11015;</span>
           </a>
         <div class="card-body">
           <h3 data-i18n="works.t5">CS 灵敏度校准</h3>
@@ -1399,7 +1442,7 @@
       </div>
       <div class="card" data-detail="works/chess.html">
         <a class="card-dl" href="Chess-Gomoku-Collection.html" download="Chess-Gomoku-Collection.html" title="下载作品">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            <span class="dl-ico">&#11015;</span>
           </a>
         <div class="card-body">
           <h3 data-i18n="works.t6">棋类合集</h3>
@@ -1419,6 +1462,46 @@
   </div>
 </section>
 
+<!-- 板块：音乐歌单墙 -->
+<section class="section rv" id="musicwall">
+  <div class="wrap">
+    <div class="section-head">
+      <p class="kicker">NETEASE MUSIC</p>
+      <h2 data-i18n="mw.title">音乐歌单墙</h2>
+      <p class="desc" data-i18n="mw.desc">网易云 NAME=Yaule · 精选歌单随时听</p>
+    </div>
+    <div class="mw-grid">
+      <a class="mw-card" href="https://music.163.com/#/search/m/?s=%E6%B8%A9%E6%9F%94%E9%92%A2%E7%90%B4%E6%9B%B2" target="_blank" rel="noopener">
+        <span class="mw-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg></span>
+        <b data-i18n="mw.n1">温柔钢琴曲</b>
+        <span class="mw-tag" data-i18n="mw.t1">助眠 · 钢琴</span>
+        <span class="mw-play" data-i18n="mw.play">播放</span>
+      </a>
+      <a class="mw-card" href="https://music.163.com/#/search/m/?s=%E7%A8%8B%E5%BA%8F%E5%91%98%E4%B8%93%E7%94%A8" target="_blank" rel="noopener">
+        <span class="mw-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg></span>
+        <b data-i18n="mw.n2">代码循环器</b>
+        <span class="mw-tag" data-i18n="mw.t2">专注 · 电子</span>
+        <span class="mw-play" data-i18n="mw.play">播放</span>
+      </a>
+      <a class="mw-card" href="https://music.163.com/#/search/m/?s=%E9%80%9A%E5%8B%A4%E6%AD%8C%E5%8D%95" target="_blank" rel="noopener">
+        <span class="mw-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12H2"/><path d="M5.45 5.11L2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"/><line x1="6" y1="16" x2="6.01" y2="16"/><line x1="10" y1="16" x2="10.01" y2="16"/></svg></span>
+        <b data-i18n="mw.n3">通勤能量站</b>
+        <span class="mw-tag" data-i18n="mw.t3">通勤 · 流行</span>
+        <span class="mw-play" data-i18n="mw.play">播放</span>
+      </a>
+      <a class="mw-card" href="https://music.163.com/#/search/m/?s=%E5%91%A8%E6%9C%AB%E6%94%BE%E6%9D%BE" target="_blank" rel="noopener">
+        <span class="mw-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.42 4.58a5.4 5.4 0 0 0-7.65 0l-.77.78-.77-.78a5.4 5.4 0 0 0-7.65 0C1.46 6.7 1.33 10.28 4 13l8 8 8-8c2.67-2.72 2.54-6.3.42-8.42z"/></svg></span>
+        <b data-i18n="mw.n4">周末松弛感</b>
+        <span class="mw-tag" data-i18n="mw.t4">放松 · 治愈</span>
+        <span class="mw-play" data-i18n="mw.play">播放</span>
+      </a>
+    </div>
+    <div class="mw-more-wrap">
+      <a class="mw-more" href="https://music.163.com/#/search/m/?s=Yaule" target="_blank" rel="noopener" data-i18n="mw.more">在网易云搜索 Yaule</a>
+    </div>
+  </div>
+</section>
+
 <!-- 板块 4：今夜（月色 · 今日推荐 · 天气） -->
 <section class="section alt rv" id="now">
   <div class="wrap">
@@ -1433,7 +1516,7 @@
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.83z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
           <span data-i18n="now.reco">今日推荐</span>
         </p>
-        <p class="reco-text" id="recoText">正在挑选今日推荐…</p>
+        <p class="reco-text" id="recoText"></p>
         <p class="reco-tag" id="recoTag"></p>
       </div>
 <div class="now-card now-sky">
@@ -1523,6 +1606,7 @@
           <li><a href="space.html" data-i18n="footer.space">个人空间</a></li>
           <li><a href="#works" data-i18n="footer.projects">项目</a></li>
           <li><a href="#life" data-i18n="footer.lifedata">生活数据</a></li>
+          <li><a href="status.html" data-i18n="footer.status">运行状态</a></li>
         </ul>
       </div>
       <div class="footer-col">
@@ -1540,6 +1624,10 @@
           <li><a href="mailto:1957784559@qq.com" data-i18n="footer.email">邮箱</a></li>
           <li><a href="atom.xml" data-i18n="footer.rss">RSS 订阅</a></li>
         </ul>
+        <div class="sub-row">
+          <input id="subEmail" type="email" placeholder="你的邮箱" aria-label="Newsletter">
+          <button id="subBtn" type="button" data-i18n="sub.btn">订阅</button>
+        </div>
       </div>
     </div>
     <div class="footer-bottom">
@@ -1552,6 +1640,120 @@
   </div>
   <span class="footer-word" aria-hidden="true">Yaule</span>
 </footer>
+<div class="search-mask" id="searchMask" aria-hidden="true">
+  <div class="search-box">
+    <div class="search-input-row">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <input id="searchInput" type="text" autocomplete="off" spellcheck="false" placeholder="搜索作品、板块、页面…">
+      <kbd>Esc</kbd>
+    </div>
+    <ul class="search-results" id="searchResults"></ul>
+    <p class="search-hint">&#8593;&#8595; 选择 · Enter 打开 · Esc 关闭</p>
+  </div>
+</div>
+
+<script>
+  /* ========== 站内搜索 Ctrl+K ========== */
+  (function () {
+    var mask = document.getElementById('searchMask');
+    var input = document.getElementById('searchInput');
+    var list = document.getElementById('searchResults');
+    if (!mask || !input) return;
+    var INDEX = [
+      { k: ['个人空间', 'space', '失眠夜'], t: '个人空间', href: 'space.html', sk: 'PAGE' },
+      { k: ['生活瞬间', 'life', '咖啡', '音乐', '游戏'], t: '生活瞬间', href: '#life', sk: 'SECTION' },
+      { k: ['精选作品', 'works', '项目', '作品'], t: '精选作品', href: '#works', sk: 'SECTION' },
+      { k: ['音乐歌单墙', 'music', '网易云', '歌单'], t: '音乐歌单墙', href: '#musicwall', sk: 'SECTION' },
+      { k: ['今夜', 'now', '月色', '推荐', '天气'], t: '今夜', href: '#now', sk: 'SECTION' },
+      { k: ['开源仓库', 'repos', 'GitHub'], t: '开源仓库', href: '#repos', sk: 'SECTION' },
+      { k: ['开源足迹', 'heatmap', '贡献'], t: '开源足迹', href: '#heatmap', sk: 'SECTION' },
+      { k: ['更新日志', 'changelog', '日志'], t: '更新日志', href: 'changelog.html', sk: 'PAGE' },
+      { k: ['运行状态', 'status', '状态'], t: '运行状态', href: 'status.html', sk: 'PAGE' },
+      { k: ['全部作品', 'works.html'], t: '全部作品', href: 'works.html', sk: 'PAGE' },
+      { k: ['兴华中学广播站系统', 'xinghua', '广播'], t: '兴华中学广播站系统', href: 'works/xinghua.html', sk: 'WORK' },
+      { k: ['自助记账系统', 'accounting', '记账'], t: '自助记账系统', href: 'works/accounting.html', sk: 'WORK' },
+      { k: ['代码编写系统', 'code', 'M4e', '编程'], t: '代码编写系统', href: 'works/code-system.html', sk: 'WORK' },
+      { k: ['表情转图片转换器', 'emoji', '表情'], t: '表情转图片转换器', href: 'works/emoji-converter.html', sk: 'WORK' },
+      { k: ['CS灵敏度校准', 'cs', '灵敏度'], t: 'CS 灵敏度校准', href: 'works/cs-sens.html', sk: 'WORK' },
+      { k: ['棋类棋和', 'chess', '五子棋', '象棋'], t: '棋类棋和', href: 'works/chess.html', sk: 'WORK' },
+      { k: ['404', '彩蛋', 'easter'], t: '404 彩蛋页', href: '404.html', sk: 'PAGE' },
+      { k: ['RSS', 'atom', '订阅'], t: 'RSS 订阅', href: 'atom.xml', sk: 'FEED' }
+    ];
+    var sel = -1, rows = [];
+    function openSearch() { mask.classList.add('open'); mask.setAttribute('aria-hidden', 'false'); input.value = ''; render(); input.focus(); }
+    function closeSearch() { mask.classList.remove('open'); mask.setAttribute('aria-hidden', 'true'); }
+    function render() {
+      var q = input.value.trim().toLowerCase();
+      var L = window.YAULE_LANG === 'en';
+      rows = INDEX.filter(function (it) {
+        if (!q) return true;
+        return it.k.some(function (w) { return w.toLowerCase().indexOf(q) >= 0; });
+      });
+      list.innerHTML = '';
+      sel = rows.length ? 0 : -1;
+      if (!rows.length) {
+        list.innerHTML = '<li class="search-empty">' + (L ? 'Nothing found' : '没有找到相关内容') + '</li>';
+        return;
+      }
+      rows.slice(0, 12).forEach(function (it, i) {
+        var li = document.createElement('li');
+        li.className = i === sel ? 'sel' : '';
+        li.innerHTML = '<a href="' + it.href + '"><span class="sk">' + it.sk + '</span><span>' + it.t + '</span><span class="s-goto">&#8594;</span></a>';
+        list.appendChild(li);
+      });
+    }
+    input.addEventListener('input', function () { sel = 0; render(); });
+    input.addEventListener('keydown', function (e) {
+      if (e.key === 'ArrowDown') { e.preventDefault(); if (rows.length) { sel = (sel + 1) % rows.length; render(); } }
+      else if (e.key === 'ArrowUp') { e.preventDefault(); if (rows.length) { sel = (sel - 1 + rows.length) % rows.length; render(); } }
+      else if (e.key === 'Enter') {
+        e.preventDefault();
+        if (rows[sel]) location.href = rows[sel].href;
+        else if (rows[0]) location.href = rows[0].href;
+      }
+      else if (e.key === 'Escape') closeSearch();
+    });
+    document.addEventListener('keydown', function (e) {
+      if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k') { e.preventDefault(); openSearch(); }
+    });
+    mask.addEventListener('click', function (e) { if (e.target === mask) closeSearch(); });
+  })();
+
+  /* ========== 订阅（本地记录 + 提示） ========== */
+  (function () {
+    var btn = document.getElementById('subBtn');
+    var inp = document.getElementById('subEmail');
+    if (!btn || !inp) return;
+    btn.addEventListener('click', function () {
+      var v = inp.value.trim();
+      var ok = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
+      var L = window.YAULE_LANG === 'en';
+      if (!ok) { showToast(L ? 'Enter a valid email' : '请输入有效的邮箱地址'); inp.focus(); return; }
+      try {
+        var arr = JSON.parse(localStorage.getItem('yaule_subs') || '[]');
+        if (arr.indexOf(v) < 0) { arr.push(v); localStorage.setItem('yaule_subs', JSON.stringify(arr)); }
+      } catch (e) {}
+      inp.value = '';
+      showToast(L ? 'Subscribed. Thanks!' : '订阅成功，感谢关注！');
+    });
+  })();
+
+  /* ========== 彩蛋入口：页脚 Logo 连点 5 次 / Ctrl+Shift+E ========== */
+  (function () {
+    var cnt = 0, timer = null;
+    var logo = document.querySelector('.footer-brand .logo, .logo');
+    if (logo) logo.addEventListener('click', function () {
+      cnt++;
+      if (timer) clearTimeout(timer);
+      timer = setTimeout(function () { cnt = 0; }, 1200);
+      if (cnt >= 5) { cnt = 0; location.href = 'easter.html'; }
+    });
+    document.addEventListener('keydown', function (e) {
+      if (e.ctrlKey && e.shiftKey && e.key.toLowerCase() === 'e') location.href = 'easter.html';
+    });
+  })();
+</script>
+
 <div class="fest-layer" id="festLayer"></div>
 <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
 <script>
@@ -1768,12 +1970,12 @@
 
 
   (function () {
-    // 锚点：2026-09-24，与上线日对齐；之后随时间自动增长
+    // 锚点：2026-09-24，与上线日对齐；之后随时间自动增长（小时每日 +12.85，首数随小时联动）
     var ANCHOR = new Date(2026, 8, 24);
-    var d = Math.max(0, Math.floor((Date.now() - ANCHOR.getTime()) / 86400000));
+    var d = Math.max(0, (Date.now() - ANCHOR.getTime()) / 86400000);
     var cups = 176 + Math.floor(d / 3);
-    var songs = 305 + Math.floor(d / 2);
-    var hours = 2000 + Math.floor(d / 2) * 25.7;
+    var hours = 2000 + Math.floor(d * 12.85);
+    var songs = 305 + Math.floor((hours - 2000) / 4.6);
     function render() {
       var en = window.YAULE_LANG === 'en';
       var ce = document.getElementById('cups');
@@ -2308,7 +2510,12 @@
 
   /* ========== 更新日志（VSCode 风格）全量数据 + 主页简短渲染 + localStorage 同步 ========== */
   var YAULE_CHANGELOG = [
-    { ver: "v23.2", date: "2026-10-05 19:47:08", current: true, list: [
+    { ver: "v26", date: "2026-10-05 20:40:00", current: true, list: [
+      { lv: "[ADD]", time: "2026-10-05 20:40:00", text: "新增音乐歌单墙（网易云 NAME=Yaule）、站内搜索 Ctrl+K、订阅入口（Newsletter + RSS）、随机彩蛋页与运行状态页。", en: "Added Music Wall (NetEase NAME=Yaule), Ctrl+K site search, newsletter+RSS, easter egg page and service status page." },
+      { lv: "[FIX]", time: "2026-10-05 20:30:00", text: "删除 hero 各国语言大字上方的小字；进入按钮改为浅色黑 / 暗色白；修复今日推荐显示异常；游戏数字改黑色。", en: "Removed hero caption above the multilingual greeting; enter button now black/white by theme; fixed daily recommendation; MC numbers in black." },
+      { lv: "[UPD]", time: "2026-10-05 20:26:00", text: "咖啡板块换开源中杯图并新增已喝菜单；音乐数字随时间联动增长；精选作品卡放大至 400px、下载按钮换回 emoji。", en: "Coffee panel now uses open-source cup art with a drink list; music numbers grow with time; work cards enlarged to 400px with emoji download button." },
+    ]},
+    { ver: "v23.2", date: "2026-10-05 19:47:08", current: false, list: [
       { lv: "[UPD]", time: "2026-10-05 19:47:08", text: "一言回归首屏原位置（中文简介下方、向下滚动上方），恢复 hero-meta 布局结构。", en: "Daily quote moved back to its original hero spot (below the intro, above the scroll hint)." },
       { lv: "[UPD]", time: "2026-10-05 19:47:08", text: "样式统一：作品卡 / 开源卡 / 今夜卡 / 生活瞬间面板统一圆角（18px）与青蓝系阴影，整体更贴合青蓝渐变主题。", en: "Style unification: work / repo / tonight / life cards now share consistent radius (18px) and cyan-tinted shadows, matching the cyan theme." },
     ]},
@@ -2700,7 +2907,7 @@
       for (var j = 0; j < ss.length; j++) { h2 = (h2 * 31 + ss.charCodeAt(j)) >>> 0; }
       var lk = (h2 % 100) + 1;
       var cc = colors[h2 % colors.length];
-      var tk = (window.YAULE_LANG === 'en') ? tipsEn[(h2 >> 4) % tipsEn.length] : tipsZh[(h2 >> 4) % tipsZh.length];
+      var tk = (window.YAULE_LANG === 'en') ? (tipsEn[(h2 >> 4) % tipsEn.length] || '') : (tipsZh[(h2 >> 4) % tipsZh.length] || '');
       el.innerHTML = (window.YAULE_LANG === 'en'
         ? 'Today\'s luck <b style="color:' + cc[0] + '">' + lk + '</b> · ' + cc[2] + ' ' + tk
         : '今日幸运 <b style="color:' + cc[0] + '">' + lk + '</b> · ' + cc[1] + ' ' + tk);
@@ -2782,11 +2989,17 @@
       'footer.nav': '导航', 'footer.home': '首页', 'footer.space': '个人空间', 'footer.projects': '项目', 'footer.lifedata': '生活数据',
       'footer.works': '作品', 'footer.space2': '失眠夜个人空间', 'footer.awards': '荣誉奖项', 'footer.contactme': '联系我',
       'footer.contact': '联系', 'footer.email': '邮箱', 'footer.rss': 'RSS 订阅', 'footer.visit1': '本站访问', 'footer.visit2': ' 次',
+      'search.placeholder': '搜索作品、板块、页面…', 'search.hint': '↑↓ 选择 · Enter 打开 · Esc 关闭', 'search.empty': '没有找到相关内容',
+      'mw.title': '音乐歌单墙', 'mw.desc': '网易云 NAME=Yaule · 精选歌单随时听', 'mw.more': '在网易云搜索 Yaule',
+      'mw.n1': '温柔钢琴曲', 'mw.n2': '代码循环器', 'mw.n3': '通勤能量站', 'mw.n4': '周末松弛感',
+      'mw.t1': '助眠 · 钢琴', 'mw.t2': '专注 · 电子', 'mw.t3': '通勤 · 流行', 'mw.t4': '放松 · 治愈', 'mw.play': '播放',
+      'sub.btn': '订阅', 'sub.placeholder': '你的邮箱', 'sub.ok': '订阅成功，感谢关注！', 'sub.bad': '请输入有效的邮箱地址',
+      'footer.status': '运行状态',
       'heatmap.h2': '开源足迹', 'heatmap.desc': '过去一年在 GitHub 上的每一天，青色越深代表越活跃。',
       'hero.quoteTitle': '换一句',
       'life.c1': '瑞幸咖啡', 'life.tag1': '续命中', 'life.un2': '杯',
       'life.d1': '从第一杯咖啡开始，悄悄记录每一次续命时刻',
-      'life.d2': '美式、拿铁、生椰……每一杯都是生活的续命剂。',
+      'life.d2': '美式、拿铁、生椰……每一杯都是生活的续命剂。', 'life.menu': '已喝菜单',
       'life.c2': '网易云音乐', 'life.tag2': '循环播放中', 'life.un1': '首',
       'life.h1': '累计收听', 'life.hours': '+ 小时 · 那些旋律陪我度过的夜晚',
       'life.d3': '深夜的旋律，陪我度过每一个失眠夜。',
@@ -2832,11 +3045,17 @@
       'footer.nav': 'Navigate', 'footer.home': 'Home', 'footer.space': 'My Space', 'footer.projects': 'Projects', 'footer.lifedata': 'Life Data',
       'footer.works': 'Works', 'footer.space2': 'Insomnia Night Space', 'footer.awards': 'Awards', 'footer.contactme': 'Contact',
       'footer.contact': 'Contact', 'footer.email': 'Email', 'footer.rss': 'RSS Feed', 'footer.visit1': 'Visits', 'footer.visit2': '',
+      'search.placeholder': 'Search works, sections, pages…', 'search.hint': '↑↓ select · Enter open · Esc close', 'search.empty': 'Nothing found',
+      'mw.title': 'Music Wall', 'mw.desc': 'NetEase NAME=Yaule · curated playlists', 'mw.more': 'Search Yaule on NetEase',
+      'mw.n1': 'Soft Piano', 'mw.n2': 'Code Loop', 'mw.n3': 'Commute Energy', 'mw.n4': 'Weekend Chill',
+      'mw.t1': 'Calm · Piano', 'mw.t2': 'Focus · Electronica', 'mw.t3': 'Commute · Pop', 'mw.t4': 'Relax · Healing', 'mw.play': 'Play',
+      'sub.btn': 'Subscribe', 'sub.placeholder': 'Your email', 'sub.ok': 'Subscribed. Thanks!', 'sub.bad': 'Enter a valid email',
+      'footer.status': 'Status',
       'heatmap.h2': 'Open-Source Footprint', 'heatmap.desc': 'Every day on GitHub over the past year — the deeper the cyan, the more active.',
       'hero.quoteTitle': 'Another quote',
       'life.c1': 'Luckin Coffee', 'life.tag1': 'LIVE', 'life.un2': 'cups',
       'life.d1': 'From the first cup, quietly counting every refuel',
-      'life.d2': 'Americano, latte, coconut milk… every cup keeps life going.',
+      'life.d2': 'Americano, latte, coconut milk… every cup keeps life going.', 'life.menu': 'My menu',
       'life.c2': 'NetEase Cloud Music', 'life.tag2': 'ON LOOP', 'life.un1': 'songs',
       'life.h1': 'Total listened', 'life.hours': '+ hours of melodies that kept the nights company',
       'life.d3': 'Late-night melodies, through every sleepless night.',
@@ -3042,8 +3261,9 @@
       if (!el) return;
       var L = getLang();
       var r = pick();
+      if (!r) return;
       el.textContent = r[L] || r.zh;
-      if (tagEl) tagEl.textContent = r.tag ? ('· ' + r.tag) : '';
+      if (tagEl) tagEl.textContent = r.tag ? r.tag : '';
     }
     render();
     window.addEventListener('yaule-langchange', render);
