@@ -5,18 +5,18 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>更新日志 · Yaule 失眠夜空间 | 完整版本记录与详细时间戳</title>
 <meta name="description" content="Yaule 失眠夜空间的完整更新日志：收录 v1 到当前版本的全部改动记录，每条均带完整时间戳与新增 / 信息 / 修复标签，与主页实时同步。">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%230d9488'/%3E%3Cpath d='M8.5 8.5 L16 16 L23.5 8.5 M16 16 L16 25' stroke='white' stroke-width='2.6' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%23D4AF37'/%3E%3Cpath d='M8.5 8.5 L16 16 L23.5 8.5 M16 16 L16 25' stroke='white' stroke-width='2.6' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
 <link rel="stylesheet" href="https://miaoda.feishu.cn/fonts/css2?family=Nunito:wght@400;500;600;700;800&family=Noto+Sans+SC:wght@300;400;500;700&display=swap">
 <style>
   :root {
-    --bg: #f4fbf9; --card: #ffffff; --ink: #0f172a; --ink-2: #5b6b7e;
-    --line: #e2e8f0; --line-strong: #cbd5e1; --accent: #0d9488; --accent-2: #2dd4bf;
-    --soft: #f1f5f9; --overlay: rgba(15, 23, 42, 0.35);
+    --bg: #0C0E0D; --card: #161A18; --ink: #EAE4D5; --ink-2: #A29B8A;
+    --line: #262B29; --line-strong: #343A38; --accent: #D4AF37; --accent-2: #E8CC7A;
+    --soft: #1A1F1D; --overlay: rgba(0, 0, 0, 0.5);
   }
   :root[data-theme="dark"] {
-    --bg: #0b1120; --card: #111a2e; --ink: #e2e8f0; --ink-2: #94a3b8;
-    --line: #1e293b; --line-strong: #334155; --accent: #2dd4bf; --accent-2: #5eead4;
-    --soft: #16203a; --overlay: rgba(2, 6, 23, 0.6);
+    --bg: #0C0E0D; --card: #161A18; --ink: #EAE4D5; --ink-2: #A29B8A;
+    --line: #262B29; --line-strong: #343A38; --accent: #D4AF37; --accent-2: #E8CC7A;
+    --soft: #1A1F1D; --overlay: rgba(0, 0, 0, 0.5);
   }
   * { margin: 0; padding: 0; box-sizing: border-box; }
   body {
@@ -144,14 +144,14 @@
   .load-skip {
     margin-top: 20px; display: inline-flex; align-items: center; gap: 7px;
     font-size: 12.5px; color: var(--accent);
-    border: 1px solid rgba(13,148,136,0.35); background: rgba(13,148,136,0.06);
+    border: 1px solid rgba(212,175,55,0.35); background: rgba(212,175,55,0.06);
     border-radius: 999px; padding: 9px 20px; cursor: pointer;
     opacity: 0; transition: opacity 0.35s ease;
     font-family: inherit; user-select: none; -webkit-user-select: none;
   }
   .load-skip.show { opacity: 1; }
   .load-skip svg { width: 14px; height: 14px; }
-  .load-skip:active { background: rgba(13,148,136,0.16); }
+  .load-skip:active { background: rgba(212,175,55,0.16); }
   .load-skip small { font-size: 11px; opacity: 0.75; }
   .theme-toggle {
     position: fixed; right: 22px; bottom: 22px; z-index: 900;
@@ -228,6 +228,13 @@
 <script>
 /* ========== 内置日志（fallback：localStorage 无数据时使用） ========== */
 var FALLBACK_LOGS = [
+        { ver: "v29", date: "2026-10-06 10:20:00", list: [
+      { lv: "[UPD]", time: "2026-10-06 10:20:00", text: "全站主题换为曜石黑金：默认深色曜石底 + 香槟金点缀，works / space / status / easter / changelog 与作品页同步。" },
+      { lv: "[FIX]", time: "2026-10-06 10:12:00", text: "主题切换按钮移入顶部导航栏，与语言按钮并排。" },
+      { lv: "[FIX]", time: "2026-10-06 10:06:00", text: "网易云音乐大字改为小时数（每日自动增长），歌曲数同步增加。" },
+      { lv: "[FIX]", time: "2026-10-06 10:02:00", text: "修复今日推荐一直显示『正在挑选』。" },
+      { lv: "[UPD]", time: "2026-10-06 09:56:00", text: "作品下载按钮改为 SVG 图标并移至卡片左上角。" },
+    ]},
         { ver: "v28", date: "2026-10-05 22:20:00", list: [
       { lv: "[ADD]", time: "2026-10-05 22:20:00", text: "新增运行状态板块（主页更新日志上方）：站点版本 / 已运行天数 / 检测时间，保留完整状态页入口。" },
       { lv: "[FIX]", time: "2026-10-05 22:14:00", text: "精选作品卡片背景统一单一纯白，去掉下半部灰渐变；顺带清理全部旧青蓝 rgba 残留。" },

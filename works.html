@@ -5,31 +5,31 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Yaule · 全部作品</title>
 <meta name="description" content="Yaule 的全部作品：校园广播站系统、自助记账、代码编写系统、表情转换、CS 灵敏度校准、棋类合集。">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230d9488'/%3E%3Cpath d='M16 20 L32 38 L48 20 M32 38 L32 52' stroke='white' stroke-width='6' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23D4AF37'/%3E%3Cpath d='M16 20 L32 38 L48 20 M32 38 L32 52' stroke='white' stroke-width='6' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
 <link rel="stylesheet" href="https://miaoda.feishu.cn/fonts/css2?family=Nunito:wght@400;500;600;700;800&family=Noto+Sans+SC:wght@300;400;500;700&display=swap">
 <style>
   :root {
-    --bg: #FAFAF9;
-    --ink: #17181C;
-    --ink-2: #5B5F66;
-    --accent: #0d9488;
-    --accent-2: #2dd4bf;
-    --line: #E5E5E1;
-    --card-bg: #fff;
-    --soft: #eef2ef;
-    --footer-bg: #16181D;
+    --bg: #0C0E0D;
+    --ink: #EAE4D5;
+    --ink-2: #A29B8A;
+    --accent: #D4AF37;
+    --accent-2: #E8CC7A;
+    --line: #262B29;
+    --card-bg: #161A18;
+    --soft: #1A1F1D;
+    --footer-bg: #060808;
     --footer-ink: #C9CDD4;
   }
   :root[data-theme="dark"] {
-    --bg: #131519;
-    --ink: #E8EAED;
-    --ink-2: #9BA1A9;
-    --accent: #2dd4bf;
-    --accent-2: #5eead4;
-    --line: #2A2E35;
-    --card-bg: #1A1D23;
-    --soft: #1E2229;
-    --footer-bg: #0D0F12;
+    --bg: #0C0E0D;
+    --ink: #EAE4D5;
+    --ink-2: #A29B8A;
+    --accent: #D4AF37;
+    --accent-2: #E8CC7A;
+    --line: #262B29;
+    --card-bg: #161A18;
+    --soft: #1A1F1D;
+    --footer-bg: #060808;
     --footer-ink: #C9CDD4;
   }
   * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -72,7 +72,7 @@
     background: var(--card-bg); color: var(--ink-2);
     transition: border-color .2s, box-shadow .2s;
   }
-  .searchbox:focus-within { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(13,148,136,.12); }
+  .searchbox:focus-within { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(212,175,55,.12); }
   .searchbox svg { width: 16px; height: 16px; flex: none; }
   .searchbox input {
     border: 0; outline: 0; background: transparent; width: 100%;
@@ -113,7 +113,7 @@
     transition: border-color .18s, transform .18s, box-shadow .18s;
     cursor: pointer;
   }
-  .card:hover { transform: translateY(-4px); border-color: var(--accent); box-shadow: 0 14px 34px rgba(13,148,136,.13); }
+  .card:hover { transform: translateY(-4px); border-color: var(--accent); box-shadow: 0 14px 34px rgba(212,175,55,.13); }
   .card .card-dl {
     position: absolute; top: 14px; right: 14px;
     width: 32px; height: 32px; border-radius: 10px;
@@ -157,7 +157,7 @@
     color: #fff; cursor: pointer; border: 0;
     transition: transform .2s, box-shadow .2s;
   }
-  .go-row .go-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(13,148,136,.3); }
+  .go-row .go-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(212,175,55,.3); }
 
   footer {
     background: var(--footer-bg); color: var(--footer-ink);
