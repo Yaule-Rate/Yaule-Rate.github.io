@@ -29,7 +29,7 @@
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23D4AF37'/%3E%3Ctext x='32' y='44' font-family='Georgia, serif' font-size='36' font-weight='bold' fill='%23fff' text-anchor='middle'%3EY%3C/text%3E%3C/svg%3E">
 <link rel="stylesheet" href="https://miaoda.feishu.cn/fonts/css2?family=Nunito:wght@500;600;700;800&family=Noto+Serif+SC:wght@600;700&family=Noto+Sans+SC:wght@400;500;600;700&family=Ma+Shan+Zheng&display=swap">
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"WebSite","name":"Yaule 失眠夜空间","alternateName":"Yaule-Rate.github.io","url":"https://Yaule-Rate.github.io/","inLanguage":["zh-CN","en"],"publisher":{"@type":"Person","name":"Yaule","url":"https://github.com/Yaule-Rate","email":"1957784559@qq.com"},"potentialAction":{"@type":"SearchAction","target":"https://Yaule-Rate.github.io/?q={search_term_string}","query-input":"required name=search_term_string"}}
+{"@context":"https://schema.org","@type":"WebSite","name":"Yaule 失眠夜空间","alternateName":"Yaule-Rate.github.io","url":"https://Yaule-Rate.github.io/","inLanguage":["zh-CN","en"],"publisher":{"@type":"Person","name":"Yaule","url":"https://github.com/Yaule-Rate"}}
 </script>
 <style>
   :root {
@@ -241,12 +241,11 @@
     line-height: 1.25;
     color: var(--ink);
     letter-spacing: 0.02em;
-    opacity: 0;
-    transition: opacity 0.55s ease;
     text-align: left;
     max-width: 760px;
   }
-   .lang-roamer.show { opacity: 1; }
+  html.js-ready .lang-roamer { opacity: 0; transition: opacity 0.55s ease; }
+  html.js-ready .lang-roamer.show { opacity: 1; }
   .lang-roamer { min-height: 1.32em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100%; }
   .hero .en-title {
     margin-top: 32px;
@@ -255,31 +254,25 @@
     letter-spacing: 0.12em;
     font-weight: 500;
     text-transform: uppercase;
-    opacity: 0;
-    transform: translateY(12px);
-    transition: opacity 0.8s ease, transform 0.8s ease;
   }
-  .hero .en-title.show { opacity: 1; transform: translateY(0); }
+  html.js-ready .hero .en-title { opacity: 0; transform: translateY(12px); transition: opacity 0.8s ease, transform 0.8s ease; }
+  html.js-ready .hero .en-title.show { opacity: 1; transform: translateY(0); }
   .hero .intro {
     margin-top: 14px;
     font-size: 16px;
     color: var(--ink-2);
     max-width: 480px;
     line-height: 1.9;
-    opacity: 0;
-    transform: translateY(12px);
-    transition: opacity 0.8s ease, transform 0.8s ease;
   }
-  .hero .intro.show { opacity: 1; transform: translateY(0); }
+  html.js-ready .hero .intro { opacity: 0; transform: translateY(12px); transition: opacity 0.8s ease, transform 0.8s ease; }
+  html.js-ready .hero .intro.show { opacity: 1; transform: translateY(0); }
   .scroll-hint {
     margin-top: 44px;
     font-size: 14px;
     color: var(--ink-2);
-    opacity: 0;
-    transform: translateY(8px);
-    transition: opacity 0.6s ease, transform 0.6s ease;
   }
-  .scroll-hint.show { opacity: 0.6; transform: translateY(0); }
+  html.js-ready .scroll-hint { opacity: 0; transform: translateY(8px); transition: opacity 0.6s ease, transform 0.6s ease; }
+  html.js-ready .scroll-hint.show { opacity: 0.6; transform: translateY(0); }
   @keyframes bounceDown {
     0%, 100% { transform: translateY(0); }
     50% { transform: translateY(6px); }
@@ -298,11 +291,9 @@
     gap: 10px;
     font-size: 14px;
     color: var(--ink-2);
-    opacity: 0;
-    transform: translateY(10px);
-    transition: opacity 0.6s ease, transform 0.6s ease;
   }
-  .clock-row.show, .quote-row.show { opacity: 1; transform: translateY(0); }
+  html.js-ready .clock-row, html.js-ready .quote-row { opacity: 0; transform: translateY(10px); transition: opacity 0.6s ease, transform 0.6s ease; }
+  html.js-ready .clock-row.show, html.js-ready .quote-row.show { opacity: 1; transform: translateY(0); }
   .clock-row svg, .quote-row svg { width: 16px; height: 16px; flex: none; color: var(--accent); }
   .quote-btn {
     border: 0;
@@ -439,6 +430,7 @@
   .grid .card { flex: 0 0 400px; scroll-snap-align: start; }
   .grid .card-body { flex: 1; }
   .grid .card .card-dl { position: absolute; top: 12px; right: 12px; z-index: 2; }
+  .card:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
   .card-dl .dl-ico { width: 17px; height: 17px; opacity: .65; transition: opacity .2s; }
   .card-dl:hover .dl-ico { opacity: 1; }
   .btn-more-wrap { display: none; margin-top: 18px; }
@@ -766,7 +758,8 @@
   #quoteText { transition: opacity 0.22s ease; }
 
   /* ===== 开屏简笔画：青色 Y 一笔画 + Yaule（首次进入 / 返回主页时播放，约 1.7 秒） ===== */
-  .page-loader {
+  .page-loader { display: none; }
+  html.js-ready .page-loader {
     position: fixed;
     inset: 0;
     z-index: 9999;
@@ -778,7 +771,7 @@
     gap: 18px;
     transition: opacity 0.5s ease, visibility 0.5s ease;
   }
-  .page-loader.done { opacity: 0; visibility: hidden; }
+  html.js-ready .page-loader.done { opacity: 0; visibility: hidden; }
   .loader-svg { width: 84px; height: 84px; color: var(--accent); }
   .loader-path {
     stroke-dasharray: 100;
@@ -1243,6 +1236,10 @@
 </style>
 </head>
 <body>
+<noscript><style>
+    .en-title, .intro, .scroll-hint, .quote-row, .lang-roamer, .rv, .page-loader { opacity: 1 !important; transform: none !important; }
+    .page-loader, .lang-loader { display: none !important; }
+</style><p class="noscript-note" style="position:fixed;inset:0;z-index:10000;display:flex;align-items:center;justify-content:center;text-align:center;padding:24px;background:var(--bg);color:var(--ink);font:14px/1.8 'Noto Sans SC',system-ui,sans-serif;">本站部分内容（天气、月色、一言、开源仓库、贡献热力图）依赖 JavaScript 与外部接口；核心内容与全部作品链接在禁用脚本时依然可用。</p></noscript>
   <script>document.documentElement.classList.add('js-ready');</script>
 <!-- 深夜特调：月亮 + 星空（22:00-06:00 显示） -->
 <nav class="topnav" id="topNav">
@@ -1282,7 +1279,7 @@
   <div class="lang-bar"><div class="lang-bar-fill" id="langBarFill"></div></div>
   <p class="lang-pct" id="langBarPct">0%</p>
 </div>
-<div class="toast" id="toast"></div>
+<div class="toast" id="toast" role="status" aria-live="polite" aria-atomic="true"></div>
 
 
 
@@ -1414,7 +1411,7 @@
       <p class="desc" data-i18n="works.desc">从校园工具到游戏辅助，都是一点点写出来的小玩意。点卡片打开，点右上角下载。</p>
     </div>
     <div class="grid">
-      <div class="card" data-detail="works/xinghua.html">
+      <div class="card" data-detail="works/xinghua.html" tabindex="0" role="link" aria-label="兴华中学广播站系统 · 查看详情">
         <a class="card-dl" href="Xinghua%20Middle%20School%20Broadcasting%20Station%20System.html" download="Xinghua Middle School Broadcasting Station System.html" title="下载作品">
             <svg class="dl-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v10"/><path d="M7 12l5 5 5-5"/><path d="M3 19h18"/></svg>
           </a>
@@ -1429,7 +1426,7 @@
 <span class="meta"></span>
         </div>
       </div>
-      <div class="card" data-detail="works/accounting.html">
+      <div class="card" data-detail="works/accounting.html" tabindex="0" role="link" aria-label="自助记账系统 · 查看详情">
         <a class="card-dl" href="Self-service%20accounting%20system%20Pro%20Enhanced%20V6.html" download="Self-service accounting system Pro Enhanced V6.html" title="下载作品">
             <svg class="dl-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v10"/><path d="M7 12l5 5 5-5"/><path d="M3 19h18"/></svg>
           </a>
@@ -1444,7 +1441,7 @@
 <span class="meta"></span>
         </div>
       </div>
-      <div class="card" data-detail="works/code-system.html">
+      <div class="card" data-detail="works/code-system.html" tabindex="0" role="link" aria-label="代码编写系统 · 查看详情">
         <a class="card-dl" href="Nayingte%20M4e%20Code%20Writing%20System%20V2.9Pro.html" download="Nayingte M4e Code Writing System V2.9Pro.html" title="下载作品">
             <svg class="dl-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v10"/><path d="M7 12l5 5 5-5"/><path d="M3 19h18"/></svg>
           </a>
@@ -1459,7 +1456,7 @@
 <span class="meta"></span>
         </div>
       </div>
-      <div class="card" data-detail="works/emoji-converter.html">
+      <div class="card" data-detail="works/emoji-converter.html" tabindex="0" role="link" aria-label="表情转图片转换器 · 查看详情">
         <a class="card-dl" href="Fancy-Pattern-Emoji-to-Image-Converter.html" download="Fancy-Pattern-Emoji-to-Image-Converter.html" title="下载作品">
             <svg class="dl-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v10"/><path d="M7 12l5 5 5-5"/><path d="M3 19h18"/></svg>
           </a>
@@ -1474,7 +1471,7 @@
 <span class="meta"></span>
         </div>
       </div>
-      <div class="card" data-detail="works/cs-sens.html">
+      <div class="card" data-detail="works/cs-sens.html" tabindex="0" role="link" aria-label="CS灵敏度校准 · 查看详情">
         <a class="card-dl" href="CS-Sens-Calibrator.html" download="CS-Sens-Calibrator.html" title="下载作品">
             <svg class="dl-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v10"/><path d="M7 12l5 5 5-5"/><path d="M3 19h18"/></svg>
           </a>
@@ -1489,7 +1486,7 @@
 <span class="meta"></span>
         </div>
       </div>
-      <div class="card" data-detail="works/chess.html">
+      <div class="card" data-detail="works/chess.html" tabindex="0" role="link" aria-label="棋类棋和 · 查看详情">
         <a class="card-dl" href="Chess-Gomoku-Collection.html" download="Chess-Gomoku-Collection.html" title="下载作品">
             <svg class="dl-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v10"/><path d="M7 12l5 5 5-5"/><path d="M3 19h18"/></svg>
           </a>
@@ -1675,7 +1672,7 @@
         <h4 data-i18n="footer.contact">联系</h4>
         <ul>
           <li><a href="https://github.com/Yaule-Rate" target="_blank" rel="noopener">GitHub</a></li>
-          <li><a href="mailto:1957784559@qq.com" data-i18n="footer.email">邮箱</a></li>
+          <li><a href="#" id="mailLink" data-i18n="footer.email">邮箱</a></li>
           <li><a href="atom.xml" data-i18n="footer.rss">RSS 订阅</a></li>
         </ul>
         <div class="sub-row">
@@ -1785,7 +1782,7 @@
         if (arr.indexOf(v) < 0) { arr.push(v); localStorage.setItem('yaule_subs', JSON.stringify(arr)); }
       } catch (e) {}
       inp.value = '';
-      showToast(L ? 'Subscribed. Thanks!' : '订阅成功，感谢关注！');
+      showToast(L ? 'Saved in this browser only \u2014 no email will be sent.' : '已记录在本浏览器（仅本地保存，不会收到邮件通知）');
     });
   })();
 
@@ -1816,6 +1813,12 @@
     var _sc = document.getElementById('statusCheck');
     if (_sc) { var _d = new Date(); _sc.textContent = String(_d.getHours()).padStart(2,'0') + ':' + String(_d.getMinutes()).padStart(2,'0') + ':' + String(_d.getSeconds()).padStart(2,'0'); }
   } catch (e) {}
+  (function () {
+    var el = document.getElementById('mailLink');
+    if (!el) return;
+    var addr = '1957784559' + '@' + 'qq.com';
+    el.href = 'mailto:' + addr;
+  })();
 
   /* ========== Toast ========== */
   var toastEl = document.getElementById('toast');
@@ -1983,10 +1986,7 @@
 
     // 小字与向下滚动：一进来就一直存在
     var quoteRow = document.getElementById('quoteRow');
-    enTitle.classList.add('show');
-    scrollHint.classList.add('show');
-    intro.classList.add('show');
-    quoteRow.classList.add('show');
+    [enTitle, scrollHint, intro, quoteRow].forEach(function (el) { if (el) el.classList.add('show'); });
 
     // 大标题：全世界语言轮播 · 打字机（缓慢打出 → 停留 → 逐字消失 → 切换）
     var li = 0;
@@ -2240,16 +2240,13 @@
     function render(q) {
       text.textContent = '“' + q[0] + '”' + (q[1] ? ' —— ' + q[1] : '');
     }
-    function fetchNet(ok) {
+    function fetchNet() {
       var ctrl = ('AbortController' in window) ? new AbortController() : null;
-      var timer = setTimeout(function () { if (ctrl) ctrl.abort(); }, 4500);
-      fetch('https://v1.hitokoto.cn/?encode=json&charset=utf-8', ctrl ? { signal: ctrl.signal } : {})
-        .then(function (r) { return r.json(); })
-        .then(function (d) {
-          clearTimeout(timer);
-          ok(d && d.hitokoto ? [d.hitokoto, d.from || ''] : null);
-        })
-        .catch(function () { clearTimeout(timer); ok(null); });
+      var timer = setTimeout(function () { if (ctrl) ctrl.abort(); }, 2500);
+      return fetch('https://v1.hitokoto.cn/?encode=json&charset=utf-8', ctrl ? { signal: ctrl.signal } : {})
+        .then(function (r) { if (!r.ok) throw new Error(String(r.status)); return r.json(); })
+        .then(function (d) { clearTimeout(timer); return (d && d.hitokoto) ? [d.hitokoto, d.from || ''] : null; })
+        .catch(function () { clearTimeout(timer); return null; });
     }
     function pickLocal(random) {
       var pool = (window.YAULE_LANG === 'en') ? ENQ : (isNight() ? NIGHTQ : quotes);
@@ -2281,19 +2278,29 @@
       text.style.opacity = '0';
       setTimeout(function () { fn(); text.style.opacity = '1'; }, 220);
     }
+    var netPool = [];
+    function refill() {
+      if (window.YAULE_LANG === 'en' || document.hidden || netPool.length >= 3) return;
+      fetchNet().then(function (q) { if (q) netPool.push(q); });
+    }
     function nextQuote() {
-      if (window.YAULE_LANG === 'en') { fadeSwap(function () { pickLocal(true); }); return; }
-      fetchNet(function (q) {
-        if (q) { fadeSwap(function () { render(q); }); }
-        else { fadeSwap(function () { pickLocal(true); }); }
+      fadeSwap(function () {
+        var q = netPool.length ? netPool.shift() : null;
+        if (q) { render(q); } else { pickLocal(true); }
       });
     }
     function restartAuto() {
       if (qTimer) clearInterval(qTimer);
       qTimer = setInterval(nextQuote, 3000);
     }
+    function stopAuto() { if (qTimer) { clearInterval(qTimer); qTimer = null; } }
     pickLocal(false);
-    fetchNet(function (q) { if (q) render(q); });
+    refill();
+    document.addEventListener('visibilitychange', function () {
+      if (document.hidden) { stopAuto(); }
+      else { restartAuto(); refill(); }
+    });
+    setInterval(function () { if (!document.hidden) refill(); }, 300000);
     next.addEventListener('click', function () { nextQuote(); restartAuto(); });
     restartAuto();
     text.style.cursor = 'pointer';
@@ -2773,7 +2780,6 @@
     }
     window.__renderChangelog = renderTop;
     renderTop();
-    try { localStorage.setItem('yaule_changelog', JSON.stringify(YAULE_CHANGELOG)); } catch (e) {}
   })();
 
   /* ========== 开屏简笔画：每次进入本站（含作品页 / 日志返回、浏览器后退）播放 Y 一笔画 ========== */
@@ -3067,7 +3073,7 @@
       'footer.works': '作品', 'footer.space2': '失眠夜个人空间', 'footer.awards': '荣誉奖项', 'footer.contactme': '联系我',
       'footer.contact': '联系', 'footer.email': '邮箱', 'footer.rss': 'RSS 订阅', 'footer.visit1': '本站访问', 'footer.visit2': ' 次',
       'search.placeholder': '搜索作品、板块、页面…', 'search.hint': '↑↓ 选择 · Enter 打开 · Esc 关闭', 'search.empty': '没有找到相关内容',
-      'nav.tag': '失眠夜空间', 'nav.works': '精选作品', 'nav.life': '生活数据', 'nav.tonight': '今夜', 'nav.open': '开源', 'nav.status': '运行状态', 'status.h2': '运行状态', 'status.desc': '本站服务与作品页的实时可用性，打开页面时自动检测。', 'status.state': '站点状态', 'status.online': '一切正常 · 在线', 'status.ver': '站点版本', 'status.uptime': '已运行', 'status.days': '天', 'status.check': '检测时间', 'status.more': '查看完整状态页 →', 'sub.btn': '订阅', 'sub.placeholder': '你的邮箱', 'sub.ok': '订阅成功，感谢关注！', 'sub.bad': '请输入有效的邮箱地址',
+      'nav.tag': '失眠夜空间', 'nav.works': '精选作品', 'nav.life': '生活数据', 'nav.tonight': '今夜', 'nav.open': '开源', 'nav.status': '运行状态', 'status.h2': '运行状态', 'status.desc': '本站服务与作品页的实时可用性，打开页面时自动检测。', 'status.state': '站点状态', 'status.online': '一切正常 · 在线', 'status.ver': '站点版本', 'status.uptime': '已运行', 'status.days': '天', 'status.check': '检测时间', 'status.more': '查看完整状态页 →', 'sub.btn': '本地收藏', 'sub.placeholder': '你的邮箱', 'sub.ok': '订阅成功，感谢关注！', 'sub.bad': '请输入有效的邮箱地址',
       'footer.status': '运行状态',
       'heatmap.h2': '开源足迹', 'heatmap.desc': '过去一年在 GitHub 上的每一天，金色越深代表越活跃。',
       'hero.quoteTitle': '换一句',
@@ -3120,7 +3126,7 @@
       'footer.works': 'Works', 'footer.space2': 'Insomnia Night Space', 'footer.awards': 'Awards', 'footer.contactme': 'Contact',
       'footer.contact': 'Contact', 'footer.email': 'Email', 'footer.rss': 'RSS Feed', 'footer.visit1': 'Visits', 'footer.visit2': '',
       'search.placeholder': 'Search works, sections, pages…', 'search.hint': '↑↓ select · Enter open · Esc close', 'search.empty': 'Nothing found',
-      'nav.tag': 'Sleepless Night Space', 'nav.works': 'Projects', 'nav.life': 'Life Data', 'nav.tonight': 'Tonight', 'nav.open': 'Open Source', 'nav.status': 'Status', 'status.h2': 'Service Status', 'status.desc': 'Real-time availability of site services and works pages.', 'status.state': 'Site Status', 'status.online': 'All systems normal · Online', 'status.ver': 'Version', 'status.uptime': 'Running for', 'status.days': 'days', 'status.check': 'Checked at', 'status.more': 'View Full Status Page →', 'sub.btn': 'Subscribe', 'sub.placeholder': 'Your email', 'sub.ok': 'Subscribed. Thanks!', 'sub.bad': 'Enter a valid email',
+      'nav.tag': 'Sleepless Night Space', 'nav.works': 'Projects', 'nav.life': 'Life Data', 'nav.tonight': 'Tonight', 'nav.open': 'Open Source', 'nav.status': 'Status', 'status.h2': 'Service Status', 'status.desc': 'Real-time availability of site services and works pages.', 'status.state': 'Site Status', 'status.online': 'All systems normal · Online', 'status.ver': 'Version', 'status.uptime': 'Running for', 'status.days': 'days', 'status.check': 'Checked at', 'status.more': 'View Full Status Page →', 'sub.btn': 'Save locally', 'sub.placeholder': 'Your email', 'sub.ok': 'Subscribed. Thanks!', 'sub.bad': 'Enter a valid email',
       'footer.status': 'Status',
       'heatmap.h2': 'Open-Source Footprint', 'heatmap.desc': 'Every day on GitHub over the past year — the deeper the gold, the more active.',
       'hero.quoteTitle': 'Another quote',
