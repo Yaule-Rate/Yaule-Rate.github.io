@@ -7,29 +7,29 @@
 <meta name="description" content="欢迎来到 Yaule 的个人主页（失眠夜空间）：记录着咖啡、音乐、游戏与作品，精选校园工具到游戏辅助的自研项目，还有全世界的「欢迎你的到来」。在这里可以看到精选作品、开源仓库、今夜月色与详细更新日志。">
 <meta name="keywords" content="Yaule,个人主页,个人空间,欢迎你的到来,博客,作品集,GitHub Pages,失眠夜">
 <meta name="author" content="Yaule">
-<link rel="canonical" href="https://Yaule-Rate.github.io/">
-<link rel="alternate" type="application/atom+xml" title="Yaule 的个人空间" href="https://Yaule-Rate.github.io/atom.xml">
-<link rel="alternate" hreflang="zh-CN" href="https://Yaule-Rate.github.io/">
-<link rel="alternate" hreflang="en" href="https://Yaule-Rate.github.io/?lang=en">
-<link rel="alternate" hreflang="x-default" href="https://Yaule-Rate.github.io/">
+<link rel="canonical" href="https://alanlumier.github.io/">
+<link rel="alternate" type="application/atom+xml" title="Yaule 的个人空间" href="https://alanlumier.github.io/atom.xml">
+<link rel="alternate" hreflang="zh-CN" href="https://alanlumier.github.io/">
+<link rel="alternate" hreflang="en" href="https://alanlumier.github.io/?lang=en">
+<link rel="alternate" hreflang="x-default" href="https://alanlumier.github.io/">
 <meta property="og:type" content="website">
 <meta property="og:title" content="Yaule · 欢迎你的到来">
 <meta property="og:description" content="欢迎来到 Yaule 的个人主页。这里记录着咖啡、音乐、游戏与作品。">
-<meta property="og:url" content="https://Yaule-Rate.github.io/">
+<meta property="og:url" content="https://alanlumier.github.io/">
 <meta property="og:site_name" content="Yaule 的个人空间">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://Yaule-Rate.github.io/og-image.png">
+<meta property="og:image" content="https://alanlumier.github.io/og-image.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta property="og:image:alt" content="Yaule · 失眠夜空间 · 个人主页">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Yaule · 欢迎你的到来">
 <meta name="twitter:description" content="欢迎来到 Yaule 的个人主页。这里记录着咖啡、音乐、游戏与作品。">
-<meta name="twitter:image" content="https://Yaule-Rate.github.io/og-image.png">
+<meta name="twitter:image" content="https://alanlumier.github.io/og-image.png">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23D4AF37'/%3E%3Ctext x='32' y='44' font-family='Georgia, serif' font-size='36' font-weight='bold' fill='%23fff' text-anchor='middle'%3EY%3C/text%3E%3C/svg%3E">
 <link rel="stylesheet" href="https://miaoda.feishu.cn/fonts/css2?family=Nunito:wght@500;600;700;800&family=Noto+Serif+SC:wght@600;700&family=Noto+Sans+SC:wght@400;500;600;700&family=Ma+Shan+Zheng&display=swap">
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"WebSite","name":"Yaule 失眠夜空间","alternateName":"Yaule-Rate.github.io","url":"https://Yaule-Rate.github.io/","inLanguage":["zh-CN","en"],"publisher":{"@type":"Person","name":"Yaule","url":"https://github.com/Yaule-Rate"}}
+{"@context":"https://schema.org","@type":"WebSite","name":"Yaule 失眠夜空间","alternateName":"AlanLumier.github.io","url":"https://alanlumier.github.io/","inLanguage":["zh-CN","en"],"publisher":{"@type":"Person","name":"Yaule","url":"https://github.com/AlanLumier"}}
 </script>
 <style>
   :root {
@@ -1714,7 +1714,7 @@
       <div class="footer-col">
         <h4 data-i18n="footer.contact">联系</h4>
         <ul>
-          <li><a href="https://github.com/Yaule-Rate" target="_blank" rel="noopener">GitHub</a></li>
+          <li><a href="https://github.com/AlanLumier" target="_blank" rel="noopener">GitHub</a></li>
           <li><a href="#" id="mailLink" data-i18n="footer.email">邮箱</a></li>
           <li><a href="atom.xml" data-i18n="footer.rss">RSS 订阅</a></li>
         </ul>
@@ -3098,7 +3098,7 @@
     function collect() {
       var days = {};
       ghCache(3600e3, function () {
-        return fetchJson('https://api.github.com/users/Yaule-Rate/repos?per_page=30&sort=pushed').then(function (repos) {
+        return fetchJson('https://api.github.com/users/AlanLumier/repos?per_page=30&sort=pushed').then(function (repos) {
           if (!repos || !repos.length) throw new Error('no repos');
           return repos;
         });
@@ -3185,10 +3185,10 @@
     var grid = document.getElementById('repoGrid');
     if (!grid) return;
     var fallback = [
-      { name: 'Yaule-Rate.github.io', desc: '本站源码：全世界语言的欢迎页与个人标签页。', lang: 'HTML', stars: 0, forks: 0, updated: '2026-09-25', color: '#e34c26' }
+      { name: 'AlanLumier.github.io', desc: '本站源码：全世界语言的欢迎页与个人标签页。', lang: 'HTML', stars: 0, forks: 0, updated: '2026-09-25', color: '#e34c26' }
     ];
     var fallbackEn = [
-      { name: 'Yaule-Rate.github.io', desc: 'Source of this site: multilingual welcome page & personal hub.', lang: 'HTML', stars: 0, forks: 0, updated: '2026-09-25', color: '#e34c26' }
+      { name: 'AlanLumier.github.io', desc: 'Source of this site: multilingual welcome page & personal hub.', lang: 'HTML', stars: 0, forks: 0, updated: '2026-09-25', color: '#e34c26' }
     ];
     var langColor = { 'HTML': '#e34c26', 'CSS': '#563d7c', 'JavaScript': '#f1e05a', 'TypeScript': '#3178c6', 'Python': '#3572A5', 'Java': '#b07219', 'C++': '#f34b7d', 'C#': '#178600', 'PHP': '#4F5D95', 'Shell': '#89e051', 'Vue': '#41b883', 'Jupyter Notebook': '#DA5B0B', 'MDX': '#fcb32c' };
     function esc(s) { return String(s == null ? '' : s).replace(/[&<>"'`]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;', '`': '&#96;' }[c]; }); }
@@ -3215,7 +3215,7 @@
     ghCache2(3600e3, function () {
       var ctrl = ('AbortController' in window) ? new AbortController() : null;
       var timer = setTimeout(function () { if (ctrl) ctrl.abort(); }, 6000);
-      return fetch('https://api.github.com/users/Yaule-Rate/repos?per_page=30&sort=pushed', ctrl ? { signal: ctrl.signal } : {})
+      return fetch('https://api.github.com/users/AlanLumier/repos?per_page=30&sort=pushed', ctrl ? { signal: ctrl.signal } : {})
         .then(function (r) { return r.json(); })
         .then(function (list) {
           clearTimeout(timer);

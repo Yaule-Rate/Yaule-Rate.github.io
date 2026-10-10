@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://Yaule-Rate.github.io/sitemap.xml
+Sitemap: https://alanlumier.github.io/sitemap.xml
